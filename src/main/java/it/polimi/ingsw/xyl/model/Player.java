@@ -14,26 +14,17 @@ public class Player {
     private int[] workerBPosition;
     private PlayerStatus currentStatus;
 
-    public Player(int playerId, String playerName, int[] workerAPosition, int[] workerBPosition){
+    public Player(int playerId, String playerName){
         this.playerId = playerId;
         this.playerName = playerName;
-        this.workerAPosition= workerAPosition;
-        this.workerBPosition= workerBPosition;
     }
+
     public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
-    }
-
     public String getPlayerName() {
         return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
     }
 
     public GameBoard getCurrentGameBoard() {
@@ -60,6 +51,7 @@ public class Player {
         else
             throw new IllegalArgumentException("Worker should be A or B!");
     }
+
     public void setWorkerPosition(Character ab, int[] workerPosition) {
         if(ab =='A')
             this.workerAPosition = workerPosition;
@@ -67,22 +59,6 @@ public class Player {
             this.workerBPosition = workerPosition;
         else
             throw new IllegalArgumentException("Worker should be A or B!");
-
-    }
-
-    public int[] getWorkerAPosition() {
-        return workerAPosition;
-    }
-
-    public int[] getWorkerBPosition() {
-        return workerBPosition;
-    }
-
-    public void setWorkerAPosition(int[] workerAPosition) {
-        this.workerAPosition = workerAPosition;
-    }
-    public void setWorkerBPosition(int[] workerBPosition) {
-        this.workerBPosition = workerBPosition;
     }
 
     public PlayerStatus getCurrentStatus() {

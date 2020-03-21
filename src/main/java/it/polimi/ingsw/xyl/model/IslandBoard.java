@@ -9,18 +9,19 @@ package it.polimi.ingsw.xyl.model;
  * @author Shaoxun
  */
 public class IslandBoard {
-    private static final Space[][] spaces = new Space[5][5];
+    private Space[][] spaces = new Space[5][5];
     private boolean noMoveUp;
 
-    public static Space[][] getSpaces() {
-        return spaces;
+    public IslandBoard(){
+        for (int i = 0; i !=5; i++){
+            for (int j = 0; j !=5; j++){
+                spaces[i][j]= new Space();
+            }
+        }
     }
 
-    public static void setSpaces(int x, int y, Space space){
-        if(x>=0 && y>=0 && x<=4 && y <=4)
-            spaces[x][y] = space;
-        else
-            throw new IllegalArgumentException("Space should in IslandBoard!");
+    public Space[][] getSpaces() {
+        return spaces;
     }
 
     public boolean isNoMoveUp() {
@@ -31,7 +32,5 @@ public class IslandBoard {
         this.noMoveUp = noMoveUp;
     }
 
-    public void updateIslandBoard(){
-
-    }
+    public void updateIslandBoard(){    }
 }

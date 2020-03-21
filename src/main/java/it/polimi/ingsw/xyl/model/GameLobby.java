@@ -1,6 +1,6 @@
 package it.polimi.ingsw.xyl.model;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * This class represents a game lobby,
@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class GameLobby {
     private String serverIP;
-    private ArrayList<GameBoard> gameBoards;
+    private Vector<GameBoard> gameBoards;
 
     public String getServerIP() {
         return serverIP;
@@ -20,7 +20,7 @@ public class GameLobby {
         this.serverIP = serverIP;
     }
 
-    public ArrayList<GameBoard> getGameBoards() {
+    public Vector<GameBoard> getGameBoards() {
         return gameBoards;
     }
 
@@ -32,7 +32,8 @@ public class GameLobby {
             throw e;
         }
     }
+
     public void init() {
-        gameBoards= new ArrayList<>();
+        gameBoards= new Vector<>();
     }
 }

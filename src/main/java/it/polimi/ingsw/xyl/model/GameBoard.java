@@ -1,6 +1,6 @@
 package it.polimi.ingsw.xyl.model;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * This class is the abstraction of A Santorini GAME (Civilian Mod),
@@ -12,7 +12,7 @@ public class GameBoard {
     private int gameId;
     private int playerNumber;
     private int turnId;
-    private ArrayList<Player> players;
+    private Vector<Player> players;
     private IslandBoard islandBoard;
     private GameStatus currentStatus;
 
@@ -45,18 +45,20 @@ public class GameBoard {
         this.turnId = turnId;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public Vector<Player> getPlayers() {
         return players;
     }
 
-    public void addPlayer(Player player) {
+    public int addPlayer(Player player) {
         //TODO: add playerNumber condition
         //TODO: multi-gameBoard
-        try {
+        if(players.size() < playerNumber){
             players.add(player);
-        }catch (Exception e){
-            init();
-            throw e;
+            return 1;
+        }
+        else {
+            System.out.println("This GameBoard is full.");
+            return -1;
         }
     }
 
@@ -78,6 +80,6 @@ public class GameBoard {
 
     public void init(){
         if(playerNumber == 2 || playerNumber==3)
-            this.players = new ArrayList<>(playerNumber);
+            this.players = new Vector<>();
     }
 }

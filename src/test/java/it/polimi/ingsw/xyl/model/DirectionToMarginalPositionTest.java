@@ -10,7 +10,6 @@ import org.junit.Test;
  *  it's a test of converting the direction to marginal position
  *
  *  @author Shaoxun
- *
  */
 public class DirectionToMarginalPositionTest {
 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.xyl.model;
 
-import static it.polimi.ingsw.xyl.model.Level.GROUND;
+import static it.polimi.ingsw.xyl.model.Level.*;
 
 /**
  * This class is the abstraction of a single space of the IslandBoard
@@ -16,6 +16,17 @@ public class Space {
 
     public void setLevel(Level level) {
         this.level = level;
+    }
+
+    public void increaseLevel() {
+        if(level.toInt() == 0)
+            this.level = LEVEL1;
+        else if(level.toInt() == 1)
+            this.level = LEVEL2;
+        else if(level.toInt() == 2)
+            this.level = LEVEL3;
+        else if(level.toInt() == 3)
+            this.level = DOME;
     }
 
     public int isOccupiedByPlayer() {
