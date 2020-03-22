@@ -5,8 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static it.polimi.ingsw.xyl.model.Direction.*;
-import static it.polimi.ingsw.xyl.model.Level.GROUND;
-import static it.polimi.ingsw.xyl.model.Level.LEVEL1;
+import static it.polimi.ingsw.xyl.model.Level.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -54,6 +53,13 @@ public class CosplayerBuildTest {
         playerB.setWorkerPosition('B',new int[]{4, 4});
         islandBoard.getSpaces()[3][3].setOccupiedByPlayer(playerB.getPlayerId());
         islandBoard.getSpaces()[4][4].setOccupiedByPlayer(playerB.getPlayerId());
+        /*
+        | 0 | 0 | 0 | 0 |B'B|
+        | 0 | 0 | 0 |B'A| 0 |
+        | 0 | 0 | 0 | 0 | 0 |
+        | 0 |A'B| 0 | 0 | 0 |
+        |A'A| 0 | 0 | 0 | 0 |
+         */
     }
 
     @After
@@ -68,31 +74,38 @@ public class CosplayerBuildTest {
 
     @Test
     public void CosplayerBuildTest_playerAWorkerABuildRight_LEVEL1_1_0(){
-        playerA.getCosplayer().build('A', RIGHT);
-        assertEquals(playerA.getCurrentGameBoard().getIslandBoard().getSpaces()[1][0].getLevel(),LEVEL1);
+        playerA.getCosplayer().build('A', RIGHT,false);
+        assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL1);
     }
 
     @Test
     public void CosplayerBuildTest_playerAWorkerABuildUpRight_NoChange() {
-        playerA.getCosplayer().build('A', UPRIGHT);
-        assertEquals(playerA.getCurrentGameBoard().getIslandBoard().getSpaces()[1][0].getLevel(),GROUND);
+        playerA.getCosplayer().build('A', UPRIGHT, false);
+        assertEquals(islandBoard.getSpaces()[1][0].getLevel(),GROUND);
     }
 
     @Test
     public void CosplayerBuildTest_playerBWorkerBBuildDownLeft_NoChange() {
-        playerB.getCosplayer().build('B', DOWNLEFT);
-        assertEquals(playerB.getCurrentGameBoard().getIslandBoard().getSpaces()[3][3].getLevel(),GROUND);
+        playerB.getCosplayer().build('B', DOWNLEFT, false);
+        assertEquals(islandBoard.getSpaces()[3][3].getLevel(),GROUND);
+    }
+
+    @Test
+    public void CosplayerBuildTest_playerBWorkerBBuildDown_dome_4_3() {
+        islandBoard.getSpaces()[4][3].setLevel(DOME);
+        playerB.getCosplayer().build('B', DOWN, false);
+        assertEquals(islandBoard.getSpaces()[4][3].getLevel(),DOME);
     }
 
     @Test (expected = Exception.class)
     public void CosplayerBuildTest_playerAWorkerABuildLeft_Error() {
-        playerA.getCosplayer().build('A', LEFT);
+        playerA.getCosplayer().build('A', LEFT, false);
     }
 
     @Test
     public void CosplayerBuildTest_playerABuildAtTurnId_1_turnId_0() {
         gameBoard.setTurnId(1);
-        playerA.getCosplayer().build('A', RIGHT);
+        playerA.getCosplayer().build('A', RIGHT,false);
         assertEquals(gameBoard.getTurnId(),0);
     }
 

@@ -9,11 +9,19 @@ import static it.polimi.ingsw.xyl.model.Level.DOME;
  */
 public class Cosplayer {
     private Player player;
+    protected GodPower godPower = null;
+
+    public GodPower getGodPower() {
+        return godPower;
+    }
 
     public Cosplayer(Player player){
         this.player = player;
     }
 
+    public Player getPlayer(){
+        return this.player;
+    }
     /**
      * move method of cosplayer(Civilian Mod)
      * Override this method in God-Cosplayer Class 01-Apollo, 08-Minotaur and 02-Artemis.
@@ -56,8 +64,9 @@ public class Cosplayer {
      * Override this method in God-Cosplayer Class 04-Atlas, 05-Demeter, 06-Hephaestus
      * @param worker 'A' or 'B' represent two works of a player.
      * @param direction see Direction class.
+     * @param buildDome whether build dome directly (only for Atlas).
      */
-    public void build(Character worker, Direction direction){
+    public void build(Character worker, Direction direction, boolean buildDome){
         try {
             GameBoard currentGameBoard = player.getCurrentGameBoard();
             IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();

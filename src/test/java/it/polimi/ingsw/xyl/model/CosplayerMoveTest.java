@@ -68,7 +68,7 @@ public class CosplayerMoveTest {
     }
 
     @Test
-    public void CosplayerMoveTest_playerOvernumber(){
+    public void CosplayerMoveTest_playerOverNumber(){
         Player playerC = new Player(3, "playerC");
         gameBoard.addPlayer(playerC);
         Player playerD = new Player(4, "playerD");
@@ -116,7 +116,7 @@ public class CosplayerMoveTest {
     }
 
     @Test
-    public void CosplayerMoveTest_playerAWorkerBMoveLeft_occupied_0_1_Exception() {
+    public void CosplayerMoveTest_playerAWorkerBMoveLeft_occupied_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setOccupiedByPlayer(1);
         playerA.getCosplayer().move('B', LEFT);
         assertEquals(playerA.getWorkerPosition('B')[0], 1);
@@ -124,7 +124,7 @@ public class CosplayerMoveTest {
     }
 
     @Test
-    public void CosplayerMoveTest_playerAWorkerBMoveLeft_dome_0_1_Exception() {
+    public void CosplayerMoveTest_playerAWorkerBMoveLeft_dome_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setLevel(DOME);
         playerA.getCosplayer().move('B', LEFT);
         assertEquals(playerA.getWorkerPosition('B')[0], 1);
@@ -132,7 +132,7 @@ public class CosplayerMoveTest {
     }
 
     @Test
-    public void CosplayerMoveTest_playerAWorkerBMoveLeft_LEVEL2_0_1_Exception() {
+    public void CosplayerMoveTest_playerAWorkerBMoveLeft_LEVEL2_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
         playerA.getCosplayer().move('B', LEFT);
         assertEquals(playerA.getWorkerPosition('B')[0], 1);
