@@ -50,15 +50,13 @@ public class MinotaurMoveTest {
         // set cosplayers and initial worker positions
         cosplayerC = new Minotaur(playerC);
         playerC.setCosplayer(cosplayerC);
-        playerC.setWorkerPosition('A',new int[]{0, 0});
-        playerC.setWorkerPosition('B',new int[]{1, 1});
+        playerC.setWorkers(0, 0, 1, 1);
         islandBoard.getSpaces()[0][0].setOccupiedByPlayer(playerC.getPlayerId());
         islandBoard.getSpaces()[1][1].setOccupiedByPlayer(playerC.getPlayerId());
 
         cosplayerD = new Cosplayer(playerD);
         playerD.setCosplayer(cosplayerD);
-        playerD.setWorkerPosition('A',new int[]{2, 1});
-        playerD.setWorkerPosition('B',new int[]{1, 2});
+        playerD.setWorkers(2, 1, 1, 2);
         islandBoard.getSpaces()[2][1].setOccupiedByPlayer(playerD.getPlayerId());
         islandBoard.getSpaces()[1][2].setOccupiedByPlayer(playerD.getPlayerId());
         /*
@@ -70,7 +68,7 @@ public class MinotaurMoveTest {
         playerC is Minotaur so that its workerB can move to (2,1),
         which will force playerD's workerA move to (3,1)
         if (3,1) is neither occupied by another player nor placed a dome.
-         */
+        */
     }
 
     @After
@@ -87,9 +85,9 @@ public class MinotaurMoveTest {
 
     @Test
     public void MinotaurMoveTest_playerCWorkerBMoveDown_normalMove(){
-        playerC.getCosplayer().move('B', DOWN);
-        assertEquals(playerC.getWorkerPosition('B')[0], 1);
-        assertEquals(playerC.getWorkerPosition('B')[1], 0);
+        playerC.getCosplayer().move(1, DOWN);
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 0);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[1][0].isOccupiedByPlayer(),1);
     }
@@ -97,9 +95,9 @@ public class MinotaurMoveTest {
     @Test
     public void MinotaurMoveTest_playerCWorkerAMoveUp_dome_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(DOME);
-        playerC.getCosplayer().move('A', UP);
-        assertEquals(playerC.getWorkerPosition('A')[0], 0);
-        assertEquals(playerC.getWorkerPosition('A')[1], 0);
+        playerC.getCosplayer().move(0, UP);
+        assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
+        assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
         assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
     }
@@ -107,9 +105,9 @@ public class MinotaurMoveTest {
     @Test
     public void MinotaurMoveTest_playerCWorkerAMoveUp_level2_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
-        playerC.getCosplayer().move('A', UP);
-        assertEquals(playerC.getWorkerPosition('A')[0], 0);
-        assertEquals(playerC.getWorkerPosition('A')[1], 0);
+        playerC.getCosplayer().move(0, UP);
+        assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
+        assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
         assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
     }
@@ -118,11 +116,11 @@ public class MinotaurMoveTest {
 
     @Test
     public void MinotaurMoveTest_playerCWorkerBMoveUp_usePower(){
-        playerC.getCosplayer().move('B', UP);
-        assertEquals(playerC.getWorkerPosition('B')[0], 1);
-        assertEquals(playerC.getWorkerPosition('B')[1], 2);
-        assertEquals(playerD.getWorkerPosition('B')[0], 1);
-        assertEquals(playerD.getWorkerPosition('B')[1], 3);
+        playerC.getCosplayer().move(1, UP);
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 2);
+        assertEquals(playerD.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerD.getWorkers()[1].getPositionY(), 3);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[1][2].isOccupiedByPlayer(),1);
         assertEquals(islandBoard.getSpaces()[1][3].isOccupiedByPlayer(),2);
@@ -130,11 +128,11 @@ public class MinotaurMoveTest {
 
     @Test
     public void MinotaurMoveTest_playerCWorkerBMoveRight_usePower(){
-        playerC.getCosplayer().move('B', RIGHT);
-        assertEquals(playerC.getWorkerPosition('B')[0], 2);
-        assertEquals(playerC.getWorkerPosition('B')[1], 1);
-        assertEquals(playerD.getWorkerPosition('A')[0], 3);
-        assertEquals(playerD.getWorkerPosition('A')[1], 1);
+        playerC.getCosplayer().move(1, RIGHT);
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 2);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
+        assertEquals(playerD.getWorkers()[0].getPositionX(), 3);
+        assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),1);
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedByPlayer(),2);
@@ -146,11 +144,11 @@ public class MinotaurMoveTest {
         // space, if their worker can be forced one space straight backwards
         // to an unoccupied space at ANY level.
         islandBoard.getSpaces()[3][1].setLevel(LEVEL2);
-        playerC.getCosplayer().move('B', RIGHT);
-        assertEquals(playerC.getWorkerPosition('B')[0], 2);
-        assertEquals(playerC.getWorkerPosition('B')[1], 1);
-        assertEquals(playerD.getWorkerPosition('A')[0], 3);
-        assertEquals(playerD.getWorkerPosition('A')[1], 1);
+        playerC.getCosplayer().move(1, RIGHT);
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 2);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
+        assertEquals(playerD.getWorkers()[0].getPositionX(), 3);
+        assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),1);
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedByPlayer(),2);
@@ -162,11 +160,11 @@ public class MinotaurMoveTest {
         // space, if their worker can be forced one space straight backwards
         // to an unoccupied space at ANY level.
         islandBoard.getSpaces()[3][1].setLevel(DOME);
-        playerC.getCosplayer().move('B', RIGHT);
-        assertEquals(playerC.getWorkerPosition('B')[0], 1);
-        assertEquals(playerC.getWorkerPosition('B')[1], 1);
-        assertEquals(playerD.getWorkerPosition('A')[0], 2);
-        assertEquals(playerD.getWorkerPosition('A')[1], 1);
+        playerC.getCosplayer().move(1, RIGHT);
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
+        assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
+        assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),1);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),2);
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedByPlayer(),0);
@@ -178,11 +176,11 @@ public class MinotaurMoveTest {
         // space, if their worker can be forced one space straight backwards
         // to an unoccupied space at ANY level.
         islandBoard.getSpaces()[3][1].setOccupiedByPlayer(3);
-        playerC.getCosplayer().move('B', RIGHT);
-        assertEquals(playerC.getWorkerPosition('B')[0], 1);
-        assertEquals(playerC.getWorkerPosition('B')[1], 1);
-        assertEquals(playerD.getWorkerPosition('A')[0], 2);
-        assertEquals(playerD.getWorkerPosition('A')[1], 1);
+        playerC.getCosplayer().move(1, RIGHT);
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
+        assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
+        assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),1);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),2);
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedByPlayer(),0);

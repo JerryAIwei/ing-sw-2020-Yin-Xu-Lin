@@ -17,11 +17,11 @@ public class Atlas extends Cosplayer {
     /**
      * Atlas' build: worker may build a dome at any level.
      *
-     * @param worker 'A' or 'B' represent two works of a player.
+     * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      * @param buildDome whether build dome directly (only for Atlas).
      */
-    public void build(Character worker, Direction direction, boolean buildDome){
+    public void build(int worker, Direction direction, boolean buildDome){
         if (buildDome){
 
         }else{

@@ -17,10 +17,10 @@ public class Apollo extends Cosplayer{
      * Apollo's move: worker may move into an opponent worker's space
      * by forcing their worker to the space to the space yours just vacated.
      *
-     * @param worker 'A' or 'B' represent two works of a player.
+     * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      */
-    public void move(Character worker, Direction direction){
+    public void move(int worker, Direction direction){
 
     }
 

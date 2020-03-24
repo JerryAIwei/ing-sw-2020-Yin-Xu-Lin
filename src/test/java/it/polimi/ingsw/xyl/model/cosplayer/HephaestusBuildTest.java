@@ -50,15 +50,13 @@ public class HephaestusBuildTest {
         // set cosplayers and initial worker positions
         cosplayerC = new Hephaestus(playerC);
         playerC.setCosplayer(cosplayerC);
-        playerC.setWorkerPosition('A',new int[]{0, 0});
-        playerC.setWorkerPosition('B',new int[]{1, 1});
+        playerC.setWorkers(0, 0, 1, 1);
         islandBoard.getSpaces()[0][0].setOccupiedByPlayer(playerC.getPlayerId());
         islandBoard.getSpaces()[1][1].setOccupiedByPlayer(playerC.getPlayerId());
 
         cosplayerD = new Cosplayer(playerD);
         playerD.setCosplayer(cosplayerD);
-        playerD.setWorkerPosition('A',new int[]{2, 1});
-        playerD.setWorkerPosition('B',new int[]{1, 2});
+        playerD.setWorkers(2, 1, 1, 2);
         islandBoard.getSpaces()[2][1].setOccupiedByPlayer(playerD.getPlayerId());
         islandBoard.getSpaces()[1][2].setOccupiedByPlayer(playerD.getPlayerId());
         /*

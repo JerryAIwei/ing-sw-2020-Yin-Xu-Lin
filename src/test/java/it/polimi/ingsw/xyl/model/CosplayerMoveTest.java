@@ -44,15 +44,13 @@ public class CosplayerMoveTest {
         // set cosplayers and initial worker positions
         cosplayerA = new Cosplayer(playerA);
         playerA.setCosplayer(cosplayerA);
-        playerA.setWorkerPosition('A',new int[]{0, 0});
-        playerA.setWorkerPosition('B',new int[]{1, 1});
+        playerA.setWorkers(0, 0, 1, 1);
         islandBoard.getSpaces()[0][0].setOccupiedByPlayer(playerA.getPlayerId());
         islandBoard.getSpaces()[1][1].setOccupiedByPlayer(playerA.getPlayerId());
 
         cosplayerB = new Cosplayer(playerB);
         playerB.setCosplayer(cosplayerB);
-        playerB.setWorkerPosition('A',new int[]{3, 3});
-        playerB.setWorkerPosition('B',new int[]{4, 4});
+        playerB.setWorkers(3, 3, 4, 4);
         islandBoard.getSpaces()[3][3].setOccupiedByPlayer(playerB.getPlayerId());
         islandBoard.getSpaces()[4][4].setOccupiedByPlayer(playerB.getPlayerId());
     }
@@ -84,58 +82,58 @@ public class CosplayerMoveTest {
 
     @Test
     public void CosplayerMoveTest_playerAWorkerAMoveRight_1_0() {
-        playerA.getCosplayer().move('A', RIGHT);
-        assertEquals(playerA.getWorkerPosition('A')[0], 1);
-        assertEquals(playerA.getWorkerPosition('A')[1], 0);
+        playerA.getCosplayer().move(0, RIGHT);
+        assertEquals(playerA.getWorkers()[0].getPositionX(), 1);
+        assertEquals(playerA.getWorkers()[0].getPositionY(), 0);
     }
 
     @Test (expected = Exception.class)
     public void CosplayerMoveTest_playerAWorkerAMoveLeft_Error() {
-        playerA.getCosplayer().move('A', LEFT);
+        playerA.getCosplayer().move(0, LEFT);
     }
 
     @Test
     public void CosplayerMoveTest_playerBWorkerAMoveRight_4_3() {
-        playerB.getCosplayer().move('A', RIGHT);
-        assertEquals(playerB.getWorkerPosition('A')[0], 4);
-        assertEquals(playerB.getWorkerPosition('A')[1], 3);
+        playerB.getCosplayer().move(0, RIGHT);
+        assertEquals(playerB.getWorkers()[0].getPositionX(), 4);
+        assertEquals(playerB.getWorkers()[0].getPositionY(), 3);
     }
 
     @Test
     public void CosplayerMoveTest_playerAWorkerBMoveUP_1_2() {
-        playerA.getCosplayer().move('B', UP);
-        assertEquals(playerA.getWorkerPosition('B')[0], 1);
-        assertEquals(playerA.getWorkerPosition('B')[1], 2);
+        playerA.getCosplayer().move(1, UP);
+        assertEquals(playerA.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerA.getWorkers()[1].getPositionY(), 2);
     }
 
     @Test
     public void CosplayerMoveTest_playerAWorkerBMoveLeft_0_1() {
-        playerA.getCosplayer().move('B', LEFT);
-        assertEquals(playerA.getWorkerPosition('B')[0], 0);
-        assertEquals(playerA.getWorkerPosition('B')[1], 1);
+        playerA.getCosplayer().move(1, LEFT);
+        assertEquals(playerA.getWorkers()[1].getPositionX(), 0);
+        assertEquals(playerA.getWorkers()[1].getPositionY(), 1);
     }
 
     @Test
     public void CosplayerMoveTest_playerAWorkerBMoveLeft_occupied_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setOccupiedByPlayer(1);
-        playerA.getCosplayer().move('B', LEFT);
-        assertEquals(playerA.getWorkerPosition('B')[0], 1);
-        assertEquals(playerA.getWorkerPosition('B')[1], 1);
+        playerA.getCosplayer().move(1, LEFT);
+        assertEquals(playerA.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerA.getWorkers()[1].getPositionY(), 1);
     }
 
     @Test
     public void CosplayerMoveTest_playerAWorkerBMoveLeft_dome_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setLevel(DOME);
-        playerA.getCosplayer().move('B', LEFT);
-        assertEquals(playerA.getWorkerPosition('B')[0], 1);
-        assertEquals(playerA.getWorkerPosition('B')[1], 1);
+        playerA.getCosplayer().move(1, LEFT);
+        assertEquals(playerA.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerA.getWorkers()[1].getPositionY(), 1);
     }
 
     @Test
     public void CosplayerMoveTest_playerAWorkerBMoveLeft_LEVEL2_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
-        playerA.getCosplayer().move('B', LEFT);
-        assertEquals(playerA.getWorkerPosition('B')[0], 1);
-        assertEquals(playerA.getWorkerPosition('B')[1], 1);
+        playerA.getCosplayer().move(1, LEFT);
+        assertEquals(playerA.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerA.getWorkers()[1].getPositionY(), 1);
     }
 }

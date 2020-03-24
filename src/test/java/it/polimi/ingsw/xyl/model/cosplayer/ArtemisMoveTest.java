@@ -49,15 +49,13 @@ public class ArtemisMoveTest {
         // set cosplayers and initial worker positions
         cosplayerC = new Artemis(playerC);
         playerC.setCosplayer(cosplayerC);
-        playerC.setWorkerPosition('A',new int[]{0, 0});
-        playerC.setWorkerPosition('B',new int[]{1, 1});
+        playerC.setWorkers(0, 0, 1, 1);
         islandBoard.getSpaces()[0][0].setOccupiedByPlayer(playerC.getPlayerId());
         islandBoard.getSpaces()[1][1].setOccupiedByPlayer(playerC.getPlayerId());
 
         cosplayerD = new Cosplayer(playerD);
         playerD.setCosplayer(cosplayerD);
-        playerD.setWorkerPosition('A',new int[]{2, 1});
-        playerD.setWorkerPosition('B',new int[]{1, 2});
+        playerD.setWorkers(2, 1, 1, 2);
         islandBoard.getSpaces()[2][1].setOccupiedByPlayer(playerD.getPlayerId());
         islandBoard.getSpaces()[1][2].setOccupiedByPlayer(playerD.getPlayerId());
         /*
@@ -84,9 +82,9 @@ public class ArtemisMoveTest {
 
     @Test
     public void ArtemisMoveTest_playerCWorkerBMoveDown_normalMove(){
-        playerC.getCosplayer().move('B', DOWN);
-        assertEquals(playerC.getWorkerPosition('B')[0], 1);
-        assertEquals(playerC.getWorkerPosition('B')[1], 0);
+        playerC.getCosplayer().move(1, DOWN);
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 0);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[1][0].isOccupiedByPlayer(),1);
     }
@@ -94,9 +92,9 @@ public class ArtemisMoveTest {
     @Test
     public void ArtemisMoveTest_playerCWorkerAMoveUp_dome_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(DOME);
-        playerC.getCosplayer().move('A', UP);
-        assertEquals(playerC.getWorkerPosition('A')[0], 0);
-        assertEquals(playerC.getWorkerPosition('A')[1], 0);
+        playerC.getCosplayer().move(0, UP);
+        assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
+        assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
         assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
     }
@@ -104,9 +102,9 @@ public class ArtemisMoveTest {
     @Test
     public void ArtemisMoveTest_playerCWorkerAMoveUp_level2_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
-        playerC.getCosplayer().move('A', UP);
-        assertEquals(playerC.getWorkerPosition('A')[0], 0);
-        assertEquals(playerC.getWorkerPosition('A')[1], 0);
+        playerC.getCosplayer().move(0, UP);
+        assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
+        assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
         assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
     }
@@ -114,9 +112,9 @@ public class ArtemisMoveTest {
     @Test
     public void ArtemisMoveTest_playerCWorkerAMoveUp_occupied_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setOccupiedByPlayer(3);
-        playerC.getCosplayer().move('A', UP);
-        assertEquals(playerC.getWorkerPosition('A')[0], 0);
-        assertEquals(playerC.getWorkerPosition('A')[1], 0);
+        playerC.getCosplayer().move(0, UP);
+        assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
+        assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
         assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),3);
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
     }
@@ -125,10 +123,10 @@ public class ArtemisMoveTest {
 
     @Test
     public void ArtemisMoveTest_playerCWorkerBMoveDownThenMoveRight_usePower(){
-        playerC.getCosplayer().move('B', DOWN);
-        playerC.getCosplayer().move('B', RIGHT);
-        assertEquals(playerC.getWorkerPosition('B')[0], 2);
-        assertEquals(playerC.getWorkerPosition('B')[1], 0);
+        playerC.getCosplayer().move(1, DOWN);
+        playerC.getCosplayer().move(1, RIGHT);
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 2);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 0);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[1][0].isOccupiedByPlayer(),0);
         assertEquals(islandBoard.getSpaces()[2][0].isOccupiedByPlayer(),1);
@@ -136,10 +134,10 @@ public class ArtemisMoveTest {
 
     @Test
     public void ArtemisMoveTest_playerCWorkerBMoveDownThenMoveUp_notAllowed(){
-        playerC.getCosplayer().move('B', DOWN);
-        playerC.getCosplayer().move('B', UP);  // no go back to its initial space
-        assertEquals(playerC.getWorkerPosition('B')[0], 1);
-        assertEquals(playerC.getWorkerPosition('B')[1], 0);
+        playerC.getCosplayer().move(1, DOWN);
+        playerC.getCosplayer().move(1, UP);  // no go back to its initial space
+        assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
+        assertEquals(playerC.getWorkers()[1].getPositionY(), 0);
     }
 
 }

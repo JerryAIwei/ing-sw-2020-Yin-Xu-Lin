@@ -22,31 +22,32 @@ public class Cosplayer {
     public Player getPlayer(){
         return this.player;
     }
+
     /**
      * move method of cosplayer(Civilian Mod)
-     * Override this method in God-Cosplayer Class 01-Apollo, 08-Minotaur and 02-Artemis.
-     * @param worker 'A' or 'B' represent two works of a player.
+     *
+     * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      */
-    public void move(Character worker, Direction direction){
+    public void move(int worker, Direction direction){
         try {
-            int targetPositionX = player.getWorkerPosition(worker)[0] + direction.toMarginalPosition()[0];
-            int targetPositionY = player.getWorkerPosition(worker)[1] + direction.toMarginalPosition()[1];
+            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
             IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();
             Space targetSpace = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY];
             int targetOccupiedBy = targetSpace.isOccupiedByPlayer();
             boolean noDome = targetSpace.getLevel() != DOME;
             Space currentSpace =
-                    currentIslandBoard.getSpaces()[player.getWorkerPosition(worker)[0]][player.getWorkerPosition(worker)[1]];
+                    currentIslandBoard.getSpaces()[player.getWorkers()[worker].getPositionX()][player.getWorkers()[worker].getPositionY()];
             int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();
 
             if (targetOccupiedBy == 0 && noDome && relativeLevel <= 1) {
                 // free the current occupied space
-                currentIslandBoard.getSpaces()[player.getWorkerPosition(worker)[0]][player.getWorkerPosition(worker)[1]].setOccupiedByPlayer(0);
+                currentIslandBoard.getSpaces()[player.getWorkers()[worker].getPositionX()][player.getWorkers()[worker].getPositionY()].setOccupiedByPlayer(0);
                 // chang the worker's position to target space
-                player.setWorkerPosition(worker,
-                        new int[]{player.getWorkerPosition(worker)[0] + direction.toMarginalPosition()[0],
-                                player.getWorkerPosition(worker)[1] + direction.toMarginalPosition()[1]}
+                player.getWorkers()[worker].setPosition(
+                        player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
+                        player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]
                 );
                 // occupy the target space by playerId
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedByPlayer(player.getPlayerId());
@@ -61,17 +62,17 @@ public class Cosplayer {
 
     /**
      * build method of cosplayer(Civilian Mod)
-     * Override this method in God-Cosplayer Class 04-Atlas, 05-Demeter, 06-Hephaestus
-     * @param worker 'A' or 'B' represent two works of a player.
+     *
+     * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      * @param buildDome whether build dome directly (only for Atlas).
      */
-    public void build(Character worker, Direction direction, boolean buildDome){
+    public void build(int worker, Direction direction, boolean buildDome){
         try {
             GameBoard currentGameBoard = player.getCurrentGameBoard();
             IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-            int targetPositionX = player.getWorkerPosition(worker)[0] + direction.toMarginalPosition()[0];
-            int targetPositionY = player.getWorkerPosition(worker)[1] + direction.toMarginalPosition()[1];
+            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
             int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedByPlayer();
             boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
             // for Civilian Mod, player can build if the target space is free(not occupied by another player)

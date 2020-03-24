@@ -10,8 +10,7 @@ public class Player {
     private String playerName;
     private GameBoard currentGameBoard;
     private Cosplayer cosplayer;
-    private int[] workerAPosition;
-    private int[] workerBPosition;
+    private Worker[] workers;
     private PlayerStatus currentStatus;
 
     public Player(int playerId, String playerName){
@@ -43,22 +42,14 @@ public class Player {
         this.cosplayer = cosplayer;
     }
 
-    public int[] getWorkerPosition(Character ab){
-        if(ab =='A')
-            return workerAPosition;
-        else if(ab =='B')
-            return workerBPosition;
-        else
-            throw new IllegalArgumentException("Worker should be A or B!");
+    public Worker[] getWorkers() {
+        return workers;
     }
 
-    public void setWorkerPosition(Character ab, int[] workerPosition) {
-        if(ab =='A')
-            this.workerAPosition = workerPosition;
-        else if(ab =='B')
-            this.workerBPosition = workerPosition;
-        else
-            throw new IllegalArgumentException("Worker should be A or B!");
+    public void setWorkers(int xOfWorkerA, int yOfWorkerA, int xOfWorkerB, int yOfWorkerB){
+        Worker workerA = new Worker(xOfWorkerA,yOfWorkerA);
+        Worker workerB = new Worker(xOfWorkerB,yOfWorkerB);
+        this.workers = new Worker[]{workerA, workerB};
     }
 
     public PlayerStatus getCurrentStatus() {

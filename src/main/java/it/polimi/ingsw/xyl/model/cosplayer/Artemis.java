@@ -20,13 +20,13 @@ public class Artemis extends Cosplayer{
      * Artemis' move: worker may move one additional time,
      * but not back to its initial space.
      *
-     * @param worker 'A' or 'B' represent two works of a player.
+     * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      */
-    public void move(Character worker, Direction direction) {
+    public void move(int worker, Direction direction) {
         if(firstMove){
-            this.initialPosition[0] = this.getPlayer().getWorkerPosition(worker)[0];
-            this.initialPosition[1] = this.getPlayer().getWorkerPosition(worker)[1];
+            this.initialPosition[0] = this.getPlayer().getWorkers()[worker].getPositionX();
+            this.initialPosition[1] = this.getPlayer().getWorkers()[worker].getPositionY();
             // do something
             this.firstMove = false;
         }else {

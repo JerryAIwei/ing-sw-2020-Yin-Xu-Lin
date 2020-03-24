@@ -47,15 +47,13 @@ public class AtlasBuildTest {
         // set cosplayers and initial worker positions
         cosplayerC = new Atlas(playerC);
         playerC.setCosplayer(cosplayerC);
-        playerC.setWorkerPosition('A',new int[]{0, 0});
-        playerC.setWorkerPosition('B',new int[]{1, 1});
+        playerC.setWorkers(0, 0, 1, 1);
         islandBoard.getSpaces()[0][0].setOccupiedByPlayer(playerC.getPlayerId());
         islandBoard.getSpaces()[1][1].setOccupiedByPlayer(playerC.getPlayerId());
 
         cosplayerD = new Cosplayer(playerD);
         playerD.setCosplayer(cosplayerD);
-        playerD.setWorkerPosition('A',new int[]{2, 1});
-        playerD.setWorkerPosition('B',new int[]{1, 2});
+        playerD.setWorkers(2, 1, 1, 2);
         islandBoard.getSpaces()[2][1].setOccupiedByPlayer(playerD.getPlayerId());
         islandBoard.getSpaces()[1][2].setOccupiedByPlayer(playerD.getPlayerId());
         /*
@@ -83,20 +81,20 @@ public class AtlasBuildTest {
     @Test
     public void AtlasBuildTest_playerCWorkerABuildRight_normal(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
-        playerC.getCosplayer().build('A', RIGHT, false);
+        playerC.getCosplayer().build(0, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
     }
 
     @Test
     public void AtlasBuildTest_playerCWorkerBBuildUpRight_occupied_2_1_notAllowed() {
-        playerC.getCosplayer().build('B', RIGHT, false);
+        playerC.getCosplayer().build(1, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(),GROUND);
     }
 
     @Test
     public void AtlasBuildTest_playerCWorkerBBuildUpRight_odome_2_1_notAllowed() {
         islandBoard.getSpaces()[2][1].setLevel(DOME);
-        playerC.getCosplayer().build('B', RIGHT, false);
+        playerC.getCosplayer().build(1, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(),DOME);
     }
 
@@ -105,7 +103,7 @@ public class AtlasBuildTest {
     @Test
     public void AtlasBuildTest_playerCWorkerABuildRightWithDome_usePower(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
-        playerC.getCosplayer().build('A', RIGHT, true);
+        playerC.getCosplayer().build(0, RIGHT, true);
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),DOME);
     }
 

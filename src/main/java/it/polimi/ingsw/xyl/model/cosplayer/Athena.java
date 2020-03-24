@@ -13,10 +13,10 @@ public class Athena extends Cosplayer{
      * Athena's power: if one of your workers moved up on
      * your last turn, opponent workers cannot move up this turn.
      *
-     * @param worker 'A' or 'B' represent two works of a player.
+     * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      */
-    public void move(Character worker, Direction direction){
+    public void move(int worker, Direction direction){
 
     }
 }
