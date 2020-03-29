@@ -11,7 +11,7 @@ public class Player {
     private GameBoard currentGameBoard;
     private Cosplayer cosplayer;
     private Worker[] workers;
-    private PlayerStatus currentStatus;
+    private PlayerStatus currentStatus = PlayerStatus.INLOBBY;
 
     public Player(int playerId, String playerName){
         this.playerId = playerId;
@@ -50,6 +50,7 @@ public class Player {
         Worker workerA = new Worker(xOfWorkerA,yOfWorkerA);
         Worker workerB = new Worker(xOfWorkerB,yOfWorkerB);
         this.workers = new Worker[]{workerA, workerB};
+        this.currentStatus = PlayerStatus.WORKERPREPARED;
     }
 
     public PlayerStatus getCurrentStatus() {

@@ -14,6 +14,7 @@ public class GameBoard {
     private int turnId;
     private Vector<Player> players;
     private IslandBoard islandBoard;
+    private Vector<GodPower> availableGodPowers;
     private GameStatus currentStatus;
 
     public GameBoard(int gameId, int playerNumber, IslandBoard islandBoard) {
@@ -21,6 +22,7 @@ public class GameBoard {
         this.playerNumber = playerNumber;
         this.islandBoard = islandBoard;
     }
+
     public int getGameId() {
         return gameId;
     }
@@ -54,6 +56,7 @@ public class GameBoard {
         //TODO: multi-gameBoard
         if(players.size() < playerNumber){
             players.add(player);
+            player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
             return 1;
         }
         else {
@@ -70,6 +73,18 @@ public class GameBoard {
         this.islandBoard = islandBoard;
     }
 
+    public Vector<GodPower> getAvailableGodPowers(){
+        return availableGodPowers;
+    }
+
+    public int addAvailableGodPowers(GodPower godPowers){
+        if (availableGodPowers.size()<=playerNumber){
+            this.availableGodPowers.add(godPowers);
+            return 1;
+        }else
+            return 0;
+    }
+
     public GameStatus getCurrentStatus() {
         return currentStatus;
     }
@@ -80,6 +95,9 @@ public class GameBoard {
 
     public void init(){
         if(playerNumber == 2 || playerNumber==3)
+        {
             this.players = new Vector<>();
+            this.availableGodPowers = new Vector<>();
+        }
     }
 }

@@ -21,64 +21,13 @@ import static org.junit.Assert.assertEquals;
  *
  *  @author Shaoxun
  */
-public class MinotaurMoveTest {
-    Cosplayer cosplayerC;
-    Cosplayer cosplayerD;
-    IslandBoard islandBoard;
-    GameBoard gameBoard;
-    Player playerC;
-    Player playerD;
+public class MinotaurMoveTest extends GodCosplayerTest{
 
     @Before
     public void setUp() {
-        // imitate a real game sequence
-        // init playerA and player B
-        playerC = new Player(1, "playerC");
-        playerD = new Player(2, "playerD");
-
-        // init GameBoard with 2 players
-        islandBoard = new IslandBoard();
-        gameBoard = new GameBoard(1, 2, islandBoard);
-        gameBoard.init();
-
-        // add players
-        gameBoard.addPlayer(playerC);
-        playerC.setCurrentGameBoard(gameBoard);
-        gameBoard.addPlayer(playerD);
-        playerD.setCurrentGameBoard(gameBoard);
-
-        // set cosplayers and initial worker positions
-        cosplayerC = new Minotaur(playerC);
-        playerC.setCosplayer(cosplayerC);
-        playerC.setWorkers(0, 0, 1, 1);
-        islandBoard.getSpaces()[0][0].setOccupiedByPlayer(playerC.getPlayerId());
-        islandBoard.getSpaces()[1][1].setOccupiedByPlayer(playerC.getPlayerId());
-
-        cosplayerD = new Cosplayer(playerD);
-        playerD.setCosplayer(cosplayerD);
-        playerD.setWorkers(2, 1, 1, 2);
-        islandBoard.getSpaces()[2][1].setOccupiedByPlayer(playerD.getPlayerId());
-        islandBoard.getSpaces()[1][2].setOccupiedByPlayer(playerD.getPlayerId());
-        /*
-        | 0 | 0 | 0 | 0 | 0 |
-        | 0 | 0 | 0 | 0 | 0 |
-        | 0 |D'B| 0 | 0 | 0 |
-        | 0 |C'B|D'A| 0 | 0 |
-        |C'A| 0 | 0 | 0 | 0 |
-        playerC is Minotaur so that its workerB can move to (2,1),
-        which will force playerD's workerA move to (3,1)
-        if (3,1) is neither occupied by another player nor placed a dome.
-        */
-    }
-
-    @After
-    public void tearDown() {
-        cosplayerC = null;
-        cosplayerD = null;
-        playerC = null;
-        playerD = null;
-        islandBoard = null;
-        gameBoard = null;
+        super.setUp();
+        Minotaur minotaur = new Minotaur(playerC);
+        playerC.setCosplayer(minotaur);
     }
 
     /* general test */
