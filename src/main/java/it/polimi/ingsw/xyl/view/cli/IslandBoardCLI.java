@@ -102,7 +102,7 @@ public class IslandBoardCLI {
             this.id = id;
         }
     }
-    private Map<Integer, Player> players = new HashMap<Integer,Player>();
+    private Map<Integer, Player> players = new HashMap<>();
     public IslandBoardCLI(){
         for(int i = 0;i<5;i++)
             for(int j = 0;j<5;j++)
