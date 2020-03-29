@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"it.polimi.ingsw.xyl.model"},{"l":"it.polimi.ingsw.xyl.model.cosplayer"},{"l":"it.polimi.ingsw.xyl.util"},{"l":"it.polimi.ingsw.xyl.view"},{"l":"it.polimi.ingsw.xyl.view.cli"}]

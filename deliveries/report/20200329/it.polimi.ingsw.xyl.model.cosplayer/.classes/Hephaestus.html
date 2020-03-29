@@ -1,0 +1,123 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Hephaestus</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model.cosplayer</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Hephaestus (it.polimi.ingsw.xyl.model.cosplayer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Hephaestus</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model.cosplayer;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.Cosplayer;
+<i>4</i>&nbsp;import it.polimi.ingsw.xyl.model.Direction;
+<i>5</i>&nbsp;import it.polimi.ingsw.xyl.model.Player;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import static it.polimi.ingsw.xyl.model.GodPower.HEPHAESTUS;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;public class Hephaestus extends Cosplayer {
+<b class="fc"><i>10</i>&nbsp;    private boolean firstBuild = true;</b>
+<b class="fc"><i>11</i>&nbsp;    private Direction firstBuildDirection = null;</b>
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    public Hephaestus(Player player) {
+<b class="fc"><i>14</i>&nbsp;        super(player);</b>
+<b class="fc"><i>15</i>&nbsp;        super.godPower = HEPHAESTUS;</b>
+<b class="fc"><i>16</i>&nbsp;    }</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Hephaestus&#39; build: worker may build one additional block(not dome)
+<i>20</i>&nbsp;     * on top of your first block.
+<i>21</i>&nbsp;     *
+<i>22</i>&nbsp;     * @param worker &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>23</i>&nbsp;     * @param direction see Direction class.
+<i>24</i>&nbsp;     * @param buildDome whether build dome directly (only for Atlas).
+<i>25</i>&nbsp;     */
+<i>26</i>&nbsp;    public void build(int worker, Direction direction, boolean buildDome){
+<b class="fc"><i>27</i>&nbsp;        if(firstBuild){</b>
+<i>28</i>&nbsp;            // do something
+<i>29</i>&nbsp;
+<b class="fc"><i>30</i>&nbsp;            this.firstBuildDirection= direction;</b>
+<b class="fc"><i>31</i>&nbsp;            this.firstBuild = false;</b>
+<i>32</i>&nbsp;        }else{
+<b class="fc"><i>33</i>&nbsp;            if(direction == firstBuildDirection){</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;            }else{
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;            }
+<i>38</i>&nbsp;        }
+<b class="fc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-03-30 01:12</div>
+</div>
+</body>
+</html>

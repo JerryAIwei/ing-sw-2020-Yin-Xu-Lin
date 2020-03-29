@@ -1,0 +1,186 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameBoard</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameBoard (it.polimi.ingsw.xyl.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameBoard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (8/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    58.3%
+  </span>
+  <span class="absValue">
+    (21/ 36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.Vector;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * This class is the abstraction of A Santorini GAME (Civilian Mod),
+<i>7</i>&nbsp; * A game lobby handles with one or more game(board).
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * @author Shaoxun
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public class GameBoard {
+<i>12</i>&nbsp;    private int gameId;
+<i>13</i>&nbsp;    private int playerNumber;
+<i>14</i>&nbsp;    private int turnId;
+<i>15</i>&nbsp;    private Vector&lt;Player&gt; players;
+<i>16</i>&nbsp;    private IslandBoard islandBoard;
+<i>17</i>&nbsp;    private Vector&lt;GodPower&gt; availableGodPowers;
+<i>18</i>&nbsp;    private GameStatus currentStatus;
+<i>19</i>&nbsp;
+<b class="fc"><i>20</i>&nbsp;    public GameBoard(int gameId, int playerNumber, IslandBoard islandBoard) {</b>
+<b class="fc"><i>21</i>&nbsp;        this.gameId = gameId;</b>
+<b class="fc"><i>22</i>&nbsp;        this.playerNumber = playerNumber;</b>
+<b class="fc"><i>23</i>&nbsp;        this.islandBoard = islandBoard;</b>
+<b class="fc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    public int getGameId() {
+<b class="nc"><i>27</i>&nbsp;        return gameId;</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    public void setGameId(int gameId) {
+<b class="nc"><i>31</i>&nbsp;        this.gameId = gameId;</b>
+<b class="nc"><i>32</i>&nbsp;    }</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    public int getPlayerNumber() {
+<b class="fc"><i>35</i>&nbsp;        return playerNumber;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    public void setPlayerNumber(int playerNumber) {
+<b class="nc"><i>39</i>&nbsp;        this.playerNumber = playerNumber;</b>
+<b class="nc"><i>40</i>&nbsp;    }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public int getTurnId() {
+<b class="fc"><i>43</i>&nbsp;        return turnId;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    public void setTurnId(int turnId) {
+<b class="fc"><i>47</i>&nbsp;        this.turnId = turnId;</b>
+<b class="fc"><i>48</i>&nbsp;    }</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    public Vector&lt;Player&gt; getPlayers() {
+<b class="fc"><i>51</i>&nbsp;        return players;</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    public int addPlayer(Player player) {
+<i>55</i>&nbsp;        //TODO: add playerNumber condition
+<i>56</i>&nbsp;        //TODO: multi-gameBoard
+<b class="fc"><i>57</i>&nbsp;        if(players.size() &lt; playerNumber){</b>
+<b class="fc"><i>58</i>&nbsp;            players.add(player);</b>
+<b class="fc"><i>59</i>&nbsp;            player.setCurrentStatus(PlayerStatus.INGAMEBOARD);</b>
+<b class="fc"><i>60</i>&nbsp;            return 1;</b>
+<i>61</i>&nbsp;        }
+<i>62</i>&nbsp;        else {
+<b class="fc"><i>63</i>&nbsp;            System.out.println(&quot;This GameBoard is full.&quot;);</b>
+<b class="fc"><i>64</i>&nbsp;            return -1;</b>
+<i>65</i>&nbsp;        }
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    public IslandBoard getIslandBoard() {
+<b class="fc"><i>69</i>&nbsp;        return islandBoard;</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    public void setIslandBoard(IslandBoard islandBoard) {
+<b class="nc"><i>73</i>&nbsp;        this.islandBoard = islandBoard;</b>
+<b class="nc"><i>74</i>&nbsp;    }</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    public Vector&lt;GodPower&gt; getAvailableGodPowers(){
+<b class="nc"><i>77</i>&nbsp;        return availableGodPowers;</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    public int addAvailableGodPowers(GodPower godPowers){
+<b class="nc"><i>81</i>&nbsp;        if (availableGodPowers.size()&lt;=playerNumber){</b>
+<b class="nc"><i>82</i>&nbsp;            this.availableGodPowers.add(godPowers);</b>
+<b class="nc"><i>83</i>&nbsp;            return 1;</b>
+<i>84</i>&nbsp;        }else
+<b class="nc"><i>85</i>&nbsp;            return 0;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    public GameStatus getCurrentStatus() {
+<b class="nc"><i>89</i>&nbsp;        return currentStatus;</b>
+<i>90</i>&nbsp;    }
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    public void setCurrentStatus(GameStatus currentStatus) {
+<b class="nc"><i>93</i>&nbsp;        this.currentStatus = currentStatus;</b>
+<b class="nc"><i>94</i>&nbsp;    }</b>
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    public void init(){
+<b class="fc"><i>97</i>&nbsp;        if(playerNumber == 2 || playerNumber==3)</b>
+<i>98</i>&nbsp;        {
+<b class="fc"><i>99</i>&nbsp;            this.players = new Vector&lt;&gt;();</b>
+<b class="fc"><i>100</i>&nbsp;            this.availableGodPowers = new Vector&lt;&gt;();</b>
+<i>101</i>&nbsp;        }
+<b class="fc"><i>102</i>&nbsp;    }</b>
+<i>103</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-03-30 01:12</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,284 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Cosplayer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Cosplayer (it.polimi.ingsw.xyl.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Cosplayer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    99%
+  </span>
+  <span class="absValue">
+    (95/ 96)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.EnumSet;
+<i>4</i>&nbsp;import java.util.Iterator;
+<i>5</i>&nbsp;import java.util.Vector;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import static it.polimi.ingsw.xyl.model.Level.DOME;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * This class represents the role of the Player: God or Civilian
+<i>11</i>&nbsp; *
+<i>12</i>&nbsp; * @author Shaoxun
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;public class Cosplayer {
+<i>15</i>&nbsp;    private Player player;
+<b class="fc"><i>16</i>&nbsp;    protected GodPower godPower = null;</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    public GodPower getGodPower() {
+<b class="nc"><i>19</i>&nbsp;        return godPower;</b>
+<i>20</i>&nbsp;    }
+<i>21</i>&nbsp;
+<b class="fc"><i>22</i>&nbsp;    public Cosplayer(Player player) {</b>
+<b class="fc"><i>23</i>&nbsp;        this.player = player;</b>
+<b class="fc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    public Player getPlayer() {
+<b class="fc"><i>27</i>&nbsp;        return this.player;</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * move method of cosplayer(Civilian Mod)
+<i>32</i>&nbsp;     *
+<i>33</i>&nbsp;     * @param worker    &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>34</i>&nbsp;     * @param direction see Direction class.
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    public void move(int worker, Direction direction) {
+<b class="fc"><i>37</i>&nbsp;        int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];</b>
+<b class="fc"><i>38</i>&nbsp;        int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];</b>
+<b class="fc"><i>39</i>&nbsp;        IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();</b>
+<b class="fc"><i>40</i>&nbsp;        Vector&lt;Direction&gt; availableMoves = getAvailableMoves(worker);</b>
+<b class="fc"><i>41</i>&nbsp;        if (availableMoves.contains(direction)) {</b>
+<b class="fc"><i>42</i>&nbsp;            Space currentSpace =</b>
+<b class="fc"><i>43</i>&nbsp;                    currentIslandBoard.getSpaces()[player.getWorkers()[worker].getPositionX()][player.getWorkers()[worker].getPositionY()];</b>
+<b class="fc"><i>44</i>&nbsp;            player.getWorkers()[worker].setFromLevel(currentSpace.getLevel().toInt());</b>
+<i>45</i>&nbsp;            // if move to lower level, set worker&#39;s fromLevel3 false
+<i>46</i>&nbsp;//            if (player.getWorkers()[worker].fromLevel() == 3) {
+<i>47</i>&nbsp;//                Space targetSpace = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY];
+<i>48</i>&nbsp;//                boolean moveToLowerLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt() &lt; 0;
+<i>49</i>&nbsp;//                if (moveToLowerLevel)
+<i>50</i>&nbsp;//                    player.getWorkers()[worker].setFromLevel(false);
+<i>51</i>&nbsp;//            }
+<i>52</i>&nbsp;            // free the current occupied space
+<b class="fc"><i>53</i>&nbsp;            currentSpace.setOccupiedByPlayer(0);</b>
+<i>54</i>&nbsp;            // chang the worker&#39;s position to target space
+<b class="fc"><i>55</i>&nbsp;            player.getWorkers()[worker].setPosition(</b>
+<b class="fc"><i>56</i>&nbsp;                    player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],</b>
+<b class="fc"><i>57</i>&nbsp;                    player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]</b>
+<i>58</i>&nbsp;            );
+<i>59</i>&nbsp;            // occupy the target space by playerId
+<b class="fc"><i>60</i>&nbsp;            currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedByPlayer(player.getPlayerId());</b>
+<i>61</i>&nbsp;            // check win
+<b class="fc"><i>62</i>&nbsp;            checkWin();</b>
+<b class="fc"><i>63</i>&nbsp;        } else {</b>
+<b class="fc"><i>64</i>&nbsp;            System.out.println(&quot;Your move is not available!&quot;);</b>
+<i>65</i>&nbsp;        }
+<b class="fc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * build method of cosplayer(Civilian Mod)
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param worker    &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>72</i>&nbsp;     * @param direction see Direction class.
+<i>73</i>&nbsp;     * @param buildDome whether build dome directly (only for Atlas).
+<i>74</i>&nbsp;     */
+<i>75</i>&nbsp;    public void build(int worker, Direction direction, boolean buildDome) {
+<i>76</i>&nbsp;        try {
+<b class="fc"><i>77</i>&nbsp;            GameBoard currentGameBoard = player.getCurrentGameBoard();</b>
+<b class="fc"><i>78</i>&nbsp;            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();</b>
+<b class="fc"><i>79</i>&nbsp;            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];</b>
+<b class="fc"><i>80</i>&nbsp;            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];</b>
+<b class="fc"><i>81</i>&nbsp;            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedByPlayer();</b>
+<b class="fc"><i>82</i>&nbsp;            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;</b>
+<i>83</i>&nbsp;            // for Civilian Mod, player can build if the target space is free(not occupied by another player)
+<i>84</i>&nbsp;            // and there is no dome in the target space
+<b class="fc"><i>85</i>&nbsp;            if (targetOccupiedBy == 0 &amp;&amp; noDome) {</b>
+<i>86</i>&nbsp;                // increase the level of the target space
+<b class="fc"><i>87</i>&nbsp;                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();</b>
+<i>88</i>&nbsp;                // change turnId after finish building
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;                /* turnId: 0, 1, 2 for playerNumber == 3 and 0, 1 for playerNumber == 2
+<i>91</i>&nbsp;                 *  current player is GameBoard.getPlayers[turnId]
+<i>92</i>&nbsp;                 *  at the beginning, the &quot;Challenger&quot; choose a &quot;Start Player&quot;, re-sort the players ArrayList
+<i>93</i>&nbsp;                 *  for GodPowers which may move or build twice, set new turnID after everything done.
+<i>94</i>&nbsp;                 * */
+<b class="fc"><i>95</i>&nbsp;                int playerNumber = currentGameBoard.getPlayerNumber();</b>
+<b class="fc"><i>96</i>&nbsp;                int nextTurnId = (currentGameBoard.getTurnId() + 1) % playerNumber;</b>
+<b class="fc"><i>97</i>&nbsp;                currentGameBoard.setTurnId(nextTurnId);</b>
+<b class="fc"><i>98</i>&nbsp;            } else {</b>
+<b class="fc"><i>99</i>&nbsp;                System.out.println(&quot;Chosen worker can&#39;t build in target space!&quot;);</b>
+<i>100</i>&nbsp;            }
+<b class="fc"><i>101</i>&nbsp;        } catch (Exception e) {</b>
+<b class="fc"><i>102</i>&nbsp;            System.out.println(&quot;Array out of bounds&quot;);</b>
+<b class="fc"><i>103</i>&nbsp;            throw e;</b>
+<b class="fc"><i>104</i>&nbsp;        }</b>
+<b class="fc"><i>105</i>&nbsp;    }</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /**
+<i>108</i>&nbsp;     * checkWin() is used after every move: if one of your workers moves
+<i>109</i>&nbsp;     * up on top of level 3 during your turn, you instantly win.
+<i>110</i>&nbsp;     *
+<i>111</i>&nbsp;     * checkWin() is used after each turnId change: if all of your workers
+<i>112</i>&nbsp;     * cannot move, you lose.
+<i>113</i>&nbsp;     * ( &quot;You must always perform a move then build on your turn.
+<i>114</i>&nbsp;     * If you are unable to, you lose.&quot; The only condition in which one
+<i>115</i>&nbsp;     * is not able to build is &quot;in a hole&quot;, that means,
+<i>116</i>&nbsp;     * all the eight spaces are occupied by another workers or domes,
+<i>117</i>&nbsp;     * but you can never get into a hole after an effective move.)
+<i>118</i>&nbsp;     */
+<i>119</i>&nbsp;    public void checkWin() {
+<i>120</i>&nbsp;        /* Civilian Mod */
+<i>121</i>&nbsp;        // If your worker is forced onto the third level,
+<i>122</i>&nbsp;        // you do not win the game. Moving from one third
+<i>123</i>&nbsp;        // level space to another also does not trigger a win.
+<b class="fc"><i>124</i>&nbsp;        IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();</b>
+<b class="fc"><i>125</i>&nbsp;        boolean win = (player.getWorkers()[0].fromLevel() != 3 &amp;&amp;</b>
+<b class="fc"><i>126</i>&nbsp;                currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>127</i>&nbsp;                        [player.getWorkers()[0].getPositionX()]</b>
+<b class="fc"><i>128</i>&nbsp;                        [player.getWorkers()[0].getPositionY()].getLevel() == Level.LEVEL3)</b>
+<b class="fc"><i>129</i>&nbsp;                || (player.getWorkers()[1].fromLevel() != 3 &amp;&amp;</b>
+<b class="fc"><i>130</i>&nbsp;                currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>131</i>&nbsp;                        [player.getWorkers()[1].getPositionX()]</b>
+<b class="fc"><i>132</i>&nbsp;                        [player.getWorkers()[1].getPositionY()].getLevel() == Level.LEVEL3);</b>
+<b class="fc"><i>133</i>&nbsp;        if (win) {</b>
+<b class="fc"><i>134</i>&nbsp;            player.setCurrentStatus(PlayerStatus.WIN);</b>
+<i>135</i>&nbsp;            // notify();
+<i>136</i>&nbsp;        }
+<b class="fc"><i>137</i>&nbsp;        boolean lose =</b>
+<b class="fc"><i>138</i>&nbsp;                player.getCosplayer().getAvailableMoves(0).size() == 0</b>
+<b class="fc"><i>139</i>&nbsp;                        &amp;&amp; player.getCosplayer().getAvailableMoves(1).size() == 0;</b>
+<b class="fc"><i>140</i>&nbsp;        if (lose) {</b>
+<b class="fc"><i>141</i>&nbsp;            player.setCurrentStatus(PlayerStatus.LOSE);</b>
+<i>142</i>&nbsp;        }
+<b class="fc"><i>143</i>&nbsp;    }</b>
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    /**
+<i>146</i>&nbsp;     * get all available move directions of a chosen worker
+<i>147</i>&nbsp;     *
+<i>148</i>&nbsp;     * @param worker &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>149</i>&nbsp;     * @return all available direction of the worker.
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public Vector&lt;Direction&gt; getAvailableMoves(int worker) {
+<b class="fc"><i>152</i>&nbsp;        int x = player.getWorkers()[worker].getPositionX();</b>
+<b class="fc"><i>153</i>&nbsp;        int y = player.getWorkers()[worker].getPositionY();</b>
+<b class="fc"><i>154</i>&nbsp;        EnumSet&lt;Direction&gt; all = EnumSet.allOf(Direction.class);</b>
+<b class="fc"><i>155</i>&nbsp;        Vector&lt;Direction&gt; availableMoves = new Vector&lt;&gt;(all);</b>
+<i>156</i>&nbsp;        // remove out of boundary
+<b class="fc"><i>157</i>&nbsp;        if (x == 0) {</b>
+<b class="fc"><i>158</i>&nbsp;            availableMoves.remove(Direction.LEFT);</b>
+<b class="fc"><i>159</i>&nbsp;            availableMoves.remove(Direction.UPLEFT);</b>
+<b class="fc"><i>160</i>&nbsp;            availableMoves.remove(Direction.DOWNLEFT);</b>
+<i>161</i>&nbsp;        }
+<b class="fc"><i>162</i>&nbsp;        if (x == 4) {</b>
+<b class="fc"><i>163</i>&nbsp;            availableMoves.remove(Direction.RIGHT);</b>
+<b class="fc"><i>164</i>&nbsp;            availableMoves.remove(Direction.UPRIGHT);</b>
+<b class="fc"><i>165</i>&nbsp;            availableMoves.remove(Direction.DOWNRIGHT);</b>
+<i>166</i>&nbsp;        }
+<b class="fc"><i>167</i>&nbsp;        if (y == 0) {</b>
+<b class="fc"><i>168</i>&nbsp;            availableMoves.remove(Direction.DOWN);</b>
+<b class="fc"><i>169</i>&nbsp;            availableMoves.remove(Direction.DOWNLEFT);</b>
+<b class="fc"><i>170</i>&nbsp;            availableMoves.remove(Direction.DOWNRIGHT);</b>
+<i>171</i>&nbsp;        }
+<b class="fc"><i>172</i>&nbsp;        if (y == 4) {</b>
+<b class="fc"><i>173</i>&nbsp;            availableMoves.remove(Direction.UP);</b>
+<b class="fc"><i>174</i>&nbsp;            availableMoves.remove(Direction.UPLEFT);</b>
+<b class="fc"><i>175</i>&nbsp;            availableMoves.remove(Direction.UPRIGHT);</b>
+<i>176</i>&nbsp;        }
+<b class="fc"><i>177</i>&nbsp;        Iterator&lt;Direction&gt; iterator = availableMoves.iterator();</b>
+<b class="fc"><i>178</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>179</i>&nbsp;            Direction a = iterator.next();</b>
+<b class="fc"><i>180</i>&nbsp;            Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()</b>
+<b class="fc"><i>181</i>&nbsp;                    [x + a.toMarginalPosition()[0]]</b>
+<b class="fc"><i>182</i>&nbsp;                    [y + a.toMarginalPosition()[1]];</b>
+<i>183</i>&nbsp;            // remove occupied by another worker or by a dome
+<b class="fc"><i>184</i>&nbsp;            if (targetSpace.isOccupiedByPlayer() != 0 || targetSpace.getLevel() == Level.DOME) {</b>
+<b class="fc"><i>185</i>&nbsp;                iterator.remove();</b>
+<b class="fc"><i>186</i>&nbsp;                continue;</b>
+<i>187</i>&nbsp;            }
+<i>188</i>&nbsp;
+<b class="fc"><i>189</i>&nbsp;            Space currentSpace =</b>
+<b class="fc"><i>190</i>&nbsp;                    player.getCurrentGameBoard().getIslandBoard().getSpaces()[player.getWorkers()[worker]</b>
+<b class="fc"><i>191</i>&nbsp;                            .getPositionX()][player.getWorkers()[worker].getPositionY()];</b>
+<i>192</i>&nbsp;
+<b class="fc"><i>193</i>&nbsp;            int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();</b>
+<b class="fc"><i>194</i>&nbsp;            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoMoveUp();</b>
+<i>195</i>&nbsp;            // remove relative level not allowed
+<b class="fc"><i>196</i>&nbsp;            if (relativeLevel &gt; 1 || (noMoveUp &amp;&amp; relativeLevel == 1))</b>
+<b class="fc"><i>197</i>&nbsp;                iterator.remove();</b>
+<b class="fc"><i>198</i>&nbsp;        }</b>
+<b class="fc"><i>199</i>&nbsp;        return availableMoves;</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-03-30 01:12</div>
+</div>
+</body>
+</html>
