@@ -3,7 +3,7 @@ package it.polimi.ingsw.xyl.model;
 import java.util.Vector;
 
 /**
- * This class is the abstraction of A Santorini GAME (Civilian Mod),
+ * This class is the abstraction of A Santorini GAME,
  * A game lobby handles with one or more game(board).
  *
  * @author Shaoxun
