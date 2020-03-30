@@ -89,7 +89,7 @@ public class Cosplayer {
 
                 /* turnId: 0, 1, 2 for playerNumber == 3 and 0, 1 for playerNumber == 2
                  *  current player is GameBoard.getPlayers[turnId]
-                 *  at the beginning, the "Challenger" choose a "Start Player", re-sort the players ArrayList
+                 *  at the beginning, the "Challenger" choose a "Start Player", set turnId to playerId of "Start Player"
                  *  for GodPowers which may move or build twice, set new turnID after everything done.
                  * */
                 int playerNumber = currentGameBoard.getPlayerNumber();

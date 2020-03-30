@@ -26,7 +26,6 @@ public class CosplayerTest {
         // init GameBoard with 2 players
         islandBoard = new IslandBoard();
         gameBoard = new GameBoard(1, 2, islandBoard);
-        gameBoard.init();
 
         // add players
         gameBoard.addPlayer(playerA);

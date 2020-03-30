@@ -10,25 +10,30 @@ import java.util.Vector;
  */
 public class GameBoard {
     private int gameId;
-    private int playerNumber;
+    private int playerNumber = 3;  // add default value in case any exception caused by not setting playerNumber
     private int turnId;
     private Vector<Player> players;
     private IslandBoard islandBoard;
     private Vector<GodPower> availableGodPowers;
     private GameStatus currentStatus;
 
+    public GameBoard(int gameId) {
+        this.gameId = gameId;
+        this.islandBoard = new IslandBoard();
+        this.players = new Vector<>();
+        this.availableGodPowers = new Vector<>();
+    }
+
     public GameBoard(int gameId, int playerNumber, IslandBoard islandBoard) {
         this.gameId = gameId;
         this.playerNumber = playerNumber;
         this.islandBoard = islandBoard;
+        this.players = new Vector<>();
+        this.availableGodPowers = new Vector<>();
     }
 
     public int getGameId() {
         return gameId;
-    }
-
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
     }
 
     public int getPlayerNumber() {
@@ -51,38 +56,21 @@ public class GameBoard {
         return players;
     }
 
-    public int addPlayer(Player player) {
-        //TODO: add playerNumber condition
-        //TODO: multi-gameBoard
-        if(players.size() < playerNumber){
-            players.add(player);
-            player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
-            return 1;
-        }
-        else {
-            System.out.println("This GameBoard is full.");
-            return -1;
-        }
+    public void addPlayer(Player player) {
+        players.add(player);
+        player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
     }
 
     public IslandBoard getIslandBoard() {
         return islandBoard;
     }
 
-    public void setIslandBoard(IslandBoard islandBoard) {
-        this.islandBoard = islandBoard;
-    }
-
     public Vector<GodPower> getAvailableGodPowers(){
         return availableGodPowers;
     }
 
-    public int addAvailableGodPowers(GodPower godPowers){
-        if (availableGodPowers.size()<=playerNumber){
-            this.availableGodPowers.add(godPowers);
-            return 1;
-        }else
-            return 0;
+    public void addAvailableGodPowers(GodPower godPowers){
+        availableGodPowers.add(godPowers);
     }
 
     public GameStatus getCurrentStatus() {
@@ -91,13 +79,5 @@ public class GameBoard {
 
     public void setCurrentStatus(GameStatus currentStatus) {
         this.currentStatus = currentStatus;
-    }
-
-    public void init(){
-        if(playerNumber == 2 || playerNumber==3)
-        {
-            this.players = new Vector<>();
-            this.availableGodPowers = new Vector<>();
-        }
     }
 }
