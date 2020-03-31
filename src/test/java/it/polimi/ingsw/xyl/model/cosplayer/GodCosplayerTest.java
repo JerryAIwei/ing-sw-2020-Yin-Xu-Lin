@@ -24,8 +24,8 @@ public class GodCosplayerTest {
     public void setUp() {
         // imitate a real game sequence
         // init playerA and player B
-        playerC = new Player(1, "playerC");
-        playerD = new Player(2, "playerD");
+        playerC = new Player(0, "playerC");
+        playerD = new Player(1, "playerD");
 
         // init GameBoard with 2 players
         islandBoard = new IslandBoard();
@@ -41,14 +41,14 @@ public class GodCosplayerTest {
         cosplayerC = new Cosplayer(playerC);
         playerC.setCosplayer(cosplayerC);
         playerC.setWorkers(0, 0, 1, 1);
-        islandBoard.getSpaces()[0][0].setOccupiedByPlayer(playerC.getPlayerId());
-        islandBoard.getSpaces()[1][1].setOccupiedByPlayer(playerC.getPlayerId());
+        islandBoard.getSpaces()[0][0].setOccupiedBy(playerC.getPlayerId() * 10);
+        islandBoard.getSpaces()[1][1].setOccupiedBy(playerC.getPlayerId() * 10 + 1);
 
         cosplayerD = new Cosplayer(playerD);
         playerD.setCosplayer(cosplayerD);
         playerD.setWorkers(2, 1, 1, 2);
-        islandBoard.getSpaces()[2][1].setOccupiedByPlayer(playerD.getPlayerId());
-        islandBoard.getSpaces()[1][2].setOccupiedByPlayer(playerD.getPlayerId());
+        islandBoard.getSpaces()[2][1].setOccupiedBy(playerD.getPlayerId() * 10);
+        islandBoard.getSpaces()[1][2].setOccupiedBy(playerD.getPlayerId() * 10 + 1);
         /*
         | 0 | 0 | 0 | 0 | 0 |
         | 0 | 0 | 0 | 0 | 0 |

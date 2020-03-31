@@ -49,7 +49,7 @@ public class CosplayerMoveTest extends CosplayerTest{
 
     @Test
     public void CosplayerMoveTest_playerAWorkerBMoveLeft_occupied_0_1_notAllowed() {
-        islandBoard.getSpaces()[0][1].setOccupiedByPlayer(1);
+        islandBoard.getSpaces()[0][1].setOccupiedBy(1);
         playerA.getCosplayer().move(1, LEFT);
         assertEquals(playerA.getWorkers()[1].getPositionX(), 1);
         assertEquals(playerA.getWorkers()[1].getPositionY(), 1);

@@ -1,10 +1,5 @@
 package it.polimi.ingsw.xyl.model.cosplayer;
 
-import it.polimi.ingsw.xyl.model.Cosplayer;
-import it.polimi.ingsw.xyl.model.GameBoard;
-import it.polimi.ingsw.xyl.model.IslandBoard;
-import it.polimi.ingsw.xyl.model.Player;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,8 +32,8 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         playerC.getCosplayer().move(1, DOWN);
         assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
         assertEquals(playerC.getWorkers()[1].getPositionY(), 0);
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[1][0].isOccupiedByPlayer(),1);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[1][0].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
     }
 
     @Test
@@ -47,8 +42,8 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         playerC.getCosplayer().move(0, UP);
         assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
         assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
-        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
+        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
     @Test
@@ -57,8 +52,8 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         playerC.getCosplayer().move(0, UP);
         assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
         assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
-        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
+        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
     /* GodPower Mod test */
@@ -70,9 +65,9 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(playerC.getWorkers()[1].getPositionY(), 2);
         assertEquals(playerD.getWorkers()[1].getPositionX(), 1);
         assertEquals(playerD.getWorkers()[1].getPositionY(), 3);
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[1][2].isOccupiedByPlayer(),1);
-        assertEquals(islandBoard.getSpaces()[1][3].isOccupiedByPlayer(),2);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[1][2].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
+        assertEquals(islandBoard.getSpaces()[1][3].isOccupiedBy(),playerD.getPlayerId() * 10 + 1);
     }
 
     @Test
@@ -82,9 +77,9 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
         assertEquals(playerD.getWorkers()[0].getPositionX(), 3);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),1);
-        assertEquals(islandBoard.getSpaces()[3][1].isOccupiedByPlayer(),2);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
+        assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(),playerD.getPlayerId() * 10);
     }
 
     @Test
@@ -98,9 +93,9 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
         assertEquals(playerD.getWorkers()[0].getPositionX(), 3);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),1);
-        assertEquals(islandBoard.getSpaces()[3][1].isOccupiedByPlayer(),2);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
+        assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(),playerD.getPlayerId() * 10);
     }
 
     @Test
@@ -114,9 +109,9 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
         assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),1);
-        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),2);
-        assertEquals(islandBoard.getSpaces()[3][1].isOccupiedByPlayer(),0);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
+        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(),playerD.getPlayerId() * 10);
+        assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(),-1);
     }
 
     @Test
@@ -124,15 +119,15 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         // Minotaur's move: worker may move into an opponent worker's
         // space, if their worker can be forced one space straight backwards
         // to an unoccupied space at ANY level.
-        islandBoard.getSpaces()[3][1].setOccupiedByPlayer(3);
+        islandBoard.getSpaces()[3][1].setOccupiedBy(3);
         playerC.getCosplayer().move(1, RIGHT);
         assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
         assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
         assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),1);
-        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),2);
-        assertEquals(islandBoard.getSpaces()[3][1].isOccupiedByPlayer(),0);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
+        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(),playerD.getPlayerId() * 10);
+        assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(),3);
     }
 
 }

@@ -37,14 +37,14 @@ public class CosplayerTest {
         cosplayerA = new Cosplayer(playerA);
         playerA.setCosplayer(cosplayerA);
         playerA.setWorkers(0, 0, 1, 1);
-        islandBoard.getSpaces()[0][0].setOccupiedByPlayer(playerA.getPlayerId());
-        islandBoard.getSpaces()[1][1].setOccupiedByPlayer(playerA.getPlayerId());
+        islandBoard.getSpaces()[0][0].setOccupiedBy(playerA.getPlayerId() * 10);
+        islandBoard.getSpaces()[1][1].setOccupiedBy(playerA.getPlayerId() * 10 + 1);
 
         cosplayerB = new Cosplayer(playerB);
         playerB.setCosplayer(cosplayerB);
         playerB.setWorkers(3, 3, 4, 4);
-        islandBoard.getSpaces()[3][3].setOccupiedByPlayer(playerB.getPlayerId());
-        islandBoard.getSpaces()[4][4].setOccupiedByPlayer(playerB.getPlayerId());
+        islandBoard.getSpaces()[3][3].setOccupiedBy(playerB.getPlayerId() * 10);
+        islandBoard.getSpaces()[4][4].setOccupiedBy(playerB.getPlayerId() * 10 +1);
         /*
         | 0 | 0 | 0 | 0 |B'B|
         | 0 | 0 | 0 |B'A| 0 |
@@ -97,7 +97,7 @@ public class CosplayerTest {
         */
         assertEquals(playerA.getCosplayer().getAvailableMoves(0).size(),0);
         assertEquals(playerA.getCosplayer().getAvailableMoves(1).size(),3);
-        ArrayList<Direction> availableMoves = new ArrayList<Direction>();
+        ArrayList<Direction> availableMoves = new ArrayList<>();
         availableMoves.add(Direction.UP);
         availableMoves.add(Direction.UPLEFT);
         availableMoves.add(Direction.DOWNRIGHT);
@@ -144,7 +144,8 @@ public class CosplayerTest {
         assertEquals(gameBoard.getPlayers().get(1).getPlayerName(),"playerB");
         gameBoard.getPlayers().get(1).getCosplayer().move(0,Direction.DOWN);
         gameBoard.getPlayers().get(1).getCosplayer().build(0,Direction.LEFT,false);
-        assertEquals(islandBoard.getSpaces()[3][2].isOccupiedByPlayer(),gameBoard.getPlayers().get(1).getPlayerId());
+        assertEquals(islandBoard.getSpaces()[3][2].isOccupiedBy(),
+                gameBoard.getPlayers().get(1).getPlayerId() * 10);
         assertEquals(islandBoard.getSpaces()[2][2].getLevel(),Level.LEVEL2);
         /*
         | 0 | 0 | 0 | 0 |B'B|
@@ -163,12 +164,12 @@ public class CosplayerTest {
     @Test
     public void CosplayerTest_checkWinAfterForced2Level3(){
         // unset initial setUp
-        islandBoard.getSpaces()[3][3].setOccupiedByPlayer(0);
-        islandBoard.getSpaces()[4][4].setOccupiedByPlayer(0);
+        islandBoard.getSpaces()[3][3].setOccupiedBy(-1);
+        islandBoard.getSpaces()[4][4].setOccupiedBy(-1);
         // new playerB workers' position
         playerB.setWorkers(2, 1, 4, 4);
-        islandBoard.getSpaces()[3][3].setOccupiedByPlayer(playerB.getPlayerId());
-        islandBoard.getSpaces()[4][4].setOccupiedByPlayer(playerB.getPlayerId());
+        islandBoard.getSpaces()[2][1].setOccupiedBy(playerB.getPlayerId() * 10);
+        islandBoard.getSpaces()[4][4].setOccupiedBy(playerB.getPlayerId() * 10 + 1);
 
         islandBoard.getSpaces()[1][0].setLevel(Level.LEVEL2);
         islandBoard.getSpaces()[1][2].setLevel(Level.LEVEL2);
@@ -198,9 +199,9 @@ public class CosplayerTest {
 
         assertNotEquals(playerA.getCurrentStatus(),PlayerStatus.WIN);
         assertNotEquals(playerB.getCurrentStatus(),PlayerStatus.WIN);
-        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),playerA.getPlayerId());
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),playerB.getPlayerId());
-        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),-1);
+        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedBy(),playerA.getPlayerId() * 10 + 1);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),playerB.getPlayerId() * 10);
+        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(),-1);
         /* now the islandBoard is like:
         | 0  | 0 | 0 | 0 |B'B|
         | 0  | 0 | 0 | 0 | 0 |

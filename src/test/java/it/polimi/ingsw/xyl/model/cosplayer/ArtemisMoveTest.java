@@ -1,10 +1,5 @@
 package it.polimi.ingsw.xyl.model.cosplayer;
 
-import it.polimi.ingsw.xyl.model.Cosplayer;
-import it.polimi.ingsw.xyl.model.GameBoard;
-import it.polimi.ingsw.xyl.model.IslandBoard;
-import it.polimi.ingsw.xyl.model.Player;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,8 +31,8 @@ public class ArtemisMoveTest extends GodCosplayerTest{
         playerC.getCosplayer().move(1, DOWN);
         assertEquals(playerC.getWorkers()[1].getPositionX(), 1);
         assertEquals(playerC.getWorkers()[1].getPositionY(), 0);
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[1][0].isOccupiedByPlayer(),1);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[1][0].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
     }
 
     @Test
@@ -46,8 +41,8 @@ public class ArtemisMoveTest extends GodCosplayerTest{
         playerC.getCosplayer().move(0, UP);
         assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
         assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
-        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
+        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
     @Test
@@ -56,18 +51,18 @@ public class ArtemisMoveTest extends GodCosplayerTest{
         playerC.getCosplayer().move(0, UP);
         assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
         assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
-        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
+        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
     @Test
     public void ArtemisMoveTest_playerCWorkerAMoveUp_occupied_0_1_notAllowed(){
-        islandBoard.getSpaces()[0][1].setOccupiedByPlayer(3);
+        islandBoard.getSpaces()[0][1].setOccupiedBy(3);
         playerC.getCosplayer().move(0, UP);
         assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
         assertEquals(playerC.getWorkers()[0].getPositionY(), 0);
-        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),3);
-        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedByPlayer(),1);
+        assertEquals(islandBoard.getSpaces()[0][1].isOccupiedBy(),3);
+        assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
     /* GodPower Mod test */
@@ -78,9 +73,9 @@ public class ArtemisMoveTest extends GodCosplayerTest{
         playerC.getCosplayer().move(1, RIGHT);
         assertEquals(playerC.getWorkers()[1].getPositionX(), 2);
         assertEquals(playerC.getWorkers()[1].getPositionY(), 0);
-        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[1][0].isOccupiedByPlayer(),0);
-        assertEquals(islandBoard.getSpaces()[2][0].isOccupiedByPlayer(),1);
+        assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[1][0].isOccupiedBy(),-1);
+        assertEquals(islandBoard.getSpaces()[2][0].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
     }
 
     @Test

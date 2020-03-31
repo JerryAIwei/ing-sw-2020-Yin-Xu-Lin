@@ -35,13 +35,13 @@ public class HephaestusBuildTest extends GodCosplayerTest{
     @Test
     public void HephaestusBuildTest_playerCWorkerABuildRight_normal(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
-        playerC.getCosplayer().build('A', RIGHT, false);
+        playerC.getCosplayer().build(0, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
     }
 
     @Test
     public void HephaestusBuildTest_playerCWorkerBBuildRight_occupied_2_1_notAllowed(){
-        playerC.getCosplayer().build('B', RIGHT, false);
+        playerC.getCosplayer().build(1, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(),GROUND);
     }
 
@@ -50,24 +50,24 @@ public class HephaestusBuildTest extends GodCosplayerTest{
     @Test
     public void HephaestusBuildTest_playerCWorkerABuildRight_usePower(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
-        playerC.getCosplayer().build('A', RIGHT, false);
-        playerC.getCosplayer().build('A', RIGHT, false);
+        playerC.getCosplayer().build(0, RIGHT, false);
+        playerC.getCosplayer().build(0, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL3);
     }
 
     @Test
     public void HephaestusBuildTest_playerCWorkerABuildRight_usePowerButDome_notAllowed(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL2);
-        playerC.getCosplayer().build('A', RIGHT, false);
-        playerC.getCosplayer().build('A', RIGHT, false); // dome, not allowed
+        playerC.getCosplayer().build(0, RIGHT, false);
+        playerC.getCosplayer().build(0, RIGHT, false); // dome, not allowed
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL3);
     }
 
     @Test
     public void HephaestusBuildTest_playerCWorkerABuildRightThenBuildUp__notAllowed(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
-        playerC.getCosplayer().build('A', RIGHT, false);
-        playerC.getCosplayer().build('A', UP, false); // different to first build, not allowed
+        playerC.getCosplayer().build(0, RIGHT, false);
+        playerC.getCosplayer().build(0, UP, false); // different to first build, not allowed
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
         assertEquals(islandBoard.getSpaces()[0][1].getLevel(),GROUND);
     }

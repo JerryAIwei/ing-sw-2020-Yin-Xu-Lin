@@ -42,22 +42,15 @@ public class Cosplayer {
             Space currentSpace =
                     currentIslandBoard.getSpaces()[player.getWorkers()[worker].getPositionX()][player.getWorkers()[worker].getPositionY()];
             player.getWorkers()[worker].setFromLevel(currentSpace.getLevel().toInt());
-            // if move to lower level, set worker's fromLevel3 false
-//            if (player.getWorkers()[worker].fromLevel() == 3) {
-//                Space targetSpace = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY];
-//                boolean moveToLowerLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt() < 0;
-//                if (moveToLowerLevel)
-//                    player.getWorkers()[worker].setFromLevel(false);
-//            }
             // free the current occupied space
-            currentSpace.setOccupiedByPlayer(-1);
-            // chang the worker's position to target space
+            currentSpace.setOccupiedBy(-1);
+            // change the worker's position to target space
             player.getWorkers()[worker].setPosition(
                     player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
                     player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]
             );
             // occupy the target space by playerId
-            currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedByPlayer(player.getPlayerId());
+            currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(player.getPlayerId() * 10 + worker);
             // check win
             checkWin();
         } else {
@@ -78,7 +71,7 @@ public class Cosplayer {
             IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
             int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
             int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedByPlayer();
+            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
             boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
             // for Civilian Mod, player can build if the target space is free(not occupied by another player)
             // and there is no dome in the target space
@@ -173,7 +166,7 @@ public class Cosplayer {
                     [x + a.toMarginalPosition()[0]]
                     [y + a.toMarginalPosition()[1]];
             // remove occupied by another worker or by a dome
-            if (targetSpace.isOccupiedByPlayer() != -1 || targetSpace.getLevel() == Level.DOME) {
+            if (targetSpace.isOccupiedBy() != -1 || targetSpace.getLevel() == Level.DOME) {
                 iterator.remove();
                 continue;
             }

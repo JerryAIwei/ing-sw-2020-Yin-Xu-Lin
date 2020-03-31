@@ -150,13 +150,13 @@ public class GameMaster {
         GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);
         Player player = gameBoard.getPlayers().get(playerId);
         IslandBoard islandBoard = gameBoard.getIslandBoard();
-        if (islandBoard.getSpaces()[ax][ay].isOccupiedByPlayer() == 0
-                && islandBoard.getSpaces()[bx][by].isOccupiedByPlayer() == 0) {
+        if (islandBoard.getSpaces()[ax][ay].isOccupiedBy() == 0
+                && islandBoard.getSpaces()[bx][by].isOccupiedBy() == 0) {
             // set worker position
             player.setWorkers(ax, ay, bx, by);
             // set occupied
-            islandBoard.getSpaces()[ax][ay].setOccupiedByPlayer(playerId);
-            islandBoard.getSpaces()[bx][by].setOccupiedByPlayer(playerId);
+            islandBoard.getSpaces()[ax][ay].setOccupiedBy(playerId * 10);
+            islandBoard.getSpaces()[bx][by].setOccupiedBy(playerId * 10 +1);
             return 1;
         }
         return -1;

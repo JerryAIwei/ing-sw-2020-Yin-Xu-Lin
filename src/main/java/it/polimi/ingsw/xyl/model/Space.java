@@ -8,7 +8,7 @@ import static it.polimi.ingsw.xyl.model.Level.*;
  */
 public class Space {
     private Level level = GROUND;      // default GROUND
-    private int occupiedByPlayer = -1;  // playerId if occupied, otherwise -1;
+    private int occupiedBy = -1;  // (playerId * 10 + workerId) if occupied, otherwise -1;
 
     public Level getLevel() {
         return level;
@@ -29,11 +29,11 @@ public class Space {
             this.level = DOME;
     }
 
-    public int isOccupiedByPlayer() {
-        return occupiedByPlayer;
+    public int isOccupiedBy() {
+        return occupiedBy;
     }
 
-    public void setOccupiedByPlayer(int occupiedByPlayerID) {
-        this.occupiedByPlayer = occupiedByPlayerID;
+    public void setOccupiedBy(int occupiedBy) {
+        this.occupiedBy = occupiedBy;
     }
 }
