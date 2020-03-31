@@ -11,7 +11,7 @@ import java.util.Vector;
 public class GameBoard {
     private int gameId;
     private int playerNumber = 3;  // add default value in case any exception caused by not setting playerNumber
-    private int turnId;
+    private Player currentPlayer;
     private Vector<Player> players;
     private IslandBoard islandBoard;
     private Vector<GodPower> availableGodPowers;
@@ -44,12 +44,24 @@ public class GameBoard {
         this.playerNumber = playerNumber;
     }
 
-    public int getTurnId() {
-        return turnId;
+    // at the beginning, the "Challenger" (owner of the game) is the current player;
+    // after one complete turn, "Challenger" chooses a "Start Player",
+    // set currentPlayer to "Start Player"
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    public void setTurnId(int turnId) {
-        this.turnId = turnId;
+    public void toNextPlayer() {
+        currentPlayer = players.get((currentPlayer.getPlayerId() + 1) % playerNumber);
+    }
+
+    public void toNextPlayer(int playerId) {
+        for (Player player : players){
+            if(player.getPlayerId() == playerId) {
+                currentPlayer = player;
+                break;
+            }
+        }
     }
 
     public Vector<Player> getPlayers() {
@@ -59,6 +71,8 @@ public class GameBoard {
     public void addPlayer(Player player) {
         players.add(player);
         player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
+        if (players.size() == 1)
+            currentPlayer = player;
     }
 
     public IslandBoard getIslandBoard() {

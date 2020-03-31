@@ -20,8 +20,8 @@ public class CosplayerTest {
     public void setUp() {
         // imitate a real game sequence
         // init playerA and player B
-        playerA = new Player(1, "playerA");
-        playerB = new Player(2, "playerB");
+        playerA = new Player(0, "playerA");
+        playerB = new Player(1, "playerB");
 
         // init GameBoard with 2 players
         islandBoard = new IslandBoard();
@@ -65,31 +65,19 @@ public class CosplayerTest {
     }
 
     @Test
-    public void CosplayerTest_playerOverNumber(){
-        Player playerC = new Player(3, "playerC");
-        gameBoard.addPlayer(playerC);
-        Player playerD = new Player(4, "playerD");
-        gameBoard.addPlayer(playerD);
-        assertEquals(gameBoard.getPlayers().size(),2);
-        assertEquals(playerA.getCurrentStatus(),PlayerStatus.WORKERPREPARED);
-        assertEquals(playerB.getCurrentStatus(),PlayerStatus.WORKERPREPARED);
-        assertEquals(playerC.getCurrentStatus(),PlayerStatus.INLOBBY);
-        assertEquals(playerD.getCurrentStatus(),PlayerStatus.INLOBBY);
-    }
-
-    @Test
     public void CosplayerTest_playerIdNameTest() {
-        assertEquals(playerA.getPlayerId(),1);
-        assertEquals(playerB.getPlayerId(),2);
+        assertEquals(playerA.getPlayerId(),0);
+        assertEquals(playerB.getPlayerId(),1);
         assertEquals(playerA.getPlayerName(),"playerA");
         assertEquals(playerB.getPlayerName(),"playerB");
     }
 
     @Test
     public void CosplayerTest_playerBFinishedTurnId_1_turnId_0() {
-        gameBoard.setTurnId(1);
-        gameBoard.getPlayers().get(1).getCosplayer().build(0, Direction.RIGHT,false);
-        assertEquals(gameBoard.getTurnId(),0);
+        gameBoard.toNextPlayer(1);
+        assertEquals(gameBoard.getCurrentPlayer().getPlayerId(),1);
+        gameBoard.getCurrentPlayer().getCosplayer().build(0, Direction.RIGHT,false);
+        assertEquals(gameBoard.getCurrentPlayer().getPlayerId(),0);
     }
 
     @Test
@@ -152,7 +140,7 @@ public class CosplayerTest {
         | 3 |A'B| 2 | 0 | 0 |
         |A'A| 2 | 2 | 0 | 0 |
         */
-        gameBoard.setTurnId(1); // B's turn
+        gameBoard.toNextPlayer(1); // B's turn
         assertEquals(gameBoard.getPlayers().get(1).getPlayerName(),"playerB");
         gameBoard.getPlayers().get(1).getCosplayer().move(0,Direction.DOWN);
         gameBoard.getPlayers().get(1).getCosplayer().build(0,Direction.LEFT,false);
@@ -165,9 +153,10 @@ public class CosplayerTest {
         | 3 |A'B| 2 | 0 | 0 |
         |A'A| 2 | 2 | 0 | 0 |
         */
-        assertEquals(gameBoard.getTurnId(),0);
-        gameBoard.getPlayers().get(gameBoard.getTurnId()).getCosplayer().checkWin(); // imitate turn controller
-        assertEquals(gameBoard.getPlayers().get(gameBoard.getTurnId()).getCurrentStatus(),PlayerStatus.LOSE);
+        assertEquals(gameBoard.getCurrentPlayer().getPlayerId(),0);
+        gameBoard.getCurrentPlayer().getCosplayer().checkWin(); // imitate turn
+        // controller
+        assertEquals(gameBoard.getCurrentPlayer().getCurrentStatus(),PlayerStatus.LOSE);
         // assertEquals(gameBoard.getPlayers().get(1).getCurrentStatus(),PlayerStatus.WIN); // should be
     }
 
@@ -211,7 +200,7 @@ public class CosplayerTest {
         assertNotEquals(playerB.getCurrentStatus(),PlayerStatus.WIN);
         assertEquals(islandBoard.getSpaces()[0][1].isOccupiedByPlayer(),playerA.getPlayerId());
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedByPlayer(),playerB.getPlayerId());
-        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),0);
+        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedByPlayer(),-1);
         /* now the islandBoard is like:
         | 0  | 0 | 0 | 0 |B'B|
         | 0  | 0 | 0 | 0 | 0 |

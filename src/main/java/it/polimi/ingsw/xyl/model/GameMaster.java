@@ -70,18 +70,26 @@ public class GameMaster {
     }
 
     /**
+     * @param gameId       game ID.
+     * @param playerNumber how may players are there in this gameBoard.
+     * @return response code
+     */
+    public int setPlayerNumber(int gameId, int playerNumber) {
+        gameLobby.getGameBoards().get(gameId).setPlayerNumber(playerNumber);
+        return 1;
+    }
+
+    /**
      * This method sets available God powers of gameBoard.
      *
      * @param gameId             game ID.
-     * @param playerNumber       how may players are there in this gameBoard.
      * @param availableGodPowers all available powers.
      * @return response code
      */
-    public int setAvailableGodPowers(int gameId, int playerNumber, Vector<GodPower> availableGodPowers) {
-        gameLobby.getGameBoards().get(gameId).setPlayerNumber(playerNumber);
+    public int setAvailableGodPowers(int gameId, Vector<GodPower> availableGodPowers) {
         for (GodPower godPower : availableGodPowers)
             gameLobby.getGameBoards().get(gameId).addAvailableGodPowers(godPower);
-        gameLobby.getGameBoards().get(gameId).setTurnId(1);
+        gameLobby.getGameBoards().get(gameId).toNextPlayer();
         return 1;
     }
 
@@ -101,11 +109,8 @@ public class GameMaster {
             Cosplayer cosplayer = godPower.cosplay(player);
             player.setCosplayer(cosplayer);
             player.setCurrentStatus(PlayerStatus.GODPOWERED);
-            int currentTurnId = gameLobby.getGameBoards().get(gameId).getTurnId();
-            int playerNumber = gameLobby.getGameBoards().get(gameId).getPlayerNumber();
-            int nextTurnId = (currentTurnId + 1) % playerNumber;
-            gameLobby.getGameBoards().get(gameId).setTurnId(nextTurnId);
-            if (nextTurnId == 0)
+            gameLobby.getGameBoards().get(gameId).toNextPlayer();
+            if (gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId() == 0)
                 return 2; // 2 for every player of the game have set God power
             return 1; // 1 for set God power OK
         }
@@ -124,7 +129,7 @@ public class GameMaster {
     public int startGame(int gameId, String messageFrom, int startPlayerId) {
         // only the "owner" of the gameBoard can decide from whom the game will start.
         if (gameLobby.getGameBoards().get(gameId).getPlayers().get(0).getPlayerName().equals(messageFrom)) {
-            gameLobby.getGameBoards().get(gameId).setTurnId(startPlayerId);
+            gameLobby.getGameBoards().get(gameId).toNextPlayer(startPlayerId);
             return 1;
         }
         return 0;
@@ -166,11 +171,9 @@ public class GameMaster {
      * @return response code
      */
     public int endTurn(int gameId, int playerId, boolean finish) {
-        int currentTurnId = gameLobby.getGameBoards().get(gameId).getTurnId();
-        if (currentTurnId == playerId && finish) {
-            int playerNumber = gameLobby.getGameBoards().get(gameId).getPlayerNumber();
-            int nextTurnId = (currentTurnId + 1) % playerNumber;
-            gameLobby.getGameBoards().get(gameId).setTurnId(nextTurnId);
+        int currentPlayerId = gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId();
+        if (currentPlayerId == playerId && finish) {
+            gameLobby.getGameBoards().get(gameId).toNextPlayer();
         }
         return -1;
     }

@@ -50,7 +50,7 @@ public class Cosplayer {
 //                    player.getWorkers()[worker].setFromLevel(false);
 //            }
             // free the current occupied space
-            currentSpace.setOccupiedByPlayer(0);
+            currentSpace.setOccupiedByPlayer(-1);
             // chang the worker's position to target space
             player.getWorkers()[worker].setPosition(
                     player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
@@ -82,19 +82,11 @@ public class Cosplayer {
             boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
             // for Civilian Mod, player can build if the target space is free(not occupied by another player)
             // and there is no dome in the target space
-            if (targetOccupiedBy == 0 && noDome) {
+            if (targetOccupiedBy == -1 && noDome) {
                 // increase the level of the target space
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 // change turnId after finish building
-
-                /* turnId: 0, 1, 2 for playerNumber == 3 and 0, 1 for playerNumber == 2
-                 *  current player is GameBoard.getPlayers[turnId]
-                 *  at the beginning, the "Challenger" choose a "Start Player", set turnId to playerId of "Start Player"
-                 *  for GodPowers which may move or build twice, set new turnID after everything done.
-                 * */
-                int playerNumber = currentGameBoard.getPlayerNumber();
-                int nextTurnId = (currentGameBoard.getTurnId() + 1) % playerNumber;
-                currentGameBoard.setTurnId(nextTurnId);
+                currentGameBoard.toNextPlayer();
             } else {
                 System.out.println("Chosen worker can't build in target space!");
             }
@@ -181,7 +173,7 @@ public class Cosplayer {
                     [x + a.toMarginalPosition()[0]]
                     [y + a.toMarginalPosition()[1]];
             // remove occupied by another worker or by a dome
-            if (targetSpace.isOccupiedByPlayer() != 0 || targetSpace.getLevel() == Level.DOME) {
+            if (targetSpace.isOccupiedByPlayer() != -1 || targetSpace.getLevel() == Level.DOME) {
                 iterator.remove();
                 continue;
             }

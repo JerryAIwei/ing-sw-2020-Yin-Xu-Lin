@@ -3,10 +3,10 @@ package it.polimi.ingsw.xyl.model.message;
 public class StartGameMessage extends Message{
     private String fromPlayer;
     private int startPlayerId;
-    public StartGameMessage(int gameId, String fromPlayer, int playerId){
+    public StartGameMessage(int gameId, String fromPlayer, int startPlayerId){
         this.gameId = gameId;
         this.fromPlayer = fromPlayer;
-        this.startPlayerId = playerId;
+        this.startPlayerId = startPlayerId;
     }
 
     public int getGameId() {

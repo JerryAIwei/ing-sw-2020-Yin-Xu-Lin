@@ -8,7 +8,7 @@ import static it.polimi.ingsw.xyl.model.Level.*;
  */
 public class Space {
     private Level level = GROUND;      // default GROUND
-    private int occupiedByPlayer = 0;  // playerId if occupied, otherwise 0;
+    private int occupiedByPlayer = -1;  // playerId if occupied, otherwise -1;
 
     public Level getLevel() {
         return level;

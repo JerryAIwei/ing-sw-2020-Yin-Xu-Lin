@@ -38,17 +38,27 @@ public class GameController {
         }
     }
 
-    public void handleMessage(AvailableGodPowersMessage message) {
+    public void handleMessage(SetPlayerNumberMessage message){
         int gameId = message.getGameId();
         int playerNumber = message.getPlayerNumber();
+        if (gameMaster.setPlayerNumber(gameId, playerNumber) == 1)
+        {
+
+        }else{
+
+        }
+    }
+
+    public void handleMessage(AvailableGodPowersMessage message) {
+        int gameId = message.getGameId();
         Vector<GodPower> availableGodPowers = new Vector<>();
         availableGodPowers.add(message.getGodPower('A'));
         availableGodPowers.add(message.getGodPower('B'));
-        if (playerNumber == 3) {
+        if (message.getGodPower('C') != null) {
             availableGodPowers.add(message.getGodPower('C'));
         }
 
-        if (gameMaster.setAvailableGodPowers(gameId, playerNumber, availableGodPowers) == 1) {
+        if (gameMaster.setAvailableGodPowers(gameId, availableGodPowers) == 1) {
 
         } else {
 

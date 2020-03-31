@@ -32,5 +32,4 @@ public class IslandBoard {
         this.noMoveUp = noMoveUp;
     }
 
-    public void updateIslandBoard(){    }
 }
