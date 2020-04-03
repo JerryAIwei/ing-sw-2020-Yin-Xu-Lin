@@ -73,7 +73,7 @@ public class Cosplayer {
             int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
             int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
             boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
-            // for Civilian Mod, player can build if the target space is free(not occupied by another player)
+            // for Civilian Mod, player can build if the target space is free(not occupied by another worker)
             // and there is no dome in the target space
             if (targetOccupiedBy == -1 && noDome) {
                 // increase the level of the target space
@@ -81,7 +81,7 @@ public class Cosplayer {
                 // change turnId after finish building
                 currentGameBoard.toNextPlayer();
             } else {
-                System.out.println("Chosen worker can't build in target space!");
+                System.out.println("Chosen worker can't build at target space!");
             }
         } catch (Exception e) {
             System.out.println("Array out of bounds");
