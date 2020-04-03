@@ -61,7 +61,6 @@ public class Artemis extends Cosplayer{
             Vector<Direction> availableMoves = getAvailableMoves(worker);
             if (availableMoves.contains(direction)) {
                 if (targetPositionX == initialPosition[0] && targetPositionY == initialPosition[1]) {  //remove if target is the initial position
-                    availableMoves.remove(direction);
                     System.out.println("Your move is not available!");
                 }
                 else {

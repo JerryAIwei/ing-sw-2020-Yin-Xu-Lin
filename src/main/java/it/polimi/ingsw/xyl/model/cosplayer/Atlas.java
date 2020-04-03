@@ -6,6 +6,10 @@ import it.polimi.ingsw.xyl.model.Player;
 
 import static it.polimi.ingsw.xyl.model.GodPower.ATLAS;
 
+/**
+ * @author Lin Xin
+ */
+
 public class Atlas extends Cosplayer {
 
 
@@ -24,7 +28,8 @@ public class Atlas extends Cosplayer {
     public void build(int worker, Direction direction, boolean buildDome){
         if (buildDome){
 
-        }else{
+        }
+        else{
 
         }
     }
