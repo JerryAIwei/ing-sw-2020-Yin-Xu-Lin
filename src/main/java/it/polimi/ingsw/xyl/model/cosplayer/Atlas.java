@@ -11,7 +11,6 @@ import static it.polimi.ingsw.xyl.model.Level.DOME;
 
 public class Atlas extends Cosplayer {
 
-
     public Atlas(Player player) {
         super(player);
         super.godPower = ATLAS;
@@ -25,20 +24,21 @@ public class Atlas extends Cosplayer {
      * @param buildDome whether build dome directly (only for Atlas).
      */
     public void build(int worker, Direction direction, boolean buildDome) {
-        GameBoard CurrentGameBoard = this.getPlayer().getCurrentGameBoard();
-        IslandBoard CurrentIslandBoard = CurrentGameBoard.getIslandBoard();
-        int targetPositionX = this.getPlayer().getWorkers()[worker].getPositionX();
-        int targetPositionY = this.getPlayer().getWorkers()[worker].getPositionY();
-        int targetOccupiedBy = CurrentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-        boolean noDome = CurrentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
         try {
-            if (noDome && (targetOccupiedBy == -1)) {
+            GameBoard currentGameBoard = this.getPlayer().getCurrentGameBoard();
+            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
+            int targetPositionX = this.getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = this.getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
+            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
+
+            if (targetOccupiedBy == -1 && noDome) {
                 if (buildDome) {
-                    CurrentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setLevel(DOME);
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setLevel(DOME);
                 } else {
-                    CurrentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 }
-                CurrentGameBoard.toNextPlayer();
+                currentGameBoard.toNextPlayer();
             } else {
                 System.out.println("Chosen worker can't build dome at target space");
             }

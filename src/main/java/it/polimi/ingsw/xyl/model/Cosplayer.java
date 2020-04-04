@@ -78,8 +78,9 @@ public class Cosplayer {
             if (targetOccupiedBy == -1 && noDome) {
                 // increase the level of the target space
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                // change turnId after finish building
+                // change currentPlayer after finish building
                 currentGameBoard.toNextPlayer();
+                // checkwin(); ????
             } else {
                 System.out.println("Chosen worker can't build at target space!");
             }
@@ -93,7 +94,7 @@ public class Cosplayer {
      * checkWin() is used after every move: if one of your workers moves
      * up on top of level 3 during your turn, you instantly win.
      *
-     * checkWin() is used after each turnId change: if all of your workers
+     * checkWin() is used after each toNextPlayer(): if all of your workers
      * cannot move, you lose.
      * ( "You must always perform a move then build on your turn.
      * If you are unable to, you lose." The only condition in which one

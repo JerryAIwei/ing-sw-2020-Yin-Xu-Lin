@@ -1,10 +1,13 @@
 package it.polimi.ingsw.xyl.model.cosplayer;
 
-import it.polimi.ingsw.xyl.model.Cosplayer;
-import it.polimi.ingsw.xyl.model.Direction;
-import it.polimi.ingsw.xyl.model.Player;
+import it.polimi.ingsw.xyl.model.*;
 
 import static it.polimi.ingsw.xyl.model.GodPower.HEPHAESTUS;
+import static it.polimi.ingsw.xyl.model.Level.DOME;
+
+/**
+ * @author Lin Xin
+ */
 
 public class Hephaestus extends Cosplayer {
     private boolean firstBuild = true;
@@ -24,6 +27,49 @@ public class Hephaestus extends Cosplayer {
      * @param buildDome whether build dome directly (only for Atlas).
      */
     public void build(int worker, Direction direction, boolean buildDome){
+        try{
+            GameBoard currentGameBoard = this.getPlayer().getCurrentGameBoard();
+            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
+            int targetPositionX = this.getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = this.getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
+            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
+
+            if (firstBuild && targetOccupiedBy == -1 && noDome){
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                this.firstBuildDirection= direction;
+                this.firstBuild = false;
+                currentGameBoard.toNextPlayer();
+            }
+
+            if (direction == firstBuildDirection){
+                System.out.println("Chosen worker can't build at target space!");
+            } else if (targetOccupiedBy == -1 && noDome) {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+            } else {
+                System.out.println("Chosen worker can't build at target space!");
+            }
+        }
+        catch (Exception e){
+            System.out.println("Array out of bounds");
+            throw e;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if(firstBuild){
             // do something
 
