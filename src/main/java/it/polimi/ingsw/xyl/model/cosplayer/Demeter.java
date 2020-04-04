@@ -40,12 +40,12 @@ public class Demeter extends Cosplayer {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                     this.firstBuildDirection = direction;
                     this.firstBuild = false;
-                    currentGameBoard.toNextPlayer();
                 } else {
                     System.out.println("Chosen worker can't build at target space!");
                 }
             } else if (this.firstBuildDirection != direction && targetOccupiedBy == -1 && noDome) {
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                currentGameBoard.toNextPlayer();
                 this.firstBuild = true;
             } else {
                 System.out.println("Chosen worker can't build at target space!");

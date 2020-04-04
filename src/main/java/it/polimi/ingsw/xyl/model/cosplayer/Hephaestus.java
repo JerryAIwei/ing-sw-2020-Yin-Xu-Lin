@@ -4,6 +4,7 @@ import it.polimi.ingsw.xyl.model.*;
 
 import static it.polimi.ingsw.xyl.model.GodPower.HEPHAESTUS;
 import static it.polimi.ingsw.xyl.model.Level.DOME;
+import static it.polimi.ingsw.xyl.model.Level.LEVEL3;
 
 /**
  * @author Lin Xin
@@ -34,53 +35,33 @@ public class Hephaestus extends Cosplayer {
             int targetPositionY = this.getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
             int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
             boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
+            boolean noLevel3 = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != LEVEL3;
 
-            if (firstBuild && targetOccupiedBy == -1 && noDome){
+            if (firstBuild) {
+                if (targetOccupiedBy == -1 && noDome) {
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                    this.firstBuildDirection = direction;
+                    if(noLevel3){
+                        this.firstBuild = false;
+                    }
+                    else{
+                        currentGameBoard.toNextPlayer();
+                    }
+                } else {
+                    System.out.println("Chosen worker can't build at target space!");
+                }
+            }else if(this.firstBuildDirection == direction && noLevel3){
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                this.firstBuildDirection= direction;
-                this.firstBuild = false;
                 currentGameBoard.toNextPlayer();
+                this.firstBuild = true;
             }
-
-            if (direction == firstBuildDirection){
-                System.out.println("Chosen worker can't build at target space!");
-            } else if (targetOccupiedBy == -1 && noDome) {
-                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-            } else {
+            else{
                 System.out.println("Chosen worker can't build at target space!");
             }
         }
         catch (Exception e){
             System.out.println("Array out of bounds");
             throw e;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if(firstBuild){
-            // do something
-
-            this.firstBuildDirection= direction;
-            this.firstBuild = false;
-        }else{
-            if(direction == firstBuildDirection){
-
-            }else{
-
-            }
         }
     }
 }
