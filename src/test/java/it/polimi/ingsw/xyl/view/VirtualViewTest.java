@@ -59,18 +59,18 @@ public class VirtualViewTest {
         //    1       LiHua     APOLLO
         //    2       LiGang    DEMETER
 
-        // LiMing LiHua and LiGang joined and LiMing set available powers
+        // LiMing LiHua and LiGang joined and then LiMing set available powers
         PlayerNameMessage liming = new PlayerNameMessage("LiMing");
         v.update(liming);
         SetPlayerNumberMessage numberM = new SetPlayerNumberMessage(0, 3);
         v.update(numberM);
         PlayerNameMessage lihua = new PlayerNameMessage("LiHua");
         v.update(lihua);
-        AvailableGodPowersMessage powersM = new AvailableGodPowersMessage(0,GodPower.APOLLO,GodPower.ATLAS,
-                GodPower.DEMETER);
-        v.update(powersM);
         PlayerNameMessage ligamg = new PlayerNameMessage("LiGang");
         v.update(ligamg);
+        AvailableGodPowersMessage powersM = new AvailableGodPowersMessage(0,GodPower.APOLLO,GodPower.ATHENA,
+                GodPower.DEMETER);
+        v.update(powersM);
 
         // LiHua, LiGang and LiMing chose his own power.
         int id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();

@@ -121,7 +121,10 @@ public class GameMaster {
             Cosplayer cosplayer = godPower.cosplay(player);
             player.setCosplayer(cosplayer);
             player.setCurrentStatus(PlayerStatus.GODPOWERED);
-            gameLobby.getGameBoards().get(gameId).toNextPlayer();
+            if (gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId() == 0)
+                player.setCurrentStatus(PlayerStatus.WAITING4START);
+            else
+                gameLobby.getGameBoards().get(gameId).toNextPlayer();
             notify(gameId);
             if (gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId() == 0)
                 return 2; // 2 for every player of the game have set God power
@@ -142,7 +145,9 @@ public class GameMaster {
     public int startGame(int gameId, String messageFrom, int startPlayerId) {
         // only the "owner" of the gameBoard can decide from whom the game will start.
         if (gameLobby.getGameBoards().get(gameId).getPlayers().get(0).getPlayerName().equals(messageFrom)) {
+            gameLobby.getGameBoards().get(gameId).getPlayers().forEach((key, value) -> value.setCurrentStatus(PlayerStatus.WAITING4INIT));
             gameLobby.getGameBoards().get(gameId).toNextPlayer(startPlayerId);
+            gameLobby.getGameBoards().get(gameId).setCurrentStatus(GameStatus.INGAME);
             notify(gameId);
             return 1;
         }
@@ -171,6 +176,7 @@ public class GameMaster {
             // set occupied
             islandBoard.getSpaces()[ax][ay].setOccupiedBy(playerId * 10);
             islandBoard.getSpaces()[bx][by].setOccupiedBy(playerId * 10 +1);
+
             gameBoard.toNextPlayer();
             notify(gameId);
             return 1;

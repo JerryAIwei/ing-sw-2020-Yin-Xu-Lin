@@ -88,11 +88,12 @@ public class GameController {
         int gameId = message.getGameId();
         int playerId = message.getPlayerId();
         GodPower godPower = message.getGodPower();
-        if (gameMaster.setPower4Player(gameId, playerId, godPower) == 1) {
-
-        } else {
-
-        }
+        gameMaster.setPower4Player(gameId, playerId, godPower);
+//        if (gameMaster.setPower4Player(gameId, playerId, godPower) == 1) {
+//
+//        } else {
+//
+//        }
     }
 
     public void handleMessage(StartGameMessage message) {
