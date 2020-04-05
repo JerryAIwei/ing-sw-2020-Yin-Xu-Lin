@@ -3,9 +3,16 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 import it.polimi.ingsw.xyl.model.*;
 import sun.jvm.hotspot.memory.SpaceClosure;
 
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Vector;
 
 import static it.polimi.ingsw.xyl.model.GodPower.APOLLO;
+
+/**
+ * @author Lin Xin
+ */
+
 
 public class Apollo extends Cosplayer{
 
@@ -27,9 +34,32 @@ public class Apollo extends Cosplayer{
         int originalPositionY = this.getPlayer().getWorkers()[worker].getPositionY();
         int targetOccupiedBy = currentIslandBoard.getSpaces()
                 [originalPositionX + direction.toMarginalPosition()[0]]
-                [originalPositionY + direction.toMarginalPosition()[1]].isOccupiedBy();
+                [originalPositionX + direction.toMarginalPosition()[1]].isOccupiedBy();
+        EnumSet<Direction> all = EnumSet.allOf(Direction.class);
+        Vector<Direction> apolloAvailableMoves = new Vector<>(all);
 
-        if(targetOccupiedBy != -1){
+        if (originalPositionX == 0) {
+            apolloAvailableMoves.remove(Direction.LEFT);
+            apolloAvailableMoves.remove(Direction.UPLEFT);
+            apolloAvailableMoves.remove(Direction.DOWNLEFT);
+        }
+        if (originalPositionX == 4) {
+            apolloAvailableMoves.remove(Direction.RIGHT);
+            apolloAvailableMoves.remove(Direction.UPRIGHT);
+            apolloAvailableMoves.remove(Direction.DOWNRIGHT);
+        }
+        if (originalPositionX == 0) {
+            apolloAvailableMoves.remove(Direction.DOWN);
+            apolloAvailableMoves.remove(Direction.DOWNLEFT);
+            apolloAvailableMoves.remove(Direction.DOWNRIGHT);
+        }
+        if (originalPositionX == 4) {
+            apolloAvailableMoves.remove(Direction.UP);
+            apolloAvailableMoves.remove(Direction.UPLEFT);
+            apolloAvailableMoves.remove(Direction.UPRIGHT);
+        }
+
+        if(targetOccupiedBy != -1 && apolloAvailableMoves.contains(direction)){
             int opponentWorkerId = targetOccupiedBy % 10;
             int opponentPlayerId = targetOccupiedBy / 10;
             this.getPlayer().getCurrentGameBoard().getIslandBoard().getSpaces()
@@ -43,6 +73,7 @@ public class Apollo extends Cosplayer{
             opponentCurrentSpace.setOccupiedBy(-1);
             this.getPlayer().getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()
                     [opponentWorkerId].setPosition(originalPositionX,originalPositionY);
+            checkWin();
         }
         super.move(worker, direction);
         if(targetOccupiedBy != -1){
