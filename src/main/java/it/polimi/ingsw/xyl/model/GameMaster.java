@@ -1,5 +1,7 @@
 package it.polimi.ingsw.xyl.model;
 
+import it.polimi.ingsw.xyl.view.VirtualView;
+
 import java.util.Vector;
 
 /**
@@ -10,6 +12,7 @@ import java.util.Vector;
  */
 public class GameMaster {
     private GameLobby gameLobby;
+    private VirtualView observerV;
 
     public GameMaster() {
         this.gameLobby = new GameLobby();
@@ -22,6 +25,10 @@ public class GameMaster {
      */
     public GameLobby getGameLobby() {
         return gameLobby;
+    }
+
+    public void register(VirtualView observer){
+        this.observerV = observer;
     }
 
     /**
@@ -51,6 +58,8 @@ public class GameMaster {
             gameBoard.addPlayer(player);
             player.setCurrentGameBoard(gameBoard);
             gameLobby.add2AllPlayers(playerName, gameId);
+            gameLobby.addGameBoard(gameBoard);
+            notify(gameId);
             return 0;  // 0 for the owner of the GameBoard(the first player of a game)
         } else {
             GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);
@@ -65,6 +74,7 @@ public class GameMaster {
             // set the game status "waiting start"
             if (gameBoard.getPlayerNumber() == gameBoard.getPlayers().size())
                 gameBoard.setCurrentStatus(GameStatus.WAITINGSTART);
+            notify(gameId);
             return 1; // 1 for other players of the GameBoard(not the first one)
         }
     }
@@ -76,6 +86,7 @@ public class GameMaster {
      */
     public int setPlayerNumber(int gameId, int playerNumber) {
         gameLobby.getGameBoards().get(gameId).setPlayerNumber(playerNumber);
+        notify(gameId);
         return 1;
     }
 
@@ -90,6 +101,7 @@ public class GameMaster {
         for (GodPower godPower : availableGodPowers)
             gameLobby.getGameBoards().get(gameId).addAvailableGodPowers(godPower);
         gameLobby.getGameBoards().get(gameId).toNextPlayer();
+        notify(gameId);
         return 1;
     }
 
@@ -110,6 +122,7 @@ public class GameMaster {
             player.setCosplayer(cosplayer);
             player.setCurrentStatus(PlayerStatus.GODPOWERED);
             gameLobby.getGameBoards().get(gameId).toNextPlayer();
+            notify(gameId);
             if (gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId() == 0)
                 return 2; // 2 for every player of the game have set God power
             return 1; // 1 for set God power OK
@@ -130,6 +143,7 @@ public class GameMaster {
         // only the "owner" of the gameBoard can decide from whom the game will start.
         if (gameLobby.getGameBoards().get(gameId).getPlayers().get(0).getPlayerName().equals(messageFrom)) {
             gameLobby.getGameBoards().get(gameId).toNextPlayer(startPlayerId);
+            notify(gameId);
             return 1;
         }
         return 0;
@@ -157,6 +171,7 @@ public class GameMaster {
             // set occupied
             islandBoard.getSpaces()[ax][ay].setOccupiedBy(playerId * 10);
             islandBoard.getSpaces()[bx][by].setOccupiedBy(playerId * 10 +1);
+            notify(gameId);
             return 1;
         }
         return -1;
@@ -174,6 +189,7 @@ public class GameMaster {
         int currentPlayerId = gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId();
         if (currentPlayerId == playerId && finish) {
             gameLobby.getGameBoards().get(gameId).toNextPlayer();
+            notify(gameId);
         }
         return -1;
     }
@@ -192,6 +208,7 @@ public class GameMaster {
                 gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().getAvailableMoves(workerId);
         if (availableMoves.contains(direction)) {
             gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().move(workerId, direction);
+            notify(gameId);
             return 1;
         }
         return -1;
@@ -210,6 +227,13 @@ public class GameMaster {
     public int handleBuild(int gameId, int playerId, int workerId, Direction direction, boolean buildDome) {
         gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().build(workerId, direction,
                 buildDome);
+        notify(gameId);
         return 1;
+    }
+
+    public void notify(int gameId){
+        synchronized(observerV) {
+            observerV.update(gameLobby.getGameBoards().get(gameId));
+        }
     }
 }

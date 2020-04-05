@@ -34,7 +34,9 @@ public class GameControllerTest {
         Player liMing = gameController.getGameMaster().getGameLobby().getGameBoards()
                 .get(0).getPlayers().get(0);
         assertEquals(liMing.getPlayerName(), "LiMing");
+        assertEquals(liMing.getPlayerId(), 0);
         assertEquals(liMing.getCurrentGameBoard().getGameId(),0);
+
         // the first player who joined to the game is the "owner" of the game
         // so he will decide the total player number(2 or 3)
         SetPlayerNumberMessage sMessage = new SetPlayerNumberMessage(0, 2);
@@ -55,8 +57,9 @@ public class GameControllerTest {
         assertEquals(gameController.getGameMaster().getGameLobby().getGameBoards()
                 .get(0).getPlayers().size(), 2);
         Player liGang = gameController.getGameMaster().getGameLobby().getGameBoards()
-                .get(1).getPlayers().get(0);
+                .get(1).getCurrentPlayer();
         assertEquals(liGang.getPlayerName(), "LiGang");
+        assertEquals(liGang.getPlayerId(), 0);
         assertEquals(liGang.getCurrentGameBoard().getGameId(),1);
     }
 

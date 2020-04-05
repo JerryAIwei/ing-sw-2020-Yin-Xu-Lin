@@ -1,5 +1,6 @@
 package it.polimi.ingsw.xyl.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,24 +103,21 @@ public class VirtualGame {
         return vPlayers;
     }
 
-    public void updateVPlayers(Player[] players) {
+    public void updateVPlayers(Collection<Player> players) {
         for(Player player:players) {
             if (vPlayers.get(player.getPlayerId()) != null) {
                 VPlayer tempVPlayer = vPlayers.get(player.getPlayerId());
                 tempVPlayer.currentStatus = player.getCurrentStatus();
-                tempVPlayer.workerAX = player.getWorkers()[0].getPositionX();
-                tempVPlayer.workerAY = player.getWorkers()[0].getPositionY();
-                tempVPlayer.workerBX = player.getWorkers()[1].getPositionX();
-                tempVPlayer.workerBY = player.getWorkers()[1].getPositionY();
+                if(player.getCurrentStatus() == PlayerStatus.WORKERPREPARED) {
+                    tempVPlayer.workerAX = player.getWorkers()[0].getPositionX();
+                    tempVPlayer.workerAY = player.getWorkers()[0].getPositionY();
+                    tempVPlayer.workerBX = player.getWorkers()[1].getPositionX();
+                    tempVPlayer.workerBY = player.getWorkers()[1].getPositionY();
+                }
             } else {
                 VPlayer tempVPlayer = new VPlayer(player.getPlayerId(), player.getPlayerName());
                 tempVPlayer.cosplayer = player.getCosplayer();
                 tempVPlayer.currentStatus = player.getCurrentStatus();
-                tempVPlayer.workerAX = player.getWorkers()[0].getPositionX();
-                tempVPlayer.workerAY = player.getWorkers()[0].getPositionY();
-                tempVPlayer.workerBX = player.getWorkers()[1].getPositionX();
-                tempVPlayer.workerBY = player.getWorkers()[1].getPositionY();
-                //Todo: switch case by currentStatus
                 vPlayers.put(tempVPlayer.playerId,tempVPlayer);
             }
         }
@@ -131,5 +129,10 @@ public class VirtualGame {
 
     public void setSpaces(Space[][] spaces) {
         this.spaces = spaces;//Todo:need deep copy
+    }
+
+    // only for test
+    public String getFirstPlayerName(){
+        return this.getVPlayers().get(0).getPlayerName();
     }
 }

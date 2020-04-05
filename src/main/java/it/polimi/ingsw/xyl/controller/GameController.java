@@ -4,6 +4,7 @@ import it.polimi.ingsw.xyl.model.Direction;
 import it.polimi.ingsw.xyl.model.GameMaster;
 import it.polimi.ingsw.xyl.model.GodPower;
 import it.polimi.ingsw.xyl.model.message.*;
+import it.polimi.ingsw.xyl.view.VirtualView;
 
 import java.util.Vector;
 
@@ -135,6 +136,27 @@ public class GameController {
         } else {
 
         }
+    }
+
+    public void update(Message message) {
+        if (message.getClass() == PlayerNameMessage.class)
+            handleMessage((PlayerNameMessage) message);
+        else if (message.getClass() == SetPlayerNumberMessage.class)
+            handleMessage((SetPlayerNumberMessage) message);
+        else if (message.getClass() == AvailableGodPowersMessage.class)
+            handleMessage((AvailableGodPowersMessage) message);
+        else if (message.getClass() == PlayerChooseGodPowerMessage.class)
+            handleMessage((PlayerChooseGodPowerMessage) message);
+        else if (message.getClass() == StartGameMessage.class)
+            handleMessage((StartGameMessage) message);
+        else if (message.getClass() == SetInitialWorkerPositionMessage.class)
+            handleMessage((SetInitialWorkerPositionMessage) message);
+        else if (message.getClass() == MyTurnFinishedMessage.class)
+            handleMessage((MyTurnFinishedMessage) message);
+        else if (message.getClass() == MoveMessage.class)
+            handleMessage((MoveMessage) message);
+        else if (message.getClass() == BuildMessage.class)
+            handleMessage((BuildMessage) message);
     }
 
 }

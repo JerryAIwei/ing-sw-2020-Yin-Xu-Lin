@@ -1,5 +1,7 @@
 package it.polimi.ingsw.xyl.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -12,7 +14,7 @@ public class GameBoard {
     private int gameId;
     private int playerNumber = 3;  // add default value in case any exception caused by not setting playerNumber
     private Player currentPlayer;
-    private Vector<Player> players;
+    private Map<Integer,Player> players;
     private IslandBoard islandBoard;
     private Vector<GodPower> availableGodPowers;
     private GameStatus currentStatus;
@@ -20,7 +22,7 @@ public class GameBoard {
     public GameBoard(int gameId) {
         this.gameId = gameId;
         this.islandBoard = new IslandBoard();
-        this.players = new Vector<>();
+        this.players = new HashMap<>();
         this.availableGodPowers = new Vector<>();
     }
 
@@ -28,7 +30,7 @@ public class GameBoard {
         this.gameId = gameId;
         this.playerNumber = playerNumber;
         this.islandBoard = islandBoard;
-        this.players = new Vector<>();
+        this.players = new HashMap<>();
         this.availableGodPowers = new Vector<>();
     }
 
@@ -52,25 +54,19 @@ public class GameBoard {
     }
 
     public void toNextPlayer() {
-
         currentPlayer = players.get((currentPlayer.getPlayerId() + 1) % playerNumber);
     }
 
     public void toNextPlayer(int playerId) {
-        for (Player player : players){
-            if(player.getPlayerId() == playerId) {
-                currentPlayer = player;
-                break;
-            }
-        }
+        currentPlayer = players.get(playerId);
     }
 
-    public Vector<Player> getPlayers() {
+    public Map<Integer,Player> getPlayers() {
         return players;
     }
 
     public void addPlayer(Player player) {
-        players.add(player);
+        players.put(players.size(), player);
         player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
         if (players.size() == 1)
             currentPlayer = player;
