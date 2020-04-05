@@ -1,17 +1,62 @@
 package it.polimi.ingsw.xyl.view.cli;
+import it.polimi.ingsw.xyl.model.VirtualGame;
+import it.polimi.ingsw.xyl.model.message.Message;
+import it.polimi.ingsw.xyl.network.client.Client;
 import it.polimi.ingsw.xyl.util.ColorSetter;
+import it.polimi.ingsw.xyl.view.ViewInterface;
+import it.polimi.ingsw.xyl.model.message.*;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
- * Class for Display CLI messages using JANSI LIBRARY.
+ * Class for Display CLI messages.
  *
  * @author yaw
  */
 
-public class CLI {
+public class CLI implements ViewInterface {
+    private IslandBoardCLI islandBoardCLI = new IslandBoardCLI();
+    private Client client;
+    private String userName;
 
-    synchronized void splashScreen() {
+    public static void main(String[] args) {
+        System.out.println("new a cli");
+        CLI cli= new CLI();
+        cli.launch();
+        System.out.println("finished");
+    }
+
+    public void CLI(){
+        client = new Client(this);
+    }
+
+    @Override
+    public void update(VirtualGame virtualGame) {
+
+    }
+
+    @Override
+    public void update(Exception e) {
+
+    }
+
+    @Override
+    public void sendMessage(Message message) {
+        client.sendMessage(message);
+    }
+
+
+    public void launch(){
+        splashScreen();
+        askLogin();
+    }
+
+    /**
+     * show welcome when start a new CLI
+     * */
+    private void splashScreen() {
 
         System.out.println();
 
@@ -29,47 +74,22 @@ public class CLI {
         System.out.println("Made by"+ColorSetter.FG_GREEN.setColor(" XU Shaoxun,")+ColorSetter.FG_RED.setColor(" YIN Aiwei")+" and"+ColorSetter.FG_YELLOW.setColor(" LIN Xin"));
     }
 
-    private static final int MAX_VERT_TILES = 5; //rows.
-    private static final int MAX_HORIZ_TILES = 5; //cols.
+    /**
+     * Set ip and username
+     * connect to server
+     * called when start a new CLI
+     * */
 
-    String tiles[][] = new String[MAX_VERT_TILES][MAX_HORIZ_TILES];
-
-    List<String > weapons = new ArrayList<>();
-
-    private void fillEmpy() {
-
-        tiles[0][0] = "╔";
-        for (int c = 1; c < MAX_HORIZ_TILES - 1; c++) {
-            tiles[0][c] = "═";
-        }
-
-        tiles[0][MAX_HORIZ_TILES - 1] = "╗";
-
-        for (int r = 1; r < MAX_VERT_TILES - 1; r++) {
-            tiles[r][0] = "║";
-            for (int c = 1; c < MAX_HORIZ_TILES - 1; c++) {
-                tiles[r][c] = " ";
-            }
-            tiles[r][MAX_HORIZ_TILES-1] = "║";
-        }
-
-        tiles[MAX_VERT_TILES - 1][0] = "╚";
-        for (int c = 1; c < MAX_HORIZ_TILES - 1; c++) {
-            tiles[MAX_VERT_TILES - 1][c] = "═";
-        }
-
-        tiles[MAX_VERT_TILES - 1][MAX_HORIZ_TILES - 1] = "╝";
-
+    private void askLogin(){
+        System.out.println("Please Enter Server IP");
+        Scanner scanner = new Scanner(System.in);
+        String ip = scanner.next();
+        //client.init(ip);
+        System.out.println("Please Enter Login Name");
+        userName = scanner.next();
+        //sendMessage(new PlayerNameMessage(userName));
     }
 
-    final void plot() {
-        for (int r = 0; r < MAX_VERT_TILES; r++) {
-            System.out.println();
-            for (int c = 0; c < MAX_HORIZ_TILES; c++) {
-                System.out.print(tiles[r][c]);
-            }
-        }
-    }
 
 
 }

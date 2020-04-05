@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 
 public class CLITest {
     @Test
-    public void CLITest_SplashScreen(){
-        CLI cli = new CLI();
-        cli.splashScreen();
+    public void CLITest_StartNewCLI() {
+        System.out.println("new a cli");
+        CLI cli= new CLI();
+        System.out.println("finished");
     }
-
 }
