@@ -52,6 +52,7 @@ public class GameBoard {
     }
 
     public void toNextPlayer() {
+
         currentPlayer = players.get((currentPlayer.getPlayerId() + 1) % playerNumber);
     }
 

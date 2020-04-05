@@ -28,7 +28,7 @@ public class Hephaestus extends Cosplayer {
      * @param buildDome whether build dome directly (only for Atlas).
      */
     public void build(int worker, Direction direction, boolean buildDome){
-        try{
+        try {
             GameBoard currentGameBoard = this.getPlayer().getCurrentGameBoard();
             IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
             int targetPositionX = this.getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
@@ -38,15 +38,14 @@ public class Hephaestus extends Cosplayer {
             boolean noLevel3 = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != LEVEL3;
 
             if (firstBuild) {
-                if (targetOccupiedBy == -1 && noDome) {
+                if (targetOccupiedBy == -1 && noDome && noLevel3) {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                     this.firstBuildDirection = direction;
-                    if(noLevel3){
-                        this.firstBuild = false;
-                    }
-                    else{
-                        currentGameBoard.toNextPlayer();
-                    }
+                    this.firstBuild = false;
+                } else if (targetOccupiedBy == -1 && noDome && !noLevel3) {
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                    this.firstBuildDirection = direction;
+                    currentGameBoard.toNextPlayer();
                 } else {
                     System.out.println("Chosen worker can't build at target space!");
                 }

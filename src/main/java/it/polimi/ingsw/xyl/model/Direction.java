@@ -37,4 +37,27 @@ public enum Direction {
                 return new int[]{0, 0};
         }
     }
+
+    public Direction toOpposite(){
+        switch (this) {
+            case UP:
+                return DOWN;
+            case DOWN:
+                return UP;
+            case LEFT:
+                return RIGHT;
+            case RIGHT:
+                return LEFT;
+            case UPLEFT:
+                return DOWNRIGHT;
+            case UPRIGHT:
+                return DOWNLEFT;
+            case DOWNLEFT:
+                return UPRIGHT;
+            case DOWNRIGHT:
+                return UPLEFT;
+            default:
+                return null;
+        }
+    }
 }

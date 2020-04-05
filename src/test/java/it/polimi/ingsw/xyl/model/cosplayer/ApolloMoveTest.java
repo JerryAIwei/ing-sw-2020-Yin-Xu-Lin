@@ -62,8 +62,8 @@ public class ApolloMoveTest extends GodCosplayerTest{
         playerC.getCosplayer().move(1, RIGHT);
         assertEquals(playerC.getWorkers()[1].getPositionX(), 2);
         assertEquals(playerC.getWorkers()[1].getPositionY(), 1);
-        assertEquals(playerD.getWorkers()[1].getPositionX(), 1);
-        assertEquals(playerD.getWorkers()[1].getPositionY(), 1);
+        assertEquals(playerD.getWorkers()[0].getPositionX(), 1);
+        assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(),playerD.getPlayerId() * 10); //playerD's workerA
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);  //playerC's workerB
     }
