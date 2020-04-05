@@ -55,6 +55,12 @@ public class GameBoard {
 
     public void toNextPlayer() {
         currentPlayer = players.get((currentPlayer.getPlayerId() + 1) % playerNumber);
+
+        if(currentStatus == GameStatus.INGAME && currentPlayer.getCurrentStatus() != PlayerStatus.WAITING4INIT) {
+            currentPlayer.getCosplayer().checkWin();
+            if (currentPlayer.getCurrentStatus() == PlayerStatus.LOSE)
+                toNextPlayer();
+        }
     }
 
     public void toNextPlayer(int playerId) {

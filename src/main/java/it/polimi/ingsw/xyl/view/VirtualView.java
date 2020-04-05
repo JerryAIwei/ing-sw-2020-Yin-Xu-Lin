@@ -10,10 +10,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VirtualView {
-    private final GameController gameController;
-    private Map<Integer, VirtualGame>  vGames = new HashMap<>(); 
+    private volatile static VirtualView singleton;
+    private GameController gameController;
+    private Map<Integer, VirtualGame>  vGames = new HashMap<>();
 
-    public VirtualView(GameController gc){
+    private VirtualView (){}
+
+    public static VirtualView getSingleton() {
+        if (singleton == null) {
+            synchronized (VirtualView.class) {
+                if (singleton == null) {
+                    singleton = new VirtualView();
+                }
+            }
+        }
+        return singleton;
+    }
+
+    public void destroy(){
+        singleton = null;
+    }
+
+    public void register(GameController gc){
         gameController = gc;
     }
 

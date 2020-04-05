@@ -14,10 +14,28 @@ import java.util.Vector;
  * @author Shaoxun
  */
 public class GameController {
-    private final GameMaster gameMaster;
+    private volatile static GameController singleton;
+    private final GameMaster gameMaster = new GameMaster();
 
-    public GameController() {
-        this.gameMaster = new GameMaster();
+    private GameController() { }
+
+    public static GameController getSingleton() {
+        if (singleton == null) {
+            synchronized (GameController.class) {
+                if (singleton == null) {
+                    singleton = new GameController();
+                }
+            }
+        }
+        return singleton;
+    }
+
+    public void destroy(){
+        singleton = null;
+    }
+
+    public void register(VirtualView v){
+        gameMaster.register(v);
     }
 
     // only for test
@@ -70,11 +88,12 @@ public class GameController {
         int gameId = message.getGameId();
         int playerId = message.getPlayerId();
         GodPower godPower = message.getGodPower();
-        if (gameMaster.setPower4Player(gameId, playerId, godPower) == 1) {
-
-        } else {
-
-        }
+        gameMaster.setPower4Player(gameId, playerId, godPower);
+//        if (gameMaster.setPower4Player(gameId, playerId, godPower) == 1) {
+//
+//        } else {
+//
+//        }
     }
 
     public void handleMessage(StartGameMessage message) {

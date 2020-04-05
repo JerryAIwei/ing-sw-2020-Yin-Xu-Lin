@@ -14,71 +14,6 @@ public class VirtualGame {
         private int workerAY;
         private int workerBX;
         private int workerBY;
-        public int getPlayerId() {
-            return playerId;
-        }
-
-        public void setPlayerId(int playerId) {
-            this.playerId = playerId;
-        }
-
-        public String getPlayerName() {
-            return playerName;
-        }
-
-        public void setPlayerName(String playerName) {
-            this.playerName = playerName;
-        }
-
-        public Cosplayer getCosplayer() {
-            return cosplayer;
-        }
-
-        public void setCosplayer(Cosplayer cosplayer) {
-            this.cosplayer = cosplayer;
-        }
-
-        public PlayerStatus getCurrentStatus() {
-            return currentStatus;
-        }
-
-        public void setCurrentStatus(PlayerStatus currentStatus) {
-            this.currentStatus = currentStatus;
-        }
-
-        public int getWorkerAX() {
-            return workerAX;
-        }
-
-        public void setWorkerAX(int workerAX) {
-            this.workerAX = workerAX;
-        }
-
-        public int getWorkerAY() {
-            return workerAY;
-        }
-
-        public void setWorkerAy(int workerAY) {
-            this.workerAY = workerAY;
-        }
-
-        public int getWorkerBX() {
-            return workerBX;
-        }
-
-        public void setWorkerBX(int workerBX) {
-            this.workerBX = workerBX;
-        }
-
-        public int getWorkerBy() {
-            return workerBY;
-        }
-
-        public void setWorkerBy(int workerBY) {
-            this.workerBY = workerBY;
-        }
-
-
 
         VPlayer(int playerId, String playerName){
             this.playerId = playerId;
@@ -133,6 +68,6 @@ public class VirtualGame {
 
     // only for test
     public String getFirstPlayerName(){
-        return this.getVPlayers().get(0).getPlayerName();
+        return vPlayers.get(0).playerName;
     }
 }

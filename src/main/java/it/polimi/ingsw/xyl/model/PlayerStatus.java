@@ -11,9 +11,11 @@ public enum PlayerStatus {
     INGAMEBOARD,        // the player joined into a game board (or created a new one)
                         // (now the number of players in the game board is less than set value)
 
-    WAITING,            // the player is waiting for other players' choice
-
     GODPOWERED,         // the player chose his GodPower
+
+    WAITING4START,       // the player is about to chose a Start Player
+
+    WAITING4INIT,        // the player is about to place his two workers
 
     WORKERPREPARED,     // the player placed his two workers
 

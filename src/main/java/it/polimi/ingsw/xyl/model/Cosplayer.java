@@ -118,13 +118,18 @@ public class Cosplayer {
                         [player.getWorkers()[1].getPositionY()].getLevel() == Level.LEVEL3);
         if (win) {
             player.setCurrentStatus(PlayerStatus.WIN);
-            // notify();
         }
         boolean lose =
                 player.getCosplayer().getAvailableMoves(0).size() == 0
                         && player.getCosplayer().getAvailableMoves(1).size() == 0;
         if (lose) {
             player.setCurrentStatus(PlayerStatus.LOSE);
+            int ax = player.getWorkers()[0].getPositionX();
+            int ay = player.getWorkers()[0].getPositionY();
+            int bx = player.getWorkers()[1].getPositionX();
+            int by = player.getWorkers()[1].getPositionY();
+            player.getCurrentGameBoard().getIslandBoard().getSpaces()[ax][ay].setOccupiedBy(-1);
+            player.getCurrentGameBoard().getIslandBoard().getSpaces()[bx][by].setOccupiedBy(-1);
         }
     }
 

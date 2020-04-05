@@ -2,28 +2,34 @@ package it.polimi.ingsw.xyl.controller;
 
 import it.polimi.ingsw.xyl.model.GodPower;
 import it.polimi.ingsw.xyl.model.Player;
-import it.polimi.ingsw.xyl.model.message.AvailableGodPowersMessage;
-import it.polimi.ingsw.xyl.model.message.PlayerChooseGodPowerMessage;
-import it.polimi.ingsw.xyl.model.message.PlayerNameMessage;
-import it.polimi.ingsw.xyl.model.message.SetPlayerNumberMessage;
+import it.polimi.ingsw.xyl.model.message.*;
+import it.polimi.ingsw.xyl.view.VirtualView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GameControllerTest {
-    GameController gameController;
+    private GameController gameController;
+    private VirtualView virtualView;
 
     @Before
     public void setUp() {
-        gameController = new GameController();
+        gameController = GameController.getSingleton();
+        virtualView = VirtualView.getSingleton();
+        virtualView.register(gameController);
+        gameController.register(virtualView);
     }
 
     @After
     public void tearDown() {
-        gameController = null;
+        gameController.destroy();
+        virtualView.destroy();
+
     }
 
     @Test
@@ -45,7 +51,7 @@ public class GameControllerTest {
         PlayerNameMessage message2 = new PlayerNameMessage("LiMing");
         gameController.handleMessage(message2);
         // not allowed same player name, so he failed to join the game
-        assertEquals(gameController.getGameMaster().getGameLobby().getGameBoards()
+        assertEquals(GameController.getSingleton().getGameMaster().getGameLobby().getGameBoards()
                 .get(0).getPlayers().size(), 1);
         // the second player chose another name "LiHua", he joined
         PlayerNameMessage message3 = new PlayerNameMessage("LiHua");
@@ -83,8 +89,6 @@ public class GameControllerTest {
         assertEquals(gameController.getGameMaster().getGameLobby().getGameBoards()
                 .get(0).getAvailableGodPowers().size(), 2);
         // since LiHua choose all available powers, he will set his own power last
-        System.out.println(gameController.getGameMaster().getGameLobby().getGameBoards()
-                .get(0).getCurrentPlayer().getPlayerId());
         int id = gameController.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         PlayerChooseGodPowerMessage cMessage = new PlayerChooseGodPowerMessage(0, id,GodPower.APOLLO);
         gameController.handleMessage(cMessage);
@@ -95,6 +99,54 @@ public class GameControllerTest {
         gameController.handleMessage(cMessage1);
         assertEquals(gameController.getGameMaster().getGameLobby().getGameBoards()
                 .get(0).getPlayers().get(0).getCosplayer().getGodPower(), GodPower.ATHENA);
+    }
+
+    @Test
+    public void GameControllerTest_startGameAndWorkerPosition() {
+        // playerId playerName Cosplayer
+        //    0       LiMing    ATHENA
+        //    1       LiHua     APOLLO
+        PlayerNameMessage message = new PlayerNameMessage("LiMing");
+        gameController.handleMessage(message);
+        SetPlayerNumberMessage sMessage = new SetPlayerNumberMessage(0, 2);
+        gameController.handleMessage(sMessage);
+        PlayerNameMessage message2 = new PlayerNameMessage("LiHua");
+        gameController.handleMessage(message2);
+        AvailableGodPowersMessage aMessage = new AvailableGodPowersMessage(0, GodPower.ATHENA, GodPower.APOLLO);
+        gameController.handleMessage(aMessage);
+        int id = gameController.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
+        PlayerChooseGodPowerMessage cMessage = new PlayerChooseGodPowerMessage(0, id,GodPower.APOLLO);
+        gameController.handleMessage(cMessage);
+        id = gameController.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
+        PlayerChooseGodPowerMessage cMessage1 = new PlayerChooseGodPowerMessage(0, id,GodPower.ATHENA);
+        gameController.handleMessage(cMessage1);
+        id = gameController.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
+        StartGameMessage startM = new StartGameMessage(0,"LiMing",1);
+        gameController.handleMessage(startM);
+
+        assertEquals(gameController.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId(), 1);
+
+        SetInitialWorkerPositionMessage workerMessage = new SetInitialWorkerPositionMessage(0,1,2,1,1,2);
+        gameController.handleMessage(workerMessage);
+        SetInitialWorkerPositionMessage workerMessage2 = new SetInitialWorkerPositionMessage(0,0,0,0,1,1);
+        gameController.handleMessage(workerMessage2);
+
+        assertEquals(gameController.getGameMaster().getGameLobby().
+                getGameBoards().get(0).getIslandBoard().getSpaces()[0][0].isOccupiedBy(),0);
+        assertEquals(gameController.getGameMaster().getGameLobby().
+                getGameBoards().get(0).getIslandBoard().getSpaces()[1][1].isOccupiedBy(),1);
+        assertEquals(gameController.getGameMaster().getGameLobby().
+                getGameBoards().get(0).getIslandBoard().getSpaces()[1][2].isOccupiedBy(),11);
+        assertEquals(gameController.getGameMaster().getGameLobby().
+                getGameBoards().get(0).getIslandBoard().getSpaces()[2][1].isOccupiedBy(),10);
+        assertEquals(gameController.getGameMaster().getGameLobby().
+                getGameBoards().get(0).getPlayers().get(0).getWorkers()[0].getPositionX(),0);
+        assertEquals(gameController.getGameMaster().getGameLobby().
+                getGameBoards().get(0).getPlayers().get(0).getWorkers()[0].getPositionY(),0);
+        assertEquals(gameController.getGameMaster().getGameLobby().
+                getGameBoards().get(0).getPlayers().get(0).getWorkers()[1].getPositionX(),1);
+        assertEquals(gameController.getGameMaster().getGameLobby().
+                getGameBoards().get(0).getPlayers().get(0).getWorkers()[1].getPositionY(),1);
     }
 
 }
