@@ -17,12 +17,14 @@ import java.net.Socket;
 public class Server
 {
     public final static int SOCKET_PORT = 7777;
-    private static GameController gc = new GameController();
-    private static VirtualView v = new VirtualView(gc);
+    private static GameController gc = GameController.getSingleton();
+    private static VirtualView v = VirtualView.getSingleton();
 
 
     public static void main(String[] args)
     {
+        gc.register(v);
+        v.register(gc);
         ServerSocket socket;
         try {
             socket = new ServerSocket(SOCKET_PORT);
