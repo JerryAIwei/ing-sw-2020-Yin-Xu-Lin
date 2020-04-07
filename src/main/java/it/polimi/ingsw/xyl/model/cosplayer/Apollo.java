@@ -1,7 +1,6 @@
 package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
-import sun.jvm.hotspot.memory.SpaceClosure;
 
 import java.util.EnumSet;
 import java.util.Iterator;
