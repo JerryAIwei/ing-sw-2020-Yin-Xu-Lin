@@ -2,9 +2,7 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
-import java.util.Vector;
 
-import static it.polimi.ingsw.xyl.model.GodPower.ARTEMIS;
 
 /**
  * @author Lin Xin
@@ -12,12 +10,11 @@ import static it.polimi.ingsw.xyl.model.GodPower.ARTEMIS;
 
 public class Artemis extends Cosplayer{
 
-    private boolean firstMove = true;
     private int[] initialPosition = new int[2];
-
+    private int movedWorker = 0;
     public Artemis(Player player) {
         super(player);
-        super.godPower = ARTEMIS;
+        super.godPower = GodPower.ARTEMIS;
     }
 
     /**
@@ -31,43 +28,43 @@ public class Artemis extends Cosplayer{
      * @param direction see Direction class.
      */
     public void move(int worker, Direction direction) {
-        int targetPositionX = this.getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0]; //positionX after move
-        int targetPositionY = this.getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]; //positionY after move
-        IslandBoard currentIslandBoard = this.getPlayer().getCurrentGameBoard().getIslandBoard(); //islandBoard before first move
-        Vector<Direction> availableMoves = getAvailableMoves(worker);
-        Space currentSpace = currentIslandBoard.getSpaces()  //the space before move
-                [this.getPlayer().getWorkers()[worker].getPositionX()][this.getPlayer().getWorkers()[worker].getPositionY()];
-
-        if (firstMove) {
-            if (availableMoves.contains(direction)) {
-                this.initialPosition[0] = this.getPlayer().getWorkers()[worker].getPositionX(); //store position before first move as initial position
-                this.initialPosition[1] = this.getPlayer().getWorkers()[worker].getPositionY();
-                this.getPlayer().getWorkers()[worker].setFromLevel(currentSpace.getLevel().toInt());  //store worker's level
-                currentSpace.setOccupiedBy(-1);   //free the space occupied before first move
-                this.getPlayer().getWorkers()[worker].setPosition(  //position after first move
-                        this.getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
-                        this.getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]
+        if(getAvailableMoves(worker).contains(direction)){
+            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            //positionX after move
+            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]; //positionY after move
+            IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard(); //islandBoard before first move
+            Space currentSpace = currentIslandBoard.getSpaces()  //the space before move
+                    [player.getWorkers()[worker].getPositionX()][player.getWorkers()[worker].getPositionY()];
+            if (nextAction == Action.MOVE) {
+                    initialPosition[0] = player.getWorkers()[worker].getPositionX(); //store position before first move as initial position
+                    initialPosition[1] = player.getWorkers()[worker].getPositionY();
+                    player.getWorkers()[worker].setFromLevel(currentSpace.getLevel().toInt());  //store worker's level
+                    currentSpace.setOccupiedBy(-1);   //free the space occupied before first move
+                    player.getWorkers()[worker].setPosition(  //position after first move
+                            player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
+                            player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]
+                    );
+                    player.getWorkers()[worker].resetForced();
+                    //occupy space after first move
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(player.getPlayerId() * 10 + worker);
+                    movedWorker = worker;
+                    nextAction = Action.MOVEORBUILD;
+                    checkWin();
+            } else if(!(targetPositionX == initialPosition[0] && targetPositionY == initialPosition[1])
+                     && movedWorker == worker) {
+                player.getWorkers()[worker].setFromLevel(currentSpace.getLevel().toInt());  //store worker's level
+                currentSpace.setOccupiedBy(-1);   //free the space occupied before second move
+                player.getWorkers()[worker].setPosition(  //position after second move
+                        player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
+                        player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]
                 );
-                //occupy space after first move
-                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(this.getPlayer().getPlayerId() * 10 + worker);
+                player.getWorkers()[worker].resetForced();
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(player.getPlayerId() * 10 + worker); //occupy space after second move
+                nextAction = Action.BUILD;
                 checkWin();
-                //then not first move
-                this.firstMove = false;
-            } else {
+            }else
+                System.out.println("You cannot move back!");
+            }else
                 System.out.println("Your move is not available!");
-            }
-        } else if(!(targetPositionX == initialPosition[0] && targetPositionY == initialPosition[1]) && availableMoves.contains(direction)) {
-            this.getPlayer().getWorkers()[worker].setFromLevel(currentSpace.getLevel().toInt());  //store worker's level
-            currentSpace.setOccupiedBy(-1);   //free the space occupied before second move
-            this.getPlayer().getWorkers()[worker].setPosition(  //position after second move
-                    this.getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
-                    this.getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]
-            );
-            currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(this.getPlayer().getPlayerId() * 10 + worker); //occupy space after second move
-            checkWin();
-            this.firstMove = true;
-        } else{
-            System.out.println("Your move is not available!");
-        }
     }
 }

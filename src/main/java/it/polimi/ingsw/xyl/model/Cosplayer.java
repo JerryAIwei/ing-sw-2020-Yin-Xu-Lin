@@ -12,8 +12,16 @@ import static it.polimi.ingsw.xyl.model.Level.DOME;
  * @author Shaoxun
  */
 public class Cosplayer {
-    private Player player;
+    protected enum Action {
+        MOVE, BUILD, MOVEORBUILD,BUILDOREND
+    }
+    protected Action nextAction = Action.MOVE;
+    protected Player player;
     protected GodPower godPower = null;
+
+    public String getNextAction() {
+        return nextAction.toString();
+    }
 
     public GodPower getGodPower() {
         return godPower;
@@ -34,11 +42,10 @@ public class Cosplayer {
      * @param direction see Direction class.
      */
     public void move(int worker, Direction direction) {
-        int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-        int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-        IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();
-        Vector<Direction> availableMoves = getAvailableMoves(worker);
-        if (availableMoves.contains(direction)) {
+        if (getAvailableMoves(worker).contains(direction)) {
+            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();
             Space currentSpace =
                     currentIslandBoard.getSpaces()[player.getWorkers()[worker].getPositionX()][player.getWorkers()[worker].getPositionY()];
             player.getWorkers()[worker].setFromLevel(currentSpace.getLevel().toInt());
@@ -49,8 +56,12 @@ public class Cosplayer {
                     player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
                     player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]
             );
+            // reset forced status of worker
+            player.getWorkers()[worker].resetForced();
             // occupy the target space by playerId
             currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(player.getPlayerId() * 10 + worker);
+            // update nextAction
+            nextAction = Action.BUILD;
             // check win
             checkWin();
         } else {
@@ -80,6 +91,8 @@ public class Cosplayer {
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 // change currentPlayer after finish building
                 currentGameBoard.toNextPlayer();
+                // update nextAction
+                nextAction = Action.MOVE;
                 // checkwin(); ????
             } else {
                 System.out.println("Chosen worker can't build at target space!");
@@ -109,10 +122,12 @@ public class Cosplayer {
         // level space to another also does not trigger a win.
         IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();
         boolean win = (player.getWorkers()[0].fromLevel() != 3 &&
+                !player.getWorkers()[0].isForced() &&
                 currentIslandBoard.getSpaces()
                         [player.getWorkers()[0].getPositionX()]
                         [player.getWorkers()[0].getPositionY()].getLevel() == Level.LEVEL3)
                 || (player.getWorkers()[1].fromLevel() != 3 &&
+                !player.getWorkers()[1].isForced() &&
                 currentIslandBoard.getSpaces()
                         [player.getWorkers()[1].getPositionX()]
                         [player.getWorkers()[1].getPositionY()].getLevel() == Level.LEVEL3);

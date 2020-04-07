@@ -2,21 +2,17 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
-import static it.polimi.ingsw.xyl.model.GodPower.DEMETER;
-import static it.polimi.ingsw.xyl.model.Level.DOME;
-
 /**
  * @author Lin Xin
  */
 
 public class Demeter extends Cosplayer {
-    private boolean firstBuild = true;
-    private int[] firstBuildPositions = new int[2];
+    private int buildWorker = 0;
     private Direction firstBuildDirection = null;
 
     public Demeter(Player player) {
         super(player);
-        super.godPower = DEMETER;
+        super.godPower = GodPower.DEMETER;
     }
     /**
      * Demeter's build: worker may build one additional time,
@@ -28,25 +24,26 @@ public class Demeter extends Cosplayer {
      */
     public void build(int worker, Direction direction, boolean buildDome){
         try {
-            GameBoard currentGameBoard = this.getPlayer().getCurrentGameBoard();
+            GameBoard currentGameBoard = getPlayer().getCurrentGameBoard();
             IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-            int targetPositionX = this.getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-            int targetPositionY = this.getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            int targetPositionX = getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
             int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
+            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
 
-            if (firstBuild) {
+            if (nextAction == Action.BUILD) {
                 if (targetOccupiedBy == -1 && noDome) {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    this.firstBuildDirection = direction;
-                    this.firstBuild = false;
+                    buildWorker = worker;
+                    firstBuildDirection = direction;
+                    nextAction = Action.BUILDOREND;
                 } else {
                     System.out.println("Chosen worker can't build at target space!");
                 }
-            } else if (this.firstBuildDirection != direction && targetOccupiedBy == -1 && noDome) {
+            } else if (buildWorker == worker && firstBuildDirection != direction && targetOccupiedBy == -1 && noDome) {
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 currentGameBoard.toNextPlayer();
-                this.firstBuild = true;
+                nextAction = Action.MOVE;
             } else {
                 System.out.println("Chosen worker can't build at target space!");
             }

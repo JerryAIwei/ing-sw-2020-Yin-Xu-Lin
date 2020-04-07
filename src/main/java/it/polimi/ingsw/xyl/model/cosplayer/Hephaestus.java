@@ -2,21 +2,18 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
-import static it.polimi.ingsw.xyl.model.GodPower.HEPHAESTUS;
-import static it.polimi.ingsw.xyl.model.Level.DOME;
-import static it.polimi.ingsw.xyl.model.Level.LEVEL3;
 
 /**
  * @author Lin Xin
  */
 
 public class Hephaestus extends Cosplayer {
-    private boolean firstBuild = true;
+    private int buildWorker = 0;
     private Direction firstBuildDirection = null;
 
     public Hephaestus(Player player) {
         super(player);
-        super.godPower = HEPHAESTUS;
+        super.godPower = GodPower.HEPHAESTUS;
     }
 
     /**
@@ -29,30 +26,33 @@ public class Hephaestus extends Cosplayer {
      */
     public void build(int worker, Direction direction, boolean buildDome){
         try {
-            GameBoard currentGameBoard = this.getPlayer().getCurrentGameBoard();
+            GameBoard currentGameBoard = player.getCurrentGameBoard();
             IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-            int targetPositionX = this.getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-            int targetPositionY = this.getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
             int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
-            boolean noLevel3 = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != LEVEL3;
+            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
+            boolean noLevel3 =
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.LEVEL3;
 
-            if (firstBuild) {
+            if (nextAction == Action.BUILD) {
                 if (targetOccupiedBy == -1 && noDome && noLevel3) {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    this.firstBuildDirection = direction;
-                    this.firstBuild = false;
-                } else if (targetOccupiedBy == -1 && noDome && !noLevel3) {
+                    firstBuildDirection = direction;
+                    buildWorker = worker;
+                    nextAction = Action.BUILDOREND;
+                } else if (targetOccupiedBy == -1 && noDome) {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    this.firstBuildDirection = direction;
+                    firstBuildDirection = direction;
+                    nextAction = Action.MOVE;
                     currentGameBoard.toNextPlayer();
                 } else {
                     System.out.println("Chosen worker can't build at target space!");
                 }
-            }else if(this.firstBuildDirection == direction && noLevel3){
+            }else if(buildWorker == worker && firstBuildDirection == direction && noLevel3){
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 currentGameBoard.toNextPlayer();
-                this.firstBuild = true;
+                nextAction = Action.MOVE;
             }
             else{
                 System.out.println("Chosen worker can't build at target space!");
