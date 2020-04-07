@@ -1,13 +1,11 @@
 package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
-import sun.jvm.hotspot.memory.SpaceClosure;
 
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Vector;
 
-import static it.polimi.ingsw.xyl.model.GodPower.APOLLO;
 
 /**
  * @author Lin Xin
@@ -18,7 +16,7 @@ public class Apollo extends Cosplayer {
 
     public Apollo(Player player) {
         super(player);
-        super.godPower = APOLLO;
+        super.godPower = GodPower.APOLLO;
     }
 
     /**
@@ -29,46 +27,47 @@ public class Apollo extends Cosplayer {
      * @param direction see Direction class.
      */
     public void move(int worker, Direction direction) {
-        IslandBoard currentIslandBoard = this.getPlayer().getCurrentGameBoard().getIslandBoard();
-        int originalPositionX = this.getPlayer().getWorkers()[worker].getPositionX();
-        int originalPositionY = this.getPlayer().getWorkers()[worker].getPositionY();
-        int targetOccupiedBy = 0;
-        Vector<Direction> apolloAvailableMoves = getApolloAvailableMoves(worker);
-
-        if (apolloAvailableMoves.contains(direction)){
-            targetOccupiedBy = currentIslandBoard.getSpaces()
-                    [originalPositionX + direction.toMarginalPosition()[0]]
-                    [originalPositionX + direction.toMarginalPosition()[1]].isOccupiedBy();
-        }
-
-        if (targetOccupiedBy != -1 && targetOccupiedBy != 0) {
+        IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();
+        int originalPositionX = player.getWorkers()[worker].getPositionX();
+        int originalPositionY = player.getWorkers()[worker].getPositionY();
+        int targetOccupiedBy = currentIslandBoard.getSpaces()
+                [originalPositionX + direction.toMarginalPosition()[0]]
+                [originalPositionY + direction.toMarginalPosition()[1]].isOccupiedBy(); ;
+        Vector<Direction> availableMoves = getAvailableMoves(worker);
+        if (targetOccupiedBy != -1 && availableMoves.contains(direction)) {
             int opponentWorkerId = targetOccupiedBy % 10;
             int opponentPlayerId = targetOccupiedBy / 10;
-            this.getPlayer().getCurrentGameBoard().getIslandBoard().getSpaces()
+            player.getCurrentGameBoard().getIslandBoard().getSpaces()
                     [originalPositionX][originalPositionY].setOccupiedBy(-1);
-            assert direction.toOpposite() != null;
             Space opponentCurrentSpace = currentIslandBoard.getSpaces()
                     [originalPositionX + direction.toMarginalPosition()[0]]
                     [originalPositionY + direction.toMarginalPosition()[1]];
-            this.getPlayer().getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()
+            player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()
                     [opponentWorkerId].setFromLevel(opponentCurrentSpace.getLevel().toInt());
+            player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()
+                    [opponentWorkerId].setForced();
             opponentCurrentSpace.setOccupiedBy(-1);
-            this.getPlayer().getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()
+            player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()
                     [opponentWorkerId].setPosition(originalPositionX, originalPositionY);
-            checkWin();
         }
-        super.move(worker, direction);
-        if (targetOccupiedBy != -1 && targetOccupiedBy != 0) {
-            this.getPlayer().getCurrentGameBoard().getIslandBoard().getSpaces()
+        super.move(worker, direction); // super.move will change nextAction and checkWin.
+        if (targetOccupiedBy != -1 && availableMoves.contains(direction)) {
+            player.getCurrentGameBoard().getIslandBoard().getSpaces()
                     [originalPositionX][originalPositionY].setOccupiedBy(targetOccupiedBy);
-            System.out.println("Apollo's move");
         }
+        checkWin();  // I don't know whehter checkWin() twice will have any side effect.
     }
 
 
-    public Vector<Direction> getApolloAvailableMoves(int worker) {
-        int originalPositionX = this.getPlayer().getWorkers()[worker].getPositionX();
-        int originalPositionY = this.getPlayer().getWorkers()[worker].getPositionY();
+    /**
+     * get all available move directions of an Apollo's worker
+     *
+     * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
+     * @return all available direction of the worker.
+     */
+    public Vector<Direction> getAvailableMoves(int worker) {
+        int originalPositionX = player.getWorkers()[worker].getPositionX();
+        int originalPositionY = player.getWorkers()[worker].getPositionY();
         EnumSet<Direction> all = EnumSet.allOf(Direction.class);
         Vector<Direction> apolloAvailableMoves = new Vector<>(all);
 
@@ -82,12 +81,12 @@ public class Apollo extends Cosplayer {
             apolloAvailableMoves.remove(Direction.UPRIGHT);
             apolloAvailableMoves.remove(Direction.DOWNRIGHT);
         }
-        if (originalPositionX == 0) {
+        if (originalPositionY == 0) {
             apolloAvailableMoves.remove(Direction.DOWN);
             apolloAvailableMoves.remove(Direction.DOWNLEFT);
             apolloAvailableMoves.remove(Direction.DOWNRIGHT);
         }
-        if (originalPositionX == 4) {
+        if (originalPositionY == 4) {
             apolloAvailableMoves.remove(Direction.UP);
             apolloAvailableMoves.remove(Direction.UPLEFT);
             apolloAvailableMoves.remove(Direction.UPRIGHT);
@@ -95,20 +94,22 @@ public class Apollo extends Cosplayer {
         Iterator<Direction> iterator = apolloAvailableMoves.iterator();
         while (iterator.hasNext()) {
             Direction a = iterator.next();
-            Space targetSpace = this.getPlayer().getCurrentGameBoard().getIslandBoard().getSpaces()
+            Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
                     [originalPositionX + a.toMarginalPosition()[0]]
                     [originalPositionY+ a.toMarginalPosition()[1]];
-            // remove occupied by a dome
-            if (targetSpace.getLevel() == Level.DOME) {
+            // remove occupied by a dome or his own worker
+            if (targetSpace.getLevel() == Level.DOME ||
+                    targetSpace.isOccupiedBy() == (player.getPlayerId() * 10 + 1) ||
+                    targetSpace.isOccupiedBy() == (player.getPlayerId() * 10)) {
                 iterator.remove();
                 continue;
             }
 
             Space currentSpace =
-                    this.getPlayer().getCurrentGameBoard().getIslandBoard().getSpaces()[originalPositionX][originalPositionY];
+                    player.getCurrentGameBoard().getIslandBoard().getSpaces()[originalPositionX][originalPositionY];
 
             int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();
-            boolean noMoveUp = this.getPlayer().getCurrentGameBoard().getIslandBoard().isNoMoveUp();
+            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoMoveUp();
             // remove relative level not allowed
             if (relativeLevel > 1 || (noMoveUp && relativeLevel == 1))
                 iterator.remove();

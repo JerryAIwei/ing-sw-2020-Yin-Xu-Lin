@@ -57,10 +57,11 @@ public class DemeterBuildTest extends GodCosplayerTest{
 
     @Test
     public void DemeterBuildTest_playerCWorkerABuildRightThenBuildRight_notAllowed(){
-        islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
+        playerC.getCosplayer().move(0, RIGHT);
+        islandBoard.getSpaces()[2][0].setLevel(LEVEL1);
         playerC.getCosplayer().build(0, RIGHT, false);
         playerC.getCosplayer().build(0, RIGHT, false);
-        assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
+        assertEquals(islandBoard.getSpaces()[2][0].getLevel(),LEVEL2);
     }
 
 }

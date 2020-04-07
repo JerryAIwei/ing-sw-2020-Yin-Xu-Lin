@@ -43,7 +43,7 @@ public class AtlasBuildTest extends GodCosplayerTest{
     }
 
     @Test
-    public void AtlasBuildTest_playerCWorkerBBuildUpRight_odome_2_1_notAllowed() {
+    public void AtlasBuildTest_playerCWorkerBBuildUpRight_dome_2_1_notAllowed() {
         islandBoard.getSpaces()[2][1].setLevel(DOME);
         playerC.getCosplayer().build(1, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(),DOME);
