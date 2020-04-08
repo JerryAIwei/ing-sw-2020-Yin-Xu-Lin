@@ -99,8 +99,10 @@ public class Minotaur extends Cosplayer {
             Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
                     [originalPositionX + a.toMarginalPosition()[0]]
                     [originalPositionY+ a.toMarginalPosition()[1]];
-            // remove occupied by a dome
-            if (targetSpace.getLevel() == Level.DOME) {
+            // remove occupied by a dome or Minotaur's own worker
+            if (targetSpace.getLevel() == Level.DOME ||
+                    targetSpace.isOccupiedBy() == (player.getPlayerId() * 10 + 1) ||
+                    targetSpace.isOccupiedBy() == (player.getPlayerId() * 10)) {
                 iterator.remove();
                 continue;
             }
