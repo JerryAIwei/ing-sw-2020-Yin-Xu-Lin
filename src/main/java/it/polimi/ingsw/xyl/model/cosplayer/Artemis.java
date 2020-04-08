@@ -64,7 +64,7 @@ public class Artemis extends Cosplayer{
                 checkWin();
             }else
                 System.out.println("You cannot move back!");
-            }else
+        }else
                 System.out.println("Your move is not available!");
     }
 }
