@@ -14,11 +14,12 @@ public enum Level {
 
     public int toInt(){
         switch(this){
-            default: return 0;
+            case GROUND: return 0;
             case LEVEL1: return 1;
             case LEVEL2: return 2;
             case LEVEL3: return 3;
             case DOME: return 4;
         }
+        return -1;
     }
 }

@@ -133,6 +133,7 @@ public class Cosplayer {
                         [player.getWorkers()[1].getPositionY()].getLevel() == Level.LEVEL3);
         if (win) {
             player.setCurrentStatus(PlayerStatus.WIN);
+            player.getCurrentGameBoard().setCurrentStatus(GameStatus.GAMEENDED);
         }
         boolean lose =
                 player.getCosplayer().getAvailableMoves(0).size() == 0
