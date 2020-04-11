@@ -45,27 +45,13 @@ public class GameController {
 
     public void handleMessage(PlayerNameMessage message) {
         String playerName = message.getPlayerName();
-        int a = gameMaster.addPlayer(playerName);
-        if (a == 0) {
-            // notify view to set playerNumber and Available God powers
-            // notify view the gameId
-        } else if (a == 1) {
-            // notify view to wait for other players or game start
-            // notify view the gameId
-        } else {
-            // there is an error
-        }
+        gameMaster.addPlayer(playerName);
     }
 
     public void handleMessage(SetPlayerNumberMessage message){
         int gameId = message.getGameId();
         int playerNumber = message.getPlayerNumber();
-        if (gameMaster.setPlayerNumber(gameId, playerNumber) == 1)
-        {
-
-        }else{
-
-        }
+        gameMaster.setPlayerNumber(gameId, playerNumber);
     }
 
     public void handleMessage(AvailableGodPowersMessage message) {
@@ -76,12 +62,7 @@ public class GameController {
         if (message.getGodPower('C') != null) {
             availableGodPowers.add(message.getGodPower('C'));
         }
-
-        if (gameMaster.setAvailableGodPowers(gameId, availableGodPowers) == 1) {
-
-        } else {
-
-        }
+        gameMaster.setAvailableGodPowers(gameId, availableGodPowers);
     }
 
     public void handleMessage(PlayerChooseGodPowerMessage message) {
@@ -89,22 +70,13 @@ public class GameController {
         int playerId = message.getPlayerId();
         GodPower godPower = message.getGodPower();
         gameMaster.setPower4Player(gameId, playerId, godPower);
-//        if (gameMaster.setPower4Player(gameId, playerId, godPower) == 1) {
-//
-//        } else {
-//
-//        }
     }
 
     public void handleMessage(StartGameMessage message) {
         int gameId = message.getGameId();
         String from = message.getFromPlayer();
         int startPlayerId = message.getStartPlayerId();
-        if (gameMaster.startGame(gameId, from, startPlayerId) == 1) {
-
-        } else {
-
-        }
+        gameMaster.startGame(gameId, from, startPlayerId);
     }
 
     public void handleMessage(SetInitialWorkerPositionMessage message) {
@@ -114,22 +86,14 @@ public class GameController {
         int ay = message.getWorkerPosition(0, 'y');
         int bx = message.getWorkerPosition(1, 'x');
         int by = message.getWorkerPosition(1, 'y');
-        if (gameMaster.setInitialWorkerPosition(gameId, playerId, ax, ay, bx, by) == 1) {
-
-        } else {
-
-        }
+        gameMaster.setInitialWorkerPosition(gameId, playerId, ax, ay, bx, by);
     }
 
     public void handleMessage(MyTurnFinishedMessage message) {
         int gameId = message.getGameId();
         int playerId = message.getPlayerId();
         boolean finish = message.isFinished();
-        if (gameMaster.endTurn(gameId, playerId, finish) == 1) {
-
-        } else {
-
-        }
+        gameMaster.endTurn(gameId, playerId, finish);
     }
 
     public void handleMessage(MoveMessage message) {
@@ -137,11 +101,7 @@ public class GameController {
         int playerId = message.getPlayerId();
         int workerId = message.getWorkerId();
         Direction direction = message.getDirection();
-        if (gameMaster.handleMove(gameId, playerId, workerId, direction) == 1) {
-
-        } else {
-
-        }
+        gameMaster.handleMove(gameId, playerId, workerId, direction);
     }
 
     public void handleMessage(BuildMessage message) {
@@ -150,11 +110,7 @@ public class GameController {
         int workerId = message.getWorkerId();
         Direction direction = message.getDirection();
         boolean buildDome = message.isBuildDome();
-        if (gameMaster.handleBuild(gameId, playerId, workerId, direction, buildDome) == 1) {
-
-        } else {
-
-        }
+        gameMaster.handleBuild(gameId, playerId, workerId, direction, buildDome);
     }
 
     public void update(Message message) {

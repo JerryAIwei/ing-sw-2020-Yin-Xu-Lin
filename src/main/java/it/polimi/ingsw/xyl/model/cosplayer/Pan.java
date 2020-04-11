@@ -36,7 +36,7 @@ public class Pan extends Cosplayer {
 
         if (normalWin || powerWin) {
             player.setCurrentStatus(PlayerStatus.WIN);
-            // notify();
+            player.getCurrentGameBoard().setCurrentStatus(GameStatus.GAMEENDED);
         }
 
         /* lose will keep same as Civilian Mod */

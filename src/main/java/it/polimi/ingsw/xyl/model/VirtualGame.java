@@ -3,13 +3,15 @@ package it.polimi.ingsw.xyl.model;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class VirtualGame {
     private class VPlayer{
         private int playerId;
         private String playerName;
         private Cosplayer cosplayer;
-        private PlayerStatus currentStatus = PlayerStatus.INGAMEBOARD;
+        private String nextAction;
+        private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;
         private int workerAX;
         private int workerAY;
         private int workerBX;
@@ -23,8 +25,9 @@ public class VirtualGame {
 
     private GameStatus gameStatus = GameStatus.WAITINGPLAYER;
     private Map<Integer, VPlayer> vPlayers = new HashMap<>();
-
     private Space[][] spaces = new Space[5][5];
+    private Vector<GodPower> availableGodPowers;
+    private int currentPlayerId;
 
     public GameStatus getGameStatus() {
         return gameStatus;
@@ -42,7 +45,9 @@ public class VirtualGame {
         for(Player player:players) {
             if (vPlayers.get(player.getPlayerId()) != null) {
                 VPlayer tempVPlayer = vPlayers.get(player.getPlayerId());
-                tempVPlayer.currentStatus = player.getCurrentStatus();
+                tempVPlayer.playerStatus = player.getCurrentStatus();
+                if(player.getCosplayer()!=null)
+                    tempVPlayer.nextAction = player.getCosplayer().getNextAction();
                 if(player.getCurrentStatus() == PlayerStatus.WORKERPREPARED) {
                     tempVPlayer.workerAX = player.getWorkers()[0].getPositionX();
                     tempVPlayer.workerAY = player.getWorkers()[0].getPositionY();
@@ -52,7 +57,7 @@ public class VirtualGame {
             } else {
                 VPlayer tempVPlayer = new VPlayer(player.getPlayerId(), player.getPlayerName());
                 tempVPlayer.cosplayer = player.getCosplayer();
-                tempVPlayer.currentStatus = player.getCurrentStatus();
+                tempVPlayer.playerStatus = player.getCurrentStatus();
                 vPlayers.put(tempVPlayer.playerId,tempVPlayer);
             }
         }
@@ -66,8 +71,29 @@ public class VirtualGame {
         this.spaces = spaces;//Todo:need deep copy
     }
 
+    public Vector<GodPower> getAvailableGodPowers() {
+        return availableGodPowers;
+    }
+
+    public void setAvailableGodPowers(Vector<GodPower> availableGodPowers) {
+        this.availableGodPowers = availableGodPowers; //Todo:need deep copy
+    }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
+    }
+
+    public void setCurrentPlayerId(int currentPlayerId) {
+        this.currentPlayerId = currentPlayerId;
+    }
+
     // only for test
     public String getFirstPlayerName(){
         return vPlayers.get(0).playerName;
+    }
+
+    // only for test
+    public String getCurrentPlayerAction(){
+        return vPlayers.get(currentPlayerId).nextAction;
     }
 }

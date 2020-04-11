@@ -37,7 +37,7 @@ public class GameMaster {
      * @param playerName the nickname of a player.
      * @return response code -1, 0, 1, 2, 3 // TODO: decide codes
      */
-    public int addPlayer(String playerName) {
+    public synchronized int addPlayer(String playerName) {
         if (gameLobby.getAllPlayers().get(playerName) != null)
             return 3;
         int gameId = 0;
@@ -120,6 +120,7 @@ public class GameMaster {
             Player player = gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId);
             Cosplayer cosplayer = godPower.cosplay(player);
             player.setCosplayer(cosplayer);
+            gameLobby.getGameBoards().get(gameId).getAvailableGodPowers().remove(godPower);
             player.setCurrentStatus(PlayerStatus.GODPOWERED);
             if (gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId() == 0)
                 player.setCurrentStatus(PlayerStatus.WAITING4START);

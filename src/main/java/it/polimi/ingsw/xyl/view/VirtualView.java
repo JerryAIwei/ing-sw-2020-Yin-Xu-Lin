@@ -39,12 +39,16 @@ public class VirtualView {
         if(vGames.get(gameBoard.getGameId()) == null){
             VirtualGame vGame = new VirtualGame();
             vGame.setGameStatus(gameBoard.getCurrentStatus());
+            vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
+            vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
             vGame.updateVPlayers(gameBoard.getPlayers().values());
             vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
             vGames.put(gameBoard.getGameId(), vGame);
         }else{
             VirtualGame vGame = vGames.get(gameBoard.getGameId());
             vGame.setGameStatus(gameBoard.getCurrentStatus());
+            vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
+            vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
             vGame.updateVPlayers(gameBoard.getPlayers().values());
             vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
         }

@@ -19,10 +19,6 @@ public enum PlayerStatus {
 
     WORKERPREPARED,     // the player placed his two workers
 
-    MYTURN,             // it is this player's turn
-
-    NOTMYTURN,          // it is another player's turn
-
     WIN,                // the player won the game
 
     LOSE               // the player lost the game
