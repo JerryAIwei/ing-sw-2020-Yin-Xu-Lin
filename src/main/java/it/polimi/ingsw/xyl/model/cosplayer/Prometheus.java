@@ -8,8 +8,12 @@ import java.util.Vector;
 
 import static it.polimi.ingsw.xyl.model.GodPower.PROMETHEUS;
 
+/**
+ * @author Lin Xin
+ **/
+
 public class Prometheus extends Cosplayer {
-    private boolean climb =false;
+    private boolean climb =false; //???
     private boolean firstActionBuild = false;
     private Action nextAction = Action.MOVEORBUILD;
     public Prometheus(Player player) {
@@ -28,23 +32,11 @@ public class Prometheus extends Cosplayer {
     public void move(int worker, Direction direction){
         if (nextAction == Action.MOVEORBUILD) {
             super.move(worker, direction);
+            nextAction = Action.BUILD;
         } else if (nextAction == Action.MOVE) {
             if (getAvailableMoves(worker).contains(direction)) {
-                int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-                int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-                IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();
-                Space currentSpace =
-                        currentIslandBoard.getSpaces()[player.getWorkers()[worker].getPositionX()][player.getWorkers()[worker].getPositionY()];
-                player.getWorkers()[worker].setFromLevel(currentSpace.getLevel().toInt());
-                currentSpace.setOccupiedBy(-1);
-                player.getWorkers()[worker].setPosition(
-                        player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0],
-                        player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1]
-                );
-                player.getWorkers()[worker].resetForced();
-                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(player.getPlayerId() * 10 + worker);
+                super.move(worker, direction);
                 nextAction = Action.BUILD;
-                checkWin();
             } else {
                 System.out.println("Your move is not available!");
             }
@@ -64,19 +56,11 @@ public class Prometheus extends Cosplayer {
         if(nextAction == Action.MOVEORBUILD){
             super.build(worker, direction, buildDome);
             firstActionBuild = true;
+            nextAction = Action.MOVE;
         }else if(nextAction == Action.BUILD){
             super.build(worker, direction, buildDome);
-            if(firstActionBuild) {
-                nextAction = Action.MOVEORBUILD;
+            if(firstActionBuild)
                 firstActionBuild = false;
-            }
-            /*
-            if(!firstActionBuild) {
-                super.build(worker, direction, buildDome);
-            }else{
-                super.build(worker, direction, buildDome);
-                nextAction = Action.MOVEORBUILD;
-            }*/
         }
     }
 
@@ -123,17 +107,17 @@ public class Prometheus extends Cosplayer {
                             .getPositionX()][player.getWorkers()[worker].getPositionY()];
 
             int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();
-            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoMoveUp();
 
             //when use power, worker cannot move up
-            if (nextAction == Action.MOVE && relativeLevel > 0){
+            if (nextAction == Action.MOVE) {
                 player.getCurrentGameBoard().getIslandBoard().setNoMoveUp(true);
             }
-            // remove relative level not allowed
-            // Worker may not move up more than one level
+            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoMoveUp();
+
             if (relativeLevel > 1 || (noMoveUp && relativeLevel == 1))
                 iterator.remove();
-        }
+            player.getCurrentGameBoard().getIslandBoard().setNoMoveUp(false);
+            }
         return availableMoves;
     }
 }

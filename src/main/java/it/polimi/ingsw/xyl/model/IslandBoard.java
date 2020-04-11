@@ -10,7 +10,7 @@ package it.polimi.ingsw.xyl.model;
  */
 public class IslandBoard {
     private Space[][] spaces = new Space[5][5];
-    private boolean noMoveUp;
+    private boolean noMoveUp = false;
 
     public IslandBoard(){
         for (int i = 0; i !=5; i++){
