@@ -27,17 +27,21 @@ public class Athena extends Cosplayer{
      * @param direction see Direction class.
      */
     public void move(int worker, Direction direction){
-        super.move(worker, direction);
-        Vector<Direction> availableMoves = super.getAvailableMoves(worker);
-        int opponentPlayerId = 0;
-        if(availableMoves.contains(direction)){
-            player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).
+        int playerNumber = player.getCurrentGameBoard().getPlayerNumber();
+        Player currentPlayer = player.getCurrentGameBoard().getCurrentPlayer();
+        int nextPlayerId = (currentPlayer.getPlayerId() + 1) % playerNumber;
+        if(super.getAvailableMoves(worker).contains(direction) && direction == Direction.UP){
+            player.getCurrentGameBoard().getPlayers().get(nextPlayerId).
+                        getCurrentGameBoard().getIslandBoard().setNoMoveUp(true);
+            player.getCurrentGameBoard().getPlayers().get((nextPlayerId+1) % playerNumber).
                     getCurrentGameBoard().getIslandBoard().setNoMoveUp(true);
-            // how to set back to default: false after a move?
+        }else{
+            //player.getCurrentGameBoard().getIslandBoard().setNoMoveUp(false);
+            player.getCurrentGameBoard().getPlayers().get(nextPlayerId).
+                    getCurrentGameBoard().getIslandBoard().setNoMoveUp(false);
+            player.getCurrentGameBoard().getPlayers().get((nextPlayerId+1) % playerNumber).
+                    getCurrentGameBoard().getIslandBoard().setNoMoveUp(false);
         }
-    }
-
-    public void setOpponentNoMoveUp(int worker, Direction direction){
-
+        super.move(worker, direction);
     }
 }

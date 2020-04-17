@@ -13,7 +13,6 @@ import static it.polimi.ingsw.xyl.model.GodPower.PROMETHEUS;
  **/
 
 public class Prometheus extends Cosplayer {
-    private boolean climb =false; //???
     private boolean firstActionBuild = false;
     private Action nextAction = Action.MOVEORBUILD;
     public Prometheus(Player player) {
