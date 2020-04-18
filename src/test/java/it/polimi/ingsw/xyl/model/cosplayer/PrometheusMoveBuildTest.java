@@ -61,6 +61,16 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), playerD.getPlayerId() * 10);
     }
 
+    @Test
+    public void PrometheusMoveBuildTest_playerDWorkerA_MoveRight_affectedByAthena_noLevelUp_notAllowed() {
+        gameBoard.getIslandBoard().getSpaces()[3][1].setLevel(LEVEL1);
+        gameBoard.getIslandBoard().setNoLevelUp(true);
+        playerD.getCosplayer().move(0, RIGHT);
+        assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
+        assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
+        assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), playerD.getPlayerId() * 10);
+    }
+
     /* GodPower Mod test */
 
     @Test
