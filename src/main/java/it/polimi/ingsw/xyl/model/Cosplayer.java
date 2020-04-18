@@ -198,7 +198,7 @@ public class Cosplayer {
                             .getPositionX()][player.getWorkers()[worker].getPositionY()];
 
             int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();
-            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoMoveUp();
+            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoLevelUp();
             // remove relative level not allowed
             if (relativeLevel > 1 || (noMoveUp && relativeLevel == 1))
                 iterator.remove();

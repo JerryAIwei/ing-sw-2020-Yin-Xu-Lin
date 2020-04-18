@@ -87,7 +87,7 @@ public class CosplayerTest {
         islandBoard.getSpaces()[2][2].setLevel(Level.DOME);
         islandBoard.getSpaces()[2][1].setLevel(Level.LEVEL1);
         // imitate Athena's power no move up
-        islandBoard.setNoMoveUp(true);
+        islandBoard.setNoLevelUp(true);
         /*
         | 0 | 0 | 0 | 0 |B'B|
         | 0 | 0 | 0 |B'A| 0 |

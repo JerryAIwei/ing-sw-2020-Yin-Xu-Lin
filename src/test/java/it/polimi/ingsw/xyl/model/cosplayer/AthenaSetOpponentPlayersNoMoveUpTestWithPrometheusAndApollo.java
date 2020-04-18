@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static it.polimi.ingsw.xyl.model.Direction.*;
-import static it.polimi.ingsw.xyl.model.Level.LEVEL1;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -101,15 +100,15 @@ public class AthenaSetOpponentPlayersNoMoveUpTestWithPrometheusAndApollo extends
     @Test
     public void AthenaSetOpponentPlayersNoMoveUpTest_playerCWorkerAMoveUp_playerDWorkerAMoveUp_notAllowed() {
         playerC.getCosplayer().move(0, UP);
-        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoMoveUp());
+        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoLevelUp());
         assertEquals(playerC.getWorkers()[0].getPositionX(), 0);
         assertEquals(playerC.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(), -1);
         assertEquals(islandBoard.getSpaces()[0][1].isOccupiedBy(), playerC.getPlayerId() * 10);
 
-        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoMoveUp());
+        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoLevelUp());
         playerD.getCosplayer().move(0, UP);
-        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoMoveUp());
+        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoLevelUp());
         assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), playerD.getPlayerId() * 10);
@@ -122,18 +121,18 @@ public class AthenaSetOpponentPlayersNoMoveUpTestWithPrometheusAndApollo extends
         assertEquals(playerC.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(), -1);
         assertEquals(islandBoard.getSpaces()[0][1].isOccupiedBy(), playerC.getPlayerId() * 10);
-        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoMoveUp());
-        System.out.println(playerE.getCurrentGameBoard().getIslandBoard().isNoMoveUp());
+        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoLevelUp());
+        System.out.println(playerE.getCurrentGameBoard().getIslandBoard().isNoLevelUp());
 
         playerD.getCosplayer().move(0, RIGHT);
-        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoMoveUp());
+        System.out.println(playerD.getCurrentGameBoard().getIslandBoard().isNoLevelUp());
         assertEquals(playerD.getWorkers()[0].getPositionX(), 3);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), -1);
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(), playerD.getPlayerId() * 10);
 
         playerE.getCosplayer().move(1, UP);
-        System.out.println(playerE.getCurrentGameBoard().getIslandBoard().isNoMoveUp());
+        System.out.println(playerE.getCurrentGameBoard().getIslandBoard().isNoLevelUp());
         assertEquals(playerE.getWorkers()[1].getPositionX(), 4);
         assertEquals(playerE.getWorkers()[1].getPositionY(), 2);
         assertEquals(islandBoard.getSpaces()[4][2].isOccupiedBy(), playerE.getPlayerId() * 10 + 1);

@@ -109,13 +109,13 @@ public class Prometheus extends Cosplayer {
 
             //when use power, worker cannot move up
             if (nextAction == Action.MOVE) {
-                player.getCurrentGameBoard().getIslandBoard().setNoMoveUp(true);
+                player.getCurrentGameBoard().getIslandBoard().setNoLevelUp(true);
             }
-            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoMoveUp();
+            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoLevelUp();
 
             if (relativeLevel > 1 || (noMoveUp && relativeLevel == 1))
                 iterator.remove();
-            player.getCurrentGameBoard().getIslandBoard().setNoMoveUp(false);
+            player.getCurrentGameBoard().getIslandBoard().setNoLevelUp(false);
             }
         return availableMoves;
     }

@@ -10,7 +10,7 @@ package it.polimi.ingsw.xyl.model;
  */
 public class IslandBoard {
     private Space[][] spaces = new Space[5][5];
-    private boolean noMoveUp = false;
+    private boolean noLevelUp = false;
 
     public IslandBoard(){
         for (int i = 0; i !=5; i++){
@@ -24,12 +24,12 @@ public class IslandBoard {
         return spaces;
     }
 
-    public boolean isNoMoveUp() {
-        return noMoveUp;
+    public boolean isNoLevelUp() {
+        return noLevelUp;
     }
 
-    public void setNoMoveUp(boolean noMoveUp) {
-        this.noMoveUp = noMoveUp;
+    public void setNoLevelUp(boolean noLevelUp) {
+        this.noLevelUp = noLevelUp;
     }
 
 }
