@@ -1,15 +1,11 @@
 package it.polimi.ingsw.xyl.model.cosplayer;
 
-import it.polimi.ingsw.xyl.model.Direction;
-import it.polimi.ingsw.xyl.model.GameBoard;
-import it.polimi.ingsw.xyl.model.Level;
 import org.junit.Before;
 import org.junit.Test;
 
 import static it.polimi.ingsw.xyl.model.Direction.*;
 import static it.polimi.ingsw.xyl.model.Level.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 /**
  * it's a test of cosplayer moving and building (Prometheus)
@@ -18,6 +14,7 @@ import static org.junit.Assert.assertNotEquals;
  * it may build both before and after moving.
  *
  * @author Lin Xin
+ * @author Shaoxun
  */
 public class PrometheusMoveBuildTest extends GodCosplayerTest {
 
@@ -37,6 +34,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(playerD.getWorkers()[0].getPositionY(), 2);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), -1);
         assertEquals(islandBoard.getSpaces()[2][2].isOccupiedBy(), playerD.getPlayerId() * 10);
+        assertEquals(playerD.getCosplayer().getNextAction(),"BUILD");
 
         playerD.getCosplayer().build(0, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[3][2].getLevel(), LEVEL1);
@@ -66,7 +64,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
     /* GodPower Mod test */
 
     @Test
-    public void PrometheusMoveBuildTest_playerDWorkerA_BuildUp_MoveRight_BuildLeft_normal() {
+    public void PrometheusMoveBuildTest_playerDWorkerA_BuildUp_MoveRight_BuildLeft_usePower() {
         playerD.getCosplayer().build(0, UP, false);
         assertEquals(islandBoard.getSpaces()[2][2].getLevel(), LEVEL1);
 
@@ -88,11 +86,12 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
     }
 
     @Test
-    public void PrometheusMoveBuildTest_playerDWorkerA_BuildUp_MoveUp_notAllowed() {
+    public void PrometheusMoveBuildTest_playerDWorkerA_BuildUp_MoveUp_levelUp_notAllowed() {
         playerD.getCosplayer().build(0, UP, false);
         assertEquals(islandBoard.getSpaces()[2][2].getLevel(), LEVEL1);
 
         playerD.getCosplayer().move(0, UP);
+        assertEquals(playerD.getCosplayer().getNextAction(),"MOVE");
         assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[2][2].isOccupiedBy(), -1);
@@ -101,15 +100,15 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
 
     @Test
     public void PrometheusMoveBuildTest_playerDWorkerA_BuildRight_MoveRight_UpOneMoreLevel_notAllowed() {
-        islandBoard.getSpaces()[3][1].setLevel(LEVEL1);
         playerD.getCosplayer().build(0, RIGHT, false);
-        assertEquals(islandBoard.getSpaces()[3][1].getLevel(), LEVEL2);
+        assertEquals(islandBoard.getSpaces()[3][1].getLevel(), LEVEL1);
 
         playerD.getCosplayer().move(0, RIGHT);
         assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(), -1);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), playerD.getPlayerId() * 10);
+        assertEquals(playerD.getCosplayer().getNextAction(),"MOVE");
     }
 
     @Test
@@ -122,6 +121,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[1][1].isOccupiedBy(), playerC.getPlayerId() * 10 + 1);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), playerD.getPlayerId() * 10);
+        assertEquals(playerD.getCosplayer().getNextAction(),"MOVE");
     }
 
     @Test
@@ -135,6 +135,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(), -1);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), playerD.getPlayerId() * 10);
+        assertEquals(playerD.getCosplayer().getNextAction(),"MOVE");
     }
 
     @Test
@@ -142,15 +143,21 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         islandBoard.getSpaces()[2][2].setLevel(LEVEL3);
         playerD.getCosplayer().build(0, UP, false);
         assertEquals(islandBoard.getSpaces()[2][2].getLevel(), DOME);
+        assertEquals(playerD.getCosplayer().getNextAction(),"MOVE");
 
         playerD.getCosplayer().move(0, RIGHT);
         assertEquals(playerD.getWorkers()[0].getPositionX(), 3);
         assertEquals(playerD.getWorkers()[0].getPositionY(), 1);
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), -1);
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(), playerD.getPlayerId() * 10);
+        assertEquals(playerD.getCosplayer().getNextAction(),"BUILD");
 
         playerD.getCosplayer().build(0, UPLEFT, false);
         assertEquals(islandBoard.getSpaces()[2][2].getLevel(), DOME);
+        assertEquals(playerD.getCosplayer().getNextAction(),"BUILD");
+
     }
+
+
 }
 
