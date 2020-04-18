@@ -18,6 +18,10 @@ public class Athena extends Cosplayer {
         super.godPower = GodPower.ATHENA;
     }
 
+    public void prepare(){
+        player.getCurrentGameBoard().getIslandBoard().setNoLevelUp(false);
+    }
+
     /**
      * Athena's power: if one of your workers moved up on
      * your last turn, opponent workers cannot move up this turn.

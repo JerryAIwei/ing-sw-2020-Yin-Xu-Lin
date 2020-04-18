@@ -35,6 +35,10 @@ public class Cosplayer {
         return this.player;
     }
 
+    public void prepare(){
+        nextAction = Action.MOVE;
+    }
+
     /**
      * move method of cosplayer(Civilian Mod)
      *

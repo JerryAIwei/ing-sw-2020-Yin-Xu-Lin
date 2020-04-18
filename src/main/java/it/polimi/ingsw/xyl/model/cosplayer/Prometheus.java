@@ -23,6 +23,10 @@ public class Prometheus extends Cosplayer {
         nextAction = Action.MOVEORBUILD;
     }
 
+    public void prepare(){
+        nextAction = Action.MOVEORBUILD;
+    }
+
     /**
      * Prometheus' move and build:
      * If your worker does not move up(means to a higher level),
