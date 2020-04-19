@@ -47,7 +47,7 @@ public class VirtualView {
             vGame.updateVPlayers(gameBoard.getPlayers().values());
             vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
             vGames.put(gameBoard.getGameId(), vGame);
-            
+
             cli.update(vGame);//for debug
         }else{
             VirtualGame vGame = vGames.get(gameBoard.getGameId());
