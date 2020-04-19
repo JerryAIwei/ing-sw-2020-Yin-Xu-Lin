@@ -1,5 +1,5 @@
 package it.polimi.ingsw.xyl.view.cli;
-import it.polimi.ingsw.xyl.model.Level;
+import it.polimi.ingsw.xyl.model.*;
 import  it.polimi.ingsw.xyl.util.ColorSetter;
 
 import java.util.HashMap;
@@ -12,13 +12,13 @@ import java.util.Map;
 public class IslandBoardCLI {
     public class Block{
         private String content= "   ";
-        private Level lever = Level.GROUND;
+        private Level level = Level.GROUND;
         private int occupiedBy = -1;//-1: Block is empty
         private void upDateContent(){
             if(occupiedBy!=-1)
                 content = " "+ occupiedBy +" ";
-            else content = "   ";
-            switch (lever){
+            else content = "    ";
+            switch (level){
                 case GROUND:
                     content= ColorSetter.BG_BLUE.setColor(content);
                     break;
@@ -35,20 +35,20 @@ public class IslandBoardCLI {
                     break;
 
                 case DOME:
-                    content = ColorSetter.BG_RED.setColor(" ")+ColorSetter.FG_RED.setColor("X")+ColorSetter.BG_RED.setColor(" ");
+                    content = ColorSetter.BG_RED.setColor(" ")+ColorSetter.FG_RED.setColor("()")+ColorSetter.BG_RED.setColor(" ");
                     break;
             }
             }
         public Block(Level lever, int occupiedBy){
-            this.lever = lever;
+            this.level = lever;
             this.occupiedBy = occupiedBy;
             upDateContent();
         }
 
         public boolean setLevel(Level lever){
-            if(this.lever==lever) return false;
+            if(this.level ==lever) return false;
             else{
-                this.lever = lever;
+                this.level = lever;
                 upDateContent();
                 return true;
             }
@@ -69,46 +69,45 @@ public class IslandBoardCLI {
     }
     private static Block[][] maps = new Block[5][5];
     public class Player{
-        private int positionX;
-        private int positionY;
         private int id;
-        public Player(int positionX, int positionY,int id){
-            this.positionX = positionX;
-            this.positionY = positionY;
+
+        public String getPlayerName() {
+            return playerName;
+        }
+
+        private String playerName;
+
+        public Cosplayer getCosplayer() {
+            return cosplayer;
+        }
+
+        private Cosplayer cosplayer;
+        private String nextAction;
+        private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;
+        public Player(int id,String playerName,Cosplayer cosplayer,String nextAction,PlayerStatus playerStatus){
             this.id = id;
+            this.playerName = playerName;
+            this.cosplayer = cosplayer;
+            this.nextAction = nextAction;
+            this.playerStatus = playerStatus;
+        }
+        public void show(){
+            System.out.println(id+":"+cosplayer+" "+playerName+" "+playerStatus);
         }
 
-        public int getPositionX() {
-            return positionX;
-        }
-
-        public void setPositionX(int positionX) {
-            this.positionX = positionX;
-        }
-
-        public int getPositionY() {
-            return positionY;
-        }
-
-        public void setPositionY(int positionY) {
-            this.positionY = positionY;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
     }
+
+    public Map<Integer, Player> getPlayers() {
+        return players;
+    }
+
     private Map<Integer, Player> players = new HashMap<>();
     public IslandBoardCLI(){
         for(int i = 0;i<5;i++)
             for(int j = 0;j<5;j++)
                 maps[i][j] = new Block(Level.GROUND,-1);
     }
-    public void show(){
+    public void showMaps(){
         for(Block[] row:maps) {
 
             System.out.print("\n");
@@ -117,17 +116,25 @@ public class IslandBoardCLI {
             System.out.print("\n");
         }
     }
-    public void addPlayer(int positionX,int positionY,int id){
-        players.put(id,new Player(positionX, positionY, id));
-        maps[positionX][positionY].setOccupiedBy(id);
+    public void showPlayers(){
+        for (Integer id:players.keySet())
+            players.get(id).show();
     }
-    public void movePlayer(int positionX,int positionY,int id){
-        maps[positionX][positionY].setOccupiedBy(id);
-        maps[players.get(id).positionX][players.get(id).positionX].setOccupiedBy(-1);
-        players.get(id).setPositionX(positionX);
-        players.get(id).setPositionY(positionY);
+
+    public void setMaps(Space[][]spaces) {
+        for(int i = 0;i<5;i++)
+            for(int j=0;j<5;j++){
+                maps[i][j].setLevel(spaces[i][j].getLevel());
+                maps[i][j].setOccupiedBy(spaces[i][j].isOccupiedBy());
+            }
     }
-    public void build(int positionX,int positionY,Level level){
-        maps[positionX][positionY].setLevel(level);
+    public void setPlayers(VirtualGame virtualGame){
+        players = new HashMap<>();
+        for(Integer id:virtualGame.getVPlayers().keySet()){
+            VirtualGame.VPlayer vPlayer = virtualGame.getVPlayers().get(id);
+            Player player = new Player(id,vPlayer.getPlayerName(),
+                    vPlayer.getCosplayer(),vPlayer.getNextAction(),vPlayer.getPlayerStatus());
+            players.put(id,player);
+        }
     }
 }

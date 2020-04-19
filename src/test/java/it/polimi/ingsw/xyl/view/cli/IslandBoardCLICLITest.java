@@ -1,6 +1,7 @@
 package it.polimi.ingsw.xyl.view.cli;
 
 import it.polimi.ingsw.xyl.model.Level;
+import it.polimi.ingsw.xyl.model.Space;
 import it.polimi.ingsw.xyl.util.ColorSetter;
 import org.junit.Test;
 
@@ -12,61 +13,67 @@ public class IslandBoardCLICLITest {
         IslandBoardCLI islandBoardCLI = new IslandBoardCLI();
         IslandBoardCLI.Block block = islandBoardCLI.new Block(Level.GROUND,-1);
         System.out.print(block.getContent()+"\n");
-        assertEquals(block.getContent(), ColorSetter.BG_BLUE.setColor("   "));
+        assertEquals(block.getContent(), ColorSetter.BG_BLUE.setColor("    "));
     }
 
     @Test
     public void IslandBoardTest_showEmptyBoard(){
         IslandBoardCLI islandBoard = new IslandBoardCLI();
-        islandBoard.show();
-        System.out.print("\n");
-    }
-    @Test
-    public void IslandBoardTest_addOnePlayer(){
-        IslandBoardCLI islandBoard = new IslandBoardCLI();
-        System.out.print("before add\n");
-        islandBoard.show();
-        System.out.print("\n");
-        System.out.print("after add\n");
-        islandBoard.addPlayer(0,0,1);
-        islandBoard.show();
-        System.out.print("\n");
-    }
-    @Test
-    public void IslandBoardTest_buildNorm(){
-        IslandBoardCLI islandBoard = new IslandBoardCLI();
-        System.out.print("before build\n");
-        islandBoard.show();
-        System.out.print("\n");
-        System.out.print("after build\n");
-        islandBoard.build(0,0,Level.LEVEL1);
-        islandBoard.show();
+        islandBoard.showMaps();
         System.out.print("\n");
     }
 
-    @Test
-    public void IslandBoardTest_buildDome(){
-        IslandBoardCLI islandBoard = new IslandBoardCLI();
-        System.out.print("before build Dome\n");
-        islandBoard.show();
-        System.out.print("\n");
-        System.out.print("after build Dome\n");
-        islandBoard.build(0,0,Level.DOME);
-        islandBoard.show();
-        System.out.print("\n");
-    }
+
+
+
+
 
     @Test
-    public void IslandBoardTest_MovePlayer(){
+    public void IslandBoardTest_setMaps(){
         IslandBoardCLI islandBoard = new IslandBoardCLI();
-        System.out.print("before move\n");
-        islandBoard.addPlayer(0,0,1);
-        islandBoard.show();
+        System.out.print("before setMaps\n");
+        islandBoard.showMaps();
         System.out.print("\n");
 
-        System.out.print("after move\n");
-        islandBoard.movePlayer(3,4,1);
-        islandBoard.show();
+        System.out.print("after setMaps\n");
+        Space[][] spaces = new Space[5][5];
+        for(int i = 0;i<5;i++)
+            for(int j = 0;j<5;j++){
+                spaces[i][j] = new Space();
+                spaces[i][j].setLevel(Level.LEVEL1);
+            }
+        islandBoard.setMaps(spaces);
+        islandBoard.showMaps();
+        for(int i = 0;i<5;i++)
+            for(int j = 0;j<5;j++){
+                spaces[i][j].setLevel(Level.LEVEL2);
+            }
+        islandBoard.setMaps(spaces);
+        islandBoard.showMaps();
+        for(int i = 0;i<5;i++)
+            for(int j = 0;j<5;j++){
+                spaces[i][j].setLevel(Level.LEVEL3);
+            }
+        islandBoard.setMaps(spaces);
+        islandBoard.showMaps();
+        for(int i = 0;i<5;i++)
+            for(int j = 0;j<5;j++){
+                spaces[i][j].setLevel(Level.DOME);
+            }
+        islandBoard.setMaps(spaces);
+        islandBoard.showMaps();
+        for(int i = 0;i<5;i++)
+            for(int j = 0;j<5;j++){
+                spaces[i][j].setLevel(Level.GROUND);
+            }
+        islandBoard.setMaps(spaces);
+        islandBoard.showMaps();
+        for(int i = 0;i<5;i++)
+            for(int j = 0;j<5;j++){
+                spaces[i][j].setOccupiedBy((i+1)*10+j);
+            }
+        islandBoard.setMaps(spaces);
+        islandBoard.showMaps();
         System.out.print("\n");
     }
 }

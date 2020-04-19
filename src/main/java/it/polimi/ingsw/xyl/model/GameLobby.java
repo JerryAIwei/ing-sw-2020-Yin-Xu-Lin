@@ -15,8 +15,6 @@ public class GameLobby {
 
     public GameLobby() {
         gameBoards= new Vector<>();
-        GameBoard gameBoard = new GameBoard(0);
-        gameBoards.add(gameBoard);
     }
 
     public Map<String,Integer> getAllPlayers() {

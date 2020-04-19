@@ -50,7 +50,7 @@ public class GameMaster {
         if (gameLobby.getGameBoards().size() == gameId) {
             GameBoard gameBoard = new GameBoard(gameId);
             // set the game status to "waiting other players"
-            gameBoard.setCurrentStatus(GameStatus.WAITINGPLAYER);
+            gameBoard.setCurrentStatus(GameStatus.WAITINGINIT);
             gameLobby.addGameBoard(gameBoard);
             Player player = new Player(0, playerName);
             // set the player's status "in gameBoard"
@@ -86,6 +86,7 @@ public class GameMaster {
      */
     public int setPlayerNumber(int gameId, int playerNumber) {
         gameLobby.getGameBoards().get(gameId).setPlayerNumber(playerNumber);
+        gameLobby.getGameBoards().get(gameId).setCurrentStatus(GameStatus.WAITINGPLAYER);
         notify(gameId);
         return 1;
     }

@@ -29,6 +29,7 @@ public class VirtualViewTest {
     public void VirtualViewTest_addPlayersAndSetPowers(){
         PlayerNameMessage message = new PlayerNameMessage("LiMing");
         v.update(message);
+        System.out.println(v.getvGames().get(0).getGameStatus());
         SetPlayerNumberMessage sMessage = new SetPlayerNumberMessage(0, 2);
         v.update(sMessage);
         PlayerNameMessage message2 = new PlayerNameMessage("LiHua");

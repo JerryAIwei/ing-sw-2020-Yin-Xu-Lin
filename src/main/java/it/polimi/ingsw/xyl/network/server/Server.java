@@ -29,8 +29,7 @@ public class Server
         try {
             socket = new ServerSocket(SOCKET_PORT);
         } catch (IOException e) {
-            System.out.println("cannot open server socket");
-            System.exit(1);
+            System.err.println(e.toString());
             return;
         }
 
@@ -44,6 +43,7 @@ public class Server
                 thread.start();
             } catch (IOException e) {
                 System.out.println("connection dropped");
+                return;
             }
         }
     }

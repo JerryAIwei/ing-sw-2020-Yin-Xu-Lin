@@ -1,12 +1,13 @@
 package it.polimi.ingsw.xyl.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-public class VirtualGame {
-    private class VPlayer{
+public class VirtualGame implements Serializable {
+    public class VPlayer{
         private int playerId;
         private String playerName;
         private Cosplayer cosplayer;
@@ -17,13 +18,30 @@ public class VirtualGame {
         private int workerBX;
         private int workerBY;
 
+
         VPlayer(int playerId, String playerName){
             this.playerId = playerId;
             this.playerName = playerName;
         }
+
+        public String getPlayerName() {
+            return playerName;
+        }
+
+        public Cosplayer getCosplayer() {
+            return cosplayer;
+        }
+
+        public String getNextAction() {
+            return nextAction;
+        }
+
+        public PlayerStatus getPlayerStatus() {
+            return playerStatus;
+        }
     }
 
-    private GameStatus gameStatus = GameStatus.WAITINGPLAYER;
+    private GameStatus gameStatus = GameStatus.WAITINGINIT;
     private Map<Integer, VPlayer> vPlayers = new HashMap<>();
     private Space[][] spaces = new Space[5][5];
     private Vector<GodPower> availableGodPowers;
