@@ -1,0 +1,149 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Hephaestus</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model.cosplayer</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Hephaestus (it.polimi.ingsw.xyl.model.cosplayer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Hephaestus</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (28/ 35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model.cosplayer;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * @author Lin Xin
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;public class Hephaestus extends Cosplayer {
+<b class="fc"><i>11</i>&nbsp;    private int buildWorker = 0;</b>
+<b class="fc"><i>12</i>&nbsp;    private Direction firstBuildDirection = null;</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    public Hephaestus(Player player) {
+<b class="fc"><i>15</i>&nbsp;        super(player);</b>
+<b class="fc"><i>16</i>&nbsp;        super.godPower = GodPower.HEPHAESTUS;</b>
+<b class="fc"><i>17</i>&nbsp;    }</b>
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    /**
+<i>20</i>&nbsp;     * Hephaestus&#39; build: worker may build one additional block(not dome)
+<i>21</i>&nbsp;     * on top of your first block.
+<i>22</i>&nbsp;     *
+<i>23</i>&nbsp;     * @param worker &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>24</i>&nbsp;     * @param direction see Direction class.
+<i>25</i>&nbsp;     * @param buildDome whether build dome directly (only for Atlas).
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    public void build(int worker, Direction direction, boolean buildDome){
+<i>28</i>&nbsp;        try {
+<b class="fc"><i>29</i>&nbsp;            GameBoard currentGameBoard = player.getCurrentGameBoard();</b>
+<b class="fc"><i>30</i>&nbsp;            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();</b>
+<b class="fc"><i>31</i>&nbsp;            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];</b>
+<b class="fc"><i>32</i>&nbsp;            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];</b>
+<b class="fc"><i>33</i>&nbsp;            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();</b>
+<b class="fc"><i>34</i>&nbsp;            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;</b>
+<b class="fc"><i>35</i>&nbsp;            boolean noLevel3 =</b>
+<b class="fc"><i>36</i>&nbsp;                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.LEVEL3;</b>
+<i>37</i>&nbsp;
+<b class="fc"><i>38</i>&nbsp;            if (nextAction == Action.BUILD) {</b>
+<b class="fc"><i>39</i>&nbsp;                if (targetOccupiedBy == -1 &amp;&amp; noDome &amp;&amp; noLevel3) {</b>
+<b class="fc"><i>40</i>&nbsp;                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();</b>
+<b class="fc"><i>41</i>&nbsp;                    firstBuildDirection = direction;</b>
+<b class="fc"><i>42</i>&nbsp;                    buildWorker = worker;</b>
+<b class="fc"><i>43</i>&nbsp;                    nextAction = Action.BUILDOREND;</b>
+<b class="fc"><i>44</i>&nbsp;                } else if (targetOccupiedBy == -1 &amp;&amp; noDome) {</b>
+<b class="nc"><i>45</i>&nbsp;                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();</b>
+<b class="nc"><i>46</i>&nbsp;                    firstBuildDirection = direction;</b>
+<b class="nc"><i>47</i>&nbsp;                    nextAction = Action.MOVE;</b>
+<b class="nc"><i>48</i>&nbsp;                    currentGameBoard.toNextPlayer();</b>
+<i>49</i>&nbsp;                } else {
+<b class="fc"><i>50</i>&nbsp;                    System.out.println(&quot;Chosen worker can&#39;t build at target space!&quot;);</b>
+<i>51</i>&nbsp;                }
+<b class="fc"><i>52</i>&nbsp;            }else if(buildWorker == worker &amp;&amp; firstBuildDirection == direction &amp;&amp; noLevel3){</b>
+<b class="fc"><i>53</i>&nbsp;                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();</b>
+<b class="fc"><i>54</i>&nbsp;                currentGameBoard.toNextPlayer();</b>
+<b class="fc"><i>55</i>&nbsp;                nextAction = Action.MOVE;</b>
+<i>56</i>&nbsp;            }
+<i>57</i>&nbsp;            else{
+<b class="fc"><i>58</i>&nbsp;                System.out.println(&quot;Chosen worker can&#39;t build at target space!&quot;);</b>
+<i>59</i>&nbsp;            }
+<i>60</i>&nbsp;        }
+<b class="nc"><i>61</i>&nbsp;        catch (Exception e){</b>
+<b class="nc"><i>62</i>&nbsp;            System.out.println(&quot;Array out of bounds&quot;);</b>
+<b class="nc"><i>63</i>&nbsp;            throw e;</b>
+<b class="fc"><i>64</i>&nbsp;        }</b>
+<b class="fc"><i>65</i>&nbsp;    }</b>
+<i>66</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-20 15:38</div>
+</div>
+</body>
+</html>

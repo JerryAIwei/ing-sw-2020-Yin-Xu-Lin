@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Apollo</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model.cosplayer</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Apollo (it.polimi.ingsw.xyl.model.cosplayer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Apollo</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.4%
+  </span>
+  <span class="absValue">
+    (64/ 70)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model.cosplayer;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.EnumSet;
+<i>6</i>&nbsp;import java.util.Iterator;
+<i>7</i>&nbsp;import java.util.Vector;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * @author Lin Xin
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;public class Apollo extends Cosplayer {
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    public Apollo(Player player) {
+<b class="fc"><i>18</i>&nbsp;        super(player);</b>
+<b class="fc"><i>19</i>&nbsp;        super.godPower = GodPower.APOLLO;</b>
+<b class="fc"><i>20</i>&nbsp;    }</b>
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * Apollo&#39;s move: worker may move into an opponent worker&#39;s space
+<i>24</i>&nbsp;     * by forcing their worker to the space to the space yours just vacated.
+<i>25</i>&nbsp;     *
+<i>26</i>&nbsp;     * @param worker    &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>27</i>&nbsp;     * @param direction see Direction class.
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    public void move(int worker, Direction direction) {
+<b class="fc"><i>30</i>&nbsp;        IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();</b>
+<b class="fc"><i>31</i>&nbsp;        int originalPositionX = player.getWorkers()[worker].getPositionX();</b>
+<b class="fc"><i>32</i>&nbsp;        int originalPositionY = player.getWorkers()[worker].getPositionY();</b>
+<b class="fc"><i>33</i>&nbsp;        int targetOccupiedBy = currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>34</i>&nbsp;                [originalPositionX + direction.toMarginalPosition()[0]]</b>
+<b class="fc"><i>35</i>&nbsp;                [originalPositionY + direction.toMarginalPosition()[1]].isOccupiedBy(); ;</b>
+<b class="fc"><i>36</i>&nbsp;        Vector&lt;Direction&gt; availableMoves = getAvailableMoves(worker);</b>
+<b class="fc"><i>37</i>&nbsp;        if (targetOccupiedBy != -1 &amp;&amp; availableMoves.contains(direction)) {</b>
+<b class="fc"><i>38</i>&nbsp;            int opponentWorkerId = targetOccupiedBy % 10;</b>
+<b class="fc"><i>39</i>&nbsp;            int opponentPlayerId = targetOccupiedBy / 10;</b>
+<b class="fc"><i>40</i>&nbsp;            player.getCurrentGameBoard().getIslandBoard().getSpaces()</b>
+<b class="fc"><i>41</i>&nbsp;                    [originalPositionX][originalPositionY].setOccupiedBy(-1);</b>
+<b class="fc"><i>42</i>&nbsp;            Space opponentCurrentSpace = currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>43</i>&nbsp;                    [originalPositionX + direction.toMarginalPosition()[0]]</b>
+<b class="fc"><i>44</i>&nbsp;                    [originalPositionY + direction.toMarginalPosition()[1]];</b>
+<b class="fc"><i>45</i>&nbsp;            player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()</b>
+<b class="fc"><i>46</i>&nbsp;                    [opponentWorkerId].setFromLevel(opponentCurrentSpace.getLevel().toInt());</b>
+<b class="fc"><i>47</i>&nbsp;            player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()</b>
+<b class="fc"><i>48</i>&nbsp;                    [opponentWorkerId].setForced();</b>
+<b class="fc"><i>49</i>&nbsp;            opponentCurrentSpace.setOccupiedBy(-1);</b>
+<b class="fc"><i>50</i>&nbsp;            player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()</b>
+<b class="fc"><i>51</i>&nbsp;                    [opponentWorkerId].setPosition(originalPositionX, originalPositionY);</b>
+<i>52</i>&nbsp;        }
+<b class="fc"><i>53</i>&nbsp;        super.move(worker, direction); // super.move will change nextAction and checkWin.</b>
+<b class="fc"><i>54</i>&nbsp;        if (targetOccupiedBy != -1 &amp;&amp; availableMoves.contains(direction)) {</b>
+<b class="fc"><i>55</i>&nbsp;            player.getCurrentGameBoard().getIslandBoard().getSpaces()</b>
+<b class="fc"><i>56</i>&nbsp;                    [originalPositionX][originalPositionY].setOccupiedBy(targetOccupiedBy);</b>
+<i>57</i>&nbsp;        }
+<b class="fc"><i>58</i>&nbsp;        checkWin();  // I don&#39;t know whehter checkWin() twice will have any side effect.</b>
+<b class="fc"><i>59</i>&nbsp;    }</b>
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /**
+<i>63</i>&nbsp;     * get all available move directions of an Apollo&#39;s worker
+<i>64</i>&nbsp;     *
+<i>65</i>&nbsp;     * @param worker &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>66</i>&nbsp;     * @return all available direction of the worker.
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    public Vector&lt;Direction&gt; getAvailableMoves(int worker) {
+<b class="fc"><i>69</i>&nbsp;        int originalPositionX = player.getWorkers()[worker].getPositionX();</b>
+<b class="fc"><i>70</i>&nbsp;        int originalPositionY = player.getWorkers()[worker].getPositionY();</b>
+<b class="fc"><i>71</i>&nbsp;        EnumSet&lt;Direction&gt; all = EnumSet.allOf(Direction.class);</b>
+<b class="fc"><i>72</i>&nbsp;        Vector&lt;Direction&gt; apolloAvailableMoves = new Vector&lt;&gt;(all);</b>
+<i>73</i>&nbsp;
+<b class="fc"><i>74</i>&nbsp;        if (originalPositionX == 0) {</b>
+<b class="fc"><i>75</i>&nbsp;            apolloAvailableMoves.remove(Direction.LEFT);</b>
+<b class="fc"><i>76</i>&nbsp;            apolloAvailableMoves.remove(Direction.UPLEFT);</b>
+<b class="fc"><i>77</i>&nbsp;            apolloAvailableMoves.remove(Direction.DOWNLEFT);</b>
+<i>78</i>&nbsp;        }
+<b class="fc"><i>79</i>&nbsp;        if (originalPositionX == 4) {</b>
+<b class="nc"><i>80</i>&nbsp;            apolloAvailableMoves.remove(Direction.RIGHT);</b>
+<b class="nc"><i>81</i>&nbsp;            apolloAvailableMoves.remove(Direction.UPRIGHT);</b>
+<b class="nc"><i>82</i>&nbsp;            apolloAvailableMoves.remove(Direction.DOWNRIGHT);</b>
+<i>83</i>&nbsp;        }
+<b class="fc"><i>84</i>&nbsp;        if (originalPositionY == 0) {</b>
+<b class="fc"><i>85</i>&nbsp;            apolloAvailableMoves.remove(Direction.DOWN);</b>
+<b class="fc"><i>86</i>&nbsp;            apolloAvailableMoves.remove(Direction.DOWNLEFT);</b>
+<b class="fc"><i>87</i>&nbsp;            apolloAvailableMoves.remove(Direction.DOWNRIGHT);</b>
+<i>88</i>&nbsp;        }
+<b class="fc"><i>89</i>&nbsp;        if (originalPositionY == 4) {</b>
+<b class="nc"><i>90</i>&nbsp;            apolloAvailableMoves.remove(Direction.UP);</b>
+<b class="nc"><i>91</i>&nbsp;            apolloAvailableMoves.remove(Direction.UPLEFT);</b>
+<b class="nc"><i>92</i>&nbsp;            apolloAvailableMoves.remove(Direction.UPRIGHT);</b>
+<i>93</i>&nbsp;        }
+<b class="fc"><i>94</i>&nbsp;        Iterator&lt;Direction&gt; iterator = apolloAvailableMoves.iterator();</b>
+<b class="fc"><i>95</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>96</i>&nbsp;            Direction a = iterator.next();</b>
+<b class="fc"><i>97</i>&nbsp;            Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()</b>
+<b class="fc"><i>98</i>&nbsp;                    [originalPositionX + a.toMarginalPosition()[0]]</b>
+<b class="fc"><i>99</i>&nbsp;                    [originalPositionY+ a.toMarginalPosition()[1]];</b>
+<i>100</i>&nbsp;            // remove occupied by a dome or his own worker
+<b class="fc"><i>101</i>&nbsp;            if (targetSpace.getLevel() == Level.DOME ||</b>
+<b class="fc"><i>102</i>&nbsp;                    targetSpace.isOccupiedBy() == (player.getPlayerId() * 10 + 1) ||</b>
+<b class="fc"><i>103</i>&nbsp;                    targetSpace.isOccupiedBy() == (player.getPlayerId() * 10)) {</b>
+<b class="fc"><i>104</i>&nbsp;                iterator.remove();</b>
+<b class="fc"><i>105</i>&nbsp;                continue;</b>
+<i>106</i>&nbsp;            }
+<i>107</i>&nbsp;
+<b class="fc"><i>108</i>&nbsp;            Space currentSpace =</b>
+<b class="fc"><i>109</i>&nbsp;                    player.getCurrentGameBoard().getIslandBoard().getSpaces()[originalPositionX][originalPositionY];</b>
+<i>110</i>&nbsp;
+<b class="fc"><i>111</i>&nbsp;            int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();</b>
+<b class="fc"><i>112</i>&nbsp;            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoLevelUp();</b>
+<i>113</i>&nbsp;            // remove relative level not allowed
+<b class="fc"><i>114</i>&nbsp;            if (relativeLevel &gt; 1 || (noMoveUp &amp;&amp; relativeLevel == 1))</b>
+<b class="fc"><i>115</i>&nbsp;                iterator.remove();</b>
+<b class="fc"><i>116</i>&nbsp;        }</b>
+<b class="fc"><i>117</i>&nbsp;        return apolloAvailableMoves;</b>
+<i>118</i>&nbsp;    }
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-20 15:38</div>
+</div>
+</body>
+</html>
