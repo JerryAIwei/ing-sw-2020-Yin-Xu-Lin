@@ -41,11 +41,20 @@ public class VirtualGame implements Serializable {
         }
     }
 
+    private int gameId;
     private GameStatus gameStatus = GameStatus.WAITINGINIT;
     private Map<Integer, VPlayer> vPlayers = new HashMap<>();
     private Space[][] spaces = new Space[5][5];
     private Vector<GodPower> availableGodPowers;
     private int currentPlayerId;
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
 
     public GameStatus getGameStatus() {
         return gameStatus;

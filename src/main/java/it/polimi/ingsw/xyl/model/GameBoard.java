@@ -11,12 +11,12 @@ import java.util.Vector;
  * @author Shaoxun
  */
 public class GameBoard {
-    private int gameId;
+    private final int gameId;
     private int playerNumber = 3;  // add default value in case any exception caused by not setting playerNumber
     private Player currentPlayer;
-    private Map<Integer,Player> players;
-    private IslandBoard islandBoard;
-    private Vector<GodPower> availableGodPowers;
+    private final Map<Integer, Player> players;
+    private final IslandBoard islandBoard;
+    private final Vector<GodPower> availableGodPowers;
     private GameStatus currentStatus;
 
     public GameBoard(int gameId) {
@@ -55,19 +55,19 @@ public class GameBoard {
 
     public void toNextPlayer() {
         currentPlayer = players.get((currentPlayer.getPlayerId() + 1) % playerNumber);
-        if(currentStatus == GameStatus.INGAME && currentPlayer.getCurrentStatus() != PlayerStatus.WAITING4INIT) {
+        if (currentStatus == GameStatus.INGAME && currentPlayer.getCurrentStatus() != PlayerStatus.WAITING4INIT) {
+            currentPlayer.getCosplayer().prepare();
             currentPlayer.getCosplayer().checkWin();
             if (currentPlayer.getCurrentStatus() == PlayerStatus.LOSE)
                 toNextPlayer();
         }
-        currentPlayer.getCosplayer().prepare();
     }
 
     public void toNextPlayer(int playerId) {
         currentPlayer = players.get(playerId);
     }
 
-    public Map<Integer,Player> getPlayers() {
+    public Map<Integer, Player> getPlayers() {
         return players;
     }
 
@@ -82,11 +82,11 @@ public class GameBoard {
         return islandBoard;
     }
 
-    public Vector<GodPower> getAvailableGodPowers(){
+    public Vector<GodPower> getAvailableGodPowers() {
         return availableGodPowers;
     }
 
-    public void addAvailableGodPowers(GodPower godPowers){
+    public void addAvailableGodPowers(GodPower godPowers) {
         availableGodPowers.add(godPowers);
     }
 

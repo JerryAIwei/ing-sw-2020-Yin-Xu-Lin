@@ -2,6 +2,8 @@ package it.polimi.ingsw.xyl.model;
 
 import it.polimi.ingsw.xyl.view.VirtualView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -11,8 +13,9 @@ import java.util.Vector;
  * @author Shaoxun
  */
 public class GameMaster {
-    private GameLobby gameLobby;
-    private VirtualView observerV;
+    private final GameLobby gameLobby;
+    private final List<VirtualView> observerV = new ArrayList<>();
+
 
     public GameMaster() {
         this.gameLobby = new GameLobby();
@@ -28,14 +31,21 @@ public class GameMaster {
     }
 
     public void register(VirtualView observer){
-        this.observerV = observer;
+        synchronized (observerV) {
+            observerV.add(observer);
+        }
+    }
+
+    public void deregister(VirtualView observer){
+        synchronized (observerV) {
+            observerV.remove(observer);
+        }
     }
 
     /**
      * This method is used by controller to handle with new player's connect.
      *
      * @param playerName the nickname of a player.
-     * @return response code -1, 0, 1, 2, 3 // TODO: decide codes
      */
     public synchronized int addPlayer(String playerName) {
         if (gameLobby.getAllPlayers().get(playerName) != null)
@@ -51,7 +61,6 @@ public class GameMaster {
             GameBoard gameBoard = new GameBoard(gameId);
             // set the game status to "waiting other players"
             gameBoard.setCurrentStatus(GameStatus.WAITINGINIT);
-            gameLobby.addGameBoard(gameBoard);
             Player player = new Player(0, playerName);
             // set the player's status "in gameBoard"
             player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
@@ -82,13 +91,11 @@ public class GameMaster {
     /**
      * @param gameId       game ID.
      * @param playerNumber how may players are there in this gameBoard.
-     * @return response code
      */
-    public int setPlayerNumber(int gameId, int playerNumber) {
+    public void setPlayerNumber(int gameId, int playerNumber) {
         gameLobby.getGameBoards().get(gameId).setPlayerNumber(playerNumber);
         gameLobby.getGameBoards().get(gameId).setCurrentStatus(GameStatus.WAITINGPLAYER);
         notify(gameId);
-        return 1;
     }
 
     /**
@@ -96,14 +103,12 @@ public class GameMaster {
      *
      * @param gameId             game ID.
      * @param availableGodPowers all available powers.
-     * @return response code
      */
-    public int setAvailableGodPowers(int gameId, Vector<GodPower> availableGodPowers) {
+    public void setAvailableGodPowers(int gameId, Vector<GodPower> availableGodPowers) {
         for (GodPower godPower : availableGodPowers)
             gameLobby.getGameBoards().get(gameId).addAvailableGodPowers(godPower);
         gameLobby.getGameBoards().get(gameId).toNextPlayer();
         notify(gameId);
-        return 1;
     }
 
     /**
@@ -112,9 +117,8 @@ public class GameMaster {
      * @param gameId   game ID.
      * @param playerId player ID.
      * @param godPower the God power player chose.
-     * @return response code
      */
-    public int setPower4Player(int gameId, int playerId, GodPower godPower) {
+    public void setPower4Player(int gameId, int playerId, GodPower godPower) {
         // chosen God power should be available
         Vector<GodPower> availableGodPowers = gameLobby.getGameBoards().get(gameId).getAvailableGodPowers();
         if (availableGodPowers.contains(godPower)) {
@@ -128,11 +132,7 @@ public class GameMaster {
             else
                 gameLobby.getGameBoards().get(gameId).toNextPlayer();
             notify(gameId);
-            if (gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId() == 0)
-                return 2; // 2 for every player of the game have set God power
-            return 1; // 1 for set God power OK
         }
-        return -1;
     }
 
     /**
@@ -142,18 +142,15 @@ public class GameMaster {
      * @param gameId        game ID.
      * @param messageFrom   which player this message is form
      * @param startPlayerId the Start Player Id
-     * @return response code
      */
-    public int startGame(int gameId, String messageFrom, int startPlayerId) {
+    public void startGame(int gameId, String messageFrom, int startPlayerId) {
         // only the "owner" of the gameBoard can decide from whom the game will start.
         if (gameLobby.getGameBoards().get(gameId).getPlayers().get(0).getPlayerName().equals(messageFrom)) {
             gameLobby.getGameBoards().get(gameId).getPlayers().forEach((key, value) -> value.setCurrentStatus(PlayerStatus.WAITING4INIT));
             gameLobby.getGameBoards().get(gameId).toNextPlayer(startPlayerId);
             gameLobby.getGameBoards().get(gameId).setCurrentStatus(GameStatus.INGAME);
             notify(gameId);
-            return 1;
         }
-        return 0;
     }
 
     /**
@@ -165,9 +162,8 @@ public class GameMaster {
      * @param ay       the y coordinate of worker 0
      * @param bx       the x coordinate of worker 1(B)
      * @param by       the y coordinate of worker 1(B)
-     * @return response code
      */
-    public int setInitialWorkerPosition(int gameId, int playerId, int ax, int ay, int bx, int by) {
+    public void setInitialWorkerPosition(int gameId, int playerId, int ax, int ay, int bx, int by) {
         GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);
         Player player = gameBoard.getPlayers().get(playerId);
         IslandBoard islandBoard = gameBoard.getIslandBoard();
@@ -181,9 +177,7 @@ public class GameMaster {
 
             gameBoard.toNextPlayer();
             notify(gameId);
-            return 1;
         }
-        return -1;
     }
 
     /**
@@ -192,15 +186,13 @@ public class GameMaster {
      * @param gameId   game ID.
      * @param playerId player ID.
      * @param finish   end my turn
-     * @return response code
      */
-    public int endTurn(int gameId, int playerId, boolean finish) {
+    public void endTurn(int gameId, int playerId, boolean finish) {
         int currentPlayerId = gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId();
         if (currentPlayerId == playerId && finish) {
             gameLobby.getGameBoards().get(gameId).toNextPlayer();
             notify(gameId);
         }
-        return -1;
     }
 
     /**
@@ -210,17 +202,14 @@ public class GameMaster {
      * @param playerId  player ID.
      * @param workerId  worker ID.
      * @param direction direction
-     * @return response code
      */
-    public int handleMove(int gameId, int playerId, int workerId, Direction direction) {
+    public void handleMove(int gameId, int playerId, int workerId, Direction direction) {
         Vector<Direction> availableMoves =
                 gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().getAvailableMoves(workerId);
         if (availableMoves.contains(direction)) {
             gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().move(workerId, direction);
             notify(gameId);
-            return 1;
         }
-        return -1;
     }
 
     /**
@@ -231,18 +220,16 @@ public class GameMaster {
      * @param workerId  worker ID.
      * @param direction direction.
      * @param buildDome whether build dome directly (only for Atlas).
-     * @return response code
      */
-    public int handleBuild(int gameId, int playerId, int workerId, Direction direction, boolean buildDome) {
+    public void handleBuild(int gameId, int playerId, int workerId, Direction direction, boolean buildDome) {
         gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().build(workerId, direction,
                 buildDome);
         notify(gameId);
-        return 1;
     }
 
     public void notify(int gameId){
-        synchronized(observerV) {
-            observerV.update(gameLobby.getGameBoards().get(gameId));
+        synchronized (observerV) {
+            observerV.get(0).update(gameLobby.getGameBoards().get(gameId));
         }
     }
 }

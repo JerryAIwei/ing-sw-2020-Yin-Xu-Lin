@@ -6,8 +6,8 @@ package it.polimi.ingsw.xyl.model;
  * @author Shaoxun
  */
 public class Player {
-    private int playerId;
-    private String playerName;
+    private final int playerId;
+    private final String playerName;
     private GameBoard currentGameBoard;
     private Cosplayer cosplayer;
     private Worker[] workers;
