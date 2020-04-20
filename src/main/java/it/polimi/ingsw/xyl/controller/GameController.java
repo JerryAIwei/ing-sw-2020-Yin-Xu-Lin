@@ -4,8 +4,10 @@ import it.polimi.ingsw.xyl.model.Direction;
 import it.polimi.ingsw.xyl.model.GameMaster;
 import it.polimi.ingsw.xyl.model.GodPower;
 import it.polimi.ingsw.xyl.model.message.*;
+import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
+import java.net.InetAddress;
 import java.util.Vector;
 
 /**
@@ -45,7 +47,8 @@ public class GameController {
 
     public void handleMessage(PlayerNameMessage message) {
         String playerName = message.getPlayerName();
-        gameMaster.addPlayer(playerName);
+        InetAddress ip = message.getIp();
+        gameMaster.addPlayer(ip, playerName);
     }
 
     public void handleMessage(SetPlayerNumberMessage message){

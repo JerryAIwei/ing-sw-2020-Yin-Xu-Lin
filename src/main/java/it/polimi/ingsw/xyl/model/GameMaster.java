@@ -2,6 +2,7 @@ package it.polimi.ingsw.xyl.model;
 
 import it.polimi.ingsw.xyl.view.VirtualView;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -42,12 +43,17 @@ public class GameMaster {
         }
     }
 
+    public synchronized void addPlayer(InetAddress ip, String playerName){
+        gameLobby.add2AllPlayers( playerName,1);
+        notify(ip,gameLobby.add2AllPlayers( playerName,1));
+       // observerV.get(0).update(ip, gameLobby.add2AllPlayers( playerName,1));
+    }
     /**
      * This method is used by controller to handle with new player's connect.
      *
      * @param playerName the nickname of a player.
      */
-    public synchronized int addPlayer(String playerName) {
+    public synchronized int addPlayer2(String playerName) {
         if (gameLobby.getAllPlayers().get(playerName) != null)
             return 3;
         int gameId = 0;
@@ -229,7 +235,12 @@ public class GameMaster {
 
     public void notify(int gameId){
         synchronized (observerV) {
-            observerV.get(0).update(gameLobby.getGameBoards().get(gameId));
+            observerV.get(0).update(gameId, gameLobby.getGameBoards().get(gameId));
+        }
+    }
+    public void notify(InetAddress ip, boolean ok){
+        synchronized (observerV) {
+            observerV.get(0).update(ip,ok,gameLobby);
         }
     }
 }

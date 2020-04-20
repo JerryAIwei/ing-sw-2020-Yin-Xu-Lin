@@ -119,6 +119,21 @@ public class CLI extends Thread implements ViewInterface {
 
     }
 
+    /**
+     * used at the begin of the game
+     * @param message message about set name and join game
+     * */
+    public void update(Message message) {
+        if (message instanceof AskPlayerNameMessage) {
+            setUserName();
+        } else if (message instanceof NameOKMessage) {
+            joinOrCreate((NameOKMessage) message);
+        } else {
+            System.err.println("Wrong Message Received:" + message.getClass().toString());
+        }
+
+    }
+
     @Override
     public void sendMessage(Message message) {
         debugView.update(message);
@@ -162,22 +177,56 @@ public class CLI extends Thread implements ViewInterface {
         Scanner scanner = new Scanner(System.in);
         String ip = scanner.next();
         //client.init(ip);
+    }
+
+    private void setUserName() {
         System.out.println("Please Enter Login Name");
-        userName = scanner.next();
+        userName = new Scanner(System.in).nextLine();
         sendMessage(new PlayerNameMessage(userName));
+
     }
 
     private void setPlayNum() {
         int playNum;
         do {
             System.out.println("Please set number of players, 2 or 3");
-            Scanner sc = new Scanner(System.in);
-            playNum
-                    = sc.nextInt();
+            playNum = new Scanner(System.in).nextInt();
         } while (playNum != 2 && playNum != 3);
-
         System.out.println("Play Number:" + playNum);
         sendMessage(new SetPlayerNumberMessage(gameId, playNum));
+    }
+
+    private void joinOrCreate(NameOKMessage nameOKMessage) {
+        Vector<NameOKMessage.Games>games = nameOKMessage.getGames();
+        for (NameOKMessage.Games game : games) {
+            int playerNum = game.getPlayerNumber();
+            int currentNum = game.getCurrentPlayers().size();
+            if (playerNum == currentNum) {
+                System.out.println(ColorSetter.FG_BLUE.setColor("==========game ID:" + game.getGameID() +
+                        " (" + game.getPlayerNumber() + "/" + ")" + "=========="));
+            }
+            else{
+                System.out.println(ColorSetter.BG_GREEN.setColor("==========game ID:" + game.getGameID() +
+                        " (" + game.getPlayerNumber() + "/" + ")" + "=========="));
+            }
+            Vector<String> players = game.getCurrentPlayers();
+            for(int i=0; i<players.size();i++)
+                System.out.println(i+". "+players.get(i));
+            System.out.println();
+        }
+        int input;
+        do{
+            if(!games.isEmpty())
+                System.out.println("Input game ID to join the game");
+            System.out.println("Input -1 to create a new game");
+            input = new Scanner(System.in).nextInt();
+        }while(input<-1||input>=games.size()
+                ||games.get(input).getPlayerNumber()==games.get(input).getCurrentPlayers().size());
+        if(input==-1){
+            sendMessage(new NewGameMessage());
+        }else{
+            sendMessage(new JoinGameMessage(input));
+        }
     }
 
     private void setAvailableGodPowers() {
@@ -251,7 +300,7 @@ public class CLI extends Thread implements ViewInterface {
             bx = new Scanner(System.in).nextInt();
             System.out.println("second worker y, please input 0 - 4");
             by = new Scanner(System.in).nextInt();
-        } while (false/*check available*/);
+        } while (false/*todo:check available*/);
         sendMessage(new SetInitialWorkerPositionMessage(gameId, id, ax, ay, bx, by));
     }
 
@@ -264,7 +313,7 @@ public class CLI extends Thread implements ViewInterface {
                 System.out.println(i + " " + Direction.values()[i]);
             }
             direction = new Scanner(System.in).nextInt();
-        } while (false/*check available*/);
+        } while (false/*todo:check available*/);
         return direction;
     }
 

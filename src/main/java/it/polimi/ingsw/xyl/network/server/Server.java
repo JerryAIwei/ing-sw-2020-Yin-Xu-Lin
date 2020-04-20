@@ -2,10 +2,13 @@ package it.polimi.ingsw.xyl.network.server;
 
 import it.polimi.ingsw.xyl.controller.GameController;
 import it.polimi.ingsw.xyl.view.VirtualView;
+import jdk.internal.org.objectweb.asm.commons.InstructionAdapter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Vector;
+
 /**
  * Class for handling new connection
  *
@@ -19,7 +22,8 @@ public class Server
     public final static int SOCKET_PORT = 7777;
     private static GameController gc = GameController.getSingleton();
     private static VirtualView v = VirtualView.getSingleton();
-
+    private static InstructionAdapter clients;
+    //private Vector<Socket> clients = new Vector<>();
 
     public static void main(String[] args)
     {
@@ -38,9 +42,12 @@ public class Server
                 /* accepts connections; for every connection we accept,
                  * create a new Thread executing a ClientHandler */
                 Socket client = socket.accept();
+                //clients.add(client);
+
                 PlayerServer playerServer = new PlayerServer(client,v);
                 Thread thread = new Thread(playerServer, "server_" + client.getInetAddress());
                 thread.start();
+
             } catch (IOException e) {
                 System.out.println("connection dropped");
                 return;

@@ -21,8 +21,13 @@ public class GameLobby {
         return allPlayers;
     }
 
-    public void add2AllPlayers(String playerName, int gameId){
-        allPlayers.put(playerName,gameId);
+    public boolean add2AllPlayers(String playerName, int a){
+        if (allPlayers.get(playerName) == null) {
+            allPlayers.put(playerName, a);
+            return true;
+        }
+        else
+           return false;
     }
 
     public String getServerIP() {
