@@ -2,13 +2,11 @@ package it.polimi.ingsw.xyl.model.message;
 
 import it.polimi.ingsw.xyl.model.GodPower;
 
-public class PlayerChooseGodPowerMessage extends Message {
-    private final int playerId;
+public class PlayerChooseGodPowerMessage extends RoleControllerMessage {
     private final GodPower godPower;
 
     public PlayerChooseGodPowerMessage(int gameId, int playerId, GodPower godPower){
-        this.gameId = gameId;
-        this.playerId = playerId;
+        super(gameId, playerId);
         this.godPower = godPower;
     }
 

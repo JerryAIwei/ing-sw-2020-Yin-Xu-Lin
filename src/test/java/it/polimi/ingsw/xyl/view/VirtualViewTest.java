@@ -17,6 +17,7 @@ public class VirtualViewTest {
     public void setUp() {
         v.register(gc);
         gc.register(v);
+        v.setTestMode();
     }
 
     @After
@@ -29,11 +30,14 @@ public class VirtualViewTest {
     public void VirtualViewTest_addPlayersAndSetPowers(){
         PlayerNameMessage message = new PlayerNameMessage("LiMing");
         v.update(message);
-        System.out.println(v.getvGames().get(0).getGameStatus());
+        CreateNewGameMessage createNewGameMessage = new CreateNewGameMessage("LiMing");
+        v.update(createNewGameMessage);
         SetPlayerNumberMessage sMessage = new SetPlayerNumberMessage(0, 2);
         v.update(sMessage);
         PlayerNameMessage message2 = new PlayerNameMessage("LiHua");
         v.update(message2);
+        JoinGameMessage joinM = new JoinGameMessage("LiHua",0);
+        v.update(joinM);
         AvailableGodPowersMessage aMessage = new AvailableGodPowersMessage(0,GodPower.APOLLO,GodPower.ATLAS);
         v.update(aMessage);
         assertEquals(gc.getGameMaster().getGameLobby().getGameBoards().get(0).getPlayers().get(0).getPlayerName(),
@@ -45,7 +49,8 @@ public class VirtualViewTest {
                 GameStatus.WAITINGSTART);
         assertEquals(v.getvGames().size(),1);
         PlayerNameMessage message4 = new PlayerNameMessage("LiGang");
-        v.update(message4);
+        createNewGameMessage = new CreateNewGameMessage("LiGang");
+        v.update(createNewGameMessage);
         assertEquals(v.getvGames().size(),2);
         assertEquals(gc.getGameMaster().getGameLobby().getGameBoards().get(1).getPlayers().get(0).getPlayerName(),
                 "LiGang");
@@ -62,12 +67,18 @@ public class VirtualViewTest {
         // LiMing LiHua and LiGang joined and then LiMing set available powers
         PlayerNameMessage liming = new PlayerNameMessage("LiMing");
         v.update(liming);
+        CreateNewGameMessage createNewGameMessage = new CreateNewGameMessage("LiMing");
+        v.update(createNewGameMessage);
         SetPlayerNumberMessage numberM = new SetPlayerNumberMessage(0, 3);
         v.update(numberM);
         PlayerNameMessage lihua = new PlayerNameMessage("LiHua");
         v.update(lihua);
         PlayerNameMessage ligamg = new PlayerNameMessage("LiGang");
         v.update(ligamg);
+        JoinGameMessage joidM = new JoinGameMessage("LiHua",0);
+        v.update(joidM);
+        joidM = new JoinGameMessage("LiGang",0);
+        v.update(joidM);
         AvailableGodPowersMessage powersM = new AvailableGodPowersMessage(0,GodPower.APOLLO,GodPower.ATHENA,
                 GodPower.DEMETER);
         v.update(powersM);
@@ -123,12 +134,18 @@ public class VirtualViewTest {
         //    2       LiGang    PAN
         PlayerNameMessage liming = new PlayerNameMessage("LiMing0");
         v.update(liming);
+        CreateNewGameMessage createNewGameMessage = new CreateNewGameMessage("LiMing0");
+        v.update(createNewGameMessage);
         SetPlayerNumberMessage numberM = new SetPlayerNumberMessage(0, 3);
         v.update(numberM);
         PlayerNameMessage lihua = new PlayerNameMessage("LiHua1");
         v.update(lihua);
         PlayerNameMessage ligamg = new PlayerNameMessage("LiGang2");
         v.update(ligamg);
+        JoinGameMessage joidM = new JoinGameMessage("LiHua1",0);
+        v.update(joidM);
+        joidM = new JoinGameMessage("LiGang2",0);
+        v.update(joidM);
         AvailableGodPowersMessage powersM = new AvailableGodPowersMessage(0, GodPower.APOLLO, GodPower.ATLAS,
                 GodPower.PAN);
         v.update(powersM);

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.xyl.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * This class is the abstraction of A Santorini GAME,
@@ -69,6 +67,14 @@ public class GameBoard {
 
     public Map<Integer, Player> getPlayers() {
         return players;
+    }
+
+    public Vector<String> getAllPlayerNames(){
+        Vector<String> names = new Vector<String>();
+        for (Map.Entry<Integer, Player> entry : players.entrySet()) {
+            names.add(entry.getValue().getPlayerName());
+        }
+        return names;
     }
 
     public void addPlayer(Player player) {

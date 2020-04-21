@@ -1,5 +1,6 @@
 package it.polimi.ingsw.xyl.model;
 
+import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
 import java.net.InetAddress;
@@ -43,58 +44,64 @@ public class GameMaster {
         }
     }
 
-    public synchronized void addPlayer(InetAddress ip, String playerName){
-        gameLobby.add2AllPlayers( playerName,1);
-        notify(ip,gameLobby.add2AllPlayers( playerName,1));
-       // observerV.get(0).update(ip, gameLobby.add2AllPlayers( playerName,1));
-    }
+
     /**
      * This method is used by controller to handle with new player's connect.
      *
+     * @param ps PlayerServer of a player, used to send messages
      * @param playerName the nickname of a player.
      */
-    public synchronized int addPlayer2(String playerName) {
-        if (gameLobby.getAllPlayers().get(playerName) != null)
-            return 3;
-        int gameId = 0;
-        // search the first available game
-        while (gameLobby.getGameBoards().size() > gameId &&
-                gameLobby.getGameBoards().get(gameId).getPlayers().size()
-                        == gameLobby.getGameBoards().get(gameId).getPlayerNumber())
-            gameId += 1;
-        // if cannot find one, create a new gameBoard
-        if (gameLobby.getGameBoards().size() == gameId) {
-            GameBoard gameBoard = new GameBoard(gameId);
-            // set the game status to "waiting other players"
-            gameBoard.setCurrentStatus(GameStatus.WAITINGINIT);
-            Player player = new Player(0, playerName);
-            // set the player's status "in gameBoard"
-            player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
-            gameBoard.addPlayer(player);
-            player.setCurrentGameBoard(gameBoard);
-            gameLobby.add2AllPlayers(playerName, gameId);
-            gameLobby.addGameBoard(gameBoard);
-            notify(gameId);
-            return 0;  // 0 for the owner of the GameBoard(the first player of a game)
-        } else {
-            GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);
+    public synchronized void addPlayer(PlayerServer ps, String playerName){
+        String result = gameLobby.add2AllPlayers(playerName,-1);
+        notify(ps, result);
+    }
+
+    /**
+     * To create a new game
+     * @param playerName player name
+     */
+    public synchronized void createNewGame(String playerName){
+        int gameId = gameLobby.getGameBoards().size();
+        GameBoard gameBoard = new GameBoard(gameId);
+        // set the game status to "waiting other players"
+        gameBoard.setCurrentStatus(GameStatus.WAITINGINIT);
+        Player player = new Player(0, playerName);
+        // set the player's status "in gameBoard"
+        player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
+        gameBoard.addPlayer(player);
+        player.setCurrentGameBoard(gameBoard);
+        gameLobby.add2AllPlayers(playerName, gameId);
+        gameLobby.addGameBoard(gameBoard);
+        notify(gameId);
+    }
+
+    /**
+     * To join a player into a game
+     *
+     * @param playerName player name
+     * @param gameId game ID
+     */
+    public synchronized void joinGame(String playerName, int gameId){
+        GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);
+        if(gameBoard != null && gameBoard.getPlayers().size() < gameBoard.getPlayerNumber()) {
             int playerId = gameBoard.getPlayers().size();
             Player player = new Player(playerId, playerName);
             // set the player's status "in gameBoard"
             player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
-            gameLobby.add2AllPlayers(playerName, gameId);
+            gameLobby.getAllPlayers().replace(playerName,gameId);
             gameBoard.addPlayer(player);
             player.setCurrentGameBoard(gameBoard);
             // if the number of players joined to the game equals to playerNumber
             // set the game status "waiting start"
             if (gameBoard.getPlayerNumber() == gameBoard.getPlayers().size())
                 gameBoard.setCurrentStatus(GameStatus.WAITINGSTART);
-            notify(gameId);
-            return 1; // 1 for other players of the GameBoard(not the first one)
+            notify(gameId); //update(InetAddress ip, int gameId)
         }
     }
 
     /**
+     * To set total player number
+     *
      * @param gameId       game ID.
      * @param playerNumber how may players are there in this gameBoard.
      */
@@ -233,14 +240,18 @@ public class GameMaster {
         notify(gameId);
     }
 
-    public void notify(int gameId){
+    // to set player name
+    // if player name is ok, show him available games
+    public void notify(PlayerServer ps, String playerName){
         synchronized (observerV) {
-            observerV.get(0).update(gameId, gameLobby.getGameBoards().get(gameId));
+            observerV.get(0).update(ps,playerName,gameLobby);
         }
     }
-    public void notify(InetAddress ip, boolean ok){
+
+    // in game, update specific vGame
+    public void notify(int gameId){
         synchronized (observerV) {
-            observerV.get(0).update(ip,ok,gameLobby);
+            observerV.get(0).update(gameLobby.getGameBoards().get(gameId));
         }
     }
 }

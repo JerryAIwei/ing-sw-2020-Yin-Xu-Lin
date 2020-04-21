@@ -23,13 +23,13 @@ public class GameControllerTest {
         virtualView = VirtualView.getSingleton();
         virtualView.register(gameController);
         gameController.register(virtualView);
+        virtualView.setTestMode();
     }
 
     @After
     public void tearDown() {
         gameController.destroy();
         virtualView.destroy();
-
     }
 
     @Test
@@ -37,6 +37,8 @@ public class GameControllerTest {
         // the first player "LiMing" joined
         PlayerNameMessage message = new PlayerNameMessage("LiMing");
         gameController.handleMessage(message);
+        CreateNewGameMessage createNewGameMessage = new CreateNewGameMessage("LiMing");
+        gameController.handleMessage(createNewGameMessage);
         Player liMing = gameController.getGameMaster().getGameLobby().getGameBoards()
                 .get(0).getPlayers().get(0);
         assertEquals(liMing.getPlayerName(), "LiMing");
@@ -56,10 +58,16 @@ public class GameControllerTest {
         // the second player chose another name "LiHua", he joined
         PlayerNameMessage message3 = new PlayerNameMessage("LiHua");
         gameController.handleMessage(message3);
+        JoinGameMessage joinGameMessage = new JoinGameMessage("LiHua",0);
+        gameController.handleMessage(joinGameMessage);
         // the third player "LiGang" joined, but the game of Id 0 is full,
         // so he will be the "owner" of the second game(game 1)
         PlayerNameMessage message4 = new PlayerNameMessage("LiGang");
         gameController.handleMessage(message4);
+        createNewGameMessage = new CreateNewGameMessage("LiGang");
+        gameController.handleMessage(createNewGameMessage);
+        //joinGameMessage = new JoinGameMessage("LiGang",0); // not allowed
+
         assertEquals(gameController.getGameMaster().getGameLobby().getGameBoards()
                 .get(0).getPlayers().size(), 2);
         Player liGang = gameController.getGameMaster().getGameLobby().getGameBoards()
@@ -73,11 +81,15 @@ public class GameControllerTest {
     public void GameControllerTest_playerChoosePower(){
         PlayerNameMessage message = new PlayerNameMessage("LiMing");
         gameController.handleMessage(message);
+        CreateNewGameMessage createNewGameMessage = new CreateNewGameMessage("LiMing");
+        gameController.handleMessage(createNewGameMessage);
         // the owner "LiMing" set playerNumber 2
         SetPlayerNumberMessage sMessage = new SetPlayerNumberMessage(0, 2);
         gameController.handleMessage(sMessage);
         PlayerNameMessage message2 = new PlayerNameMessage("LiHua");
         gameController.handleMessage(message2);
+        JoinGameMessage joinGameMessage = new JoinGameMessage("LiHua",0);
+        gameController.handleMessage(joinGameMessage);
 
         // the owner "LiMing" set available god powers ATHENA and APOLLO
         AvailableGodPowersMessage aMessage = new AvailableGodPowersMessage(0, GodPower.ATHENA, GodPower.APOLLO);
@@ -108,10 +120,14 @@ public class GameControllerTest {
         //    1       LiHua     APOLLO
         PlayerNameMessage message = new PlayerNameMessage("LiMing");
         gameController.handleMessage(message);
+        CreateNewGameMessage createNewGameMessage = new CreateNewGameMessage("LiMing");
+        gameController.handleMessage(createNewGameMessage);
         SetPlayerNumberMessage sMessage = new SetPlayerNumberMessage(0, 2);
         gameController.handleMessage(sMessage);
         PlayerNameMessage message2 = new PlayerNameMessage("LiHua");
         gameController.handleMessage(message2);
+        JoinGameMessage joinGameMessage = new JoinGameMessage("LiHua",0);
+        gameController.handleMessage(joinGameMessage);
         AvailableGodPowersMessage aMessage = new AvailableGodPowersMessage(0, GodPower.ATHENA, GodPower.APOLLO);
         gameController.handleMessage(aMessage);
         int id = gameController.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();

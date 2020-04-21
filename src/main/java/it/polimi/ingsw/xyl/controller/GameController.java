@@ -47,8 +47,19 @@ public class GameController {
 
     public void handleMessage(PlayerNameMessage message) {
         String playerName = message.getPlayerName();
-        InetAddress ip = message.getIp();
-        gameMaster.addPlayer(ip, playerName);
+        PlayerServer ps = message.getPs();
+        gameMaster.addPlayer(ps, playerName);
+    }
+
+    public void handleMessage(CreateNewGameMessage createNewGameMessage){
+        String playerName = createNewGameMessage.getPlayerName();
+        gameMaster.createNewGame(playerName);
+    }
+
+    public void handleMessage(JoinGameMessage joinGameMessage){
+        String playerName = joinGameMessage.getPlayerName();
+        int gameId = joinGameMessage.getGameID();
+        gameMaster.joinGame(playerName, gameId);
     }
 
     public void handleMessage(SetPlayerNumberMessage message){
@@ -119,6 +130,10 @@ public class GameController {
     public void update(Message message) {
         if (message.getClass() == PlayerNameMessage.class)
             handleMessage((PlayerNameMessage) message);
+        else if (message.getClass() == CreateNewGameMessage.class)
+            handleMessage((CreateNewGameMessage) message);
+        else if (message.getClass() == JoinGameMessage.class)
+            handleMessage((JoinGameMessage) message);
         else if (message.getClass() == SetPlayerNumberMessage.class)
             handleMessage((SetPlayerNumberMessage) message);
         else if (message.getClass() == AvailableGodPowersMessage.class)

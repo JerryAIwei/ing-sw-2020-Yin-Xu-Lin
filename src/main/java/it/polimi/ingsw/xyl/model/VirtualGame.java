@@ -48,12 +48,11 @@ public class VirtualGame implements Serializable {
     private Vector<GodPower> availableGodPowers;
     private int currentPlayerId;
 
+    public VirtualGame(int gameId){
+        this.gameId = gameId;
+    }
     public int getGameId() {
         return gameId;
-    }
-
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
     }
 
     public GameStatus getGameStatus() {

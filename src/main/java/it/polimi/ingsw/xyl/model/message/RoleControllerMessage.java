@@ -1,6 +1,7 @@
 package it.polimi.ingsw.xyl.model.message;
 
 public class RoleControllerMessage extends Message {
+    protected final int gameId;
     protected final int playerId;
     public RoleControllerMessage(int gameId, int playerId) {
         this.gameId = gameId;

@@ -3,6 +3,7 @@ package it.polimi.ingsw.xyl.model.message;
 import it.polimi.ingsw.xyl.model.GodPower;
 
 public class AvailableGodPowersMessage extends Message {
+    private final int gameId;
     private final GodPower godPowerA;
     private final GodPower godPowerB;
     private final GodPower godPowerC;

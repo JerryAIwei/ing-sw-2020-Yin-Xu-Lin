@@ -183,7 +183,6 @@ public class CLI extends Thread implements ViewInterface {
         System.out.println("Please Enter Login Name");
         userName = new Scanner(System.in).nextLine();
         sendMessage(new PlayerNameMessage(userName));
-
     }
 
     private void setPlayNum() {
@@ -223,9 +222,9 @@ public class CLI extends Thread implements ViewInterface {
         }while(input<-1||input>=games.size()
                 ||games.get(input).getPlayerNumber()==games.get(input).getCurrentPlayers().size());
         if(input==-1){
-            sendMessage(new NewGameMessage());
+            sendMessage(new CreateNewGameMessage(userName));
         }else{
-            sendMessage(new JoinGameMessage(input));
+            sendMessage(new JoinGameMessage(userName,input));
         }
     }
 

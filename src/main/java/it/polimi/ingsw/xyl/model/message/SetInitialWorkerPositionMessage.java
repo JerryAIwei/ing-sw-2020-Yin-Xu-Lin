@@ -1,22 +1,20 @@
 package it.polimi.ingsw.xyl.model.message;
 
-public class SetInitialWorkerPositionMessage extends Message {
-    private final int playerId;
+public class SetInitialWorkerPositionMessage extends RoleControllerMessage {
     private final int workerAX;
     private final int workerAY;
     private final int workerBX;
     private final int workerBY;
 
     public SetInitialWorkerPositionMessage(int gameId, int playerId, int ax, int ay, int bx, int by) {
-        this.gameId = gameId;
-        this.playerId = playerId;
+        super(gameId, playerId);
         this.workerAX = ax;
         this.workerAY = ay;
         this.workerBX = bx;
         this.workerBY = by;
     }
 
-    public int getGameId(){
+    public int getGameId() {
         return gameId;
     }
 

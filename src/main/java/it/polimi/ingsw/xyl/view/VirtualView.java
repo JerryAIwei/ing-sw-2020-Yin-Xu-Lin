@@ -7,12 +7,10 @@ import it.polimi.ingsw.xyl.model.GameLobby;
 import it.polimi.ingsw.xyl.model.VirtualGame;
 import it.polimi.ingsw.xyl.model.message.Message;
 import it.polimi.ingsw.xyl.model.message.NameOKMessage;
-import it.polimi.ingsw.xyl.model.message.PlayerNameMessage;
 import it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage;
 import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import it.polimi.ingsw.xyl.view.cli.CLI;
 
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -20,12 +18,12 @@ import java.util.Vector;
 public class VirtualView {
     private volatile static VirtualView singleton;
     private GameController gameController;
-    private Map<Integer, VirtualGame>  vGames = new HashMap<>();
-    //private Map<String,PlayerServer> allPayerServers = new HashMap<>();
-    private Map<InetAddress,PlayerServer> initPlayerServers= new HashMap<>();
-    private Map<Integer, Vector<PlayerServer>> allPayerServers = new HashMap<>();
+    private final Map<Integer, VirtualGame>  vGames = new HashMap<>();
+
+    private final Map<String,PlayerServer> playerName2PlayerServer= new HashMap<>();
+    private final Map<Integer, Vector<String>> gameID2PlayerNames = new HashMap<>();
     private CLI cli; //for debug
-    private boolean debug = false;
+    private boolean test = false;
 
     private VirtualView (){}
 
@@ -50,23 +48,44 @@ public class VirtualView {
 
     public void register(CLI cli){
         this.cli = cli;
-        this.debug = true;
+        this.test = false;
     }//for debug
 
     public void register(String ip){
 
     }
 
-    public void update(InetAddress ip, boolean ok, GameLobby gl){
-        if(ok){
+    public void update(PlayerServer ps, String playerName, GameLobby gl){
+        if(playerName!=null){
+            playerName2PlayerServer.put(playerName,ps);
             NameOKMessage nameOkMessage = new NameOKMessage(gl);
-            initPlayerServers.get(ip).sendMessage(nameOkMessage);
-        }else
-            initPlayerServers.get(ip).sendMessage(new AskPlayerNameMessage());
+            if (!test)
+                ps.sendMessage(nameOkMessage);
+        }else {
+            if (!test)
+                ps.sendMessage(new AskPlayerNameMessage());
+        }
     }
 
-    public void update(int gameId, GameBoard gameBoard){
-        if(vGames.get(gameBoard.getGameId()) == null){
+    public void update(GameBoard gameBoard){
+        int gameId = gameBoard.getGameId();
+        gameID2PlayerNames.computeIfAbsent(gameId, k -> new Vector<>());
+        if (gameID2PlayerNames.get(gameId).size() < gameBoard.getPlayers().size()){
+            for(String playerName: gameBoard.getAllPlayerNames()){
+                if(!gameID2PlayerNames.get(gameId).contains(playerName))
+                    gameID2PlayerNames.get(gameId).add(playerName);
+            }
+        }
+        vGames.computeIfAbsent(gameId, k -> new VirtualGame(gameId));
+        VirtualGame vGame = vGames.get(gameBoard.getGameId());
+        vGame.setGameStatus(gameBoard.getCurrentStatus());
+        vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
+        vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
+        vGame.updateVPlayers(gameBoard.getPlayers().values());
+        vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
+        if (!test)
+            cli.update(vGame);//for debug
+  /*      if(vGames.get(gameBoard.getGameId()) == null){
             VirtualGame vGame = new VirtualGame();
             vGame.setGameId(gameBoard.getGameId());
             vGame.setGameStatus(gameBoard.getCurrentStatus());
@@ -88,27 +107,27 @@ public class VirtualView {
             if (debug)
                 cli.update(vGame);//for debug
         }
-
+*/
     }
 
     public void update(Message message) {
         gameController.update(message);
     }
 
-    public void update(PlayerServer ps){
-        initPlayerServers.put(ps.getIp(),ps);
-        ps.sendMessage(new AskPlayerNameMessage());
-    }
-    public void update(PlayerNameMessage playerNameMessage,PlayerServer ps){}
 
     // only for test
     public Map<Integer, VirtualGame> getvGames() {
         return vGames;
     }
 
+    // only for test
+    public void setTestMode(){
+        this.test = true;
+    }
+
     public void sendMessage(int gameId, VirtualGame vGame){
-        for(PlayerServer playerServer:allPayerServers.get(gameId)){
-            playerServer.sendMessage(vGame);
+        for(String playerName:gameID2PlayerNames.get(gameId)){
+            playerName2PlayerServer.get(playerName).sendMessage(vGame);
         }
     }
 }

@@ -54,7 +54,8 @@ public class PlayerServer implements Runnable {
 
                     if (clientMessage instanceof PlayerNameMessage) {
                         playerName = ((PlayerNameMessage)clientMessage).getPlayerName();
-                        vView.update((PlayerNameMessage)clientMessage,this);
+                        ((PlayerNameMessage)clientMessage).setPs(this);
+                        vView.update(clientMessage);
                     } else
                         vView.update(clientMessage);
                 } catch (ClassNotFoundException | ClassCastException e) {
