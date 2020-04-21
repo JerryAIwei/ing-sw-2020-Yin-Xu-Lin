@@ -2,7 +2,7 @@ package it.polimi.ingsw.xyl.network.server;
 
 import it.polimi.ingsw.xyl.controller.GameController;
 import it.polimi.ingsw.xyl.view.VirtualView;
-import jdk.internal.org.objectweb.asm.commons.InstructionAdapter;
+//import org.objectweb.asm.commons.InstructionAdapter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,7 +22,7 @@ public class Server
     public final static int SOCKET_PORT = 7777;
     private static GameController gc = GameController.getSingleton();
     private static VirtualView v = VirtualView.getSingleton();
-    private static InstructionAdapter clients;
+    //private static InstructionAdapter clients;
     //private Vector<Socket> clients = new Vector<>();
 
     public static void main(String[] args)

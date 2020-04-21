@@ -99,6 +99,7 @@ public class VirtualView {
         initPlayerServers.put(ps.getIp(),ps);
         ps.sendMessage(new AskPlayerNameMessage());
     }
+    public void update(PlayerNameMessage playerNameMessage,PlayerServer ps){}
 
     // only for test
     public Map<Integer, VirtualGame> getvGames() {

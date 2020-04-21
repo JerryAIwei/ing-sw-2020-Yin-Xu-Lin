@@ -2,6 +2,7 @@ package it.polimi.ingsw.xyl.network.server;
 
 
 import it.polimi.ingsw.xyl.model.VirtualGame;
+import it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage;
 import it.polimi.ingsw.xyl.model.message.Message;
 import it.polimi.ingsw.xyl.model.message.PlayerNameMessage;
 import it.polimi.ingsw.xyl.view.VirtualView;
@@ -34,7 +35,8 @@ public class PlayerServer implements Runnable {
         this.client = client;
         this.vView = vView;
         this.ip = client.getInetAddress();
-        vView.update(this);
+        sendMessage(new AskPlayerNameMessage());
+        //vView.update(this);
     }
 
 
@@ -45,15 +47,14 @@ public class PlayerServer implements Runnable {
             this.inputStream = new ObjectInputStream(this.client.getInputStream());
             this.outputStream = new ObjectOutputStream(this.client.getOutputStream());
             System.out.println("Connected to " + client.getInetAddress());
-
+//            client.ge
             while (true) {
                 try {
                     Message clientMessage = (Message) inputStream.readObject();
+
                     if (clientMessage instanceof PlayerNameMessage) {
                         playerName = ((PlayerNameMessage)clientMessage).getPlayerName();
-                        ((PlayerNameMessage)clientMessage).setIp(client.getInetAddress());
-                        vView.update(clientMessage);
-                        //vView.update(clientMessage);
+                        vView.update((PlayerNameMessage)clientMessage,this);
                     } else
                         vView.update(clientMessage);
                 } catch (ClassNotFoundException | ClassCastException e) {

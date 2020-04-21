@@ -8,7 +8,6 @@ import it.polimi.ingsw.xyl.view.ViewInterface;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 /**
  * Class for reacting with Server
@@ -21,7 +20,6 @@ public class Client implements Runnable{
     private ViewInterface view;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
-    private InetAddress ip;
 
     public Client(ViewInterface view){
         this.view=view;
@@ -31,7 +29,7 @@ public class Client implements Runnable{
      * connect to server and start a new thread
      * @param ip IP address of the server
      */
-    public void init(InetAddress ip){
+    public void init(String ip){
         try {
             server = new Socket(ip, Server.SOCKET_PORT);
             outputStream = new ObjectOutputStream(server.getOutputStream());
