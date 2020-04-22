@@ -1,11 +1,13 @@
 package it.polimi.ingsw.xyl.model;
 
+import java.io.Serializable;
+
 /**
  * It represents the player of the Santorini game.
  *
  * @author Shaoxun
  */
-public class Player {
+public class Player implements Serializable {
     private final int playerId;
     private final String playerName;
     private GameBoard currentGameBoard;

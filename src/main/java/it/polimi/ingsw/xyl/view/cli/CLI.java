@@ -62,34 +62,40 @@ public class CLI extends Thread implements ViewInterface {
     @Override
     public void update(VirtualGame virtualGame) {
 
-        GameStatus gameStatus = virtualGame.getGameStatus();
+        final GameStatus gameStatus = virtualGame.getGameStatus();
+
         islandBoardCLI.setMaps(virtualGame.getSpaces());
         islandBoardCLI.setPlayers(virtualGame);
         //GameStatus gameStatus = virtualGame.getGameStatus();
 
-        if (gameStatus == GameStatus.WAITINGINIT && id == -1 && gameId == -1) {
+        if (id == -1 && gameId == -1) {
             for (Integer id : islandBoardCLI.getPlayers().keySet()) {
                 if (islandBoardCLI.getPlayers().get(id).getPlayerName().equals(this.userName)) {
                     this.id = id;
-                    this.gameId = 0;
+                    System.out.println("My ID: " + id);
                 }
             }
-
+            this.gameId = virtualGame.getGameId();
+            System.out.println("Game ID: " + gameId);
         }
 
         playerStatus = virtualGame.getVPlayers().get(id).getPlayerStatus();
         availableGodPowers = virtualGame.getAvailableGodPowers();
         nextAction = virtualGame.getVPlayers().get(id).getNextAction();
-
+        currentPlayerId = virtualGame.getCurrentPlayerId();
+        System.out.println("Player: " + currentPlayerId+"is playing");
         switch (gameStatus) {
             case WAITINGINIT:
                 if (id == 0 && virtualGame.getCurrentPlayerId() == 0) {
+                    System.out.println("WAITINGINIT" + gameStatus);
                     setPlayNum();
+                    System.out.println("WAITINGINIT1" + gameStatus);
                 } else {//do nothing
                     System.err.println("Wrong gameStatus");
                 }
                 break;
             case WAITINGPLAYER:
+                System.out.println("WAITINGPLAYER" + gameStatus);
                 islandBoardCLI.showPlayers();
                 System.out.println("Waiting for other player");
                 break;
@@ -121,8 +127,9 @@ public class CLI extends Thread implements ViewInterface {
 
     /**
      * used at the begin of the game
+     *
      * @param message message about set name and join game
-     * */
+     */
     public void update(Message message) {
         if (message instanceof AskPlayerNameMessage) {
             setUserName();
@@ -136,8 +143,8 @@ public class CLI extends Thread implements ViewInterface {
 
     @Override
     public void sendMessage(Message message) {
-        debugView.update(message);
-        //client.sendMessage(message);
+        //debugView.update(message);
+        client.sendMessage(message);
     }
 
 
@@ -176,7 +183,7 @@ public class CLI extends Thread implements ViewInterface {
         System.out.println("Please Enter Server IP");
         Scanner scanner = new Scanner(System.in);
         String ip = scanner.next();
-        //client.init(ip);
+        client.init(ip);
     }
 
     private void setUserName() {
@@ -196,35 +203,34 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     private void joinOrCreate(NameOKMessage nameOKMessage) {
-        Vector<NameOKMessage.Games>games = nameOKMessage.getGames();
+        Vector<NameOKMessage.Games> games = nameOKMessage.getGames();
         for (NameOKMessage.Games game : games) {
             int playerNum = game.getPlayerNumber();
             int currentNum = game.getCurrentPlayers().size();
             if (playerNum == currentNum) {
                 System.out.println(ColorSetter.FG_BLUE.setColor("==========game ID:" + game.getGameID() +
-                        " (" + game.getPlayerNumber() + "/" + ")" + "=========="));
-            }
-            else{
+                        " (" + currentNum + "/" + playerNum + ")" + "=========="));
+            } else {
                 System.out.println(ColorSetter.BG_GREEN.setColor("==========game ID:" + game.getGameID() +
-                        " (" + game.getPlayerNumber() + "/" + ")" + "=========="));
+                        " (" + currentNum + "/" + playerNum + ")" + "=========="));
             }
             Vector<String> players = game.getCurrentPlayers();
-            for(int i=0; i<players.size();i++)
-                System.out.println(i+". "+players.get(i));
+            for (int i = 0; i < players.size(); i++)
+                System.out.println(i + ". " + players.get(i));
             System.out.println();
         }
         int input;
-        do{
-            if(!games.isEmpty())
+        do {
+            if (!games.isEmpty())
                 System.out.println("Input game ID to join the game");
             System.out.println("Input -1 to create a new game");
             input = new Scanner(System.in).nextInt();
-        }while(input<-1||input>=games.size()
-                ||games.get(input).getPlayerNumber()==games.get(input).getCurrentPlayers().size());
-        if(input==-1){
+        } while (input < -1 || input >= games.size()
+                || (!games.isEmpty() && games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));
+        if (input == -1) {
             sendMessage(new CreateNewGameMessage(userName));
-        }else{
-            sendMessage(new JoinGameMessage(userName,input));
+        } else {
+            sendMessage(new JoinGameMessage(userName, input));
         }
     }
 
@@ -232,20 +238,20 @@ public class CLI extends Thread implements ViewInterface {
         int[] godPowers = {-1, -1, -1};
         int playNum = islandBoardCLI.getPlayers().size();
         int countDown = playNum;
+        System.out.println("input number to select available god power");
         do {
-            System.out.println("input number to select available god power");
-            System.out.println(playNum + " need to choose");
+            System.out.println(countDown + " need to choose");
             for (int i = 0; i < GodPower.values().length; i++) {
                 if (i != godPowers[0] && i != godPowers[1] && i != godPowers[2])
                     System.out.println(i + ":" + GodPower.values()[i]);
-                int input = new Scanner(System.in).nextInt();
-                if (input >= 0 && input < GodPower.values().length &&
-                        input != godPowers[0] && input != godPowers[1]
-                        && input != godPowers[2]
-                ) {
-                    godPowers[countDown - 1] = input;
-                    countDown--;
-                }
+            }
+            int input = new Scanner(System.in).nextInt();
+            if (input >= 0 && input < GodPower.values().length &&
+                    input != godPowers[0] && input != godPowers[1]
+                    && input != godPowers[2]
+            ) {
+                godPowers[countDown - 1] = input;
+                countDown--;
             }
         } while (countDown > 0);
         if (playNum == 2)
@@ -263,12 +269,13 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     private void setGodPower() {
-        int input;
+        int input = 0;
         do {
             System.out.println("input number to select your god power");
             int i = 0;
             for (GodPower godPower : availableGodPowers) {
                 System.out.println(i + ":" + godPower);
+                i++;
             }
             input = new Scanner(System.in).nextInt();
         } while (input < 0 || input >= availableGodPowers.size());
@@ -283,7 +290,7 @@ public class CLI extends Thread implements ViewInterface {
             System.out.println("input number to choose who start first");
             islandBoardCLI.showPlayers();
             input = new Scanner(System.in).nextInt();
-        } while (input < playNum && input > 0);
+        } while (input < 0 || input >= playNum);
         sendMessage(new StartGameMessage(gameId, userName, input));
     }
 
@@ -340,7 +347,7 @@ public class CLI extends Thread implements ViewInterface {
         boolean isDome = false;
         int input;
         //special for Atlas
-        if (islandBoardCLI.getPlayers().get(id).getCosplayer().getGodPower()
+        if (islandBoardCLI.getPlayers().get(id).getGodPower()
                 == ATLAS)
             do {
                 System.out.println
@@ -390,23 +397,28 @@ public class CLI extends Thread implements ViewInterface {
      */
     private void setUpGame() {
         switch (playerStatus) {
-            case INGAMEBOARD:
-                if (id == 0) {
-                    if (availableGodPowers.size() == 1)
-                        setGodPower();
-                    else
+            case INGAMEBOARD: if (availableGodPowers.isEmpty()){
+                    if(id==0)
                         setAvailableGodPowers();
-                } else {
-                    setGodPower();
-                }
-                break;
-            case GODPOWERED://do nothing
-                break;
-            case WAITING4START:
-                setStartPlayer();
-                break;
-        }
+                    else {
+                        System.out.println("Waiting for setting Available God Power");
+                    }
+            }
+            else if (id == availableGodPowers.size() - 1) {
+                setGodPower();
+            }
+            else{
+                System.out.println("Waiting for Other Player choosing God Power");
+            }
+        break;
+        case GODPOWERED://do nothing
+        break;
+        case WAITING4START:
+        setStartPlayer();
+        break;
     }
+
+}
 
     /**
      * my turn, play game based on playerStatus and nextAction

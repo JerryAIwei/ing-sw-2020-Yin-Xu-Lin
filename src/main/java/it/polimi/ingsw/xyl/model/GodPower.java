@@ -2,10 +2,12 @@ package it.polimi.ingsw.xyl.model;
 
 import it.polimi.ingsw.xyl.model.cosplayer.*;
 
+import java.io.Serializable;
+
 /**
  * All simple God cards except Hermes.
  */
-public enum GodPower {
+public enum GodPower implements Serializable  {
     APOLLO, ARTEMIS, ATHENA, ATLAS, DEMETER, HEPHAESTUS, MINOTAUR, PAN, PROMETHEUS;
 
     public Cosplayer cosplay(Player player){

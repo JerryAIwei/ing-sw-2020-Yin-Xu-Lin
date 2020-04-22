@@ -1,16 +1,18 @@
 package it.polimi.ingsw.xyl.model;
 
+import it.polimi.ingsw.xyl.model.message.Message;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-public class VirtualGame implements Serializable {
-    public class VPlayer{
+public class VirtualGame extends Message {
+    public class VPlayer implements Serializable{
         private int playerId;
         private String playerName;
-        private Cosplayer cosplayer;
+        private GodPower godPower;
         private String nextAction;
         private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;
         private int workerAX;
@@ -28,8 +30,8 @@ public class VirtualGame implements Serializable {
             return playerName;
         }
 
-        public Cosplayer getCosplayer() {
-            return cosplayer;
+        public GodPower getGodPower() {
+            return godPower;
         }
 
         public String getNextAction() {
@@ -42,10 +44,10 @@ public class VirtualGame implements Serializable {
     }
 
     private int gameId;
-    private GameStatus gameStatus = GameStatus.WAITINGINIT;
+    private GameStatus gameStatus ;//= GameStatus.WAITINGINIT;
     private Map<Integer, VPlayer> vPlayers = new HashMap<>();
     private Space[][] spaces = new Space[5][5];
-    private Vector<GodPower> availableGodPowers;
+    private Vector<GodPower> availableGodPowers = new Vector<>();
     private int currentPlayerId;
 
     public VirtualGame(int gameId){
@@ -72,6 +74,7 @@ public class VirtualGame implements Serializable {
             if (vPlayers.get(player.getPlayerId()) != null) {
                 VPlayer tempVPlayer = vPlayers.get(player.getPlayerId());
                 tempVPlayer.playerStatus = player.getCurrentStatus();
+                tempVPlayer.godPower = player.getCosplayer().getGodPower();
                 if(player.getCosplayer()!=null)
                     tempVPlayer.nextAction = player.getCosplayer().getNextAction();
                 if(player.getCurrentStatus() == PlayerStatus.WORKERPREPARED) {
@@ -82,7 +85,6 @@ public class VirtualGame implements Serializable {
                 }
             } else {
                 VPlayer tempVPlayer = new VPlayer(player.getPlayerId(), player.getPlayerName());
-                tempVPlayer.cosplayer = player.getCosplayer();
                 tempVPlayer.playerStatus = player.getCurrentStatus();
                 vPlayers.put(tempVPlayer.playerId,tempVPlayer);
             }
@@ -102,7 +104,8 @@ public class VirtualGame implements Serializable {
     }
 
     public void setAvailableGodPowers(Vector<GodPower> availableGodPowers) {
-        this.availableGodPowers = availableGodPowers; //Todo:need deep copy
+
+            this.availableGodPowers = (Vector<GodPower>)availableGodPowers.clone(); //Todo:need deep copy
     }
 
     public int getCurrentPlayerId() {

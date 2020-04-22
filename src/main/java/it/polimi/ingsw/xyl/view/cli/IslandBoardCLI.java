@@ -77,22 +77,22 @@ public class IslandBoardCLI {
 
         private String playerName;
 
-        public Cosplayer getCosplayer() {
-            return cosplayer;
+        public GodPower getGodPower() {
+            return godPower;
         }
 
-        private Cosplayer cosplayer;
+        private GodPower godPower;
         private String nextAction;
         private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;
-        public Player(int id,String playerName,Cosplayer cosplayer,String nextAction,PlayerStatus playerStatus){
+        public Player(int id,String playerName,GodPower godPower,String nextAction,PlayerStatus playerStatus){
             this.id = id;
             this.playerName = playerName;
-            this.cosplayer = cosplayer;
+            this.godPower = godPower;
             this.nextAction = nextAction;
             this.playerStatus = playerStatus;
         }
         public void show(){
-            System.out.println(id+":"+cosplayer+" "+playerName+" "+playerStatus);
+            System.out.println(id+":"+ godPower +" "+playerName+" "+playerStatus);
         }
 
     }
@@ -133,7 +133,7 @@ public class IslandBoardCLI {
         for(Integer id:virtualGame.getVPlayers().keySet()){
             VirtualGame.VPlayer vPlayer = virtualGame.getVPlayers().get(id);
             Player player = new Player(id,vPlayer.getPlayerName(),
-                    vPlayer.getCosplayer(),vPlayer.getNextAction(),vPlayer.getPlayerStatus());
+                    vPlayer.getGodPower(),vPlayer.getNextAction(),vPlayer.getPlayerStatus());
             players.put(id,player);
         }
     }

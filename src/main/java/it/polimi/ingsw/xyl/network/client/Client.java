@@ -64,8 +64,15 @@ public class Client implements Runnable{
 
         while (true) {
             try {
-                VirtualGame received = (VirtualGame) inputStream.readObject();
-                view.update(received);
+
+                Message received = (Message) inputStream.readObject();
+                if(received instanceof VirtualGame) {
+                    System.out.println("VirtualGame getGameStatus" + ((VirtualGame) received).getGameStatus());
+                    view.update((VirtualGame) received);
+                }
+                else{
+                    view.update(received);
+                }
             } catch (IOException | ClassNotFoundException e) {
                 view.update(e);
                 break;

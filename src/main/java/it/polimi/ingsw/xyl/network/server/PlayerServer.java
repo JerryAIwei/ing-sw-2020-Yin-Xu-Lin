@@ -35,6 +35,13 @@ public class PlayerServer implements Runnable {
         this.client = client;
         this.vView = vView;
         this.ip = client.getInetAddress();
+        try {
+            this.inputStream = new ObjectInputStream(this.client.getInputStream());
+            this.outputStream = new ObjectOutputStream(this.client.getOutputStream());
+            System.out.println("Connected to " + client.getInetAddress());
+        } catch (IOException e) {
+            System.err.println(e.toString());
+        }
         sendMessage(new AskPlayerNameMessage());
         //vView.update(this);
     }
@@ -43,48 +50,41 @@ public class PlayerServer implements Runnable {
     @Override
     public void run() {
 
-        try {
-            this.inputStream = new ObjectInputStream(this.client.getInputStream());
-            this.outputStream = new ObjectOutputStream(this.client.getOutputStream());
-            System.out.println("Connected to " + client.getInetAddress());
-//            client.ge
-            while (true) {
-                try {
-                    Message clientMessage = (Message) inputStream.readObject();
+        while (true) {
+            try {
+                Message clientMessage = (Message) inputStream.readObject();
 
-                    if (clientMessage instanceof PlayerNameMessage) {
-                        playerName = ((PlayerNameMessage)clientMessage).getPlayerName();
-                        ((PlayerNameMessage)clientMessage).setPs(this);
-                        vView.update(clientMessage);
-                    } else
-                        vView.update(clientMessage);
-                } catch (ClassNotFoundException | ClassCastException e) {
-                    System.err.println(e.toString());
-                    break;
-                }
+                if (clientMessage instanceof PlayerNameMessage) {
+                    playerName = ((PlayerNameMessage) clientMessage).getPlayerName();
+                    ((PlayerNameMessage) clientMessage).setPs(this);
+                    System.out.println(((PlayerNameMessage) clientMessage).getPs().getIp());
+                     vView.update(clientMessage);
+                } else
+                    vView.update(clientMessage);
+            } catch (ClassNotFoundException | ClassCastException | IOException e) {
+                e.printStackTrace();
+                break;
             }
+        }
+        try {
             client.close();
         } catch (IOException e) {
-            System.err.println(e.toString());
+            e.printStackTrace();
         }
     }
 
     /**
      * sendMessage to server, called by View
      */
-    public void sendMessage(Message message) {
+    public void sendMessage(Message message){
         try {
+            if(message instanceof VirtualGame)
+                System.out.println("sendMessage virtualGame"+((VirtualGame)message).getGameStatus());
             outputStream.writeObject(message);
         } catch (IOException e) {
-            System.err.println(e.toString());
+            e.printStackTrace();
         }
-    }
-    public void sendMessage(VirtualGame virtualGame) {
-        try {
-            outputStream.writeObject(virtualGame);
-        } catch (IOException e) {
-            System.err.println(e.toString());
-        }
+
     }
 
 }

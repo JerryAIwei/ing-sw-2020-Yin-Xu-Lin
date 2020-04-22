@@ -4,10 +4,11 @@ import it.polimi.ingsw.xyl.model.GameBoard;
 import it.polimi.ingsw.xyl.model.GameLobby;
 import it.polimi.ingsw.xyl.model.Player;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 public class NameOKMessage extends Message {
-    public class Games{
+    public class Games implements Serializable {
         private int gameID;
         private int playerNumber;
         private Vector<String> currentPlayers = new Vector<>();

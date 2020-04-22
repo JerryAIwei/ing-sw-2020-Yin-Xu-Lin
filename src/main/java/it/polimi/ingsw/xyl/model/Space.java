@@ -1,12 +1,14 @@
 package it.polimi.ingsw.xyl.model;
 
+import java.io.Serializable;
+
 import static it.polimi.ingsw.xyl.model.Level.*;
 
 /**
  * This class is the abstraction of a single space of the IslandBoard
  * @author Shaoxun
  */
-public class Space {
+public class Space implements Serializable {
     private Level level = GROUND;      // default GROUND
     private int occupiedBy = -1;  // (playerId * 10 + workerId) if occupied, otherwise -1;
 
