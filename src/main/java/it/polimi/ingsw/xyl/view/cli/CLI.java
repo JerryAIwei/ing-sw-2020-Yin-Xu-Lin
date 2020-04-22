@@ -9,6 +9,7 @@ import it.polimi.ingsw.xyl.view.ViewInterface;
 import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -87,17 +88,13 @@ public class CLI extends Thread implements ViewInterface {
         switch (gameStatus) {
             case WAITINGINIT:
                 if (id == 0 && virtualGame.getCurrentPlayerId() == 0) {
-                    System.out.println("WAITINGINIT" + gameStatus);
                     setPlayNum();
-                    System.out.println("WAITINGINIT1" + gameStatus);
                 } else {//do nothing
                     System.err.println("Wrong gameStatus");
                 }
                 break;
             case WAITINGPLAYER:
-                System.out.println("WAITINGPLAYER" + gameStatus);
                 islandBoardCLI.showPlayers();
-                System.out.println("Waiting for other player");
                 break;
             case WAITINGSTART:
                 islandBoardCLI.showPlayers();
@@ -181,14 +178,25 @@ public class CLI extends Thread implements ViewInterface {
      */
     private void askLogin() {
         System.out.println("Please Enter Server IP");
-        Scanner scanner = new Scanner(System.in);
-        String ip = scanner.next();
+//        Scanner scanner = new Scanner(System.in);
+//        String ip = scanner.next();
+        String ip = "127.0.0.1";
+        System.out.println("Use default server ip: localhost");
         client.init(ip);
     }
 
     private void setUserName() {
         System.out.println("Please Enter Login Name");
-        userName = new Scanner(System.in).nextLine();
+//        userName = new Scanner(System.in).nextLine();
+        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random=new Random();
+        StringBuffer sb=new StringBuffer();
+        for(int i=0;i<5;i++){
+            int number=random.nextInt(62);
+            sb.append(str.charAt(number));
+        }
+        userName = sb.toString();
+        System.out.println("Your player name is "+userName);
         sendMessage(new PlayerNameMessage(userName));
     }
 

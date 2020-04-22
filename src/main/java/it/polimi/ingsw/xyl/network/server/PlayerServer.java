@@ -78,9 +78,8 @@ public class PlayerServer implements Runnable {
      */
     public void sendMessage(Message message){
         try {
-            if(message instanceof VirtualGame)
-                System.out.println("sendMessage virtualGame"+((VirtualGame)message).getGameStatus());
             outputStream.writeObject(message);
+            outputStream.reset();
         } catch (IOException e) {
             e.printStackTrace();
         }

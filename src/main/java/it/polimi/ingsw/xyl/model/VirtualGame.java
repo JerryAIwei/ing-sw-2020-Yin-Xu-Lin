@@ -74,7 +74,6 @@ public class VirtualGame extends Message {
             if (vPlayers.get(player.getPlayerId()) != null) {
                 VPlayer tempVPlayer = vPlayers.get(player.getPlayerId());
                 tempVPlayer.playerStatus = player.getCurrentStatus();
-                tempVPlayer.godPower = player.getCosplayer().getGodPower();
                 if(player.getCosplayer()!=null)
                     tempVPlayer.nextAction = player.getCosplayer().getNextAction();
                 if(player.getCurrentStatus() == PlayerStatus.WORKERPREPARED) {
@@ -85,6 +84,7 @@ public class VirtualGame extends Message {
                 }
             } else {
                 VPlayer tempVPlayer = new VPlayer(player.getPlayerId(), player.getPlayerName());
+                tempVPlayer.godPower = player.getCosplayer().getGodPower();
                 tempVPlayer.playerStatus = player.getCurrentStatus();
                 vPlayers.put(tempVPlayer.playerId,tempVPlayer);
             }
@@ -96,7 +96,7 @@ public class VirtualGame extends Message {
     }
 
     public void setSpaces(Space[][] spaces) {
-        this.spaces = spaces;//Todo:need deep copy
+        this.spaces = spaces;
     }
 
     public Vector<GodPower> getAvailableGodPowers() {

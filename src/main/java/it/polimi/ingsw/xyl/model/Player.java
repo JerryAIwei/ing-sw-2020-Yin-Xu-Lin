@@ -7,15 +7,15 @@ import java.io.Serializable;
  *
  * @author Shaoxun
  */
-public class Player implements Serializable {
+public class Player {
     private final int playerId;
     private final String playerName;
     private GameBoard currentGameBoard;
-    private Cosplayer cosplayer;
+    private Cosplayer cosplayer = new Cosplayer(this);
     private Worker[] workers;
     private PlayerStatus currentStatus = PlayerStatus.INLOBBY;
 
-    public Player(int playerId, String playerName){
+    public Player(int playerId, String playerName) {
         this.playerId = playerId;
         this.playerName = playerName;
     }
@@ -48,9 +48,9 @@ public class Player implements Serializable {
         return workers;
     }
 
-    public void setWorkers(int xOfWorkerA, int yOfWorkerA, int xOfWorkerB, int yOfWorkerB){
-        Worker workerA = new Worker(xOfWorkerA,yOfWorkerA);
-        Worker workerB = new Worker(xOfWorkerB,yOfWorkerB);
+    public void setWorkers(int xOfWorkerA, int yOfWorkerA, int xOfWorkerB, int yOfWorkerB) {
+        Worker workerA = new Worker(xOfWorkerA, yOfWorkerA);
+        Worker workerB = new Worker(xOfWorkerB, yOfWorkerB);
         this.workers = new Worker[]{workerA, workerB};
         this.currentStatus = PlayerStatus.WORKERPREPARED;
     }
