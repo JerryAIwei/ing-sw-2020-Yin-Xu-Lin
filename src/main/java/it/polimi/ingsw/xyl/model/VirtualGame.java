@@ -12,7 +12,7 @@ public class VirtualGame extends Message {
     public class VPlayer implements Serializable{
         private int playerId;
         private String playerName;
-        private GodPower godPower;
+        private String godPower;
         private String nextAction;
         private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;
         private int workerAX;
@@ -30,7 +30,7 @@ public class VirtualGame extends Message {
             return playerName;
         }
 
-        public GodPower getGodPower() {
+        public String getGodPower() {
             return godPower;
         }
 
@@ -74,6 +74,10 @@ public class VirtualGame extends Message {
             if (vPlayers.get(player.getPlayerId()) != null) {
                 VPlayer tempVPlayer = vPlayers.get(player.getPlayerId());
                 tempVPlayer.playerStatus = player.getCurrentStatus();
+                if (player.getCosplayer().getGodPower()!=null){
+                    tempVPlayer.godPower = player.getCosplayer().getGodPower().toString();
+
+                }
                 if(player.getCosplayer()!=null)
                     tempVPlayer.nextAction = player.getCosplayer().getNextAction();
                 if(player.getCurrentStatus() == PlayerStatus.WORKERPREPARED) {
@@ -84,7 +88,6 @@ public class VirtualGame extends Message {
                 }
             } else {
                 VPlayer tempVPlayer = new VPlayer(player.getPlayerId(), player.getPlayerName());
-                tempVPlayer.godPower = player.getCosplayer().getGodPower();
                 tempVPlayer.playerStatus = player.getCurrentStatus();
                 vPlayers.put(tempVPlayer.playerId,tempVPlayer);
             }

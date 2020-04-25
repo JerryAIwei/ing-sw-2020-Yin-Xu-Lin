@@ -336,9 +336,9 @@ public class CLI extends Thread implements ViewInterface {
         int workerId;
         do {
             System.out.println
-                    ("input 1 or 2 to choose your worker to move");
+                    ("input 0 or 1 to choose your worker to move");
             workerId = new Scanner(System.in).nextInt();
-        } while (workerId != 1 && workerId != 2);
+        } while (workerId != 1 && workerId != 0);
         int direction = chooseDirection();
         sendMessage(new MoveMessage
                 (gameId, id, workerId, Direction.values()[direction]));
@@ -348,15 +348,15 @@ public class CLI extends Thread implements ViewInterface {
         int workerId;//todo:move and build is the same worker
         do {
             System.out.println
-                    ("input 1 or 2 to choose your worker to move");
+                    ("input 0 or 1 to choose your worker to build");
             workerId = new Scanner(System.in).nextInt();
-        } while (workerId != 1 && workerId != 2);
+        } while (workerId != 1 && workerId != 0);
         int direction = chooseDirection();
         boolean isDome = false;
         int input;
         //special for Atlas
         if (islandBoardCLI.getPlayers().get(id).getGodPower()
-                == ATLAS)
+                == "ATLAS")
             do {
                 System.out.println
                         ("please input 1 for building a dome," +

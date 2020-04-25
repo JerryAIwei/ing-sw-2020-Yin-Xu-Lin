@@ -15,8 +15,14 @@ public class IslandBoardCLI {
         private Level level = Level.GROUND;
         private int occupiedBy = -1;//-1: Block is empty
         private void upDateContent(){
-            if(occupiedBy!=-1)
-                content = " "+ occupiedBy +" ";
+            if(occupiedBy!=-1){
+                if(occupiedBy==0)
+                    content = " 0"+ occupiedBy +" ";
+                else if(occupiedBy==1)
+                    content = " 0"+ occupiedBy +" ";
+                else
+                    content = " "+ occupiedBy +" ";
+            }
             else content = "    ";
             switch (level){
                 case GROUND:
@@ -77,14 +83,14 @@ public class IslandBoardCLI {
 
         private String playerName;
 
-        public GodPower getGodPower() {
+        public String getGodPower() {
             return godPower;
         }
 
-        private GodPower godPower;
+        private String godPower;
         private String nextAction;
         private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;
-        public Player(int id,String playerName,GodPower godPower,String nextAction,PlayerStatus playerStatus){
+        public Player(int id,String playerName,String godPower,String nextAction,PlayerStatus playerStatus){
             this.id = id;
             this.playerName = playerName;
             this.godPower = godPower;
@@ -108,13 +114,16 @@ public class IslandBoardCLI {
                 maps[i][j] = new Block(Level.GROUND,-1);
     }
     public void showMaps(){
-        for(Block[] row:maps) {
 
-            System.out.print("\n");
-            for (Block block : row)
-                System.out.print(block.getContent() + " ");
-            System.out.print("\n");
+
+        for(int i = 4;i>=0;i--){
+            for(int j=0;j<5;j++){
+                System.out.print(maps[j][i].getContent() + " ");
+            }
+            System.out.println("\n");
         }
+
+
     }
     public void showPlayers(){
         for (Integer id:players.keySet())

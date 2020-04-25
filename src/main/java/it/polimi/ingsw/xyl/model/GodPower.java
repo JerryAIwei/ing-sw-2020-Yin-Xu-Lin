@@ -24,4 +24,5 @@ public enum GodPower implements Serializable  {
             default: return new Cosplayer(player);
         }
     }
+
 }
