@@ -25,6 +25,7 @@ public class Prometheus extends Cosplayer {
 
     public void prepare(){
         nextAction = Action.MOVEORBUILD;
+        workerInAction = -1;
     }
 
     /**
@@ -41,7 +42,12 @@ public class Prometheus extends Cosplayer {
                 super.move(worker, direction);
                 //  nextAction = Action.BUILD; // super.move did
             } else if (nextAction == Action.MOVE) {
-                super.move(worker, direction);
+                if (worker == workerInAction)
+                    super.move(worker, direction);
+                else{
+                    System.out.println("You shouldn't have different workers to operate.");
+                    throw new RuntimeException("You shouldn't have different workers to operate.");
+                }
             }
         }
 
@@ -65,12 +71,18 @@ public class Prometheus extends Cosplayer {
             int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
             boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
             if (targetOccupiedBy == -1 && noDome) {
-                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 if (nextAction == Action.BUILD) {
-                    nextAction = Action.MOVEORBUILD;
-                    currentGameBoard.toNextPlayer();
-                } else if (nextAction == Action.MOVEORBUILD)
+                    if(worker == workerInAction) {
+                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                        nextAction = Action.MOVEORBUILD;
+                        workerInAction = -1;
+                        currentGameBoard.toNextPlayer();
+                    }
+                } else if (nextAction == Action.MOVEORBUILD) {
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                    workerInAction = worker;
                     nextAction = Action.MOVE;
+                }
             } else {
                 System.out.println("Chosen worker can't build at target space!");
             }

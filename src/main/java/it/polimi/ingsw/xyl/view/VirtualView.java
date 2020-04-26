@@ -80,7 +80,6 @@ public class VirtualView {
         }
         vGames.computeIfAbsent(gameId, k -> new VirtualGame(gameId));
         VirtualGame vGame = vGames.get(gameBoard.getGameId());
-//        VirtualGame vGame = new VirtualGame(gameId);
         vGame.setGameStatus(gameBoard.getCurrentStatus());
         vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
         vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
@@ -88,31 +87,6 @@ public class VirtualView {
         vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
         if (!test)
             sendMessage(gameId, vGame);
-
-        //cli.update(vGame);//for debug
-  /*      if(vGames.get(gameBoard.getGameId()) == null){
-            VirtualGame vGame = new VirtualGame();
-            vGame.setGameId(gameBoard.getGameId());
-            vGame.setGameStatus(gameBoard.getCurrentStatus());
-            vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
-            vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
-            vGame.updateVPlayers(gameBoard.getPlayers().values());
-            vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
-            vGames.put(gameBoard.getGameId(), vGame);
-            if (debug)
-                cli.update(vGame);//for debug
-            sendMessage(gameId, vGame);
-        }else{
-            VirtualGame vGame = vGames.get(gameBoard.getGameId());
-            vGame.setGameStatus(gameBoard.getCurrentStatus());
-            vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
-            vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
-            vGame.updateVPlayers(gameBoard.getPlayers().values());
-            vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
-            if (debug)
-                cli.update(vGame);//for debug
-        }
-*/
     }
 
     public void update(Message message) {

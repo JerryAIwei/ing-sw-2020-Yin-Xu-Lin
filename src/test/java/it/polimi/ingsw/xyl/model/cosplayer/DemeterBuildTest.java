@@ -1,15 +1,10 @@
 package it.polimi.ingsw.xyl.model.cosplayer;
 
-import it.polimi.ingsw.xyl.model.Cosplayer;
-import it.polimi.ingsw.xyl.model.GameBoard;
-import it.polimi.ingsw.xyl.model.IslandBoard;
-import it.polimi.ingsw.xyl.model.Player;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static it.polimi.ingsw.xyl.model.Direction.RIGHT;
-import static it.polimi.ingsw.xyl.model.Direction.UP;
+import static it.polimi.ingsw.xyl.model.Direction.*;
 import static it.polimi.ingsw.xyl.model.Level.*;
 import static org.junit.Assert.assertEquals;
 
@@ -34,12 +29,14 @@ public class DemeterBuildTest extends GodCosplayerTest{
     @Test
     public void DemeterBuildTest_playerCWorkerABuildRight_normal(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
+        playerC.getCosplayer().only_for_test_setWorkerInAction(0);
         playerC.getCosplayer().build(0, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
     }
 
     @Test
     public void DemeterBuildTest_playerCWorkerBBuildRight_occupied_2_1_notAllowed(){
+        playerC.getCosplayer().only_for_test_setWorkerInAction(1);
         playerC.getCosplayer().build(1, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(),GROUND);
     }
@@ -47,12 +44,13 @@ public class DemeterBuildTest extends GodCosplayerTest{
     /* GodPower Mod test */
 
     @Test
-    public void DemeterBuildTest_playerCWorkerABuildRightThenBuildUp_usePower(){
-        islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
+    public void DemeterBuildTest_playerCWorkerAMoveRightBuildRightThenBuildLeft_usePower(){
+        playerC.getCosplayer().move(0,RIGHT);
+        islandBoard.getSpaces()[2][0].setLevel(LEVEL1);
         playerC.getCosplayer().build(0, RIGHT, false);
-        playerC.getCosplayer().build(0, UP, false);
-        assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
-        assertEquals(islandBoard.getSpaces()[0][1].getLevel(),LEVEL1);
+        playerC.getCosplayer().build(0, LEFT, false);
+        assertEquals(islandBoard.getSpaces()[2][0].getLevel(),LEVEL2);
+        assertEquals(islandBoard.getSpaces()[0][0].getLevel(),LEVEL1);
     }
 
     @Test

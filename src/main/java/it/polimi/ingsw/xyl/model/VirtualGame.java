@@ -14,11 +14,14 @@ public class VirtualGame extends Message {
         private String playerName;
         private String godPower;
         private String nextAction;
+        private int workerInAction = -1;
         private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;
         private int workerAX;
         private int workerAY;
         private int workerBX;
         private int workerBY;
+        private Vector<Direction> workerAAvailableMoves = new Vector<>();
+        private Vector<Direction> workerBAvailableMoves = new Vector<>();
 
 
         VPlayer(int playerId, String playerName){
@@ -38,8 +41,21 @@ public class VirtualGame extends Message {
             return nextAction;
         }
 
+        public int getWorkerInAction(){
+            return workerInAction;
+        }
+
         public PlayerStatus getPlayerStatus() {
             return playerStatus;
+        }
+
+        public Vector<Direction> getAvailableMoves(int worker) {
+            if (worker == 0)
+                return workerAAvailableMoves;
+            else if (worker ==1)
+                return workerBAvailableMoves;
+            else
+                return new Vector<>();
         }
     }
 
@@ -76,7 +92,6 @@ public class VirtualGame extends Message {
                 tempVPlayer.playerStatus = player.getCurrentStatus();
                 if (player.getCosplayer().getGodPower()!=null){
                     tempVPlayer.godPower = player.getCosplayer().getGodPower().toString();
-
                 }
                 if(player.getCosplayer()!=null)
                     tempVPlayer.nextAction = player.getCosplayer().getNextAction();
@@ -85,6 +100,9 @@ public class VirtualGame extends Message {
                     tempVPlayer.workerAY = player.getWorkers()[0].getPositionY();
                     tempVPlayer.workerBX = player.getWorkers()[1].getPositionX();
                     tempVPlayer.workerBY = player.getWorkers()[1].getPositionY();
+                    tempVPlayer.workerInAction = player.getCosplayer().getWorkerInAction();
+                    tempVPlayer.workerAAvailableMoves = player.getCosplayer().getAvailableMoves(0);
+                    tempVPlayer.workerBAvailableMoves = player.getCosplayer().getAvailableMoves(1);
                 }
             } else {
                 VPlayer tempVPlayer = new VPlayer(player.getPlayerId(), player.getPlayerName());
@@ -127,5 +145,10 @@ public class VirtualGame extends Message {
     // only for test
     public String getCurrentPlayerAction(){
         return vPlayers.get(currentPlayerId).nextAction;
+    }
+
+    // only for test
+    public int getCurrentPlayerWorkerInAction(){
+        return vPlayers.get(currentPlayerId).workerInAction;
     }
 }

@@ -31,6 +31,7 @@ public class CLI extends Thread implements ViewInterface {
     private Vector<GodPower> availableGodPowers;
     private PlayerStatus playerStatus;
     private String nextAction;
+    private int workerInAction = -1;
     private VirtualView debugView = VirtualView.getSingleton();
     private GameController debugController = GameController.getSingleton();
 
@@ -83,6 +84,7 @@ public class CLI extends Thread implements ViewInterface {
         playerStatus = virtualGame.getVPlayers().get(id).getPlayerStatus();
         availableGodPowers = virtualGame.getAvailableGodPowers();
         nextAction = virtualGame.getVPlayers().get(id).getNextAction();
+        workerInAction = virtualGame.getVPlayers().get(id).getWorkerInAction();
         currentPlayerId = virtualGame.getCurrentPlayerId();
         System.out.println("Player: " + currentPlayerId+"is playing");
         switch (gameStatus) {
@@ -332,7 +334,8 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     private void move() {
-
+        if(workerInAction != -1)
+            System.out.println("You should move worker " + workerInAction + ".");
         int workerId;
         do {
             System.out.println
@@ -345,6 +348,8 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     private void build() {
+        if(workerInAction != -1)
+            System.out.println("You should use worker " + workerInAction + " to build.");
         int workerId;//todo:move and build is the same worker
         do {
             System.out.println

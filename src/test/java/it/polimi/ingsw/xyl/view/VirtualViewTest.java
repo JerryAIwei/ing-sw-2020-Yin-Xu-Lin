@@ -195,6 +195,11 @@ public class VirtualViewTest {
         assertEquals(id,0);
         assertEquals(nextAction,nextActionInVGame);
         assertEquals(nextAction,"BUILD");
+        int workerInAction =
+                gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getCosplayer().getWorkerInAction();
+        int workerInActionInVGame = v.getvGames().get(0).getCurrentPlayerWorkerInAction();
+        assertEquals(workerInAction,0);
+        assertEquals(workerInActionInVGame,0);
         // LiMing uses workerA to build Right
         BuildMessage buildM = new BuildMessage(0,id,0,Direction.RIGHT,false);
         v.update(buildM);

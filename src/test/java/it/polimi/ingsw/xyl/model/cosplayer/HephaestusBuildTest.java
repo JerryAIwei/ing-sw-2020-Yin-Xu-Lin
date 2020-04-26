@@ -66,7 +66,7 @@ public class HephaestusBuildTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[2][0].getLevel(),LEVEL3);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void HephaestusBuildTest_playerCWorkerABuildRight_differentWorker_notAllowed(){
         playerC.getCosplayer().move(0, RIGHT);
         islandBoard.getSpaces()[2][0].setLevel(LEVEL2);

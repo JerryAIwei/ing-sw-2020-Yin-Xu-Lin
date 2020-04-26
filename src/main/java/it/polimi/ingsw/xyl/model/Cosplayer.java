@@ -16,11 +16,16 @@ public class Cosplayer {
         MOVE, BUILD, MOVEORBUILD,BUILDOREND
     }
     protected Action nextAction = Action.MOVE;
+    protected int workerInAction = -1;
     protected Player player;
     protected GodPower godPower = null;
 
     public String getNextAction() {
         return nextAction.toString();
+    }
+
+    public int getWorkerInAction(){
+        return this.workerInAction;
     }
 
     public GodPower getGodPower() {
@@ -37,6 +42,7 @@ public class Cosplayer {
 
     public void prepare(){
         nextAction = Action.MOVE;
+        workerInAction = -1;
     }
 
     /**
@@ -64,8 +70,9 @@ public class Cosplayer {
             player.getWorkers()[worker].resetForced();
             // occupy the target space by playerId
             currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(player.getPlayerId() * 10 + worker);
-            // update nextAction
+            // update nextAction and workerInAction
             nextAction = Action.BUILD;
+            workerInAction = worker;
             // check win
             checkWin();
         } else {
@@ -81,29 +88,35 @@ public class Cosplayer {
      * @param buildDome whether build dome directly (only for Atlas).
      */
     public void build(int worker, Direction direction, boolean buildDome) {
-        try {
-            GameBoard currentGameBoard = player.getCurrentGameBoard();
-            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
-            // for Civilian Mod, player can build if the target space is free(not occupied by another worker)
-            // and there is no dome in the target space
-            if (targetOccupiedBy == -1 && noDome) {
-                // increase the level of the target space
-                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                // change currentPlayer after finish building
-                currentGameBoard.toNextPlayer();
-                // update nextAction
-                nextAction = Action.MOVE;
-                // checkwin(); ????
-            } else {
-                System.out.println("Chosen worker can't build at target space!");
+        if (worker == workerInAction){
+            try {
+                GameBoard currentGameBoard = player.getCurrentGameBoard();
+                IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
+                int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+                int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+                int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
+                boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
+                // for Civilian Mod, player can build if the target space is free(not occupied by another worker)
+                // and there is no dome in the target space
+                if (targetOccupiedBy == -1 && noDome) {
+                    // increase the level of the target space
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                    // change currentPlayer after finish building
+                    currentGameBoard.toNextPlayer();
+                    // update nextAction and workerInAction
+                    nextAction = Action.MOVE;
+                    workerInAction = -1;
+                    // checkwin(); ????
+                } else {
+                    System.out.println("Chosen worker can't build at target space!");
+                }
+            } catch (Exception e) {
+                System.out.println("Array out of bounds");
+                throw e;
             }
-        } catch (Exception e) {
-            System.out.println("Array out of bounds");
-            throw e;
+        }else{
+            System.out.println("You shouldn't have different workers to operate.");
+            throw new RuntimeException("You shouldn't have different workers to operate.");
         }
     }
 
@@ -208,5 +221,10 @@ public class Cosplayer {
                 iterator.remove();
         }
         return availableMoves;
+    }
+
+    // only for test
+    public void only_for_test_setWorkerInAction(int worker){
+        this.workerInAction = worker;
     }
 }

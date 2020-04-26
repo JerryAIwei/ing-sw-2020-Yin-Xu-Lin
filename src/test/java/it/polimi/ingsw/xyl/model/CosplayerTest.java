@@ -76,6 +76,8 @@ public class CosplayerTest {
     public void CosplayerTest_playerBFinishedTurnId_1_turnId_0() {
         gameBoard.toNextPlayer(1);
         assertEquals(gameBoard.getCurrentPlayer().getPlayerId(),1);
+        playerA.getCosplayer().only_for_test_setWorkerInAction(0);
+        gameBoard.getCurrentPlayer().getCosplayer().only_for_test_setWorkerInAction(0);
         gameBoard.getCurrentPlayer().getCosplayer().build(0, Direction.RIGHT,false);
         assertEquals(gameBoard.getCurrentPlayer().getPlayerId(),0);
     }

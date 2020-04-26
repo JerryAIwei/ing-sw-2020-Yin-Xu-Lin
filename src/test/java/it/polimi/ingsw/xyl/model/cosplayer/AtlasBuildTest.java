@@ -32,12 +32,14 @@ public class AtlasBuildTest extends GodCosplayerTest{
     @Test
     public void AtlasBuildTest_playerCWorkerABuildRight_normal(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
+        playerC.getCosplayer().only_for_test_setWorkerInAction(0);
         playerC.getCosplayer().build(0, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
     }
 
     @Test
     public void AtlasBuildTest_playerCWorkerBBuildUpRight_occupied_2_1_notAllowed() {
+        playerC.getCosplayer().only_for_test_setWorkerInAction(1);
         playerC.getCosplayer().build(1, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(),GROUND);
     }
@@ -45,6 +47,7 @@ public class AtlasBuildTest extends GodCosplayerTest{
     @Test
     public void AtlasBuildTest_playerCWorkerBBuildUpRight_dome_2_1_notAllowed() {
         islandBoard.getSpaces()[2][1].setLevel(DOME);
+        playerC.getCosplayer().only_for_test_setWorkerInAction(1);
         playerC.getCosplayer().build(1, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(),DOME);
     }
@@ -54,6 +57,7 @@ public class AtlasBuildTest extends GodCosplayerTest{
     @Test
     public void AtlasBuildTest_playerCWorkerABuildRightWithDome_usePower(){
         islandBoard.getSpaces()[1][0].setLevel(LEVEL1);
+        playerC.getCosplayer().only_for_test_setWorkerInAction(0);
         playerC.getCosplayer().build(0, RIGHT, true);
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),DOME);
     }

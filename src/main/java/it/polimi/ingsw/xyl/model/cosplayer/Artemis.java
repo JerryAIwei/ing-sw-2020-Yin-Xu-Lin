@@ -48,6 +48,7 @@ public class Artemis extends Cosplayer{
                     //occupy space after first move
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setOccupiedBy(player.getPlayerId() * 10 + worker);
                     movedWorker = worker;
+                    workerInAction = worker;
                     nextAction = Action.MOVEORBUILD;
                     checkWin();
             } else if(!(targetPositionX == initialPosition[0] && targetPositionY == initialPosition[1])

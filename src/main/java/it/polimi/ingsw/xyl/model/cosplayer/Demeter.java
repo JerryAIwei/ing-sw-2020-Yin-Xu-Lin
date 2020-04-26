@@ -23,34 +23,40 @@ public class Demeter extends Cosplayer {
      * @param buildDome whether build dome directly (only for Atlas).
      */
     public void build(int worker, Direction direction, boolean buildDome){
-        try {
-            GameBoard currentGameBoard = getPlayer().getCurrentGameBoard();
-            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-            int targetPositionX = getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-            int targetPositionY = getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
+        if (worker == workerInAction){
+            try {
+                GameBoard currentGameBoard = getPlayer().getCurrentGameBoard();
+                IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
+                int targetPositionX = getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+                int targetPositionY = getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+                int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
+                boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
 
-            if (nextAction == Action.BUILD) {
-                if (targetOccupiedBy == -1 && noDome) {
+                if (nextAction == Action.BUILD) {
+                    if (targetOccupiedBy == -1 && noDome) {
+                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                        buildWorker = worker;
+                        firstBuildDirection = direction;
+                        nextAction = Action.BUILDOREND;
+                    } else {
+                        System.out.println("Chosen worker can't build at target space!");
+                    }
+                } else if (buildWorker == worker && firstBuildDirection != direction && targetOccupiedBy == -1 && noDome) {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    buildWorker = worker;
-                    firstBuildDirection = direction;
-                    nextAction = Action.BUILDOREND;
+                    currentGameBoard.toNextPlayer();
+                    nextAction = Action.MOVE;
+                    workerInAction = -1;
                 } else {
                     System.out.println("Chosen worker can't build at target space!");
                 }
-            } else if (buildWorker == worker && firstBuildDirection != direction && targetOccupiedBy == -1 && noDome) {
-                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                currentGameBoard.toNextPlayer();
-                nextAction = Action.MOVE;
-            } else {
-                System.out.println("Chosen worker can't build at target space!");
             }
-        }
-        catch (Exception e){
-            System.out.println("Array out of bounds");
-            throw e;
+            catch (Exception e){
+                System.out.println("Array out of bounds");
+                throw e;
+            }
+        }else{
+            System.out.println("You shouldn't have different workers to operate.");
+            throw new RuntimeException("You shouldn't have different workers to operate.");
         }
     }
 }

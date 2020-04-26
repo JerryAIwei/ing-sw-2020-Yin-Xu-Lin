@@ -50,7 +50,7 @@ public class Apollo extends Cosplayer {
             player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()
                     [opponentWorkerId].setPosition(originalPositionX, originalPositionY);
         }
-        super.move(worker, direction); // super.move will change nextAction and checkWin.
+        super.move(worker, direction); // super.move will change nextAction & workerInAction and checkWin.
         if (targetOccupiedBy != -1 && availableMoves.contains(direction)) {
             player.getCurrentGameBoard().getIslandBoard().getSpaces()
                     [originalPositionX][originalPositionY].setOccupiedBy(targetOccupiedBy);

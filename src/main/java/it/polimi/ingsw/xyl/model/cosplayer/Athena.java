@@ -20,6 +20,7 @@ public class Athena extends Cosplayer {
 
     public void prepare(){
         player.getCurrentGameBoard().getIslandBoard().setNoLevelUp(false);
+        workerInAction = -1;
     }
 
     /**
