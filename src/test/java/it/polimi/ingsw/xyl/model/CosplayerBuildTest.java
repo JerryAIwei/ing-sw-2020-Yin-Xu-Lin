@@ -2,6 +2,9 @@ package it.polimi.ingsw.xyl.model;
 
 import org.junit.Test;
 
+import java.util.EnumSet;
+import java.util.Vector;
+
 import static it.polimi.ingsw.xyl.model.Direction.*;
 import static it.polimi.ingsw.xyl.model.Level.*;
 import static org.junit.Assert.assertEquals;
@@ -48,4 +51,12 @@ public class CosplayerBuildTest extends CosplayerTest{
         playerA.getCosplayer().build(0, LEFT, false);
     }
 
+    @Test
+    public void CosplayerGetAvailableBuildsTest_playerAWorkerA() {
+        EnumSet<Direction> none = EnumSet.noneOf(Direction.class);
+        Vector<Direction> availableBuilds = new Vector<>(none);
+        availableBuilds.add(UP);
+        availableBuilds.add(RIGHT);
+        assertEquals(availableBuilds, playerA.getCosplayer().getAvailableBuilds(0));
+    }
 }

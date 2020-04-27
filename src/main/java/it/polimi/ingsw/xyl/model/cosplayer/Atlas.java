@@ -28,10 +28,8 @@ public class Atlas extends Cosplayer {
                 IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
                 int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
                 int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-                int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-                boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
 
-                if (targetOccupiedBy == -1 && noDome) {
+                if (super.getAvailableBuilds(worker).contains(direction)) {
                     if (buildDome) {
                         currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setLevel(Level.DOME);
                     } else {
@@ -52,5 +50,7 @@ public class Atlas extends Cosplayer {
             System.out.println("You shouldn't have different workers to operate.");
             throw new RuntimeException("You shouldn't have different workers to operate.");
         }
+
+
     }
 }

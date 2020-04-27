@@ -94,11 +94,7 @@ public class Cosplayer {
                 IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
                 int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
                 int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-                int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-                boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != DOME;
-                // for Civilian Mod, player can build if the target space is free(not occupied by another worker)
-                // and there is no dome in the target space
-                if (targetOccupiedBy == -1 && noDome) {
+                if (getAvailableBuilds(worker).contains(direction)) {
                     // increase the level of the target space
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                     // change currentPlayer after finish building
@@ -106,14 +102,13 @@ public class Cosplayer {
                     // update nextAction and workerInAction
                     nextAction = Action.MOVE;
                     workerInAction = -1;
-                    // checkwin(); ????
                 } else {
                     System.out.println("Chosen worker can't build at target space!");
                 }
             } catch (Exception e) {
                 System.out.println("Array out of bounds");
                 throw e;
-            }
+              }
         }else{
             System.out.println("You shouldn't have different workers to operate.");
             throw new RuntimeException("You shouldn't have different workers to operate.");
@@ -221,6 +216,53 @@ public class Cosplayer {
                 iterator.remove();
         }
         return availableMoves;
+    }
+
+
+    /**
+     * get all available build directions of a chosen worker
+     *
+     * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
+     * @return all available direction of the worker.
+     */
+    public Vector<Direction> getAvailableBuilds(int worker) {
+        int x = player.getWorkers()[worker].getPositionX();
+        int y = player.getWorkers()[worker].getPositionY();
+        EnumSet<Direction> all = EnumSet.allOf(Direction.class);
+        Vector<Direction> availableBuilds = new Vector<>(all);
+        // remove out of boundary
+        if (x == 0) {
+            availableBuilds.remove(Direction.LEFT);
+            availableBuilds.remove(Direction.UPLEFT);
+            availableBuilds.remove(Direction.DOWNLEFT);
+        }
+        if (x == 4) {
+            availableBuilds.remove(Direction.RIGHT);
+            availableBuilds.remove(Direction.UPRIGHT);
+            availableBuilds.remove(Direction.DOWNRIGHT);
+        }
+        if (y == 0) {
+            availableBuilds.remove(Direction.DOWN);
+            availableBuilds.remove(Direction.DOWNLEFT);
+            availableBuilds.remove(Direction.DOWNRIGHT);
+        }
+        if (y == 4) {
+            availableBuilds.remove(Direction.UP);
+            availableBuilds.remove(Direction.UPLEFT);
+            availableBuilds.remove(Direction.UPRIGHT);
+        }
+        Iterator<Direction> iterator = availableBuilds.iterator();
+        while (iterator.hasNext()) {
+            Direction a = iterator.next();
+            Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
+                    [x + a.toMarginalPosition()[0]]
+                    [y + a.toMarginalPosition()[1]];
+            // remove occupied by another worker or by a dome
+            if (targetSpace.isOccupiedBy() != -1 || targetSpace.getLevel() == Level.DOME) {
+                iterator.remove();
+            }
+        }
+        return availableBuilds;
     }
 
     // only for test
