@@ -2,6 +2,10 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Vector;
+
 /**
  * @author Lin Xin
  */
@@ -33,7 +37,7 @@ public class Demeter extends Cosplayer {
                 boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
 
                 if (nextAction == Action.BUILD) {
-                    if (targetOccupiedBy == -1 && noDome) {
+                    if (getAvailableBuilds(worker).contains(direction)) {
                         currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                         buildWorker = worker;
                         firstBuildDirection = direction;
@@ -41,7 +45,7 @@ public class Demeter extends Cosplayer {
                     } else {
                         System.out.println("Chosen worker can't build at target space!");
                     }
-                } else if (buildWorker == worker && firstBuildDirection != direction && targetOccupiedBy == -1 && noDome) {
+                } else if (buildWorker == worker && getAvailableBuilds(worker).contains(direction)) {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                     currentGameBoard.toNextPlayer();
                     nextAction = Action.MOVE;
@@ -58,5 +62,13 @@ public class Demeter extends Cosplayer {
             System.out.println("You shouldn't have different workers to operate.");
             throw new RuntimeException("You shouldn't have different workers to operate.");
         }
+    }
+
+
+    public Vector<Direction> getAvailableBuilds(int worker) {
+        Vector<Direction> availableBuilds = super.getAvailableBuilds(worker);
+        if (nextAction == Action.BUILDOREND)
+            availableBuilds.remove(firstBuildDirection);
+        return availableBuilds;
     }
 }
