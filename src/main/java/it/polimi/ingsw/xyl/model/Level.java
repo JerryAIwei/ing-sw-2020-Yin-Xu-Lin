@@ -6,20 +6,41 @@ package it.polimi.ingsw.xyl.model;
  * @author Shaoxun
  */
 public enum Level {
-    GROUND,
-    LEVEL1,     // the first level block
-    LEVEL2,     // the second level block
-    LEVEL3,     // the third level block
-    DOME;       // usually a dome can only be placed on the top of LEVEL3 blocks
+    GROUND { // the ground
 
-    public int toInt(){
-        switch(this){
-            case GROUND: return 0;
-            case LEVEL1: return 1;
-            case LEVEL2: return 2;
-            case LEVEL3: return 3;
-            case DOME: return 4;
+        @Override
+        public int toInt() {
+            return 0;
         }
-        return -1;
-    }
+    },
+    LEVEL1 { // the first level block
+
+        @Override
+        public int toInt() {
+            return 1;
+        }
+    },
+    LEVEL2 { // the second level block
+
+        @Override
+        public int toInt() {
+            return 2;
+        }
+    },
+    LEVEL3 {// the third level block
+
+        @Override
+        public int toInt() {
+            return 3;
+        }
+    },
+    DOME { // usually a dome can only be placed on the top of LEVEL3 blocks
+
+        @Override
+        public int toInt() {
+            return 4;
+        }
+    };
+
+    public abstract int toInt();
 }

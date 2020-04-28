@@ -1,6 +1,5 @@
 package it.polimi.ingsw.xyl.model;
 
-import java.io.Serializable;
 
 /**
  * It represents the player of the Santorini game.
@@ -11,13 +10,14 @@ public class Player {
     private final int playerId;
     private final String playerName;
     private GameBoard currentGameBoard;
-    private Cosplayer cosplayer = new Cosplayer(this);
+    private Cosplayer cosplayer;
     private Worker[] workers;
     private PlayerStatus currentStatus = PlayerStatus.INLOBBY;
 
     public Player(int playerId, String playerName) {
         this.playerId = playerId;
         this.playerName = playerName;
+        this.cosplayer = new Cosplayer(this);
     }
 
     public int getPlayerId() {

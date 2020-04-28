@@ -4,7 +4,6 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Vector;
 
-import static it.polimi.ingsw.xyl.model.Level.DOME;
 
 /**
  * This class represents the role of the Player: God or Civilian
@@ -18,7 +17,7 @@ public class Cosplayer {
     protected Action nextAction = Action.MOVE;
     protected int workerInAction = -1;
     protected Player player;
-    protected GodPower godPower = null;
+    protected GodPower godPower = GodPower.ANONYMOUS;
 
     public String getNextAction() {
         return nextAction.toString();

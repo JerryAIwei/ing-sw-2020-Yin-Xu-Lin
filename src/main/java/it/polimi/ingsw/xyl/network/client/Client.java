@@ -67,7 +67,6 @@ public class Client implements Runnable{
 
                 Message received = (Message) inputStream.readObject();
                 if(received instanceof VirtualGame) {
-                    System.out.println("VirtualGame getGameStatus" + ((VirtualGame) received).getGameStatus());
                     view.update((VirtualGame) received);
                 }
                 else{
