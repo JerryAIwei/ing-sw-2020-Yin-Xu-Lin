@@ -45,11 +45,13 @@ public class CosplayerBuildTest extends CosplayerTest{
         assertEquals(islandBoard.getSpaces()[4][3].getLevel(),DOME);
     }
 
+    /*
     @Test (expected = Exception.class)
     public void CosplayerBuildTest_playerAWorkerABuildLeft_Error() {
         playerA.getCosplayer().only_for_test_setWorkerInAction(0);
         playerA.getCosplayer().build(0, LEFT, false);
     }
+    */
 
     @Test
     public void CosplayerGetAvailableBuildsTest_playerAWorkerA() {

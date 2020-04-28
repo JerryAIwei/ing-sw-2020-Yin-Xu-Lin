@@ -1,0 +1,263 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: VirtualGame</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: VirtualGame (it.polimi.ingsw.xyl.model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VirtualGame</td>
+<td class="coverageStat">
+  <span class="percent">
+    73.3%
+  </span>
+  <span class="absValue">
+    (11/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.1%
+  </span>
+  <span class="absValue">
+    (41/ 45)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">VirtualGame$VPlayer</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    44.4%
+  </span>
+  <span class="absValue">
+    (8/ 18)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    54.5%
+  </span>
+  <span class="absValue">
+    (12/ 22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77.8%
+  </span>
+  <span class="absValue">
+    (49/ 63)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.message.Message;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.io.Serializable;
+<i>6</i>&nbsp;import java.util.Collection;
+<i>7</i>&nbsp;import java.util.HashMap;
+<i>8</i>&nbsp;import java.util.Map;
+<i>9</i>&nbsp;import java.util.Vector;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;public class VirtualGame extends Message {
+<i>12</i>&nbsp;    public class VPlayer implements Serializable{
+<i>13</i>&nbsp;        private int playerId;
+<i>14</i>&nbsp;        private String playerName;
+<i>15</i>&nbsp;        private String godPower;
+<i>16</i>&nbsp;        private String nextAction;
+<b class="fc"><i>17</i>&nbsp;        private int workerInAction = -1;</b>
+<b class="fc"><i>18</i>&nbsp;        private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;</b>
+<i>19</i>&nbsp;        private int workerAX;
+<i>20</i>&nbsp;        private int workerAY;
+<i>21</i>&nbsp;        private int workerBX;
+<i>22</i>&nbsp;        private int workerBY;
+<b class="fc"><i>23</i>&nbsp;        private Vector&lt;Direction&gt; workerAAvailableMoves = new Vector&lt;&gt;();</b>
+<b class="fc"><i>24</i>&nbsp;        private Vector&lt;Direction&gt; workerBAvailableMoves = new Vector&lt;&gt;();</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;        VPlayer(int playerId, String playerName){</b>
+<b class="fc"><i>28</i>&nbsp;            this.playerId = playerId;</b>
+<b class="fc"><i>29</i>&nbsp;            this.playerName = playerName;</b>
+<b class="fc"><i>30</i>&nbsp;        }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;        public String getPlayerName() {
+<b class="nc"><i>33</i>&nbsp;            return playerName;</b>
+<i>34</i>&nbsp;        }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;        public String getGodPower() {
+<b class="nc"><i>37</i>&nbsp;            return godPower;</b>
+<i>38</i>&nbsp;        }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;        public String getNextAction() {
+<b class="nc"><i>41</i>&nbsp;            return nextAction;</b>
+<i>42</i>&nbsp;        }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;        public int getWorkerInAction(){
+<b class="nc"><i>45</i>&nbsp;            return workerInAction;</b>
+<i>46</i>&nbsp;        }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;        public PlayerStatus getPlayerStatus() {
+<b class="nc"><i>49</i>&nbsp;            return playerStatus;</b>
+<i>50</i>&nbsp;        }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;        public Vector&lt;Direction&gt; getAvailableMoves(int worker) {
+<b class="nc"><i>53</i>&nbsp;            if (worker == 0)</b>
+<b class="nc"><i>54</i>&nbsp;                return workerAAvailableMoves;</b>
+<b class="nc"><i>55</i>&nbsp;            else if (worker ==1)</b>
+<b class="nc"><i>56</i>&nbsp;                return workerBAvailableMoves;</b>
+<i>57</i>&nbsp;            else
+<b class="nc"><i>58</i>&nbsp;                return new Vector&lt;&gt;();</b>
+<i>59</i>&nbsp;        }
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    private int gameId;
+<i>63</i>&nbsp;    private GameStatus gameStatus ;//= GameStatus.WAITINGINIT;
+<b class="fc"><i>64</i>&nbsp;    private Map&lt;Integer, VPlayer&gt; vPlayers = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>65</i>&nbsp;    private Space[][] spaces = new Space[5][5];</b>
+<b class="fc"><i>66</i>&nbsp;    private Vector&lt;GodPower&gt; availableGodPowers = new Vector&lt;&gt;();</b>
+<i>67</i>&nbsp;    private int currentPlayerId;
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;    public VirtualGame(int gameId){</b>
+<b class="fc"><i>70</i>&nbsp;        this.gameId = gameId;</b>
+<b class="fc"><i>71</i>&nbsp;    }</b>
+<i>72</i>&nbsp;    public int getGameId() {
+<b class="nc"><i>73</i>&nbsp;        return gameId;</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    public GameStatus getGameStatus() {
+<b class="fc"><i>77</i>&nbsp;        return gameStatus;</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    public void setGameStatus(GameStatus gameStatus) {
+<b class="fc"><i>81</i>&nbsp;        this.gameStatus = gameStatus;</b>
+<b class="fc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    public Map&lt;Integer, VPlayer&gt; getVPlayers() {
+<b class="nc"><i>85</i>&nbsp;        return vPlayers;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    public void updateVPlayers(Collection&lt;Player&gt; players) {
+<b class="fc"><i>89</i>&nbsp;        for(Player player:players) {</b>
+<b class="fc"><i>90</i>&nbsp;            if (vPlayers.get(player.getPlayerId()) != null) {</b>
+<b class="fc"><i>91</i>&nbsp;                VPlayer tempVPlayer = vPlayers.get(player.getPlayerId());</b>
+<b class="fc"><i>92</i>&nbsp;                tempVPlayer.playerStatus = player.getCurrentStatus();</b>
+<b class="fc"><i>93</i>&nbsp;                if (player.getCosplayer().getGodPower()!=null){</b>
+<b class="fc"><i>94</i>&nbsp;                    tempVPlayer.godPower = player.getCosplayer().getGodPower().toString();</b>
+<i>95</i>&nbsp;                }
+<b class="fc"><i>96</i>&nbsp;                if(player.getCosplayer()!=null)</b>
+<b class="fc"><i>97</i>&nbsp;                    tempVPlayer.nextAction = player.getCosplayer().getNextAction();</b>
+<b class="fc"><i>98</i>&nbsp;                if(player.getCurrentStatus() == PlayerStatus.WORKERPREPARED) {</b>
+<b class="fc"><i>99</i>&nbsp;                    tempVPlayer.workerAX = player.getWorkers()[0].getPositionX();</b>
+<b class="fc"><i>100</i>&nbsp;                    tempVPlayer.workerAY = player.getWorkers()[0].getPositionY();</b>
+<b class="fc"><i>101</i>&nbsp;                    tempVPlayer.workerBX = player.getWorkers()[1].getPositionX();</b>
+<b class="fc"><i>102</i>&nbsp;                    tempVPlayer.workerBY = player.getWorkers()[1].getPositionY();</b>
+<b class="fc"><i>103</i>&nbsp;                    tempVPlayer.workerInAction = player.getCosplayer().getWorkerInAction();</b>
+<b class="fc"><i>104</i>&nbsp;                    tempVPlayer.workerAAvailableMoves = player.getCosplayer().getAvailableMoves(0);</b>
+<b class="fc"><i>105</i>&nbsp;                    tempVPlayer.workerBAvailableMoves = player.getCosplayer().getAvailableMoves(1);</b>
+<i>106</i>&nbsp;                }
+<b class="fc"><i>107</i>&nbsp;            } else {</b>
+<b class="fc"><i>108</i>&nbsp;                VPlayer tempVPlayer = new VPlayer(player.getPlayerId(), player.getPlayerName());</b>
+<b class="fc"><i>109</i>&nbsp;                tempVPlayer.playerStatus = player.getCurrentStatus();</b>
+<b class="fc"><i>110</i>&nbsp;                vPlayers.put(tempVPlayer.playerId,tempVPlayer);</b>
+<i>111</i>&nbsp;            }
+<b class="fc"><i>112</i>&nbsp;        }</b>
+<b class="fc"><i>113</i>&nbsp;    }</b>
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    public Space[][] getSpaces() {
+<b class="nc"><i>116</i>&nbsp;        return spaces;</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    public void setSpaces(Space[][] spaces) {
+<b class="fc"><i>120</i>&nbsp;        this.spaces = spaces;</b>
+<b class="fc"><i>121</i>&nbsp;    }</b>
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    public Vector&lt;GodPower&gt; getAvailableGodPowers() {
+<b class="nc"><i>124</i>&nbsp;        return availableGodPowers;</b>
+<i>125</i>&nbsp;    }
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    public void setAvailableGodPowers(Vector&lt;GodPower&gt; availableGodPowers) {
+<i>128</i>&nbsp;
+<b class="fc"><i>129</i>&nbsp;            this.availableGodPowers = (Vector&lt;GodPower&gt;)availableGodPowers.clone(); //Todo:need deep copy</b>
+<b class="fc"><i>130</i>&nbsp;    }</b>
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    public int getCurrentPlayerId() {
+<b class="fc"><i>133</i>&nbsp;        return currentPlayerId;</b>
+<i>134</i>&nbsp;    }
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    public void setCurrentPlayerId(int currentPlayerId) {
+<b class="fc"><i>137</i>&nbsp;        this.currentPlayerId = currentPlayerId;</b>
+<b class="fc"><i>138</i>&nbsp;    }</b>
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    // only for test
+<i>141</i>&nbsp;    public String getFirstPlayerName(){
+<b class="fc"><i>142</i>&nbsp;        return vPlayers.get(0).playerName;</b>
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    // only for test
+<i>146</i>&nbsp;    public String getCurrentPlayerAction(){
+<b class="fc"><i>147</i>&nbsp;        return vPlayers.get(currentPlayerId).nextAction;</b>
+<i>148</i>&nbsp;    }
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;    // only for test
+<i>151</i>&nbsp;    public int getCurrentPlayerWorkerInAction(){
+<b class="fc"><i>152</i>&nbsp;        return vPlayers.get(currentPlayerId).workerInAction;</b>
+<i>153</i>&nbsp;    }
+<i>154</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-28 14:47</div>
+</div>
+</body>
+</html>
