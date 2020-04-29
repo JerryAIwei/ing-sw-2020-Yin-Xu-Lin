@@ -3,10 +3,10 @@ package it.polimi.ingsw.xyl.model;
 import it.polimi.ingsw.xyl.model.message.Message;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+
 
 public class VirtualGame extends Message {
     public class VPlayer implements Serializable {
@@ -20,7 +20,7 @@ public class VirtualGame extends Message {
         private int workerAY;
         private int workerBX;
         private int workerBY;
-        private final Map<String, Vector<Direction>> availableMovesAndBuilds = new HashMap<>();
+        private final HashMap<String, ArrayList<Direction>> availableMovesAndBuilds = new HashMap<>();
 
         VPlayer(int playerId, String playerName) {
             this.playerId = playerId;
@@ -47,16 +47,16 @@ public class VirtualGame extends Message {
             return playerStatus;
         }
 
-        public Vector<Direction> getAvailable(String action, int worker) {
+        public ArrayList<Direction> getAvailable(String action, int worker) {
             return availableMovesAndBuilds.get(action + worker);
         }
     }
 
     private final int gameId;
     private GameStatus gameStatus;
-    private final Map<Integer, VPlayer> vPlayers = new HashMap<>();
+    private final HashMap<Integer, VPlayer> vPlayers = new HashMap<>();
     private Space[][] spaces = new Space[5][5];
-    private final Vector<GodPower> availableGodPowers = new Vector<>();
+    private final ArrayList<GodPower> availableGodPowers = new ArrayList<>();
     private int currentPlayerId;
 
     public VirtualGame(int gameId) {
@@ -75,7 +75,7 @@ public class VirtualGame extends Message {
         this.gameStatus = gameStatus;
     }
 
-    public Map<Integer, VPlayer> getVPlayers() {
+    public HashMap<Integer, VPlayer> getVPlayers() {
         return vPlayers;
     }
 
@@ -115,12 +115,12 @@ public class VirtualGame extends Message {
         this.spaces = spaces;
     }
 
-    public Vector<GodPower> getAvailableGodPowers() {
+    public ArrayList<GodPower> getAvailableGodPowers() {
         return availableGodPowers;
     }
 
-    public void setAvailableGodPowers(Vector<GodPower> availableGodPowers) {
-        this.availableGodPowers.removeAllElements();
+    public void setAvailableGodPowers(ArrayList<GodPower> availableGodPowers) {
+        this.availableGodPowers.clear();
         this.availableGodPowers.addAll(availableGodPowers);
     }
 
@@ -132,18 +132,4 @@ public class VirtualGame extends Message {
         this.currentPlayerId = currentPlayerId;
     }
 
-    // only for test
-    public String getFirstPlayerName() {
-        return vPlayers.get(0).playerName;
-    }
-
-    // only for test
-    public String getCurrentPlayerAction() {
-        return vPlayers.get(currentPlayerId).nextAction;
-    }
-
-    // only for test
-    public int getCurrentPlayerWorkerInAction() {
-        return vPlayers.get(currentPlayerId).workerInAction;
-    }
 }

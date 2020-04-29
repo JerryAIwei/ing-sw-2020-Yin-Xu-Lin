@@ -42,7 +42,7 @@ public class VirtualViewTest {
         v.update(aMessage);
         assertEquals(gc.getGameMaster().getGameLobby().getGameBoards().get(0).getPlayers().get(0).getPlayerName(),
                 "LiMing");
-        assertEquals(v.getvGames().get(0).getFirstPlayerName(),"LiMing");
+        assertEquals(v.getvGames().get(0).getVPlayers().get(0).getPlayerName() ,"LiMing");
         PlayerNameMessage message3 = new PlayerNameMessage("LiHua");
         v.update(message3);
         assertEquals(gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentStatus(),
@@ -54,7 +54,7 @@ public class VirtualViewTest {
         assertEquals(v.getvGames().size(),2);
         assertEquals(gc.getGameMaster().getGameLobby().getGameBoards().get(1).getPlayers().get(0).getPlayerName(),
                 "LiGang");
-        assertEquals(v.getvGames().get(1).getFirstPlayerName(),"LiGang");
+        assertEquals(v.getvGames().get(1).getVPlayers().get(0).getPlayerName(),"LiGang");
     }
 
     @Test
@@ -120,7 +120,7 @@ public class VirtualViewTest {
         assertEquals(id,0);
         int currentIdInVGame = v.getvGames().get(0).getCurrentPlayerId();
         assertEquals(id,currentIdInVGame);
-        String currentPlayerAction = v.getvGames().get(0).getCurrentPlayerAction();
+        String currentPlayerAction = v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals("MOVE", currentPlayerAction);
         assertEquals(v.getvGames().get(0).getGameStatus(),GameStatus.INGAME);
         assertEquals(gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentStatus(),GameStatus.INGAME);
@@ -178,7 +178,7 @@ public class VirtualViewTest {
         String nextAction =
                 gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getCosplayer().getNextAction();
         String nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         // turn to LiMing move
         assertEquals(id,0);
         assertEquals(nextAction,nextActionInVGame);
@@ -191,13 +191,13 @@ public class VirtualViewTest {
         nextAction =
                 gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getCosplayer().getNextAction();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,0);
         assertEquals(nextAction,nextActionInVGame);
         assertEquals(nextAction,"BUILD");
         int workerInAction =
                 gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getCosplayer().getWorkerInAction();
-        int workerInActionInVGame = v.getvGames().get(0).getCurrentPlayerWorkerInAction();
+        int workerInActionInVGame = v.getvGames().get(0).getVPlayers().get(id).getWorkerInAction();
         assertEquals(workerInAction,0);
         assertEquals(workerInActionInVGame,0);
         // LiMing uses workerA to build Right
@@ -212,7 +212,7 @@ public class VirtualViewTest {
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         assertEquals(id,1);
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(nextActionInVGame,"MOVE");
         // LiHua move workerB left(use power, change position with LiMing's workerB(01))
         moveM = new MoveMessage(0,id,1,Direction.LEFT);
@@ -224,7 +224,7 @@ public class VirtualViewTest {
         // turn to LiHua build
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,1);
         assertEquals(nextActionInVGame,"BUILD");
         // LiHua use workerB to build downleft
@@ -234,7 +234,7 @@ public class VirtualViewTest {
         // turn to LiGang move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,2);
         assertEquals(nextActionInVGame,"MOVE");
         // LiGang moves workerB down
@@ -243,7 +243,7 @@ public class VirtualViewTest {
         // turn to LiGang build
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,2);
         assertEquals(nextActionInVGame,"BUILD");
         // LiGang workerB build left
@@ -254,7 +254,7 @@ public class VirtualViewTest {
         // turn to LiMing move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,0);
         assertEquals(nextActionInVGame,"MOVE");
         // LiMing moves workerB downright and builds a dome left
@@ -266,7 +266,7 @@ public class VirtualViewTest {
         // turn to LiHua move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,1);
         assertEquals(nextActionInVGame,"MOVE");
         // LiHua moves workerB up and builds down
@@ -280,7 +280,7 @@ public class VirtualViewTest {
         // turn to LiGang move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,2);
         assertEquals(nextActionInVGame,"MOVE");
         // LiGang moves workerB downleft and builds right
@@ -293,7 +293,7 @@ public class VirtualViewTest {
         // turn to LiMing move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,0);
         assertEquals(nextActionInVGame,"MOVE");
         // LiMing moves workerA upleft and builds down
@@ -305,7 +305,7 @@ public class VirtualViewTest {
         // turn to LiHua move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,1);
         assertEquals(nextActionInVGame,"MOVE");
         // LiHua moves workerA right and builds right
@@ -317,7 +317,7 @@ public class VirtualViewTest {
         // turn to LiGang move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,2);
         assertEquals(nextActionInVGame,"MOVE");
         // LiGang moves workerB downleft and builds upright
@@ -329,7 +329,7 @@ public class VirtualViewTest {
         // turn to LiMing move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,0);
         assertEquals(nextActionInVGame,"MOVE");
         // LiMing moves workerA up and builds up
@@ -340,7 +340,7 @@ public class VirtualViewTest {
         // turn to LiHua move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,1);
         assertEquals(nextActionInVGame,"MOVE");
         // LiHua moves workerA right and builds right
@@ -351,7 +351,7 @@ public class VirtualViewTest {
         // turn to LiGang move
         id = gc.getGameMaster().getGameLobby().getGameBoards().get(0).getCurrentPlayer().getPlayerId();
         nextActionInVGame =
-                v.getvGames().get(0).getCurrentPlayerAction();
+                v.getvGames().get(0).getVPlayers().get(id).getNextAction();
         assertEquals(id,2);
         assertEquals(nextActionInVGame,"MOVE");
         // LiGang moves workerB right and wins the game

@@ -2,9 +2,6 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.Vector;
 
 
 /**

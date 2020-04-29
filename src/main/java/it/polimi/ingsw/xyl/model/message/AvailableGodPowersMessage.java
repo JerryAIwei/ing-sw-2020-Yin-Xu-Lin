@@ -26,7 +26,7 @@ public class AvailableGodPowersMessage extends Message {
             case 'A' : return godPowerA;
             case 'B' : return godPowerB;
             case 'C' : return godPowerC;
-            default : return null;
+            default : return GodPower.ANONYMOUS;
         }
     }
 

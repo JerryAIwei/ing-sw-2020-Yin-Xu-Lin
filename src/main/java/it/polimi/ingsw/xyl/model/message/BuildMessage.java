@@ -3,9 +3,9 @@ package it.polimi.ingsw.xyl.model.message;
 import it.polimi.ingsw.xyl.model.Direction;
 
 public class BuildMessage extends RoleControllerMessage {
-    private int workerId;
-    private Direction direction;
-    private boolean buildDome;
+    private final int workerId;
+    private final Direction direction;
+    private final boolean buildDome;
 
     public BuildMessage(int gameId, int playerId, int worker, Direction direction, boolean buildDome) {
         super(gameId, playerId);

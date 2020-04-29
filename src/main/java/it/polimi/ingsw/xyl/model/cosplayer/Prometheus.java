@@ -2,8 +2,8 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
 
 /**
  * This class represents the role of the Player: Prometheus
@@ -88,8 +88,8 @@ public class Prometheus extends Cosplayer {
         }
     }
 
-    public Vector<Direction> getAvailableMoves(int worker) {
-        Vector<Direction> availableMoves = super.getAvailableMoves(worker);
+    public ArrayList<Direction> getAvailableMoves(int worker) {
+        ArrayList<Direction> availableMoves = super.getAvailableMoves(worker);
         if (nextAction == Action.MOVE) {
             Iterator<Direction> iterator = availableMoves.iterator();
             while (iterator.hasNext()) {

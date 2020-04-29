@@ -2,9 +2,7 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * @author Lin Xin
@@ -59,8 +57,8 @@ public class Demeter extends Cosplayer {
     }
 
 
-    public Vector<Direction> getAvailableBuilds(int worker) {
-        Vector<Direction> availableBuilds = super.getAvailableBuilds(worker);
+    public ArrayList<Direction> getAvailableBuilds(int worker) {
+        ArrayList<Direction> availableBuilds = super.getAvailableBuilds(worker);
         if (nextAction == Action.BUILDOREND)
             availableBuilds.remove(firstBuildDirection);
         return availableBuilds;

@@ -2,8 +2,8 @@ package it.polimi.ingsw.xyl.model.message;
 
 public class StartGameMessage extends Message{
     private final int gameId;
-    private String fromPlayer;
-    private int startPlayerId;
+    private final String fromPlayer;
+    private final int startPlayerId;
     public StartGameMessage(int gameId, String fromPlayer, int startPlayerId){
         this.gameId = gameId;
         this.fromPlayer = fromPlayer;

@@ -1,16 +1,13 @@
 package it.polimi.ingsw.xyl.view;
 
-
 import it.polimi.ingsw.xyl.controller.GameController;
 import it.polimi.ingsw.xyl.model.GameBoard;
 import it.polimi.ingsw.xyl.model.GameLobby;
-import it.polimi.ingsw.xyl.model.GameStatus;
 import it.polimi.ingsw.xyl.model.VirtualGame;
+import it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage;
 import it.polimi.ingsw.xyl.model.message.Message;
 import it.polimi.ingsw.xyl.model.message.NameOKMessage;
-import it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage;
 import it.polimi.ingsw.xyl.network.server.PlayerServer;
-import it.polimi.ingsw.xyl.view.cli.CLI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,14 +16,15 @@ import java.util.Vector;
 public class VirtualView {
     private volatile static VirtualView singleton;
     private GameController gameController;
-    private final Map<Integer, VirtualGame> vGames = new HashMap<>();
-
-    private final Map<String, PlayerServer> playerName2PlayerServer = new HashMap<>();
-    private final Map<Integer, Vector<String>> gameID2PlayerNames = new HashMap<>();
-    private CLI cli; //for debug
+    private final Map<Integer, VirtualGame> vGames;
+    private final Map<String, PlayerServer> playerName2PlayerServer;
+    private final Map<Integer, Vector<String>> gameID2PlayerNames;
     private boolean test = false;
 
     private VirtualView() {
+        this.vGames = new HashMap<>();
+        this.playerName2PlayerServer = new HashMap<>();
+        this.gameID2PlayerNames = new HashMap<>();
     }
 
     public static VirtualView getSingleton() {
@@ -46,15 +44,6 @@ public class VirtualView {
 
     public void register(GameController gc) {
         gameController = gc;
-    }
-
-    public void register(CLI cli) {
-        this.cli = cli;
-        this.test = false;
-    }//for debug
-
-    public void register(String ip) {
-
     }
 
     public void update(PlayerServer ps, String playerName, GameLobby gl) {
@@ -93,6 +82,11 @@ public class VirtualView {
         gameController.update(message);
     }
 
+    public void sendMessage(int gameId, VirtualGame vGame) {
+        for (String playerName : gameID2PlayerNames.get(gameId)) {
+            playerName2PlayerServer.get(playerName).sendMessage(vGame);
+        }
+    }
 
     // only for test
     public Map<Integer, VirtualGame> getvGames() {
@@ -102,11 +96,5 @@ public class VirtualView {
     // only for test
     public void setTestMode() {
         this.test = true;
-    }
-
-    public void sendMessage(int gameId, VirtualGame vGame) {
-        for (String playerName : gameID2PlayerNames.get(gameId)) {
-            playerName2PlayerServer.get(playerName).sendMessage(vGame);
-        }
     }
 }

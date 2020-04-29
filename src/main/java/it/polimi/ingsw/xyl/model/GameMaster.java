@@ -3,10 +3,8 @@ package it.polimi.ingsw.xyl.model;
 import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+
 
 /**
  * GameMaster is virtual model handle all the other models,
@@ -16,7 +14,7 @@ import java.util.Vector;
  */
 public class GameMaster {
     private final GameLobby gameLobby;
-    private final List<VirtualView> observerV = new ArrayList<>();
+    private final ArrayList<VirtualView> observerV = new ArrayList<>();
 
 
     public GameMaster() {
@@ -95,7 +93,7 @@ public class GameMaster {
             // set the game status "waiting start"
             if (gameBoard.getPlayerNumber() == gameBoard.getPlayers().size())
                 gameBoard.setCurrentStatus(GameStatus.WAITINGSTART);
-            notify(gameId); //update(InetAddress ip, int gameId)
+            notify(gameId);
         }
     }
 
@@ -117,7 +115,7 @@ public class GameMaster {
      * @param gameId             game ID.
      * @param availableGodPowers all available powers.
      */
-    public void setAvailableGodPowers(int gameId, Vector<GodPower> availableGodPowers) {
+    public void setAvailableGodPowers(int gameId, ArrayList<GodPower> availableGodPowers) {
         for (GodPower godPower : availableGodPowers)
             gameLobby.getGameBoards().get(gameId).addAvailableGodPowers(godPower);
         gameLobby.getGameBoards().get(gameId).toNextPlayer();
@@ -133,7 +131,7 @@ public class GameMaster {
      */
     public void setPower4Player(int gameId, int playerId, GodPower godPower) {
         // chosen God power should be available
-        Vector<GodPower> availableGodPowers = gameLobby.getGameBoards().get(gameId).getAvailableGodPowers();
+        ArrayList<GodPower> availableGodPowers = gameLobby.getGameBoards().get(gameId).getAvailableGodPowers();
         if (availableGodPowers.contains(godPower)) {
             Player player = gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId);
             Cosplayer cosplayer = godPower.cosplay(player);
@@ -217,7 +215,7 @@ public class GameMaster {
      * @param direction direction
      */
     public void handleMove(int gameId, int playerId, int workerId, Direction direction) {
-        Vector<Direction> availableMoves =
+        ArrayList<Direction> availableMoves =
                 gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().getAvailableMoves(workerId);
         if (availableMoves.contains(direction)) {
             gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().move(workerId, direction);

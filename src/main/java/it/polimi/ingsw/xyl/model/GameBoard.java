@@ -1,6 +1,9 @@
 package it.polimi.ingsw.xyl.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * This class is the abstraction of A Santorini GAME,
@@ -10,18 +13,18 @@ import java.util.*;
  */
 public class GameBoard {
     private final int gameId;
-    private int playerNumber = 3;  // add default value in case any exception caused by not setting playerNumber
+    private int playerNumber = 3;
     private Player currentPlayer;
-    private final Map<Integer, Player> players;
+    private final HashMap<Integer, Player> players;
     private final IslandBoard islandBoard;
-    private final Vector<GodPower> availableGodPowers;
+    private final ArrayList<GodPower> availableGodPowers;
     private GameStatus currentStatus;
 
     public GameBoard(int gameId) {
         this.gameId = gameId;
         this.islandBoard = new IslandBoard();
         this.players = new HashMap<>();
-        this.availableGodPowers = new Vector<>();
+        this.availableGodPowers = new ArrayList<>();
     }
 
     public GameBoard(int gameId, int playerNumber, IslandBoard islandBoard) {
@@ -29,7 +32,7 @@ public class GameBoard {
         this.playerNumber = playerNumber;
         this.islandBoard = islandBoard;
         this.players = new HashMap<>();
-        this.availableGodPowers = new Vector<>();
+        this.availableGodPowers = new ArrayList<>();
     }
 
     public int getGameId() {
@@ -63,14 +66,15 @@ public class GameBoard {
 
     public void toNextPlayer(int playerId) {
         currentPlayer = players.get(playerId);
+        currentPlayer.getCosplayer().prepare();
     }
 
-    public Map<Integer, Player> getPlayers() {
+    public HashMap<Integer, Player> getPlayers() {
         return players;
     }
 
-    public Vector<String> getAllPlayerNames(){
-        Vector<String> names = new Vector<String>();
+    public ArrayList<String> getAllPlayerNames(){
+        ArrayList<String> names = new ArrayList<>();
         for (Map.Entry<Integer, Player> entry : players.entrySet()) {
             names.add(entry.getValue().getPlayerName());
         }
@@ -88,7 +92,7 @@ public class GameBoard {
         return islandBoard;
     }
 
-    public Vector<GodPower> getAvailableGodPowers() {
+    public ArrayList<GodPower> getAvailableGodPowers() {
         return availableGodPowers;
     }
 

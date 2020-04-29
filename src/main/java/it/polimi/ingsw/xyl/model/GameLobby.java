@@ -1,6 +1,7 @@
 package it.polimi.ingsw.xyl.model;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Vector;
 
 /**
  * This class represents a game lobby,
@@ -10,13 +11,14 @@ import java.util.*;
  */
 public class GameLobby {
     private final Vector<GameBoard> gameBoards;
-    private final Map<String,Integer> allPlayers = new HashMap<>(); //TODO: when a game end, delete relevant players
+    private final HashMap<String,Integer> allPlayers;
 
     public GameLobby() {
         gameBoards= new Vector<>();
+        allPlayers = new HashMap<>(); //TODO: when a game end, delete relevant players
     }
 
-    public Map<String,Integer> getAllPlayers() {
+    public HashMap<String,Integer> getAllPlayers() {
         return allPlayers;
     }
 

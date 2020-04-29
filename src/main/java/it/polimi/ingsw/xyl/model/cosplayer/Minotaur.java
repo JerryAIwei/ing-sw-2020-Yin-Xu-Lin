@@ -2,9 +2,10 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.Vector;
+
 
 
 /**
@@ -67,11 +68,11 @@ public class Minotaur extends Cosplayer {
      * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @return all available direction of the worker.
      */
-    public Vector<Direction> getAvailableMoves(int worker) {
+    public ArrayList<Direction> getAvailableMoves(int worker) {
         int originalPositionX = player.getWorkers()[worker].getPositionX();
         int originalPositionY = player.getWorkers()[worker].getPositionY();
         EnumSet<Direction> all = EnumSet.allOf(Direction.class);
-        Vector<Direction> minotaurAvailableMoves = new Vector<>(all);
+        ArrayList<Direction> minotaurAvailableMoves = new ArrayList<>(all);
 
         if (originalPositionX == 0) {
             minotaurAvailableMoves.remove(Direction.LEFT);

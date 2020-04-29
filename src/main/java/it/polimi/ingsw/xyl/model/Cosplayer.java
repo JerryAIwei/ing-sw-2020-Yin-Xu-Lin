@@ -1,8 +1,8 @@
 package it.polimi.ingsw.xyl.model;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.Vector;
 
 
 /**
@@ -147,8 +147,8 @@ public class Cosplayer {
             player.getCurrentGameBoard().setCurrentStatus(GameStatus.GAMEENDED);
         }
         boolean lose =
-                player.getCosplayer().getAvailableMoves(0).size() == 0
-                        && player.getCosplayer().getAvailableMoves(1).size() == 0;
+                player.getCosplayer().getAvailableMoves(0).isEmpty()
+                        && player.getCosplayer().getAvailableMoves(1).isEmpty();
         if (lose) {
             player.setCurrentStatus(PlayerStatus.LOSE);
             int ax = player.getWorkers()[0].getPositionX();
@@ -166,11 +166,11 @@ public class Cosplayer {
      * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @return all available direction of the worker.
      */
-    public Vector<Direction> getAvailableMoves(int worker) {
+    public ArrayList<Direction> getAvailableMoves(int worker) {
         int x = player.getWorkers()[worker].getPositionX();
         int y = player.getWorkers()[worker].getPositionY();
         EnumSet<Direction> all = EnumSet.allOf(Direction.class);
-        Vector<Direction> availableMoves = new Vector<>(all);
+        ArrayList<Direction> availableMoves = new ArrayList<>(all);
         // remove out of boundary
         if (x == 0) {
             availableMoves.remove(Direction.LEFT);
@@ -224,11 +224,11 @@ public class Cosplayer {
      * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @return all available direction of the worker.
      */
-    public Vector<Direction> getAvailableBuilds(int worker) {
+    public ArrayList<Direction> getAvailableBuilds(int worker) {
         int x = player.getWorkers()[worker].getPositionX();
         int y = player.getWorkers()[worker].getPositionY();
         EnumSet<Direction> all = EnumSet.allOf(Direction.class);
-        Vector<Direction> availableBuilds = new Vector<>(all);
+        ArrayList<Direction> availableBuilds = new ArrayList<>(all);
         // remove out of boundary
         if (x == 0) {
             availableBuilds.remove(Direction.LEFT);
