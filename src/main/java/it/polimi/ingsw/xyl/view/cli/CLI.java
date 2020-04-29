@@ -34,6 +34,7 @@ public class CLI extends Thread implements ViewInterface {
     private int workerInAction = -1;
     private VirtualView debugView = VirtualView.getSingleton();
     private GameController debugController = GameController.getSingleton();
+    private VirtualGame vGame;
 
     public static void main(String[] args) {
         System.out.println("new a cli");
@@ -63,7 +64,7 @@ public class CLI extends Thread implements ViewInterface {
      */
     @Override
     public void update(VirtualGame virtualGame) {
-
+        this.vGame = virtualGame;
         final GameStatus gameStatus = virtualGame.getGameStatus();
 
         islandBoardCLI.setMaps(virtualGame.getSpaces());
@@ -97,6 +98,7 @@ public class CLI extends Thread implements ViewInterface {
                 break;
             case WAITINGPLAYER:
                 islandBoardCLI.showPlayers();
+                System.out.println(ColorSetter.FG_BLUE.setColor("Please wait for other players join the game."));
                 break;
             case WAITINGSTART:
                 islandBoardCLI.showPlayers();
@@ -111,6 +113,8 @@ public class CLI extends Thread implements ViewInterface {
                 islandBoardCLI.showPlayers();
                 if (currentPlayerId == id)
                     playGame();
+                else
+                    System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for other player's operations."));
                 break;
             case GAMEENDED:
                 System.out.println("Game Over");
@@ -218,16 +222,17 @@ public class CLI extends Thread implements ViewInterface {
             int playerNum = game.getPlayerNumber();
             int currentNum = game.getCurrentPlayers().size();
             if (playerNum == currentNum) {
-                System.out.println(ColorSetter.FG_BLUE.setColor("==========game ID:" + game.getGameID() +
+                System.out.println(ColorSetter.FG_RED.setColor("==========game ID:" + game.getGameID() +
                         " (" + currentNum + "/" + playerNum + ")" + "=========="));
             } else {
-                System.out.println(ColorSetter.BG_GREEN.setColor("==========game ID:" + game.getGameID() +
+                System.out.println(ColorSetter.BG_BLUE.setColor("==========game ID:" + game.getGameID() +
                         " (" + currentNum + "/" + playerNum + ")" + "=========="));
             }
             Vector<String> players = game.getCurrentPlayers();
+            System.out.println("Players:");
             for (int i = 0; i < players.size(); i++)
-                System.out.println(i + ". " + players.get(i));
-            System.out.println();
+                System.out.print("\t" + players.get(i));
+            System.out.println("\n");
         }
         int input;
         do {
@@ -236,7 +241,7 @@ public class CLI extends Thread implements ViewInterface {
             System.out.println(ColorSetter.FG_BLUE.setColor("Input -1 to create a new game"));
             input = new Scanner(System.in).nextInt();
         } while (input < -1 || input >= games.size()
-                || (!games.isEmpty() && games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));
+                || (input != -1 && games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));
         if (input == -1) {
             sendMessage(new CreateNewGameMessage(userName));
         } else {
@@ -337,43 +342,51 @@ public class CLI extends Thread implements ViewInterface {
         sendMessage(new SetInitialWorkerPositionMessage(gameId, id, ax, ay, bx, by));
     }
 
-    private int chooseDirection() {
-        int direction;
+    private Direction chooseDirection(String action, int workerId) {
+        Vector<Direction> available = vGame.getVPlayers().get(id).getAvailable(action, workerId);
+        int directionInput;
         do {
             System.out.println
                     (ColorSetter.FG_BLUE.setColor("Please input number to select direction"));
-            for (int i = 0; i < Direction.values().length; i++) {
-                System.out.println(i + " " + Direction.values()[i].toSymbol() + " " + Direction.values()[i].toString());
+            for (int i = 0; i < available.size(); i++) {
+                System.out.println(i + " " + available.get(i).toSymbol() + " " + available.get(i).toString());
             }
-            direction = new Scanner(System.in).nextInt();
-        } while (false/*todo:check available*/);
-        return direction;
+            directionInput = new Scanner(System.in).nextInt();
+        } while (directionInput < 0 || directionInput >= available.size());
+        return available.get(directionInput);
     }
 
     private void move() {
-        if(workerInAction != -1)
-            System.out.println("You should move worker " + workerInAction + ".");
         int workerId;
-        do {
-            System.out.println
-                    (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to move"));
-            workerId = new Scanner(System.in).nextInt();
-        } while (workerId != 1 && workerId != 0);
-        int direction = chooseDirection();
+        if(workerInAction != -1) {
+            System.out.println(ColorSetter.FG_BLUE.setColor("You should use worker " + workerInAction + " to move."));
+            workerId = workerInAction;
+        }
+        else {
+            do {
+                System.out.println
+                        (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to move"));
+                workerId = new Scanner(System.in).nextInt();
+            } while (workerId != 1 && workerId != 0);
+        }
+        Direction direction = chooseDirection("Move",workerId);
         sendMessage(new MoveMessage
-                (gameId, id, workerId, Direction.values()[direction]));
+                (gameId, id, workerId, direction));
     }
 
     private void build() {
-        if(workerInAction != -1)
-            System.out.println("You should use worker " + workerInAction + " to build.");
-        int workerId;//todo:move and build is the same worker
-        do {
-            System.out.println
-                    (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to build"));
-            workerId = new Scanner(System.in).nextInt();
-        } while (workerId != 1 && workerId != 0);
-        int direction = chooseDirection();
+        int workerId;
+        if(workerInAction != -1) {
+            System.out.println(ColorSetter.FG_BLUE.setColor("You should use worker " + workerInAction + " to build."));
+            workerId = workerInAction;
+        }else {
+            do {
+                System.out.println
+                        (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to build"));
+                workerId = new Scanner(System.in).nextInt();
+            } while (workerId != 1 && workerId != 0);
+        }
+        Direction direction = chooseDirection("Build", workerId);
         boolean isDome = false;
         int input;
         //special for Atlas
@@ -389,7 +402,7 @@ public class CLI extends Thread implements ViewInterface {
 
 
         sendMessage(new BuildMessage
-                (gameId, id, workerId, Direction.values()[direction], isDome));
+                (gameId, id, workerId, direction, isDome));
 
     }
 
