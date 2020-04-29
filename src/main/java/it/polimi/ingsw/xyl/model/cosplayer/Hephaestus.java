@@ -2,6 +2,10 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Vector;
+
 
 /**
  * @author Lin Xin
@@ -31,37 +35,28 @@ public class Hephaestus extends Cosplayer {
                 IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
                 int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
                 int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-                int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-                boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
                 boolean noLevel3 =
                         currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.LEVEL3;
 
-                if (nextAction == Action.BUILD) {
-                    if (targetOccupiedBy == -1 && noDome && noLevel3) {
-                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                        firstBuildDirection = direction;
-                        buildWorker = worker;
-                        nextAction = Action.BUILDOREND;
-                    } else if (targetOccupiedBy == -1 && noDome) {
-                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                        firstBuildDirection = direction;
-                        nextAction = Action.MOVE;
-                        workerInAction = -1;
-                        currentGameBoard.toNextPlayer();
-                    } else {
-                        System.out.println("Chosen worker can't build at target space!");
-                    }
-                }else if(buildWorker == worker && firstBuildDirection == direction && noLevel3){
+                if (nextAction == Action.BUILD && super.getAvailableBuilds(worker).contains(direction) && noLevel3) {
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                    firstBuildDirection = direction;
+                    buildWorker = worker;
+                    nextAction = Action.BUILDOREND;
+                } else if (nextAction == Action.BUILD && super.getAvailableBuilds(worker).contains(direction)){
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                    nextAction = Action.MOVE;
+                    workerInAction = -1;
+                    currentGameBoard.toNextPlayer();
+                } else if (buildWorker == worker && firstBuildDirection == direction && noLevel3) {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                     currentGameBoard.toNextPlayer();
                     nextAction = Action.MOVE;
                     workerInAction = -1;
-                }
-                else{
+                } else {
                     System.out.println("Chosen worker can't build at target space!");
                 }
-            }
-            catch (Exception e){
+            }catch (Exception e) {
                 System.out.println("Array out of bounds");
                 throw e;
             }

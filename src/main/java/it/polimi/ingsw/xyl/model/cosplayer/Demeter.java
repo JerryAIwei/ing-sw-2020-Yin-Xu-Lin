@@ -33,18 +33,12 @@ public class Demeter extends Cosplayer {
                 IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
                 int targetPositionX = getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
                 int targetPositionY = getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-                int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-                boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
 
-                if (nextAction == Action.BUILD) {
-                    if (getAvailableBuilds(worker).contains(direction)) {
-                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                        buildWorker = worker;
-                        firstBuildDirection = direction;
-                        nextAction = Action.BUILDOREND;
-                    } else {
-                        System.out.println("Chosen worker can't build at target space!");
-                    }
+                if (nextAction == Action.BUILD && getAvailableBuilds(worker).contains(direction)) {
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                    buildWorker = worker;
+                    firstBuildDirection = direction;
+                    nextAction = Action.BUILDOREND;
                 } else if (buildWorker == worker && getAvailableBuilds(worker).contains(direction)) {
                     currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                     currentGameBoard.toNextPlayer();
