@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Vector;
 
 public class VirtualGame extends Message {
-    public class VPlayer implements Serializable{
-        private int playerId;
-        private String playerName;
+    public class VPlayer implements Serializable {
+        private final int playerId;
+        private final String playerName;
         private String godPower;
         private String nextAction;
         private int workerInAction = -1;
@@ -20,11 +20,9 @@ public class VirtualGame extends Message {
         private int workerAY;
         private int workerBX;
         private int workerBY;
-        private Vector<Direction> workerAAvailableMoves = new Vector<>();
-        private Vector<Direction> workerBAvailableMoves = new Vector<>();
+        private final Map<String, Vector<Direction>> availableMovesAndBuilds = new HashMap<>();
 
-
-        VPlayer(int playerId, String playerName){
+        VPlayer(int playerId, String playerName) {
             this.playerId = playerId;
             this.playerName = playerName;
         }
@@ -41,7 +39,7 @@ public class VirtualGame extends Message {
             return nextAction;
         }
 
-        public int getWorkerInAction(){
+        public int getWorkerInAction() {
             return workerInAction;
         }
 
@@ -49,26 +47,22 @@ public class VirtualGame extends Message {
             return playerStatus;
         }
 
-        public Vector<Direction> getAvailableMoves(int worker) {
-            if (worker == 0)
-                return workerAAvailableMoves;
-            else if (worker ==1)
-                return workerBAvailableMoves;
-            else
-                return new Vector<>();
+        public Vector<Direction> getAvailable(String action, int worker) {
+            return availableMovesAndBuilds.get(action + worker);
         }
     }
 
-    private int gameId;
-    private GameStatus gameStatus ;//= GameStatus.WAITINGINIT;
-    private Map<Integer, VPlayer> vPlayers = new HashMap<>();
+    private final int gameId;
+    private GameStatus gameStatus;
+    private final Map<Integer, VPlayer> vPlayers = new HashMap<>();
     private Space[][] spaces = new Space[5][5];
-    private Vector<GodPower> availableGodPowers = new Vector<>();
+    private final Vector<GodPower> availableGodPowers = new Vector<>();
     private int currentPlayerId;
 
-    public VirtualGame(int gameId){
+    public VirtualGame(int gameId) {
         this.gameId = gameId;
     }
+
     public int getGameId() {
         return gameId;
     }
@@ -86,27 +80,29 @@ public class VirtualGame extends Message {
     }
 
     public void updateVPlayers(Collection<Player> players) {
-        for(Player player:players) {
+        for (Player player : players) {
             if (vPlayers.get(player.getPlayerId()) != null) {
                 VPlayer tempVPlayer = vPlayers.get(player.getPlayerId());
                 tempVPlayer.playerStatus = player.getCurrentStatus();
                 tempVPlayer.godPower = player.getCosplayer().getGodPower().toString();
-                if(player.getCosplayer()!=null)
+                if (player.getCosplayer() != null)
                     tempVPlayer.nextAction = player.getCosplayer().getNextAction();
-                if(player.getCurrentStatus() == PlayerStatus.WORKERPREPARED) {
+                if (player.getCurrentStatus() == PlayerStatus.WORKERPREPARED) {
                     tempVPlayer.workerAX = player.getWorkers()[0].getPositionX();
                     tempVPlayer.workerAY = player.getWorkers()[0].getPositionY();
                     tempVPlayer.workerBX = player.getWorkers()[1].getPositionX();
                     tempVPlayer.workerBY = player.getWorkers()[1].getPositionY();
                     tempVPlayer.workerInAction = player.getCosplayer().getWorkerInAction();
-                    tempVPlayer.workerAAvailableMoves = player.getCosplayer().getAvailableMoves(0);
-                    tempVPlayer.workerBAvailableMoves = player.getCosplayer().getAvailableMoves(1);
+                    tempVPlayer.availableMovesAndBuilds.put("Move0", player.getCosplayer().getAvailableMoves(0));
+                    tempVPlayer.availableMovesAndBuilds.put("Move1", player.getCosplayer().getAvailableMoves(1));
+                    tempVPlayer.availableMovesAndBuilds.put("Build0", player.getCosplayer().getAvailableBuilds(0));
+                    tempVPlayer.availableMovesAndBuilds.put("Build1", player.getCosplayer().getAvailableBuilds(1));
                 }
             } else {
                 VPlayer tempVPlayer = new VPlayer(player.getPlayerId(), player.getPlayerName());
                 tempVPlayer.playerStatus = player.getCurrentStatus();
                 tempVPlayer.godPower = player.getCosplayer().getGodPower().toString();
-                vPlayers.put(tempVPlayer.playerId,tempVPlayer);
+                vPlayers.put(tempVPlayer.playerId, tempVPlayer);
             }
         }
     }
@@ -124,8 +120,8 @@ public class VirtualGame extends Message {
     }
 
     public void setAvailableGodPowers(Vector<GodPower> availableGodPowers) {
-
-            this.availableGodPowers = (Vector<GodPower>)availableGodPowers.clone();
+        this.availableGodPowers.removeAllElements();
+        this.availableGodPowers.addAll(availableGodPowers);
     }
 
     public int getCurrentPlayerId() {
@@ -137,17 +133,17 @@ public class VirtualGame extends Message {
     }
 
     // only for test
-    public String getFirstPlayerName(){
+    public String getFirstPlayerName() {
         return vPlayers.get(0).playerName;
     }
 
     // only for test
-    public String getCurrentPlayerAction(){
+    public String getCurrentPlayerAction() {
         return vPlayers.get(currentPlayerId).nextAction;
     }
 
     // only for test
-    public int getCurrentPlayerWorkerInAction(){
+    public int getCurrentPlayerWorkerInAction() {
         return vPlayers.get(currentPlayerId).workerInAction;
     }
 }

@@ -49,6 +49,8 @@ public class Prometheus extends Cosplayer {
                     throw new RuntimeException("You shouldn't have different workers to operate.");
                 }
             }
+        } else {
+            System.out.println("Your move is not available!");
         }
 
     }
@@ -68,21 +70,15 @@ public class Prometheus extends Cosplayer {
             IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
             int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
             int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-            int targetOccupiedBy = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].isOccupiedBy();
-            boolean noDome = currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.DOME;
-            if (targetOccupiedBy == -1 && noDome) {
-                if (nextAction == Action.BUILD) {
-                    if(worker == workerInAction) {
-                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                        nextAction = Action.MOVEORBUILD;
-                        workerInAction = -1;
-                        currentGameBoard.toNextPlayer();
-                    }
-                } else if (nextAction == Action.MOVEORBUILD) {
-                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    workerInAction = worker;
-                    nextAction = Action.MOVE;
-                }
+            if (getAvailableBuilds(worker).contains(direction) && nextAction == Action.BUILD && worker == workerInAction) {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                nextAction = Action.MOVEORBUILD;
+                workerInAction = -1;
+                currentGameBoard.toNextPlayer();
+            } else if (getAvailableBuilds(worker).contains(direction) && nextAction == Action.MOVEORBUILD) {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                workerInAction = worker;
+                nextAction = Action.MOVE;
             } else {
                 System.out.println("Chosen worker can't build at target space!");
             }

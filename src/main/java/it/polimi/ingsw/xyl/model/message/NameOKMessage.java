@@ -2,6 +2,7 @@ package it.polimi.ingsw.xyl.model.message;
 
 import it.polimi.ingsw.xyl.model.GameBoard;
 import it.polimi.ingsw.xyl.model.GameLobby;
+import it.polimi.ingsw.xyl.model.GameStatus;
 import it.polimi.ingsw.xyl.model.Player;
 
 import java.io.Serializable;
@@ -9,9 +10,9 @@ import java.util.Vector;
 
 public class NameOKMessage extends Message {
     public class Games implements Serializable {
-        private int gameID;
-        private int playerNumber;
-        private Vector<String> currentPlayers = new Vector<>();
+        private final int gameID;
+        private final int playerNumber;
+        private final Vector<String> currentPlayers = new Vector<>();
 
         public Games(int id, int num){
             gameID = id;
@@ -30,15 +31,17 @@ public class NameOKMessage extends Message {
             return currentPlayers;
         }
     }
-    private Vector<Games> games = new Vector<>();
+    private final Vector<Games> games = new Vector<>();
 
     public NameOKMessage(GameLobby gameLobby){
         for(GameBoard gb:gameLobby.getGameBoards()){
-            Games game = new Games(gb.getGameId(),gb.getPlayerNumber());
-            for(Player player:gb.getPlayers().values()){
-                game.currentPlayers.add(player.getPlayerName());
+            if (gb.getCurrentStatus() != GameStatus.WAITINGINIT ) {
+                Games game = new Games(gb.getGameId(), gb.getPlayerNumber());
+                for (Player player : gb.getPlayers().values()) {
+                    game.currentPlayers.add(player.getPlayerName());
+                }
+                games.add(game);
             }
-            games.add(game);
         }
     }
 
