@@ -34,7 +34,7 @@ public class ApolloMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[1][0].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void ApolloMoveTest_playerCWorkerAMoveUp_dome_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(DOME);
         playerC.getCosplayer().move(0, UP);
@@ -44,7 +44,7 @@ public class ApolloMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void ApolloMoveTest_playerCWorkerAMoveUp_level2_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
         playerC.getCosplayer().move(0, UP);
@@ -54,7 +54,7 @@ public class ApolloMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10); //playerC's workerA
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void ApolloMoveTest_playerCWorkerA_MoveRight_affectedByAthena_noLevelUp_notAllowed() {
         gameBoard.getIslandBoard().getSpaces()[1][0].setLevel(LEVEL1);
         gameBoard.getIslandBoard().setNoLevelUp(true);
@@ -88,7 +88,7 @@ public class ApolloMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[1][2].isOccupiedBy(),playerC.getPlayerId() * 10 + 1); //playerC's workerB
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void ApolloMoveTest_playerCWorkerB_MoveRight_affectedByAthena_noLevelUp_notAllowed() {
         gameBoard.getIslandBoard().getSpaces()[2][1].setLevel(LEVEL1);
         gameBoard.getIslandBoard().setNoLevelUp(true);

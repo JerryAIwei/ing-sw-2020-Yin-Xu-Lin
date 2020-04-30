@@ -18,6 +18,7 @@ public class Athena extends Cosplayer {
         super.godPower = GodPower.ATHENA;
     }
 
+    @Override
     public void prepare(){
         player.getCurrentGameBoard().getIslandBoard().setNoLevelUp(false);
         workerInAction = -1;
@@ -30,6 +31,7 @@ public class Athena extends Cosplayer {
      * @param worker    '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      */
+    @Override
     public void move(int worker, Direction direction) {
         if (getAvailableMoves(worker).contains(direction)) {
             int currentX = player.getWorkers()[worker].getPositionX();
@@ -48,6 +50,7 @@ public class Athena extends Cosplayer {
             }
         } else {
             System.out.println("Your move is not available!");
+            throw new RuntimeException("Move not available.");
         }
     }
 }

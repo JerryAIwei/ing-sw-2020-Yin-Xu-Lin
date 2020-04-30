@@ -76,6 +76,7 @@ public class Cosplayer {
             checkWin();
         } else {
             System.out.println("Your move is not available!");
+            throw new RuntimeException("Move not available.");
         }
     }
 
@@ -87,30 +88,21 @@ public class Cosplayer {
      * @param buildDome whether build dome directly (only for Atlas).
      */
     public void build(int worker, Direction direction, boolean buildDome) {
-        if (worker == workerInAction){
-            try {
-                GameBoard currentGameBoard = player.getCurrentGameBoard();
-                IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-                int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-                int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-                if (getAvailableBuilds(worker).contains(direction)) {
-                    // increase the level of the target space
-                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    // change currentPlayer after finish building
-                    currentGameBoard.toNextPlayer();
-                    // update nextAction and workerInAction
-                    nextAction = Action.MOVE;
-                    workerInAction = -1;
-                } else {
-                    System.out.println("Chosen worker can't build at target space!");
-                }
-            } catch (Exception e) {
-                System.out.println("Array out of bounds");
-                throw e;
-              }
-        }else{
-            System.out.println("You shouldn't have different workers to operate.");
-            throw new RuntimeException("You shouldn't have different workers to operate.");
+        if (worker == workerInAction && getAvailableBuilds(worker).contains(direction)) {
+            GameBoard currentGameBoard = player.getCurrentGameBoard();
+            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
+            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            // increase the level of the target space
+            currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+            // change currentPlayer after finish building
+            currentGameBoard.toNextPlayer();
+            // update nextAction and workerInAction
+            nextAction = Action.MOVE;
+            workerInAction = -1;
+        } else {
+            System.out.println("Your build is not available!");
+            throw new RuntimeException("Build not available.");
         }
     }
 
@@ -160,6 +152,45 @@ public class Cosplayer {
         }
     }
 
+    protected ArrayList<Direction> getAvailable(int x, int y){
+        EnumSet<Direction> all = EnumSet.allOf(Direction.class);
+        ArrayList<Direction> available = new ArrayList<>(all);
+        if (x == 0) {
+            available.remove(Direction.LEFT);
+            available.remove(Direction.UPLEFT);
+            available.remove(Direction.DOWNLEFT);
+        }
+        if (x == 4) {
+            available.remove(Direction.RIGHT);
+            available.remove(Direction.UPRIGHT);
+            available.remove(Direction.DOWNRIGHT);
+        }
+        if (y == 0) {
+            available.remove(Direction.DOWN);
+            available.remove(Direction.DOWNLEFT);
+            available.remove(Direction.DOWNRIGHT);
+        }
+        if (y == 4) {
+            available.remove(Direction.UP);
+            available.remove(Direction.UPLEFT);
+            available.remove(Direction.UPRIGHT);
+        }
+        Iterator<Direction> iterator = available.iterator();
+        Direction a;
+        Space targetSpace;
+        while (iterator.hasNext()) {
+            a = iterator.next();
+            targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
+                    [x + a.toMarginalPosition()[0]]
+                    [y + a.toMarginalPosition()[1]];
+            // remove occupied by by a dome
+            if (targetSpace.getLevel() == Level.DOME) {
+                iterator.remove();
+            }
+        }
+        return available;
+    }
+
     /**
      * get all available move directions of a chosen worker
      *
@@ -169,45 +200,22 @@ public class Cosplayer {
     public ArrayList<Direction> getAvailableMoves(int worker) {
         int x = player.getWorkers()[worker].getPositionX();
         int y = player.getWorkers()[worker].getPositionY();
-        EnumSet<Direction> all = EnumSet.allOf(Direction.class);
-        ArrayList<Direction> availableMoves = new ArrayList<>(all);
-        // remove out of boundary
-        if (x == 0) {
-            availableMoves.remove(Direction.LEFT);
-            availableMoves.remove(Direction.UPLEFT);
-            availableMoves.remove(Direction.DOWNLEFT);
-        }
-        if (x == 4) {
-            availableMoves.remove(Direction.RIGHT);
-            availableMoves.remove(Direction.UPRIGHT);
-            availableMoves.remove(Direction.DOWNRIGHT);
-        }
-        if (y == 0) {
-            availableMoves.remove(Direction.DOWN);
-            availableMoves.remove(Direction.DOWNLEFT);
-            availableMoves.remove(Direction.DOWNRIGHT);
-        }
-        if (y == 4) {
-            availableMoves.remove(Direction.UP);
-            availableMoves.remove(Direction.UPLEFT);
-            availableMoves.remove(Direction.UPRIGHT);
-        }
+        ArrayList<Direction> availableMoves = getAvailable(x,y);
         Iterator<Direction> iterator = availableMoves.iterator();
+        Direction a;
+        Space targetSpace;
+        Space currentSpace;
         while (iterator.hasNext()) {
-            Direction a = iterator.next();
-            Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
+            a = iterator.next();
+            targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
                     [x + a.toMarginalPosition()[0]]
                     [y + a.toMarginalPosition()[1]];
-            // remove occupied by another worker or by a dome
-            if (targetSpace.isOccupiedBy() != -1 || targetSpace.getLevel() == Level.DOME) {
+            // remove occupied by another worker
+            if (targetSpace.isOccupiedBy() != -1) {
                 iterator.remove();
                 continue;
             }
-
-            Space currentSpace =
-                    player.getCurrentGameBoard().getIslandBoard().getSpaces()[player.getWorkers()[worker]
-                            .getPositionX()][player.getWorkers()[worker].getPositionY()];
-
+            currentSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()[x][y];
             int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();
             boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoLevelUp();
             // remove relative level not allowed
@@ -227,37 +235,17 @@ public class Cosplayer {
     public ArrayList<Direction> getAvailableBuilds(int worker) {
         int x = player.getWorkers()[worker].getPositionX();
         int y = player.getWorkers()[worker].getPositionY();
-        EnumSet<Direction> all = EnumSet.allOf(Direction.class);
-        ArrayList<Direction> availableBuilds = new ArrayList<>(all);
-        // remove out of boundary
-        if (x == 0) {
-            availableBuilds.remove(Direction.LEFT);
-            availableBuilds.remove(Direction.UPLEFT);
-            availableBuilds.remove(Direction.DOWNLEFT);
-        }
-        if (x == 4) {
-            availableBuilds.remove(Direction.RIGHT);
-            availableBuilds.remove(Direction.UPRIGHT);
-            availableBuilds.remove(Direction.DOWNRIGHT);
-        }
-        if (y == 0) {
-            availableBuilds.remove(Direction.DOWN);
-            availableBuilds.remove(Direction.DOWNLEFT);
-            availableBuilds.remove(Direction.DOWNRIGHT);
-        }
-        if (y == 4) {
-            availableBuilds.remove(Direction.UP);
-            availableBuilds.remove(Direction.UPLEFT);
-            availableBuilds.remove(Direction.UPRIGHT);
-        }
+        ArrayList<Direction> availableBuilds = getAvailable(x,y);
         Iterator<Direction> iterator = availableBuilds.iterator();
+        Direction a;
+        Space targetSpace;
         while (iterator.hasNext()) {
-            Direction a = iterator.next();
-            Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
+            a = iterator.next();
+            targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
                     [x + a.toMarginalPosition()[0]]
                     [y + a.toMarginalPosition()[1]];
-            // remove occupied by another worker or by a dome
-            if (targetSpace.isOccupiedBy() != -1 || targetSpace.getLevel() == Level.DOME) {
+            // remove occupied by another worker
+            if (targetSpace.isOccupiedBy() != -1) {
                 iterator.remove();
             }
         }

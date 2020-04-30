@@ -16,6 +16,7 @@ public class Demeter extends Cosplayer {
         super(player);
         super.godPower = GodPower.DEMETER;
     }
+
     /**
      * Demeter's build: worker may build one additional time,
      * but not on the same space.
@@ -24,39 +25,31 @@ public class Demeter extends Cosplayer {
      * @param direction see Direction class.
      * @param buildDome whether build dome directly (only for Atlas).
      */
+    @Override
     public void build(int worker, Direction direction, boolean buildDome){
-        if (worker == workerInAction){
-            try {
-                GameBoard currentGameBoard = getPlayer().getCurrentGameBoard();
-                IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-                int targetPositionX = getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-                int targetPositionY = getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-
-                if (nextAction == Action.BUILD && getAvailableBuilds(worker).contains(direction)) {
-                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    buildWorker = worker;
-                    firstBuildDirection = direction;
-                    nextAction = Action.BUILDOREND;
-                } else if (buildWorker == worker && getAvailableBuilds(worker).contains(direction)) {
-                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    currentGameBoard.toNextPlayer();
-                    nextAction = Action.MOVE;
-                    workerInAction = -1;
-                } else {
-                    System.out.println("Chosen worker can't build at target space!");
-                }
-            }
-            catch (Exception e){
-                System.out.println("Array out of bounds");
-                throw e;
+        if (worker == workerInAction && getAvailableBuilds(worker).contains(direction)){
+            GameBoard currentGameBoard = getPlayer().getCurrentGameBoard();
+            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
+            int targetPositionX = getPlayer().getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = getPlayer().getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            if (nextAction == Action.BUILD) {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                buildWorker = worker;
+                firstBuildDirection = direction;
+                nextAction = Action.BUILDOREND;
+            } else if (buildWorker == worker) {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                currentGameBoard.toNextPlayer();
+                nextAction = Action.MOVE;
+                workerInAction = -1;
             }
         }else{
-            System.out.println("You shouldn't have different workers to operate.");
-            throw new RuntimeException("You shouldn't have different workers to operate.");
+            System.out.println("Your build is not available!");
+            throw new RuntimeException("Build not available.");
         }
     }
 
-
+    @Override
     public ArrayList<Direction> getAvailableBuilds(int worker) {
         ArrayList<Direction> availableBuilds = super.getAvailableBuilds(worker);
         if (nextAction == Action.BUILDOREND)

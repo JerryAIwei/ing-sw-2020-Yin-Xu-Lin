@@ -28,6 +28,7 @@ public class Minotaur extends Cosplayer {
      * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      */
+    @Override
     public void move(int worker, Direction direction) {
         if (getAvailableMoves(worker).contains(direction)) {
             IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();
@@ -58,8 +59,10 @@ public class Minotaur extends Cosplayer {
             }
             // if target space is not occupied, it's just a Civilian move.
             super.move(worker, direction); // super.move will change nextAction and checkWin.
-        }else
+        }else {
             System.out.println("Your move is not available!");
+            throw new RuntimeException("Move not available.");
+        }
     }
 
     /**
@@ -68,41 +71,22 @@ public class Minotaur extends Cosplayer {
      * @param worker '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @return all available direction of the worker.
      */
+    @Override
     public ArrayList<Direction> getAvailableMoves(int worker) {
-        int originalPositionX = player.getWorkers()[worker].getPositionX();
-        int originalPositionY = player.getWorkers()[worker].getPositionY();
-        EnumSet<Direction> all = EnumSet.allOf(Direction.class);
-        ArrayList<Direction> minotaurAvailableMoves = new ArrayList<>(all);
-
-        if (originalPositionX == 0) {
-            minotaurAvailableMoves.remove(Direction.LEFT);
-            minotaurAvailableMoves.remove(Direction.UPLEFT);
-            minotaurAvailableMoves.remove(Direction.DOWNLEFT);
-        }
-        if (originalPositionX == 4) {
-            minotaurAvailableMoves.remove(Direction.RIGHT);
-            minotaurAvailableMoves.remove(Direction.UPRIGHT);
-            minotaurAvailableMoves.remove(Direction.DOWNRIGHT);
-        }
-        if (originalPositionY == 0) {
-            minotaurAvailableMoves.remove(Direction.DOWN);
-            minotaurAvailableMoves.remove(Direction.DOWNLEFT);
-            minotaurAvailableMoves.remove(Direction.DOWNRIGHT);
-        }
-        if (originalPositionY == 4) {
-            minotaurAvailableMoves.remove(Direction.UP);
-            minotaurAvailableMoves.remove(Direction.UPLEFT);
-            minotaurAvailableMoves.remove(Direction.UPRIGHT);
-        }
+        int x = player.getWorkers()[worker].getPositionX();
+        int y = player.getWorkers()[worker].getPositionY();
+        ArrayList<Direction> minotaurAvailableMoves = getAvailable(x,y);
         Iterator<Direction> iterator = minotaurAvailableMoves.iterator();
+        Direction a;
+        Space targetSpace;
+        Space currentSpace;
         while (iterator.hasNext()) {
-            Direction a = iterator.next();
-            Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
-                    [originalPositionX + a.toMarginalPosition()[0]]
-                    [originalPositionY+ a.toMarginalPosition()[1]];
+            a = iterator.next();
+            targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
+                    [x + a.toMarginalPosition()[0]]
+                    [y+ a.toMarginalPosition()[1]];
             // remove occupied by a dome or Minotaur's own worker
-            if (targetSpace.getLevel() == Level.DOME ||
-                    targetSpace.isOccupiedBy() == (player.getPlayerId() * 10 + 1) ||
+            if (targetSpace.isOccupiedBy() == (player.getPlayerId() * 10 + 1) ||
                     targetSpace.isOccupiedBy() == (player.getPlayerId() * 10)) {
                 iterator.remove();
                 continue;
@@ -111,8 +95,8 @@ public class Minotaur extends Cosplayer {
             if(targetSpace.isOccupiedBy() != -1
                     && targetSpace.isOccupiedBy() != (player.getPlayerId() * 10 + 1)
                     &&targetSpace.isOccupiedBy() != (player.getPlayerId() * 10)){
-               int backwardsPositionX = originalPositionX + 2 * a.toMarginalPosition()[0];
-               int backwardsPositionY = originalPositionY+ 2 * a.toMarginalPosition()[1];
+               int backwardsPositionX = x + 2 * a.toMarginalPosition()[0];
+               int backwardsPositionY = y+ 2 * a.toMarginalPosition()[1];
                if(backwardsPositionX < 0 || backwardsPositionY < 0 ){
                    // remove out of island board if apply power
                    iterator.remove();
@@ -130,8 +114,8 @@ public class Minotaur extends Cosplayer {
                }
             }
 
-            Space currentSpace =
-                    player.getCurrentGameBoard().getIslandBoard().getSpaces()[originalPositionX][originalPositionY];
+            currentSpace =
+                    player.getCurrentGameBoard().getIslandBoard().getSpaces()[x][y];
 
             int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();
             boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoLevelUp();

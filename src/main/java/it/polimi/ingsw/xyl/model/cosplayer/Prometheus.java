@@ -23,6 +23,7 @@ public class Prometheus extends Cosplayer {
         nextAction = Action.MOVEORBUILD;
     }
 
+    @Override
     public void prepare(){
         nextAction = Action.MOVEORBUILD;
         workerInAction = -1;
@@ -36,23 +37,17 @@ public class Prometheus extends Cosplayer {
      * @param worker    '0' or '1' represent two workers (we call them worker A and B) of a player.
      * @param direction see Direction class.
      */
+    @Override
     public void move(int worker, Direction direction) {
-        if (getAvailableMoves(worker).contains(direction)) {
-            if (nextAction == Action.MOVEORBUILD) {
-                super.move(worker, direction);
-                //  nextAction = Action.BUILD; // super.move did
-            } else if (nextAction == Action.MOVE) {
-                if (worker == workerInAction)
-                    super.move(worker, direction);
-                else{
-                    System.out.println("You shouldn't have different workers to operate.");
-                    throw new RuntimeException("You shouldn't have different workers to operate.");
-                }
-            }
-        } else {
+        if (getAvailableMoves(worker).contains(direction)
+                && (nextAction == Action.MOVEORBUILD
+                || (nextAction == Action.MOVE && worker == workerInAction))) {
+            super.move(worker, direction);
+            //  nextAction = Action.BUILD; // super.move did
+        }else {
             System.out.println("Your move is not available!");
+            throw new RuntimeException("Move not available.");
         }
-
     }
 
     /**
@@ -64,40 +59,46 @@ public class Prometheus extends Cosplayer {
      * @param direction see Direction class.
      * @param buildDome whether build dome directly (only for Atlas).
      */
+    @Override
     public void build(int worker, Direction direction, boolean buildDome) {
-        try {
+        if (getAvailableBuilds(worker).contains(direction)) {
             GameBoard currentGameBoard = player.getCurrentGameBoard();
             IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
             int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
             int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-            if (getAvailableBuilds(worker).contains(direction) && nextAction == Action.BUILD && worker == workerInAction) {
+            if (nextAction == Action.BUILD && worker == workerInAction) {
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 nextAction = Action.MOVEORBUILD;
                 workerInAction = -1;
                 currentGameBoard.toNextPlayer();
-            } else if (getAvailableBuilds(worker).contains(direction) && nextAction == Action.MOVEORBUILD) {
+            } else if (nextAction == Action.MOVEORBUILD) {
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 workerInAction = worker;
                 nextAction = Action.MOVE;
             } else {
-                System.out.println("Chosen worker can't build at target space!");
+                System.out.println("Your build is not available!");
+                throw new RuntimeException("Build not available.");
             }
-        } catch (Exception e) {
-            System.out.println("Array out of bounds");
-            throw e;
+        }else{
+            System.out.println("Your build is not available!");
+            throw new RuntimeException("Build not available.");
         }
     }
 
+    @Override
     public ArrayList<Direction> getAvailableMoves(int worker) {
         ArrayList<Direction> availableMoves = super.getAvailableMoves(worker);
         if (nextAction == Action.MOVE) {
             Iterator<Direction> iterator = availableMoves.iterator();
+            Direction a;
+            Space currentSpace;
+            Space targetSpace;
             while (iterator.hasNext()) {
-                Direction a = iterator.next();
-                Space currentSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
+                a = iterator.next();
+                currentSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
                         [player.getWorkers()[worker].getPositionX()]
                         [player.getWorkers()[worker].getPositionY()];
-                Space targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
+                targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()
                         [player.getWorkers()[worker].getPositionX() + a.toMarginalPosition()[0]]
                         [player.getWorkers()[worker].getPositionY() + a.toMarginalPosition()[1]];
                 int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();

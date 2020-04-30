@@ -13,6 +13,7 @@ public class Pan extends Cosplayer {
     /**
      * Pan will win if the worker moves down two or more levels
      */
+    @Override
     public void checkWin() {
         IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();
 
@@ -41,8 +42,8 @@ public class Pan extends Cosplayer {
 
         /* lose will keep same as Civilian Mod */
         boolean lose =
-                player.getCosplayer().getAvailableMoves(0).size() == 0
-                        && player.getCosplayer().getAvailableMoves(1).size() == 0;
+                player.getCosplayer().getAvailableMoves(0).isEmpty()
+                        && player.getCosplayer().getAvailableMoves(1).isEmpty();
         if (lose) {
             player.setCurrentStatus(PlayerStatus.LOSE);
             int ax = player.getWorkers()[0].getPositionX();

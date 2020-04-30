@@ -63,7 +63,7 @@ public class AthenaSetOpponentPlayersNoMoveUpTest extends GodCosplayerTest {
         assertEquals(islandBoard.getSpaces()[1][0].isOccupiedBy(), playerC.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void AthenaSetOpponentPlayersNoMoveUpTest_playerCWorkerAMoveLeft_notAllowed() {
         playerC.getCosplayer().move(0, LEFT);
         assertEquals(playerC.getWorkers()[0].getPositionX(), 0);

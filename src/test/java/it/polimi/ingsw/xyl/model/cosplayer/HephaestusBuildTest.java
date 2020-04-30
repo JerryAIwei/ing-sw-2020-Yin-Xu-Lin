@@ -39,7 +39,7 @@ public class HephaestusBuildTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[2][0].getLevel(),LEVEL2);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void HephaestusBuildTest_playerCWorkerBBuildRight_occupied_0_0_notAllowed(){
         playerC.getCosplayer().move(1, DOWN);
         playerC.getCosplayer().build(1, LEFT, false);
@@ -57,7 +57,7 @@ public class HephaestusBuildTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[2][0].getLevel(),LEVEL3);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void HephaestusBuildTest_playerCWorkerABuildRight_usePowerButDome_notAllowed(){
         playerC.getCosplayer().move(0, RIGHT);
         islandBoard.getSpaces()[2][0].setLevel(LEVEL2);
@@ -76,7 +76,7 @@ public class HephaestusBuildTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[0][1].getLevel(),GROUND);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void HephaestusBuildTest_playerCWorkerABuildRightThenBuildLeft__notAllowed(){
         playerC.getCosplayer().move(0, RIGHT);
         islandBoard.getSpaces()[2][0].setLevel(LEVEL1);
