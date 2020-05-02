@@ -40,7 +40,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(islandBoard.getSpaces()[3][2].getLevel(), LEVEL1);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_MoveUp_BuildLeft_Occupied_notAllowed() {
         playerD.getCosplayer().move(0, UP);
         assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
@@ -52,7 +52,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(islandBoard.getSpaces()[2][3].getLevel(), GROUND);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_MoveLeft_Occupied_notAllowed() {
         playerD.getCosplayer().move(0, LEFT);
         assertEquals(playerD.getWorkers()[0].getPositionX(), 2);
@@ -61,7 +61,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), playerD.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_MoveRight_affectedByAthena_noLevelUp_notAllowed() {
         gameBoard.getIslandBoard().getSpaces()[3][1].setLevel(LEVEL1);
         gameBoard.getIslandBoard().setNoLevelUp(true);
@@ -88,14 +88,14 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(), LEVEL1);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_BuildRight_Dome_notAllowed() {
         islandBoard.getSpaces()[3][1].setLevel(DOME);
         playerD.getCosplayer().build(0, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[3][1].getLevel(), DOME);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_BuildUp_MoveUp_levelUp_notAllowed() {
         playerD.getCosplayer().build(0, UP, false);
         assertEquals(islandBoard.getSpaces()[2][2].getLevel(), LEVEL1);
@@ -108,7 +108,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(islandBoard.getSpaces()[2][1].isOccupiedBy(), playerD.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_BuildRight_MoveRight_UpOneMoreLevel_notAllowed() {
         playerD.getCosplayer().build(0, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[3][1].getLevel(), LEVEL1);
@@ -121,7 +121,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(playerD.getCosplayer().getNextAction(),"MOVE");
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_BuildUp_MoveLeft_Occupied_notAllowed() {
         playerD.getCosplayer().build(0, UP, false);
         assertEquals(islandBoard.getSpaces()[2][2].getLevel(), LEVEL1);
@@ -134,7 +134,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(playerD.getCosplayer().getNextAction(),"MOVE");
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_BuildRight_MoveRight_Dome_notAllowed() {
         islandBoard.getSpaces()[3][1].setLevel(LEVEL3);
         playerD.getCosplayer().build(0, RIGHT, false);
@@ -148,7 +148,7 @@ public class PrometheusMoveBuildTest extends GodCosplayerTest {
         assertEquals(playerD.getCosplayer().getNextAction(),"MOVE");
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void PrometheusMoveBuildTest_playerDWorkerA_BuildUp_MoveRight_BuildUpLeft_Dome_notAllowed() {
         islandBoard.getSpaces()[2][2].setLevel(LEVEL3);
         playerD.getCosplayer().build(0, UP, false);

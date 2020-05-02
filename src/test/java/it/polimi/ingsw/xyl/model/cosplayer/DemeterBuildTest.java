@@ -34,7 +34,7 @@ public class DemeterBuildTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void DemeterBuildTest_playerCWorkerBBuildRight_occupied_2_1_notAllowed(){
         playerC.getCosplayer().only_for_test_setWorkerInAction(1);
         playerC.getCosplayer().build(1, RIGHT, false);
@@ -53,7 +53,7 @@ public class DemeterBuildTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[0][0].getLevel(),LEVEL1);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void DemeterBuildTest_playerCWorkerABuildRightThenBuildRight_notAllowed(){
         playerC.getCosplayer().move(0, RIGHT);
         islandBoard.getSpaces()[2][0].setLevel(LEVEL1);

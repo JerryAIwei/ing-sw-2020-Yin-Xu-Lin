@@ -7,8 +7,8 @@ import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
-import java.net.InetAddress;
-import java.util.Vector;
+import java.util.ArrayList;
+
 
 /**
  * This class represents the controller of MVC pattern
@@ -17,9 +17,11 @@ import java.util.Vector;
  */
 public class GameController {
     private volatile static GameController singleton;
-    private final GameMaster gameMaster = new GameMaster();
+    private final GameMaster gameMaster;
 
-    private GameController() { }
+    private GameController() {
+        gameMaster = new GameMaster();
+    }
 
     public static GameController getSingleton() {
         if (singleton == null) {
@@ -70,7 +72,7 @@ public class GameController {
 
     public void handleMessage(AvailableGodPowersMessage message) {
         int gameId = message.getGameId();
-        Vector<GodPower> availableGodPowers = new Vector<>();
+        ArrayList<GodPower> availableGodPowers = new ArrayList<>();
         availableGodPowers.add(message.getGodPower('A'));
         availableGodPowers.add(message.getGodPower('B'));
         if (message.getGodPower('C') != null) {

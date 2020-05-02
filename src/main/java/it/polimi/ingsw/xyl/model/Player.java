@@ -12,12 +12,13 @@ public class Player {
     private GameBoard currentGameBoard;
     private Cosplayer cosplayer;
     private Worker[] workers;
-    private PlayerStatus currentStatus = PlayerStatus.INLOBBY;
+    private PlayerStatus currentStatus;
 
     public Player(int playerId, String playerName) {
         this.playerId = playerId;
         this.playerName = playerName;
         this.cosplayer = new Cosplayer(this);
+        this.currentStatus = PlayerStatus.INLOBBY;
     }
 
     public int getPlayerId() {

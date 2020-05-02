@@ -9,10 +9,11 @@ package it.polimi.ingsw.xyl.model;
  * @author Shaoxun
  */
 public class IslandBoard {
-    private Space[][] spaces = new Space[5][5];
+    private final Space[][] spaces;
     private boolean noLevelUp = false;
 
     public IslandBoard(){
+        spaces = new Space[5][5];
         for (int i = 0; i !=5; i++){
             for (int j = 0; j !=5; j++){
                 spaces[i][j]= new Space();

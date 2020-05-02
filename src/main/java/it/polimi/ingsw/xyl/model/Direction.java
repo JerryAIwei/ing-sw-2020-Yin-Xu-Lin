@@ -22,6 +22,11 @@ public enum Direction {
         public int[] toMarginalPosition() {
             return new int[]{0, 1};
         }
+
+        @Override
+        public Direction toOpposite() {
+            return DOWN;
+        }
     },
     DOWN {
         @Override
@@ -37,6 +42,11 @@ public enum Direction {
         @Override
         public int[] toMarginalPosition() {
             return new int[]{0, -1};
+        }
+
+        @Override
+        public Direction toOpposite() {
+            return UP;
         }
     },
     LEFT {
@@ -54,6 +64,11 @@ public enum Direction {
         public int[] toMarginalPosition() {
             return new int[]{-1, 0};
         }
+
+        @Override
+        public Direction toOpposite() {
+            return RIGHT;
+        }
     },
     RIGHT {
         @Override
@@ -69,6 +84,11 @@ public enum Direction {
         @Override
         public int[] toMarginalPosition() {
             return new int[]{1, 0};
+        }
+
+        @Override
+        public Direction toOpposite() {
+            return LEFT;
         }
     },
     UPLEFT {
@@ -86,6 +106,11 @@ public enum Direction {
         public int[] toMarginalPosition() {
             return new int[]{-1, 1};
         }
+
+        @Override
+        public Direction toOpposite() {
+            return DOWNRIGHT;
+        }
     },
     UPRIGHT {
         @Override
@@ -101,6 +126,11 @@ public enum Direction {
         @Override
         public int[] toMarginalPosition() {
             return new int[]{1, 1};
+        }
+
+        @Override
+        public Direction toOpposite() {
+            return DOWNLEFT;
         }
     },
     DOWNLEFT {
@@ -118,6 +148,11 @@ public enum Direction {
         public int[] toMarginalPosition() {
             return new int[]{-1, -1};
         }
+
+        @Override
+        public Direction toOpposite() {
+            return UPRIGHT;
+        }
     },
     DOWNRIGHT {
         @Override
@@ -134,6 +169,11 @@ public enum Direction {
         public int[] toMarginalPosition() {
             return new int[]{1, -1};
         }
+
+        @Override
+        public Direction toOpposite() {
+            return UPLEFT;
+        }
     };
 
     /**
@@ -149,4 +189,6 @@ public enum Direction {
      * ← ↑ → ↓ ↖ ↗ ↘ ↙
      */
     public abstract String toSymbol();
+
+    public abstract Direction toOpposite();
 }

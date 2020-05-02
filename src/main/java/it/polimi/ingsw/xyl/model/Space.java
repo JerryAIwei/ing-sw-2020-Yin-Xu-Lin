@@ -21,14 +21,10 @@ public class Space implements Serializable {
     }
 
     public void increaseLevel() {
-        if(level.toInt() == 0)
-            this.level = LEVEL1;
-        else if(level.toInt() == 1)
-            this.level = LEVEL2;
-        else if(level.toInt() == 2)
-            this.level = LEVEL3;
-        else if(level.toInt() == 3)
-            this.level = DOME;
+        if (level.toInt() == 4)
+            return;
+        Level[] levels = new Level[]{LEVEL1,LEVEL2,LEVEL3,DOME};
+        this.level = levels[level.toInt()];
     }
 
     public int isOccupiedBy() {

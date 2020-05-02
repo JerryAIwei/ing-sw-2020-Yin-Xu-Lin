@@ -37,14 +37,14 @@ public class AtlasBuildTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL2);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void AtlasBuildTest_playerCWorkerBBuildUpRight_occupied_2_1_notAllowed() {
         playerC.getCosplayer().only_for_test_setWorkerInAction(1);
         playerC.getCosplayer().build(1, RIGHT, false);
         assertEquals(islandBoard.getSpaces()[2][1].getLevel(),GROUND);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void AtlasBuildTest_playerCWorkerBBuildUpRight_dome_2_1_notAllowed() {
         islandBoard.getSpaces()[2][1].setLevel(DOME);
         playerC.getCosplayer().only_for_test_setWorkerInAction(1);

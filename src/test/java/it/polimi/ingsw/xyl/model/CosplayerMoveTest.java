@@ -20,7 +20,7 @@ public class CosplayerMoveTest extends CosplayerTest{
         assertEquals(playerA.getWorkers()[0].getPositionY(), 0);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void CosplayerMoveTest_playerAWorkerAMoveLeft_notAvailable() {
         playerA.getCosplayer().move(0, LEFT);
         // got a println "Your move is not available!"
@@ -47,7 +47,7 @@ public class CosplayerMoveTest extends CosplayerTest{
         assertEquals(playerA.getWorkers()[1].getPositionY(), 1);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void CosplayerMoveTest_playerAWorkerBMoveLeft_occupied_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setOccupiedBy(1);
         playerA.getCosplayer().move(1, LEFT);
@@ -55,7 +55,7 @@ public class CosplayerMoveTest extends CosplayerTest{
         assertEquals(playerA.getWorkers()[1].getPositionY(), 1);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void CosplayerMoveTest_playerAWorkerBMoveLeft_dome_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setLevel(DOME);
         playerA.getCosplayer().move(1, LEFT);
@@ -63,7 +63,7 @@ public class CosplayerMoveTest extends CosplayerTest{
         assertEquals(playerA.getWorkers()[1].getPositionY(), 1);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void CosplayerMoveTest_playerAWorkerBMoveLeft_LEVEL2_0_1_notAllowed() {
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
         playerA.getCosplayer().move(1, LEFT);

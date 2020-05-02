@@ -35,7 +35,7 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[1][0].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void MinotaurMoveTest_playerCWorkerAMoveUp_dome_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(DOME);
         playerC.getCosplayer().move(0, UP);
@@ -45,7 +45,7 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void MinotaurMoveTest_playerCWorkerAMoveUp_level2_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
         playerC.getCosplayer().move(0, UP);
@@ -55,7 +55,7 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void MinotaurMoveTest_playerCWorkerA_MoveRight_affectedByAthena_noLevelUp_notAllowed() {
         gameBoard.getIslandBoard().getSpaces()[1][0].setLevel(LEVEL1);
         gameBoard.getIslandBoard().setNoLevelUp(true);
@@ -106,7 +106,7 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(),playerD.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void MinotaurMoveTest_playerCWorkerBMoveRight_dome_3_1_notAllowed(){
         // Minotaur's move: worker may move into an opponent worker's
         // space, if their worker can be forced one space straight backwards
@@ -122,7 +122,7 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(),-1);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void MinotaurMoveTest_playerCWorkerBMoveRight_occupied_3_1_notAllowed(){
         // Minotaur's move: worker may move into an opponent worker's
         // space, if their worker can be forced one space straight backwards
@@ -138,7 +138,7 @@ public class MinotaurMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[3][1].isOccupiedBy(),3);
     }
 
-    @Test
+    @Test(expected= RuntimeException.class)
     public void MinotaurMoveTest_playerCWorkerB_MoveRight_affectedByAthena_noLevelUp_notAllowed() {
         gameBoard.getIslandBoard().getSpaces()[2][1].setLevel(LEVEL1);
         gameBoard.getIslandBoard().setNoLevelUp(true);

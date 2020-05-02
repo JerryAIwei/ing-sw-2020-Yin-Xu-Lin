@@ -35,7 +35,7 @@ public class ArtemisMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[1][0].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void ArtemisMoveTest_playerCWorkerAMoveUp_dome_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(DOME);
         playerC.getCosplayer().move(0, UP);
@@ -45,7 +45,7 @@ public class ArtemisMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void ArtemisMoveTest_playerCWorkerAMoveUp_level2_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
         playerC.getCosplayer().move(0, UP);
@@ -55,7 +55,7 @@ public class ArtemisMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void ArtemisMoveTest_playerCWorkerAMoveUp_occupied_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setOccupiedBy(3);
         playerC.getCosplayer().move(0, UP);
@@ -78,7 +78,7 @@ public class ArtemisMoveTest extends GodCosplayerTest{
         assertEquals(islandBoard.getSpaces()[2][0].isOccupiedBy(),playerC.getPlayerId() * 10 + 1);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void ArtemisMoveTest_playerCWorkerBMoveDownThenMoveUp_notAllowed(){
         playerC.getCosplayer().move(1, DOWN);
         playerC.getCosplayer().move(1, UP);  // no go back to its initial space

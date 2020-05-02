@@ -21,36 +21,25 @@ public class Atlas extends Cosplayer {
      * @param direction see Direction class.
      * @param buildDome whether build dome directly (only for Atlas).
      */
+    @Override
     public void build(int worker, Direction direction, boolean buildDome) {
-        if (worker == workerInAction){
-            try {
-                GameBoard currentGameBoard = player.getCurrentGameBoard();
-                IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-                int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-                int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-
-                if (super.getAvailableBuilds(worker).contains(direction)) {
-                    if (buildDome) {
-                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setLevel(Level.DOME);
-                    } else {
-                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    }
-                    // update nextAction and workerInAction
-                    nextAction = Action.MOVE;
-                    workerInAction = -1;
-                    currentGameBoard.toNextPlayer();
-                } else {
-                    System.out.println("Chosen worker can't build at target space");
-                }
-            } catch (Exception e) {
-                System.out.println("Array out of bounds");
-                throw e;
+        if (worker == workerInAction && getAvailableBuilds(worker).contains(direction)){
+            GameBoard currentGameBoard = player.getCurrentGameBoard();
+            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
+            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            if (buildDome) {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].setLevel(Level.DOME);
+            } else {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
             }
+            // update nextAction and workerInAction
+            nextAction = Action.MOVE;
+            workerInAction = -1;
+            currentGameBoard.toNextPlayer();
         }else{
-            System.out.println("You shouldn't have different workers to operate.");
-            throw new RuntimeException("You shouldn't have different workers to operate.");
+            System.out.println("Your build is not available!");
+            throw new RuntimeException("Build not available.");
         }
-
-
     }
 }

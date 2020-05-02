@@ -9,11 +9,10 @@ import it.polimi.ingsw.xyl.view.ViewInterface;
 import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Vector;
 
-import static it.polimi.ingsw.xyl.model.GodPower.ATLAS;
 
 /**
  * Class for Display CLI messages.
@@ -28,12 +27,10 @@ public class CLI extends Thread implements ViewInterface {
     private int id = -1;
     private int gameId = -1;
     private int currentPlayerId;
-    private Vector<GodPower> availableGodPowers;
+    private ArrayList<GodPower> availableGodPowers;
     private PlayerStatus playerStatus;
     private String nextAction;
     private int workerInAction = -1;
-    private VirtualView debugView = VirtualView.getSingleton();
-    private GameController debugController = GameController.getSingleton();
     private VirtualGame vGame;
 
     public static void main(String[] args) {
@@ -52,9 +49,6 @@ public class CLI extends Thread implements ViewInterface {
 
     public CLI() {
         client = new Client(this);
-        debugView.register(debugController);
-        debugController.register(debugView);
-        debugView.register(this);
     }
 
     /**
@@ -217,7 +211,7 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     private void joinOrCreate(NameOKMessage nameOKMessage) {
-        Vector<NameOKMessage.Games> games = nameOKMessage.getGames();
+        ArrayList<NameOKMessage.Games> games = nameOKMessage.getGames();
         for (NameOKMessage.Games game : games) {
             int playerNum = game.getPlayerNumber();
             int currentNum = game.getCurrentPlayers().size();
@@ -228,7 +222,7 @@ public class CLI extends Thread implements ViewInterface {
                 System.out.println(ColorSetter.BG_BLUE.setColor("==========game ID:" + game.getGameID() +
                         " (" + currentNum + "/" + playerNum + ")" + "=========="));
             }
-            Vector<String> players = game.getCurrentPlayers();
+            ArrayList<String> players = game.getCurrentPlayers();
             System.out.println("Players:");
             for (int i = 0; i < players.size(); i++)
                 System.out.print("\t" + players.get(i));
@@ -343,7 +337,7 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     private Direction chooseDirection(String action, int workerId) {
-        Vector<Direction> available = vGame.getVPlayers().get(id).getAvailable(action, workerId);
+        ArrayList<Direction> available = vGame.getVPlayers().get(id).getAvailable(action, workerId);
         int directionInput;
         do {
             System.out.println

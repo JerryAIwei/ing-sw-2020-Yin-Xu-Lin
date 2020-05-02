@@ -66,7 +66,7 @@ public class AthenaPowerTest extends GodCosplayerTest {
         assertEquals(playerC.getCosplayer().getNextAction(),"BUILD");
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void AthenaPowerTest_playerCWorkerAMoveUp_dome_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(DOME);
         playerC.getCosplayer().move(0, UP);
@@ -76,7 +76,7 @@ public class AthenaPowerTest extends GodCosplayerTest {
         assertEquals(islandBoard.getSpaces()[0][0].isOccupiedBy(),playerC.getPlayerId() * 10);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void AthenaPowerTest_playerCWorkerAMoveUp_level2_0_1_notAllowed(){
         islandBoard.getSpaces()[0][1].setLevel(LEVEL2);
         playerC.getCosplayer().move(0, UP);

@@ -2,9 +2,7 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.ArrayList;
 
 
 /**
@@ -12,7 +10,6 @@ import java.util.Vector;
  */
 
 public class Hephaestus extends Cosplayer {
-    private int buildWorker = 0;
     private Direction firstBuildDirection = null;
 
     public Hephaestus(Player player) {
@@ -28,41 +25,45 @@ public class Hephaestus extends Cosplayer {
      * @param direction see Direction class.
      * @param buildDome whether build dome directly (only for Atlas).
      */
+    @Override
     public void build(int worker, Direction direction, boolean buildDome){
-        if (worker == workerInAction){
-            try {
-                GameBoard currentGameBoard = player.getCurrentGameBoard();
-                IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
-                int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
-                int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
-                boolean noLevel3 =
-                        currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.LEVEL3;
+        if (worker == workerInAction && getAvailableBuilds(worker).contains(direction)){
+            GameBoard currentGameBoard = player.getCurrentGameBoard();
+            IslandBoard currentIslandBoard = currentGameBoard.getIslandBoard();
+            int targetPositionX = player.getWorkers()[worker].getPositionX() + direction.toMarginalPosition()[0];
+            int targetPositionY = player.getWorkers()[worker].getPositionY() + direction.toMarginalPosition()[1];
+            boolean noLevel3 =
+                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].getLevel() != Level.LEVEL3;
 
-                if (nextAction == Action.BUILD && super.getAvailableBuilds(worker).contains(direction) && noLevel3) {
-                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    firstBuildDirection = direction;
-                    buildWorker = worker;
-                    nextAction = Action.BUILDOREND;
-                } else if (nextAction == Action.BUILD && super.getAvailableBuilds(worker).contains(direction)){
-                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    nextAction = Action.MOVE;
-                    workerInAction = -1;
-                    currentGameBoard.toNextPlayer();
-                } else if (buildWorker == worker && firstBuildDirection == direction && noLevel3) {
-                    currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
-                    currentGameBoard.toNextPlayer();
-                    nextAction = Action.MOVE;
-                    workerInAction = -1;
-                } else {
-                    System.out.println("Chosen worker can't build at target space!");
-                }
-            }catch (Exception e) {
-                System.out.println("Array out of bounds");
-                throw e;
+            if (nextAction == Action.BUILD  && noLevel3) {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                firstBuildDirection = direction;
+                workerInAction = worker;
+                nextAction = Action.BUILDOREND;
+            } else if (nextAction == Action.BUILD){
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                nextAction = Action.MOVE;
+                workerInAction = -1;
+                currentGameBoard.toNextPlayer();
+            } else if (workerInAction == worker && firstBuildDirection == direction && noLevel3) {
+                currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
+                currentGameBoard.toNextPlayer();
+                nextAction = Action.MOVE;
+                workerInAction = -1;
+            } else {
+                System.out.println("Chosen worker can't build at target space!");
+                throw new RuntimeException("Build not available.");
             }
         }else{
-            System.out.println("You shouldn't have different workers to operate.");
-            throw new RuntimeException("You shouldn't have different workers to operate.");
+            System.out.println("Your build is not available!");
+            throw new RuntimeException("Build not available.");
         }
+    }
+
+    @Override
+    public ArrayList<Direction> getAvailableBuilds(int worker) {
+        if (nextAction == Action.BUILDOREND)
+            return new ArrayList<>(){{add(firstBuildDirection);}};
+        return super.getAvailableBuilds(worker);
     }
 }

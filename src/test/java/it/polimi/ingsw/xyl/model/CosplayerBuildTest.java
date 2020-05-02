@@ -23,21 +23,21 @@ public class CosplayerBuildTest extends CosplayerTest{
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),LEVEL1);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void CosplayerBuildTest_playerAWorkerABuildUpRight_NoChange() {
         playerA.getCosplayer().only_for_test_setWorkerInAction(0);
         playerA.getCosplayer().build(0, UPRIGHT, false);
         assertEquals(islandBoard.getSpaces()[1][0].getLevel(),GROUND);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void CosplayerBuildTest_playerBWorkerBBuildDownLeft_NoChange() {
         playerB.getCosplayer().only_for_test_setWorkerInAction(1);
         playerB.getCosplayer().build(1, DOWNLEFT, false);
         assertEquals(islandBoard.getSpaces()[3][3].getLevel(),GROUND);
     }
 
-    @Test
+    @Test(expected=RuntimeException.class)
     public void CosplayerBuildTest_playerBWorkerBBuildDown_dome_4_3() {
         islandBoard.getSpaces()[4][3].setLevel(DOME);
         playerB.getCosplayer().only_for_test_setWorkerInAction(1);
