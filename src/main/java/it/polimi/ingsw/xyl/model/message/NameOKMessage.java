@@ -12,6 +12,7 @@ public class NameOKMessage extends Message {
     public class Games implements Serializable {
         private final int gameID;
         private final int playerNumber;
+        private int currentNumber;
         private final Vector<String> currentPlayers = new Vector<>();
 
         public Games(int id, int num){
@@ -30,6 +31,10 @@ public class NameOKMessage extends Message {
         public Vector<String> getCurrentPlayers() {
             return currentPlayers;
         }
+
+        public int getCurrentNumber() {
+            return currentNumber;
+        }
     }
     private final Vector<Games> games = new Vector<>();
 
@@ -40,6 +45,7 @@ public class NameOKMessage extends Message {
                 for (Player player : gb.getPlayers().values()) {
                     game.currentPlayers.add(player.getPlayerName());
                 }
+                game.currentNumber = game.currentPlayers.size();
                 games.add(game);
             }
         }

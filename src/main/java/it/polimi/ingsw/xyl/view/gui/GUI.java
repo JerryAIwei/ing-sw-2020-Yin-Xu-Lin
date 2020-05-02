@@ -2,11 +2,19 @@ package it.polimi.ingsw.xyl.view.gui;
 
 import java.io.IOException;
 
+import it.polimi.ingsw.xyl.model.VirtualGame;
+import it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage;
+import it.polimi.ingsw.xyl.model.message.Message;
+import it.polimi.ingsw.xyl.model.message.NameOKMessage;
+import it.polimi.ingsw.xyl.network.client.Client;
+import it.polimi.ingsw.xyl.view.ViewInterface;
 import it.polimi.ingsw.xyl.view.gui.controller.AskLoginController;
+import it.polimi.ingsw.xyl.view.gui.controller.GameLobbyController;
 import it.polimi.ingsw.xyl.view.gui.controller.PersonEditDialogController;
 import it.polimi.ingsw.xyl.view.gui.controller.PersonOverviewController;
 import it.polimi.ingsw.xyl.view.gui.model.Person;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -16,19 +24,41 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class GUI extends Application {
+public class GUI extends Application implements ViewInterface {
 
 
     private final int PREF_MIN_WIDTH = 1080;
     private final int PREF_MIN_HEIGHT = 800;
 
-    private ObservableList<Person> personData = FXCollections.observableArrayList();
-    private Stage primaryStage;
+    private Client client;
+
+
+    private String userName;
+
+    private AskLoginController askLoginController;
     private Stage loginStage;
+
+    private ObservableList<Person> personData = FXCollections.observableArrayList();
+
+    private Stage primaryStage;
     private BorderPane rootLayout;
-    private BorderPane loginLayout;
+
+    public void initClient(String IP) {
+        client.init(IP);
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 
     public GUI() {
+
+        client = new Client(this);
+
         personData.add(new Person("Hans", "Muster"));
         personData.add(new Person("Ruth", "Mueller"));
         personData.add(new Person("Heinz", "Kurz"));
@@ -62,11 +92,7 @@ public class GUI extends Application {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(GUI.class.getResource("/AskLogin.fxml"));
-            loginLayout = loader.load();
-
-            // Give the controller access to the main app.
-            AskLoginController controller = loader.getController();
-            controller.setMainApp(this);
+            BorderPane loginLayout = loader.load();
 
             loginStage = new Stage();
             loginStage.setResizable(false);
@@ -75,7 +101,14 @@ public class GUI extends Application {
             loginStage.initOwner(primaryStage);
             Scene scene = new Scene(loginLayout);
             loginStage.setScene(scene);
-            loginStage.show();
+
+            // Give the controller access to the main app.
+            askLoginController = loader.getController();
+            askLoginController.setMainApp(this);
+            askLoginController.setDialogStage(loginStage);
+
+            // Show the dialog and wait until the user closes it
+            loginStage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,6 +117,29 @@ public class GUI extends Application {
 
     }
 
+    private void joinOrCreate(NameOKMessage nameOKMessage) {
+        Platform.runLater(()->{loginStage.close();});
+        ObservableList<NameOKMessage.Games> games = FXCollections.observableArrayList();
+        for (var game : nameOKMessage.getGames()) {
+            games.add(game);
+        }
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUI.class.getResource("/GameLobby.fxml"));
+            AnchorPane layout = (AnchorPane) loader.load();
+            // Give the controller access to the main app.
+            GameLobbyController controller = loader.getController();
+            controller.setMainApp(this, games);
+            Scene scene = new Scene(layout);
+            Platform.runLater(()->{
+            primaryStage.setScene(scene);
+            primaryStage.show();});
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
 
     /**
      * Initializes the root layout.
@@ -101,8 +157,6 @@ public class GUI extends Application {
             rootLayout.setBackground(new Background(myBI));
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
-
-
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
@@ -110,6 +164,7 @@ public class GUI extends Application {
             //e.printStackTrace();
         }
     }
+
 
     /**
      * Shows the person overview inside the root layout.
@@ -184,5 +239,32 @@ public class GUI extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void update(VirtualGame virtualGame) {
+
+    }
+
+    @Override
+    public void update(Exception e) {
+
+    }
+
+    @Override
+    public void update(Message message) {
+        if (message instanceof AskPlayerNameMessage) {
+            askLoginController.setUserName();
+        } else if (message instanceof NameOKMessage) {
+            joinOrCreate((NameOKMessage) message);
+        } else {
+            System.err.println("Wrong Message Received:" + message.getClass().toString());
+        }
+
+    }
+
+    @Override
+    public void sendMessage(Message message) {
+        client.sendMessage(message);
     }
 }
