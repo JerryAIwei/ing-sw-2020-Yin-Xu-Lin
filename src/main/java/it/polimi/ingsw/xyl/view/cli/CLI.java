@@ -385,7 +385,7 @@ public class CLI extends Thread implements ViewInterface {
         int input;
         //special for Atlas
         if (islandBoardCLI.getPlayers().get(id).getGodPower()
-                == "ATLAS")
+                == GodPower.ATLAS)
             do {
                 System.out.println
                         ("Please input 1 for building a dome," +
@@ -441,11 +441,8 @@ public class CLI extends Thread implements ViewInterface {
                         System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for setting Available God Power"));
                     }
             }
-            else if (id == availableGodPowers.size() - 1) {
+            else {
                 setGodPower();
-            }
-            else{
-                System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for Other Player choosing God Power"));
             }
         break;
         case GODPOWERED://do nothing

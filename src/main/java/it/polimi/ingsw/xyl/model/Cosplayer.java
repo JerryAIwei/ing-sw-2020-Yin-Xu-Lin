@@ -252,6 +252,26 @@ public class Cosplayer {
         return availableBuilds;
     }
 
+    public void restoreNextAction(String action){
+        switch (action) {
+            case "MOVE":
+                this.nextAction = Action.MOVE;
+                break;
+            case "BUILD":
+                this.nextAction = Action.BUILD;
+                break;
+            case "MOVEORBUILD":
+                this.nextAction = Action.MOVEORBUILD;
+                break;
+            case "BUILDOREND":
+                this.nextAction = Action.BUILDOREND;
+                break;
+        }
+    }
+
+    public void restoreWorkerInAction(int worker){
+        this.workerInAction = worker;
+    }
     // only for test
     public void only_for_test_setWorkerInAction(int worker){
         this.workerInAction = worker;

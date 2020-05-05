@@ -129,6 +129,10 @@ public class GameController {
         gameMaster.handleBuild(gameId, playerId, workerId, direction, buildDome);
     }
 
+    public void handleMessage(LoadDataMessage message){
+        gameMaster.loadData();
+    }
+
     public void update(Message message) {
         if (message.getClass() == PlayerNameMessage.class)
             handleMessage((PlayerNameMessage) message);
@@ -152,6 +156,8 @@ public class GameController {
             handleMessage((MoveMessage) message);
         else if (message.getClass() == BuildMessage.class)
             handleMessage((BuildMessage) message);
+        else if (message.getClass() == LoadDataMessage.class)
+            handleMessage((LoadDataMessage) message);
     }
 
 }

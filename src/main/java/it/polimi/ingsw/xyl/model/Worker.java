@@ -1,11 +1,13 @@
 package it.polimi.ingsw.xyl.model;
 
+import java.io.Serializable;
+
 /**
  * It represents the worker of player
  *
  * @author Shaoxun
  */
-public class Worker {
+public class Worker implements Serializable {
     private int positionX;
     private int positionY;
     private int fromLevel = 0;

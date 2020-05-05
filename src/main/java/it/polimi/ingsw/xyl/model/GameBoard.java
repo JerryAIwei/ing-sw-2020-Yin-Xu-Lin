@@ -69,6 +69,9 @@ public class GameBoard {
         currentPlayer.getCosplayer().prepare();
     }
 
+    public void restoreNextPlayer(int playerId) {
+        currentPlayer = players.get(playerId);
+    }
     public HashMap<Integer, Player> getPlayers() {
         return players;
     }

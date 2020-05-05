@@ -83,14 +83,14 @@ public class IslandBoardCLI {
 
         private String playerName;
 
-        public String getGodPower() {
+        public GodPower getGodPower() {
             return godPower;
         }
 
-        private String godPower;
+        private GodPower godPower;
         private String nextAction;
         private PlayerStatus playerStatus = PlayerStatus.INGAMEBOARD;
-        public Player(int id,String playerName,String godPower,String nextAction,PlayerStatus playerStatus){
+        public Player(int id,String playerName,GodPower godPower,String nextAction,PlayerStatus playerStatus){
             this.id = id;
             this.playerName = playerName;
             this.godPower = godPower;

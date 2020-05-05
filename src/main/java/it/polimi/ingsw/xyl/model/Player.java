@@ -56,6 +56,10 @@ public class Player {
         this.currentStatus = PlayerStatus.WORKERPREPARED;
     }
 
+    public void restoreWorkers(Worker[] workers) {
+        this.workers = workers;
+    }
+
     public PlayerStatus getCurrentStatus() {
         return currentStatus;
     }
