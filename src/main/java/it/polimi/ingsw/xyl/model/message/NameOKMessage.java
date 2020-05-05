@@ -6,13 +6,13 @@ import it.polimi.ingsw.xyl.model.GameStatus;
 import it.polimi.ingsw.xyl.model.Player;
 
 import java.io.Serializable;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class NameOKMessage extends Message {
     public class Games implements Serializable {
         private final int gameID;
         private final int playerNumber;
-        private final Vector<String> currentPlayers = new Vector<>();
+        private final ArrayList<String> currentPlayers = new ArrayList<>();
 
         public Games(int id, int num){
             gameID = id;
@@ -27,11 +27,11 @@ public class NameOKMessage extends Message {
             return playerNumber;
         }
 
-        public Vector<String> getCurrentPlayers() {
+        public ArrayList<String> getCurrentPlayers() {
             return currentPlayers;
         }
     }
-    private final Vector<Games> games = new Vector<>();
+    private final ArrayList<Games> games = new ArrayList<>();
 
     public NameOKMessage(GameLobby gameLobby){
         for(GameBoard gb:gameLobby.getGameBoards()){
@@ -45,7 +45,7 @@ public class NameOKMessage extends Message {
         }
     }
 
-    public Vector<Games> getGames() {
+    public ArrayList<Games> getGames() {
         return games;
     }
 }
