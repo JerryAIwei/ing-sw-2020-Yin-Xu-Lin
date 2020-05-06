@@ -3,6 +3,7 @@ package it.polimi.ingsw.xyl.model;
 import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
+import java.io.*;
 import java.util.ArrayList;
 
 
@@ -236,6 +237,69 @@ public class GameMaster {
         gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().build(workerId, direction,
                 buildDome);
         notify(gameId);
+    }
+
+    /**
+     * loadData is for persistence, the server will firstly
+     * load previous saved data file in ./data to restore the
+     * previous status of the server after the unexpected
+     * crash of the server
+     */
+    public void loadData(){
+        int gameId = 0;
+        VirtualGame vGame = loadVirtualGame(gameId);
+        while (vGame != null){
+            IslandBoard islandBoard = new IslandBoard(vGame.getSpaces());
+            islandBoard.setNoLevelUp(vGame.isNoLevelUp());
+            GameBoard gameBoard = new GameBoard(gameId,vGame.getPlayerNumber(),islandBoard);
+            VirtualGame.VPlayer vPlayer;
+            for (int i = 0; i < vGame.getVPlayers().size(); i++){
+                vPlayer = vGame.getVPlayers().get(i);
+                Player player = new Player(vPlayer.playerId, vPlayer.playerName);
+                player.setCosplayer(vPlayer.getGodPower().cosplay(player));
+                player.restoreWorkers(vPlayer.getWorkers());
+                if (vPlayer.getNextAction() != null)
+                    player.getCosplayer().restoreNextAction(vPlayer.getNextAction());
+                player.getCosplayer().restoreWorkerInAction(vPlayer.getWorkerInAction());
+                player.setCurrentGameBoard(gameBoard);
+                player.setCurrentStatus(vPlayer.getPlayerStatus());
+                gameBoard.addPlayer(player);
+                gameLobby.add2AllPlayers(vPlayer.playerName,vPlayer.playerId);
+            }
+            if (!vGame.getAllGodPowers().isEmpty()) {
+                for (GodPower godPower : vGame.getAllGodPowers()) {
+                    gameBoard.addAvailableGodPowers(godPower);
+                }
+            }
+            gameBoard.setCurrentStatus(vGame.getGameStatus());
+            gameBoard.restoreNextPlayer(vGame.getCurrentPlayerId());
+            gameLobby.addGameBoard(gameBoard);
+            System.out.println("Previous data loaded from GameID "+ gameId);
+            //notify(gameId);
+            gameId += 1;
+            vGame = loadVirtualGame(gameId);
+        }
+    }
+
+    /**
+     * It's used by loadData to restore VirtualGame Object from data file
+     *
+     * @param gameId game Id
+     * @return a VirtualGame object or null
+     */
+    private VirtualGame loadVirtualGame(int gameId){
+        VirtualGame vGame = null;
+        File vGameFile = new File("./data/virtualGame_" + gameId + ".ser");
+        if (vGameFile.exists()){
+            try{
+                FileInputStream fileIn = new FileInputStream("./data/virtualGame_" + gameId + ".ser");
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                vGame = (VirtualGame) in.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return vGame;
     }
 
     // to set player name

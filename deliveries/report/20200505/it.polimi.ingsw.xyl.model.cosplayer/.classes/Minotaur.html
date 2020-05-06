@@ -1,0 +1,211 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Minotaur</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model.cosplayer</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Minotaur (it.polimi.ingsw.xyl.model.cosplayer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Minotaur</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (67/ 67)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model.cosplayer;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.ArrayList;
+<i>6</i>&nbsp;import java.util.EnumSet;
+<i>7</i>&nbsp;import java.util.Iterator;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * @author Lin Xin
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;public class Minotaur extends Cosplayer {
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    public Minotaur(Player player) {
+<b class="fc"><i>19</i>&nbsp;        super(player);</b>
+<b class="fc"><i>20</i>&nbsp;        super.godPower = GodPower.MINOTAUR;</b>
+<b class="fc"><i>21</i>&nbsp;    }</b>
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * Minotaur&#39;s move: worker may move into an opponent worker&#39;s
+<i>25</i>&nbsp;     * space, if their worker can be forced one space straight backwards
+<i>26</i>&nbsp;     * to an unoccupied space at ANY level.
+<i>27</i>&nbsp;     *
+<i>28</i>&nbsp;     * @param worker &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>29</i>&nbsp;     * @param direction see Direction class.
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    @Override
+<i>32</i>&nbsp;    public void move(int worker, Direction direction) {
+<b class="fc"><i>33</i>&nbsp;        if (getAvailableMoves(worker).contains(direction)) {</b>
+<b class="fc"><i>34</i>&nbsp;            IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();</b>
+<b class="fc"><i>35</i>&nbsp;            int originalPositionX = player.getWorkers()[worker].getPositionX();</b>
+<b class="fc"><i>36</i>&nbsp;            int originalPositionY = player.getWorkers()[worker].getPositionY();</b>
+<b class="fc"><i>37</i>&nbsp;            int targetOccupiedBy = currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>38</i>&nbsp;                    [originalPositionX + direction.toMarginalPosition()[0]]</b>
+<b class="fc"><i>39</i>&nbsp;                    [originalPositionY + direction.toMarginalPosition()[1]].isOccupiedBy();</b>
+<i>40</i>&nbsp;            // Since getAvailableMoves deleted not allowed cases of using power,
+<i>41</i>&nbsp;            // if target space is occupied, it is occupied by an opponent worker which can move backwards
+<i>42</i>&nbsp;            // So, we force move that worker backwards and then perform a Civilian move for Minotaur.
+<b class="fc"><i>43</i>&nbsp;            if (targetOccupiedBy != -1) {</b>
+<b class="fc"><i>44</i>&nbsp;                int backwardsPositionX = originalPositionX + 2 * direction.toMarginalPosition()[0];</b>
+<b class="fc"><i>45</i>&nbsp;                int backwardsPositionY = originalPositionY + 2 * direction.toMarginalPosition()[1];</b>
+<b class="fc"><i>46</i>&nbsp;                int opponentWorkerId = targetOccupiedBy % 10;</b>
+<b class="fc"><i>47</i>&nbsp;                int opponentPlayerId = targetOccupiedBy / 10;</b>
+<b class="fc"><i>48</i>&nbsp;                Space opponentCurrentSpace = currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>49</i>&nbsp;                        [originalPositionX + direction.toMarginalPosition()[0]]</b>
+<b class="fc"><i>50</i>&nbsp;                        [originalPositionY + direction.toMarginalPosition()[1]];</b>
+<b class="fc"><i>51</i>&nbsp;                player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()</b>
+<b class="fc"><i>52</i>&nbsp;                        [opponentWorkerId].setFromLevel(opponentCurrentSpace.getLevel().toInt());</b>
+<b class="fc"><i>53</i>&nbsp;                player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()</b>
+<b class="fc"><i>54</i>&nbsp;                        [opponentWorkerId].setForced();</b>
+<b class="fc"><i>55</i>&nbsp;                opponentCurrentSpace.setOccupiedBy(-1);</b>
+<b class="fc"><i>56</i>&nbsp;                player.getCurrentGameBoard().getPlayers().get(opponentPlayerId).getWorkers()</b>
+<b class="fc"><i>57</i>&nbsp;                        [opponentWorkerId].setPosition(backwardsPositionX, backwardsPositionY);</b>
+<b class="fc"><i>58</i>&nbsp;                currentIslandBoard.getSpaces()[backwardsPositionX][backwardsPositionY].setOccupiedBy(opponentPlayerId * 10 + opponentWorkerId);</b>
+<i>59</i>&nbsp;            }
+<i>60</i>&nbsp;            // if target space is not occupied, it&#39;s just a Civilian move.
+<b class="fc"><i>61</i>&nbsp;            super.move(worker, direction); // super.move will change nextAction and checkWin.</b>
+<b class="fc"><i>62</i>&nbsp;        }else {</b>
+<b class="fc"><i>63</i>&nbsp;            System.out.println(&quot;Your move is not available!&quot;);</b>
+<b class="fc"><i>64</i>&nbsp;            throw new RuntimeException(&quot;Move not available.&quot;);</b>
+<i>65</i>&nbsp;        }
+<b class="fc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * get all available move directions of a Minotaur&#39;s worker
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param worker &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>72</i>&nbsp;     * @return all available direction of the worker.
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    @Override
+<i>75</i>&nbsp;    public ArrayList&lt;Direction&gt; getAvailableMoves(int worker) {
+<b class="fc"><i>76</i>&nbsp;        int x = player.getWorkers()[worker].getPositionX();</b>
+<b class="fc"><i>77</i>&nbsp;        int y = player.getWorkers()[worker].getPositionY();</b>
+<b class="fc"><i>78</i>&nbsp;        ArrayList&lt;Direction&gt; minotaurAvailableMoves = getAvailable(x,y);</b>
+<b class="fc"><i>79</i>&nbsp;        Iterator&lt;Direction&gt; iterator = minotaurAvailableMoves.iterator();</b>
+<i>80</i>&nbsp;        Direction a;
+<i>81</i>&nbsp;        Space targetSpace;
+<i>82</i>&nbsp;        Space currentSpace;
+<b class="fc"><i>83</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>84</i>&nbsp;            a = iterator.next();</b>
+<b class="fc"><i>85</i>&nbsp;            targetSpace = player.getCurrentGameBoard().getIslandBoard().getSpaces()</b>
+<b class="fc"><i>86</i>&nbsp;                    [x + a.toMarginalPosition()[0]]</b>
+<b class="fc"><i>87</i>&nbsp;                    [y+ a.toMarginalPosition()[1]];</b>
+<i>88</i>&nbsp;            // remove occupied by a dome or Minotaur&#39;s own worker
+<b class="fc"><i>89</i>&nbsp;            if (targetSpace.isOccupiedBy() == (player.getPlayerId() * 10 + 1) ||</b>
+<b class="fc"><i>90</i>&nbsp;                    targetSpace.isOccupiedBy() == (player.getPlayerId() * 10)) {</b>
+<b class="fc"><i>91</i>&nbsp;                iterator.remove();</b>
+<b class="fc"><i>92</i>&nbsp;                continue;</b>
+<i>93</i>&nbsp;            }
+<i>94</i>&nbsp;            // if targetSpace is occupied by opponent&#39;s worker, check power is applicable.
+<b class="fc"><i>95</i>&nbsp;            if(targetSpace.isOccupiedBy() != -1</b>
+<b class="fc"><i>96</i>&nbsp;                    &amp;&amp; targetSpace.isOccupiedBy() != (player.getPlayerId() * 10 + 1)</b>
+<b class="fc"><i>97</i>&nbsp;                    &amp;&amp;targetSpace.isOccupiedBy() != (player.getPlayerId() * 10)){</b>
+<b class="fc"><i>98</i>&nbsp;               int backwardsPositionX = x + 2 * a.toMarginalPosition()[0];</b>
+<b class="fc"><i>99</i>&nbsp;               int backwardsPositionY = y+ 2 * a.toMarginalPosition()[1];</b>
+<b class="fc"><i>100</i>&nbsp;               if(backwardsPositionX &lt; 0 || backwardsPositionY &lt; 0 ){</b>
+<i>101</i>&nbsp;                   // remove out of island board if apply power
+<b class="fc"><i>102</i>&nbsp;                   iterator.remove();</b>
+<b class="fc"><i>103</i>&nbsp;                   continue;</b>
+<i>104</i>&nbsp;               }else{
+<b class="fc"><i>105</i>&nbsp;                   int backwardsOccupiedBy = player.getCurrentGameBoard().getIslandBoard().</b>
+<b class="fc"><i>106</i>&nbsp;                                   getSpaces()[backwardsPositionX][backwardsPositionY].isOccupiedBy();</b>
+<b class="fc"><i>107</i>&nbsp;                   boolean backwardsDome = player.getCurrentGameBoard().getIslandBoard().</b>
+<b class="fc"><i>108</i>&nbsp;                           getSpaces()[backwardsPositionX][backwardsPositionY].getLevel() == Level.DOME;</b>
+<b class="fc"><i>109</i>&nbsp;                   if(backwardsOccupiedBy != -1 || backwardsDome) {</b>
+<i>110</i>&nbsp;                       // if backward space is occupied by a dome or another worker, power cannot apply
+<b class="fc"><i>111</i>&nbsp;                       iterator.remove();</b>
+<b class="fc"><i>112</i>&nbsp;                       continue;</b>
+<i>113</i>&nbsp;                   }
+<i>114</i>&nbsp;               }
+<i>115</i>&nbsp;            }
+<i>116</i>&nbsp;
+<b class="fc"><i>117</i>&nbsp;            currentSpace =</b>
+<b class="fc"><i>118</i>&nbsp;                    player.getCurrentGameBoard().getIslandBoard().getSpaces()[x][y];</b>
+<i>119</i>&nbsp;
+<b class="fc"><i>120</i>&nbsp;            int relativeLevel = targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt();</b>
+<b class="fc"><i>121</i>&nbsp;            boolean noMoveUp = player.getCurrentGameBoard().getIslandBoard().isNoLevelUp();</b>
+<i>122</i>&nbsp;            // remove relative level not allowed
+<b class="fc"><i>123</i>&nbsp;            if (relativeLevel &gt; 1 || (noMoveUp &amp;&amp; relativeLevel == 1))</b>
+<b class="fc"><i>124</i>&nbsp;                iterator.remove();</b>
+<b class="fc"><i>125</i>&nbsp;        }</b>
+<b class="fc"><i>126</i>&nbsp;        return minotaurAvailableMoves;</b>
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 13:27</div>
+</div>
+</body>
+</html>

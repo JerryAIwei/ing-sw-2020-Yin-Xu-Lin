@@ -21,6 +21,10 @@ public class IslandBoard {
         }
     }
 
+    public IslandBoard(Space[][] spaces){
+        this.spaces = spaces;
+    }
+
     public Space[][] getSpaces() {
         return spaces;
     }

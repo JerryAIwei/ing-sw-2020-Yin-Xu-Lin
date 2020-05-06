@@ -10,3 +10,6 @@ dependency-reduced-pom.xml
 # Maven
 log/
 target/
+
+# Data files for Persistence
+data/

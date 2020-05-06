@@ -1,13 +1,13 @@
 package it.polimi.ingsw.xyl.network.server;
 
 import it.polimi.ingsw.xyl.controller.GameController;
+import it.polimi.ingsw.xyl.model.message.LoadDataMessage;
 import it.polimi.ingsw.xyl.view.VirtualView;
 //import org.objectweb.asm.commons.InstructionAdapter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
 
 /**
  * Class for handling new connection
@@ -29,6 +29,7 @@ public class Server
     {
         gc.register(v);
         v.register(gc);
+        v.update(new LoadDataMessage());
         ServerSocket socket;
         try {
             socket = new ServerSocket(SOCKET_PORT);

@@ -69,6 +69,8 @@ public class VirtualView {
         }
         vGames.computeIfAbsent(gameId, k -> new VirtualGame(gameId));
         VirtualGame vGame = vGames.get(gameBoard.getGameId());
+        vGame.setNoLevelUp(gameBoard.getIslandBoard().isNoLevelUp());
+        vGame.setPlayerNumber(gameBoard.getPlayerNumber());
         vGame.setGameStatus(gameBoard.getCurrentStatus());
         vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
         vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
@@ -84,7 +86,11 @@ public class VirtualView {
 
     public void sendMessage(int gameId, VirtualGame vGame) {
         for (String playerName : gameID2PlayerNames.get(gameId)) {
-            playerName2PlayerServer.get(playerName).sendMessage(vGame);
+            try {
+                playerName2PlayerServer.get(playerName).sendMessage(vGame);
+            }catch (NullPointerException e){
+                System.out.println("Re-connection related error");
+            }
         }
     }
 
