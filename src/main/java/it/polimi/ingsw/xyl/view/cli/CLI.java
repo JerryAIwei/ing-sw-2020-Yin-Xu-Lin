@@ -9,6 +9,9 @@ import it.polimi.ingsw.xyl.view.ViewInterface;
 import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -32,6 +35,7 @@ public class CLI extends Thread implements ViewInterface {
     private String nextAction;
     private int workerInAction = -1;
     private VirtualGame vGame;
+    private boolean interruptInput = false;
 
     public static void main(String[] args) {
         System.out.println("new a cli");
@@ -81,7 +85,7 @@ public class CLI extends Thread implements ViewInterface {
         nextAction = virtualGame.getVPlayers().get(id).getNextAction();
         workerInAction = virtualGame.getVPlayers().get(id).getWorkerInAction();
         currentPlayerId = virtualGame.getCurrentPlayerId();
-        System.out.println("Player: " + currentPlayerId+" is playing");
+        System.out.println("Player: " + currentPlayerId + " is playing");
         switch (gameStatus) {
             case WAITINGINIT:
                 if (id == 0 && virtualGame.getCurrentPlayerId() == 0) {
@@ -119,7 +123,8 @@ public class CLI extends Thread implements ViewInterface {
 
     @Override
     public void update(Exception e) {
-
+        System.out.println("update(Exception e)");
+        interruptInput = true;
     }
 
     /**
@@ -188,30 +193,34 @@ public class CLI extends Thread implements ViewInterface {
     private void setUserName() {
         System.out.println(ColorSetter.FG_BLUE.setColor("Please Enter Login Name"));
 //        userName = new Scanner(System.in).nextLine();
-        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random random=new Random();
-        StringBuffer sb=new StringBuffer();
-        for(int i=0;i<5;i++){
-            int number=random.nextInt(62);
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < 5; i++) {
+            int number = random.nextInt(62);
             sb.append(str.charAt(number));
         }
         userName = sb.toString();
-        System.out.println(ColorSetter.FG_BLUE.setColor("Your player name is "+userName));
+        System.out.println(ColorSetter.FG_BLUE.setColor("Your player name is " + userName));
         sendMessage(new PlayerNameMessage(userName));
     }
 
     private void setPlayNum() {
-        int playNum;
-        do {
-            System.out.println(ColorSetter.FG_BLUE.setColor("Please set number of players, 2 or 3"));
-            playNum = new Scanner(System.in).nextInt();
-        } while (playNum != 2 && playNum != 3);
-        System.out.println("Play Number:" + playNum);
-        sendMessage(new SetPlayerNumberMessage(gameId, playNum));
+
+        var t = new Thread(() -> {
+            int playNum;
+            do {
+                System.out.println(ColorSetter.FG_BLUE.setColor("Please set number of players, 2 or 3"));
+                playNum = new Scanner(System.in).nextInt();
+            } while (playNum != 2 && playNum != 3);
+            System.out.println("Play Number:" + playNum);
+            sendMessage(new SetPlayerNumberMessage(gameId, playNum));
+        });
+        t.start();
     }
 
     private void joinOrCreate(NameOKMessage nameOKMessage) {
-        ArrayList<NameOKMessage.Games> games = nameOKMessage.getGames();
+        var games = nameOKMessage.getGames();
         for (NameOKMessage.Games game : games) {
             int playerNum = game.getPlayerNumber();
             int currentNum = game.getCurrentPlayers().size();
@@ -222,118 +231,138 @@ public class CLI extends Thread implements ViewInterface {
                 System.out.println(ColorSetter.BG_BLUE.setColor("==========game ID:" + game.getGameID() +
                         " (" + currentNum + "/" + playerNum + ")" + "=========="));
             }
-            ArrayList<String> players = game.getCurrentPlayers();
+            var players = game.getCurrentPlayers();
             System.out.println("Players:");
             for (int i = 0; i < players.size(); i++)
                 System.out.print("\t" + players.get(i));
             System.out.println("\n");
         }
-        int input;
-        do {
-            if (!games.isEmpty())
-                System.out.println(ColorSetter.FG_BLUE.setColor("Input game ID to join the game"));
-            System.out.println(ColorSetter.FG_BLUE.setColor("Input -1 to create a new game"));
-            input = new Scanner(System.in).nextInt();
-        } while (input < -1 || input >= games.size()
-                || (input != -1 && games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));
-        if (input == -1) {
-            sendMessage(new CreateNewGameMessage(userName));
-        } else {
-            sendMessage(new JoinGameMessage(userName, input));
-        }
+
+        var t = new Thread(() -> {
+            int input;
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            do {
+                if (!games.isEmpty())
+                    System.out.println(ColorSetter.FG_BLUE.setColor("Input game ID to join the game"));
+                System.out.println(ColorSetter.FG_BLUE.setColor("Input -1 to create a new game"));
+                input = new Scanner(System.in).nextInt();
+            } while (input < -1 || input >= games.size()
+                    || (input != -1 && games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));
+
+            if (input == -1) {
+                sendMessage(new CreateNewGameMessage(userName));
+            } else {
+                sendMessage(new JoinGameMessage(userName, input));
+            }
+        });
+        t.start();
     }
 
     private void setAvailableGodPowers() {
-        int[] godPowers = {-1, -1, -1};
+
         int playNum = islandBoardCLI.getPlayers().size();
-        int countDown = playNum;
-        System.out.println(ColorSetter.FG_BLUE.setColor("Input number to select available god power"));
-        System.out.println(ColorSetter.FG_RED.setColor("If you choose 0 Anonymous, your will start a game" +
-                "without God Powers."));
-        do {
-            System.out.println(countDown + " need to choose");
-            for (int i = 0; i < GodPower.values().length; i++) {
-                if (i != godPowers[0] && i != godPowers[1] && i != godPowers[2])
-                    System.out.println(i + ":" + GodPower.values()[i].toString() + ":");
-                    System.out.println("\t"+GodPower.values()[i].description());
-            }
-            int input = new Scanner(System.in).nextInt();
-            if (input >= 0 && input < GodPower.values().length &&
-                    input != godPowers[0] && input != godPowers[1]
-                    && input != godPowers[2]
-            ) {
-                if (input == 0){
-                    for(int i = 0; i < playNum; i++){
-                        godPowers[i] = input;
-                    }
-                    countDown = 0;
-                }else {
-                    godPowers[countDown - 1] = input;
-                    countDown--;
+        var t = new Thread(() -> {
+            int[] godPowers = {-1, -1, -1};
+            int countDown = playNum;
+            System.out.println(ColorSetter.FG_BLUE.setColor("Input number to select available god power"));
+            System.out.println(ColorSetter.FG_RED.setColor("If you choose 0 Anonymous, your will start a game" +
+                    "without God Powers."));
+            do {
+                System.out.println(countDown + " need to choose");
+                for (int i = 0; i < GodPower.values().length; i++) {
+                    if (i != godPowers[0] && i != godPowers[1] && i != godPowers[2])
+                        System.out.println(i + ":" + GodPower.values()[i].toString() + ":");
+                    System.out.println("\t" + GodPower.values()[i].description());
                 }
+                int input = new Scanner(System.in).nextInt();
+                if (input >= 0 && input < GodPower.values().length &&
+                        input != godPowers[0] && input != godPowers[1]
+                        && input != godPowers[2]
+                ) {
+                    if (input == 0) {
+                        for (int i = 0; i < playNum; i++) {
+                            godPowers[i] = input;
+                        }
+                        countDown = 0;
+                    } else {
+                        godPowers[countDown - 1] = input;
+                        countDown--;
+                    }
+                }
+            } while (countDown > 0);
+            if (playNum == 2)
+                sendMessage(new AvailableGodPowersMessage
+                        (gameId, GodPower.values()[godPowers[0]],
+                                GodPower.values()[godPowers[1]]));
+            else if (playNum == 3) {
+                sendMessage(new AvailableGodPowersMessage
+                        (gameId, GodPower.values()[godPowers[0]],
+                                GodPower.values()[godPowers[1]],
+                                GodPower.values()[godPowers[2]]));
+            } else {
+                System.err.println("in setAvailableGodPowers(): playNum!=2&&playNum!=3");
             }
-        } while (countDown > 0);
-        if (playNum == 2)
-            sendMessage(new AvailableGodPowersMessage
-                    (gameId, GodPower.values()[godPowers[0]],
-                            GodPower.values()[godPowers[1]]));
-        else if (playNum == 3) {
-            sendMessage(new AvailableGodPowersMessage
-                    (gameId, GodPower.values()[godPowers[0]],
-                            GodPower.values()[godPowers[1]],
-                            GodPower.values()[godPowers[2]]));
-        } else {
-            System.err.println("in setAvailableGodPowers(): playNum!=2&&playNum!=3");
-        }
+        });
+        t.start();
     }
 
     private void setGodPower() {
-        if (availableGodPowers.get(0) == GodPower.ANONYMOUS){
+        if (availableGodPowers.get(0) == GodPower.ANONYMOUS) {
             System.out.println(ColorSetter.FG_BLUE.setColor("This is a no-GodPowers game!"));
             sendMessage(new PlayerChooseGodPowerMessage
                     (gameId, id, availableGodPowers.get(0)));
-        }else {
-            int input = 0;
-            do {
-                System.out.println(ColorSetter.FG_BLUE.setColor("Input number to select your god power"));
-                int i = 0;
-                for (GodPower godPower : availableGodPowers) {
-                    System.out.println(i + ":" + godPower.toString() + ":");
-                    System.out.println("\t" + godPower.description());
-                    i++;
-                }
-                input = new Scanner(System.in).nextInt();
-            } while (input < 0 || input >= availableGodPowers.size());
-            sendMessage(new PlayerChooseGodPowerMessage
-                    (gameId, id, availableGodPowers.get(input)));
+        } else {
+            var t = new Thread(() -> {
+                int input = 0;
+                do {
+                    System.out.println(ColorSetter.FG_BLUE.setColor("Input number to select your god power"));
+                    int i = 0;
+                    for (GodPower godPower : availableGodPowers) {
+                        System.out.println(i + ":" + godPower.toString() + ":");
+                        System.out.println("\t" + godPower.description());
+                        i++;
+                    }
+                    input = new Scanner(System.in).nextInt();
+                } while (input < 0 || input >= availableGodPowers.size());
+                sendMessage(new PlayerChooseGodPowerMessage
+                        (gameId, id, availableGodPowers.get(input)));
+            });
+            t.start();
         }
     }
 
     private void setStartPlayer() {
         int playNum = islandBoardCLI.getPlayers().size();
-        int input;
-        do {
-            System.out.println(ColorSetter.FG_BLUE.setColor("Input number to choose who start first"));
-            islandBoardCLI.showPlayers();
-            input = new Scanner(System.in).nextInt();
-        } while (input < 0 || input >= playNum);
-        sendMessage(new StartGameMessage(gameId, userName, input));
+        var t = new Thread(() -> {
+            int input;
+            do {
+                System.out.println(ColorSetter.FG_BLUE.setColor("Input number to choose who start first"));
+                islandBoardCLI.showPlayers();
+                input = new Scanner(System.in).nextInt();
+            } while (input < 0 || input >= playNum);
+            sendMessage(new StartGameMessage(gameId, userName, input));
+        });
+        t.start();
     }
 
     private void setInitialWorkPosition() {
-        int ax, ay, bx, by;
+
         System.out.println(ColorSetter.FG_BLUE.setColor("Set initial worker position"));
-        do {
-            System.out.println(ColorSetter.FG_BLUE.setColor("First worker x, please input 0 - 4"));
-            ax = new Scanner(System.in).nextInt();
-            System.out.println(ColorSetter.FG_BLUE.setColor("First worker y, please input 0 - 4"));
-            ay = new Scanner(System.in).nextInt();
-            System.out.println(ColorSetter.FG_BLUE.setColor("Second worker x, please input 0 - 4"));
-            bx = new Scanner(System.in).nextInt();
-            System.out.println(ColorSetter.FG_BLUE.setColor("Second worker y, please input 0 - 4"));
-            by = new Scanner(System.in).nextInt();
-        } while (false/*todo:check available*/);
-        sendMessage(new SetInitialWorkerPositionMessage(gameId, id, ax, ay, bx, by));
+        var t = new Thread(() -> {
+            int ax, ay, bx, by;
+            do {
+                System.out.println(ColorSetter.FG_BLUE.setColor("First worker x, please input 0 - 4"));
+                ax = new Scanner(System.in).nextInt();
+                System.out.println(ColorSetter.FG_BLUE.setColor("First worker y, please input 0 - 4"));
+                ay = new Scanner(System.in).nextInt();
+                System.out.println(ColorSetter.FG_BLUE.setColor("Second worker x, please input 0 - 4"));
+                bx = new Scanner(System.in).nextInt();
+                System.out.println(ColorSetter.FG_BLUE.setColor("Second worker y, please input 0 - 4"));
+                by = new Scanner(System.in).nextInt();
+            } while (false/*todo:check available*/);
+            sendMessage(new SetInitialWorkerPositionMessage(gameId, id, ax, ay, bx, by));
+        });
+        t.start();
     }
 
     private Direction chooseDirection(String action, int workerId) {
@@ -351,82 +380,94 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     private void move() {
-        int workerId;
-        if(workerInAction != -1) {
-            System.out.println(ColorSetter.FG_BLUE.setColor("You should use worker " + workerInAction + " to move."));
-            workerId = workerInAction;
-        }
-        else {
-            do {
-                System.out.println
-                        (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to move"));
-                workerId = new Scanner(System.in).nextInt();
-            } while (workerId != 1 && workerId != 0);
-        }
-        Direction direction = chooseDirection("Move",workerId);
-        sendMessage(new MoveMessage
-                (gameId, id, workerId, direction));
+        var t = new Thread(() -> {
+            int workerId;
+            if (workerInAction != -1) {
+                System.out.println(ColorSetter.FG_BLUE.setColor("You should use worker " + workerInAction + " to move."));
+                workerId = workerInAction;
+            } else {
+
+                do {
+                    System.out.println
+                            (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to move"));
+                    workerId = new Scanner(System.in).nextInt();
+                } while (workerId != 1 && workerId != 0);
+            }
+            Direction direction = chooseDirection("Move", workerId);
+            sendMessage(new MoveMessage
+                    (gameId, id, workerId, direction));
+        });
+        t.start();
     }
 
     private void build() {
-        int workerId;
-        if(workerInAction != -1) {
-            System.out.println(ColorSetter.FG_BLUE.setColor("You should use worker " + workerInAction + " to build."));
-            workerId = workerInAction;
-        }else {
-            do {
-                System.out.println
-                        (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to build"));
-                workerId = new Scanner(System.in).nextInt();
-            } while (workerId != 1 && workerId != 0);
-        }
-        Direction direction = chooseDirection("Build", workerId);
-        boolean isDome = false;
-        int input;
-        //special for Atlas
-        if (islandBoardCLI.getPlayers().get(id).getGodPower()
-                == "ATLAS")
-            do {
-                System.out.println
-                        ("Please input 1 for building a dome," +
-                                " 0 for normal building");
-                input = new Scanner(System.in).nextInt();
-                if (input == 1) isDome = true;
-            } while (input != 1 && input != 0);
+        var t = new Thread(() -> {
+            int workerId;
+            if (workerInAction != -1) {
+                System.out.println(ColorSetter.FG_BLUE.setColor("You should use worker " + workerInAction + " to build."));
+                workerId = workerInAction;
+            } else {
+                do {
+                    System.out.println
+                            (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to build"));
+                    workerId = new Scanner(System.in).nextInt();
+                } while (workerId != 1 && workerId != 0);
+            }
+            Direction direction = chooseDirection("Build", workerId);
+            boolean isDome = false;
+            int input;
+            //special for Atlas
+            if (islandBoardCLI.getPlayers().get(id).getGodPower()
+                    == "ATLAS")
+                do {
+                    System.out.println
+                            ("Please input 1 for building a dome," +
+                                    " 0 for normal building");
+                    input = new Scanner(System.in).nextInt();
+                    if (input == 1) isDome = true;
+                } while (input != 1 && input != 0);
 
 
-        sendMessage(new BuildMessage
-                (gameId, id, workerId, direction, isDome));
+            sendMessage(new BuildMessage
+                    (gameId, id, workerId, direction, isDome));
 
+        });
+        t.start();
     }
 
     private void chooseMoveOrBuild() {
-        int input;
-        do {
-            System.out.println
-                    (ColorSetter.FG_BLUE.setColor("Please input 1 for moving," +
-                            " 0 for building"));
-            input = new Scanner(System.in).nextInt();
-        } while (input != 0 && input != 1);
-        if (input == 1)
-            move();
-        else
-            build();
+        var t = new Thread(() -> {
+            int input;
+            do {
+                System.out.println
+                        (ColorSetter.FG_BLUE.setColor("Please input 1 for moving," +
+                                " 0 for building"));
+                input = new Scanner(System.in).nextInt();
+            } while (input != 0 && input != 1);
+            if (input == 1)
+                move();
+            else
+                build();
+        });
+        t.start();
     }
 
     private void chooseBuildOrEnd() {
-        int input;
-        do {
-            System.out.println
-                    (ColorSetter.FG_BLUE.setColor("Please input 1 for building," +
-                            " 0 for end your turn"));
-            input = new Scanner(System.in).nextInt();
-        } while (input != 0 && input != 1);
+        var t = new Thread(() -> {
+            int input;
+            do {
+                System.out.println
+                        (ColorSetter.FG_BLUE.setColor("Please input 1 for building," +
+                                " 0 for end your turn"));
+                input = new Scanner(System.in).nextInt();
+            } while (input != 0 && input != 1);
 
-        if (input == 1)
-            build();
-        else
-            sendMessage(new MyTurnFinishedMessage(gameId, id));
+            if (input == 1)
+                build();
+            else
+                sendMessage(new MyTurnFinishedMessage(gameId, id));
+        });
+        t.start();
     }
 
     /**
@@ -434,28 +475,25 @@ public class CLI extends Thread implements ViewInterface {
      */
     private void setUpGame() {
         switch (playerStatus) {
-            case INGAMEBOARD: if (availableGodPowers.isEmpty()){
-                    if(id==0)
+            case INGAMEBOARD:
+                if (availableGodPowers.isEmpty()) {
+                    if (id == 0)
                         setAvailableGodPowers();
                     else {
                         System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for setting Available God Power"));
                     }
-            }
-            else if (id == availableGodPowers.size() - 1) {
-                setGodPower();
-            }
-            else{
-                System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for Other Player choosing God Power"));
-            }
-        break;
-        case GODPOWERED://do nothing
-        break;
-        case WAITING4START:
-        setStartPlayer();
-        break;
-    }
+                } else {
+                    setGodPower();
+                }
+                break;
+            case GODPOWERED://do nothing
+                break;
+            case WAITING4START:
+                setStartPlayer();
+                break;
+        }
 
-}
+    }
 
     /**
      * my turn, play game based on playerStatus and nextAction
