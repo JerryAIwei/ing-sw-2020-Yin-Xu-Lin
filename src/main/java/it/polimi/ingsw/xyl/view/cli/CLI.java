@@ -418,7 +418,7 @@ public class CLI extends Thread implements ViewInterface {
             int input;
             //special for Atlas
             if (islandBoardCLI.getPlayers().get(id).getGodPower()
-                    == "ATLAS")
+                    == GodPower.ATLAS)
                 do {
                     System.out.println
                             ("Please input 1 for building a dome," +
