@@ -127,7 +127,6 @@ public class VirtualGame extends Message {
                 vPlayers.put(tempVPlayer.playerId, tempVPlayer);
             }
         }
-        save();
     }
 
     public Space[][] getSpaces() {
@@ -175,7 +174,7 @@ public class VirtualGame extends Message {
      * For persistence advanced function of the project.
      * All data files are in ./data/
      */
-    private void save(){
+    public void save(){
         try
         {
             File dir = new File("./data/");

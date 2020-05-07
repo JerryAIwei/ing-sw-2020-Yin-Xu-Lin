@@ -280,9 +280,9 @@ public class GameMaster {
                     player.getCosplayer().restoreNextAction(vPlayer.getNextAction());
                 player.getCosplayer().restoreWorkerInAction(vPlayer.getWorkerInAction());
                 player.setCurrentGameBoard(gameBoard);
-                player.setCurrentStatus(vPlayer.getPlayerStatus());
                 player.setReconnecting(true);
-                gameBoard.addPlayer(player);
+                gameBoard.addPlayer(player);  // addPlayer will set player status to INGAMEBOARD !!
+                player.setCurrentStatus(vPlayer.getPlayerStatus());
                 gameLobby.add2AllPlayers(vPlayer.playerName, gameId);
             }
             if (!vGame.getAllGodPowers().isEmpty()) {
@@ -295,7 +295,7 @@ public class GameMaster {
             gameBoard.restoreNextPlayer(vGame.getCurrentPlayerId());
             gameLobby.addGameBoard(gameBoard);
             System.out.println("Previous data loaded from GameID "+ gameId);
-            notify(gameId, vGame);
+            notify(vGame);
             gameId += 1;
             vGame = loadVirtualGame(gameId);
         }
@@ -343,7 +343,7 @@ public class GameMaster {
         }
     }
 
-    public void notify(int gameId, VirtualGame vGame){
+    public void notify(VirtualGame vGame){
         synchronized (observerV) {
             observerV.get(0).restoreVGames(vGame);
         }

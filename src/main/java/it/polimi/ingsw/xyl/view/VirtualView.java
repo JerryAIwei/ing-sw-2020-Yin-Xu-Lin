@@ -85,9 +85,6 @@ public class VirtualView {
         }else {
             try {
                 update(gameBoard);
-//                int gameId = gameBoard.getGameId();
-//                VirtualGame vGame = vGames.get(gameId);
-//                ps.sendMessage(vGame);
             } catch (NullPointerException e) {
                 System.out.println("Re-connection related error");
             }
@@ -112,6 +109,7 @@ public class VirtualView {
         vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
         vGame.updateVPlayers(gameBoard.getPlayers().values());
         vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
+        vGame.save();
         if (!test)
             sendMessage(gameId, vGame);
     }

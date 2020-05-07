@@ -471,7 +471,6 @@ public class CLI extends Thread implements ViewInterface {
      * Method used to set god power and choose who to start first
      */
     private void setUpGame() {
-        // TODO: change if-else logic by changing playerStatus for reconnection.
         switch (playerStatus) {
             case INGAMEBOARD:
                 if (availableGodPowers.isEmpty()) {
