@@ -4,10 +4,7 @@ import it.polimi.ingsw.xyl.controller.GameController;
 import it.polimi.ingsw.xyl.model.GameBoard;
 import it.polimi.ingsw.xyl.model.GameLobby;
 import it.polimi.ingsw.xyl.model.VirtualGame;
-import it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage;
-import it.polimi.ingsw.xyl.model.message.Message;
-import it.polimi.ingsw.xyl.model.message.NameOKMessage;
-import it.polimi.ingsw.xyl.model.message.WaitingReconnectionMessage;
+import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.network.server.PlayerServer;
 
 import java.util.HashMap;
@@ -15,7 +12,6 @@ import java.util.Map;
 import java.util.Vector;
 
 public class VirtualView {
-    private static final String RECONNECTION = "_RECONNECTION";
     private volatile static VirtualView singleton;
     private GameController gameController;
     private final Map<Integer, VirtualGame> vGames;
@@ -135,6 +131,14 @@ public class VirtualView {
 
     public void restoreVGames(VirtualGame vGame) {
         vGames.put(vGame.getGameId(), vGame);
+    }
+
+    public void notifyToStopGame(int gameId, String from){
+        for (String playerName : gameID2PlayerNames.get(gameId)) {
+            try {
+                playerName2PlayerServer.get(playerName).sendMessage(new ConnectionDroppedMessage(from));
+            }catch (NullPointerException ignored){}
+        }
     }
 
     // only for test

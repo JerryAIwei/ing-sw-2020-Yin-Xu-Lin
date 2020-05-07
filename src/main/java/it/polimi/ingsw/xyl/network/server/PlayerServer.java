@@ -1,8 +1,8 @@
 package it.polimi.ingsw.xyl.network.server;
 
 
-import it.polimi.ingsw.xyl.model.VirtualGame;
 import it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage;
+import it.polimi.ingsw.xyl.model.message.ConnectionDroppedMessage;
 import it.polimi.ingsw.xyl.model.message.Message;
 import it.polimi.ingsw.xyl.model.message.PlayerNameMessage;
 import it.polimi.ingsw.xyl.view.VirtualView;
@@ -53,16 +53,15 @@ public class PlayerServer implements Runnable {
         while (true) {
             try {
                 Message clientMessage = (Message) inputStream.readObject();
-
                 if (clientMessage instanceof PlayerNameMessage) {
                     playerName = ((PlayerNameMessage) clientMessage).getPlayerName();
                     ((PlayerNameMessage) clientMessage).setPs(this);
                     System.out.println(((PlayerNameMessage) clientMessage).getPs().getIp());
-                     vView.update(clientMessage);
-                } else
-                    vView.update(clientMessage);
+                }
+                vView.update(clientMessage);
             } catch (ClassNotFoundException | ClassCastException | IOException e) {
                 e.printStackTrace();
+                vView.update(new ConnectionDroppedMessage(playerName));
                 break;
             }
         }

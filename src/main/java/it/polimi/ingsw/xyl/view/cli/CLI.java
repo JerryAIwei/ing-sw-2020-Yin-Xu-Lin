@@ -8,7 +8,9 @@ import it.polimi.ingsw.xyl.view.ViewInterface;
 import it.polimi.ingsw.xyl.model.message.*;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -122,9 +124,16 @@ public class CLI extends Thread implements ViewInterface {
 
     @Override
     public void update(Exception e)  {
-        System.out.println(ColorSetter.FG_RED.setColor("Connection failed! If you want to rejoin the game,\n" +
-                "please restart the game and login with the same username!"));
-        System.exit(0);
+        if (e instanceof ConnectException) {
+            System.err.println("Connection refused");
+            //askLogin();
+        }else if (e instanceof EOFException){
+            System.err.println("Connection failed! If you want to rejoin the game,\n" +
+                    "please restart the game and login with the same username!");
+            System.exit(0);
+        }else{
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -139,6 +148,11 @@ public class CLI extends Thread implements ViewInterface {
             joinOrCreate((NameOKMessage) message);
         } else if (message instanceof WaitingReconnectionMessage){
             System.out.println("Please waiting for other players' reconnection.");
+        } else if (message instanceof ConnectionDroppedMessage){
+            System.err.println(((ConnectionDroppedMessage) message).playerName + " dropped the connection with " +
+                    "server, " +
+                    "the game stopped.");
+            System.exit(0);
         }else {
             System.err.println("Wrong Message Received:" + message.getClass().toString());
         }

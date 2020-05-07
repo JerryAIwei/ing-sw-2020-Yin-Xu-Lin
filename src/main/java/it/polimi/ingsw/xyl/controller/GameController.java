@@ -134,6 +134,10 @@ public class GameController {
         gameMaster.loadData();
     }
 
+    public void handleMessage(ConnectionDroppedMessage message){
+        gameMaster.stopGameOf(message.playerName);
+    }
+
     public void update(Message message) {
         if (message.getClass() == PlayerNameMessage.class)
             handleMessage((PlayerNameMessage) message);
@@ -159,6 +163,8 @@ public class GameController {
             handleMessage((BuildMessage) message);
         else if (message.getClass() == LoadDataMessage.class)
             handleMessage((LoadDataMessage) message);
+        else if (message.getClass() == ConnectionDroppedMessage.class)
+            handleMessage((ConnectionDroppedMessage) message);
     }
 
 }

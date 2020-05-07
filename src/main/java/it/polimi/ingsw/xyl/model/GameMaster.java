@@ -258,6 +258,17 @@ public class GameMaster {
     }
 
     /**
+     * To stop the game if any of the players dropped connection with server
+     * @param playerName player name
+     */
+    public void stopGameOf(String playerName) {
+        int gameId = gameLobby.getAllPlayers().get(playerName);
+        gameLobby.getGameBoards().get(gameId).setReconnecting(true);
+        stopGame(gameId,playerName);
+    }
+
+
+    /**
      * loadData is for persistence, the server will firstly
      * load previous saved data file in ./data to restore the
      * previous status of the server after the unexpected
@@ -346,6 +357,12 @@ public class GameMaster {
     public void notify(VirtualGame vGame){
         synchronized (observerV) {
             observerV.get(0).restoreVGames(vGame);
+        }
+    }
+
+    public void stopGame(int gameId, String from){
+        synchronized (observerV) {
+            observerV.get(0).notifyToStopGame(gameId,from);
         }
     }
 }
