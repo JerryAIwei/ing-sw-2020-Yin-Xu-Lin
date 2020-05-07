@@ -13,12 +13,14 @@ public class Player {
     private Cosplayer cosplayer;
     private Worker[] workers;
     private PlayerStatus currentStatus;
+    private boolean reconnecting;
 
     public Player(int playerId, String playerName) {
         this.playerId = playerId;
         this.playerName = playerName;
         this.cosplayer = new Cosplayer(this);
         this.currentStatus = PlayerStatus.INLOBBY;
+        this.workers = new Worker[2];
     }
 
     public int getPlayerId() {
@@ -52,7 +54,8 @@ public class Player {
     public void setWorkers(int xOfWorkerA, int yOfWorkerA, int xOfWorkerB, int yOfWorkerB) {
         Worker workerA = new Worker(xOfWorkerA, yOfWorkerA);
         Worker workerB = new Worker(xOfWorkerB, yOfWorkerB);
-        this.workers = new Worker[]{workerA, workerB};
+        this.workers[0] = workerA;
+        this.workers[1] = workerB;
         this.currentStatus = PlayerStatus.WORKERPREPARED;
     }
 
@@ -66,5 +69,13 @@ public class Player {
 
     public void setCurrentStatus(PlayerStatus currentStatus) {
         this.currentStatus = currentStatus;
+    }
+
+    public void setReconnecting(boolean reconnecting){
+        this.reconnecting = reconnecting;
+    }
+
+    public boolean getReconnecting(){
+        return reconnecting;
     }
 }

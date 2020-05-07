@@ -33,6 +33,7 @@ public class VirtualGame extends Message {
         VPlayer(int playerId, String playerName) {
             this.playerId = playerId;
             this.playerName = playerName;
+            this.workers = new Worker[2];
         }
 
         public Worker[] getWorkers() {

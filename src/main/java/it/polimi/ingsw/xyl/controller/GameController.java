@@ -7,6 +7,7 @@ import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
+import java.io.EOFException;
 import java.util.ArrayList;
 
 

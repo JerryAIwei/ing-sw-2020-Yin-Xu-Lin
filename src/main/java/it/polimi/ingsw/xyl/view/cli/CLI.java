@@ -1,20 +1,18 @@
 package it.polimi.ingsw.xyl.view.cli;
 
-import it.polimi.ingsw.xyl.controller.GameController;
 import it.polimi.ingsw.xyl.model.*;
 import it.polimi.ingsw.xyl.model.message.Message;
 import it.polimi.ingsw.xyl.network.client.Client;
 import it.polimi.ingsw.xyl.util.ColorSetter;
 import it.polimi.ingsw.xyl.view.ViewInterface;
 import it.polimi.ingsw.xyl.model.message.*;
-import it.polimi.ingsw.xyl.view.VirtualView;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -35,7 +33,7 @@ public class CLI extends Thread implements ViewInterface {
     private String nextAction;
     private int workerInAction = -1;
     private VirtualGame vGame;
-    private boolean interruptInput = false;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public static void main(String[] args) {
         System.out.println("new a cli");
@@ -115,16 +113,18 @@ public class CLI extends Thread implements ViewInterface {
                     System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for other player's operations."));
                 break;
             case GAMEENDED:
-                System.out.println("Game Over");
+                System.out.println("Game End");
+                System.out.println("You " + vGame.getVPlayers().get(id).getPlayerStatus());
                 break;
         }
 
     }
 
     @Override
-    public void update(Exception e) {
-        System.out.println("update(Exception e)");
-        interruptInput = true;
+    public void update(Exception e)  {
+        System.out.println(ColorSetter.FG_RED.setColor("Connection failed! If you want to rejoin the game,\n" +
+                "please restart the game and login with the same username!"));
+        System.exit(0);
     }
 
     /**
@@ -137,7 +137,9 @@ public class CLI extends Thread implements ViewInterface {
             setUserName();
         } else if (message instanceof NameOKMessage) {
             joinOrCreate((NameOKMessage) message);
-        } else {
+        } else if (message instanceof WaitingReconnectionMessage){
+            System.out.println("Please waiting for other players' reconnection.");
+        }else {
             System.err.println("Wrong Message Received:" + message.getClass().toString());
         }
 
@@ -192,22 +194,23 @@ public class CLI extends Thread implements ViewInterface {
 
     private void setUserName() {
         System.out.println(ColorSetter.FG_BLUE.setColor("Please Enter Login Name"));
-//        userName = new Scanner(System.in).nextLine();
-        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random random = new Random();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < 5; i++) {
-            int number = random.nextInt(62);
-            sb.append(str.charAt(number));
-        }
-        userName = sb.toString();
-        System.out.println(ColorSetter.FG_BLUE.setColor("Your player name is " + userName));
-        sendMessage(new PlayerNameMessage(userName));
+        executor.execute(() -> {
+            userName = new Scanner(System.in).nextLine();
+//            String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+//            Random random = new Random();
+//            StringBuffer sb = new StringBuffer();
+//            for (int i = 0; i < 5; i++) {
+//                int number = random.nextInt(62);
+//                sb.append(str.charAt(number));
+//            }
+//            userName = sb.toString();
+//            System.out.println(ColorSetter.FG_BLUE.setColor("Your player name is " + userName));
+            sendMessage(new PlayerNameMessage(userName));
+        });
     }
 
     private void setPlayNum() {
-
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int playNum;
             do {
                 System.out.println(ColorSetter.FG_BLUE.setColor("Please set number of players, 2 or 3"));
@@ -216,7 +219,6 @@ public class CLI extends Thread implements ViewInterface {
             System.out.println("Play Number:" + playNum);
             sendMessage(new SetPlayerNumberMessage(gameId, playNum));
         });
-        t.start();
     }
 
     private void joinOrCreate(NameOKMessage nameOKMessage) {
@@ -238,7 +240,7 @@ public class CLI extends Thread implements ViewInterface {
             System.out.println("\n");
         }
 
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int input;
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             do {
@@ -255,13 +257,14 @@ public class CLI extends Thread implements ViewInterface {
                 sendMessage(new JoinGameMessage(userName, input));
             }
         });
-        t.start();
+
+        
     }
 
     private void setAvailableGodPowers() {
 
         int playNum = islandBoardCLI.getPlayers().size();
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int[] godPowers = {-1, -1, -1};
             int countDown = playNum;
             System.out.println(ColorSetter.FG_BLUE.setColor("Input number to select available god power"));
@@ -303,7 +306,7 @@ public class CLI extends Thread implements ViewInterface {
                 System.err.println("in setAvailableGodPowers(): playNum!=2&&playNum!=3");
             }
         });
-        t.start();
+
     }
 
     private void setGodPower() {
@@ -312,7 +315,7 @@ public class CLI extends Thread implements ViewInterface {
             sendMessage(new PlayerChooseGodPowerMessage
                     (gameId, id, availableGodPowers.get(0)));
         } else {
-            var t = new Thread(() -> {
+            executor.execute(() -> {
                 int input = 0;
                 do {
                     System.out.println(ColorSetter.FG_BLUE.setColor("Input number to select your god power"));
@@ -327,13 +330,12 @@ public class CLI extends Thread implements ViewInterface {
                 sendMessage(new PlayerChooseGodPowerMessage
                         (gameId, id, availableGodPowers.get(input)));
             });
-            t.start();
         }
     }
 
     private void setStartPlayer() {
         int playNum = islandBoardCLI.getPlayers().size();
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int input;
             do {
                 System.out.println(ColorSetter.FG_BLUE.setColor("Input number to choose who start first"));
@@ -342,13 +344,12 @@ public class CLI extends Thread implements ViewInterface {
             } while (input < 0 || input >= playNum);
             sendMessage(new StartGameMessage(gameId, userName, input));
         });
-        t.start();
     }
 
     private void setInitialWorkPosition() {
 
         System.out.println(ColorSetter.FG_BLUE.setColor("Set initial worker position"));
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int ax, ay, bx, by;
             do {
                 System.out.println(ColorSetter.FG_BLUE.setColor("First worker x, please input 0 - 4"));
@@ -362,7 +363,6 @@ public class CLI extends Thread implements ViewInterface {
             } while (false/*todo:check available*/);
             sendMessage(new SetInitialWorkerPositionMessage(gameId, id, ax, ay, bx, by));
         });
-        t.start();
     }
 
     private Direction chooseDirection(String action, int workerId) {
@@ -380,7 +380,7 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     private void move() {
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int workerId;
             if (workerInAction != -1) {
                 System.out.println(ColorSetter.FG_BLUE.setColor("You should use worker " + workerInAction + " to move."));
@@ -397,12 +397,12 @@ public class CLI extends Thread implements ViewInterface {
             sendMessage(new MoveMessage
                     (gameId, id, workerId, direction));
         });
-        t.start();
     }
 
     private void build() {
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int workerId;
+
             if (workerInAction != -1) {
                 System.out.println(ColorSetter.FG_BLUE.setColor("You should use worker " + workerInAction + " to build."));
                 workerId = workerInAction;
@@ -432,11 +432,10 @@ public class CLI extends Thread implements ViewInterface {
                     (gameId, id, workerId, direction, isDome));
 
         });
-        t.start();
     }
 
     private void chooseMoveOrBuild() {
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int input;
             do {
                 System.out.println
@@ -449,11 +448,10 @@ public class CLI extends Thread implements ViewInterface {
             else
                 build();
         });
-        t.start();
     }
 
     private void chooseBuildOrEnd() {
-        var t = new Thread(() -> {
+        executor.execute(() -> {
             int input;
             do {
                 System.out.println
@@ -467,13 +465,13 @@ public class CLI extends Thread implements ViewInterface {
             else
                 sendMessage(new MyTurnFinishedMessage(gameId, id));
         });
-        t.start();
     }
 
     /**
      * Method used to set god power and choose who to start first
      */
     private void setUpGame() {
+        // TODO: change if-else logic by changing playerStatus for reconnection.
         switch (playerStatus) {
             case INGAMEBOARD:
                 if (availableGodPowers.isEmpty()) {

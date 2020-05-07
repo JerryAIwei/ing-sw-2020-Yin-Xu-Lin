@@ -19,6 +19,7 @@ public class GameBoard {
     private final IslandBoard islandBoard;
     private final ArrayList<GodPower> availableGodPowers;
     private GameStatus currentStatus;
+    private boolean reconnecting;
 
     public GameBoard(int gameId) {
         this.gameId = gameId;
@@ -76,6 +77,17 @@ public class GameBoard {
         return players;
     }
 
+    public Player getPlayer(String playerName) {
+        Player player = null;
+        for (int i = 0;i<players.size();i++) {
+            if (players.get(i).getPlayerName().equals(playerName)) {
+                player = players.get(i);
+                break;
+            }
+        }
+        return player;
+    }
+
     public ArrayList<String> getAllPlayerNames(){
         ArrayList<String> names = new ArrayList<>();
         for (Map.Entry<Integer, Player> entry : players.entrySet()) {
@@ -109,5 +121,18 @@ public class GameBoard {
 
     public void setCurrentStatus(GameStatus currentStatus) {
         this.currentStatus = currentStatus;
+    }
+
+    public void setReconnecting(boolean reconnecting){
+        this.reconnecting = reconnecting;
+        if(reconnecting) {
+            for (Map.Entry<Integer, Player> entry : players.entrySet()) {
+                entry.getValue().setReconnecting(reconnecting);
+            }
+        }
+    }
+
+    public boolean getReconnecting(){
+        return reconnecting;
     }
 }

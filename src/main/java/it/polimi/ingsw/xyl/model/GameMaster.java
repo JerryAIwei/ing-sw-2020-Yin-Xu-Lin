@@ -14,9 +14,10 @@ import java.util.ArrayList;
  * @author Shaoxun
  */
 public class GameMaster {
+    private static final String RECONNECTION = "_RECONNECTION";
     private final GameLobby gameLobby;
     private final ArrayList<VirtualView> observerV = new ArrayList<>();
-
+    private final static int NO_GAME_ID = -1;
 
     public GameMaster() {
         this.gameLobby = new GameLobby();
@@ -51,8 +52,25 @@ public class GameMaster {
      * @param playerName the nickname of a player.
      */
     public synchronized void addPlayer(PlayerServer ps, String playerName){
-        String result = gameLobby.add2AllPlayers(playerName,-1);
-        notify(ps, result);
+        String result = gameLobby.add2AllPlayers(playerName, NO_GAME_ID);
+        if (RECONNECTION.equals(result)){
+            int gameId = gameLobby.getAllPlayers().get(playerName);
+            GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);
+            gameBoard.getPlayer(playerName).setReconnecting(false);
+            boolean allReconnected = true;
+            int playerSize = gameBoard.getPlayers().size();
+            for (int i = 0; i < playerSize; i++){
+                if (gameBoard.getPlayers().get(i).getReconnecting()) {
+                    allReconnected = false;
+                }
+            }
+            if(allReconnected) {
+                gameLobby.getGameBoards().get(gameId).setReconnecting(false);
+            }
+            notify(ps,playerName,gameId);
+        }else{
+            notify(ps, result);
+        }
     }
 
     /**
@@ -69,7 +87,7 @@ public class GameMaster {
         player.setCurrentStatus(PlayerStatus.INGAMEBOARD);
         gameBoard.addPlayer(player);
         player.setCurrentGameBoard(gameBoard);
-        gameLobby.add2AllPlayers(playerName, gameId);
+        gameLobby.getAllPlayers().replace(playerName,gameId);
         gameLobby.addGameBoard(gameBoard);
         notify(gameId);
     }
@@ -257,14 +275,15 @@ public class GameMaster {
                 vPlayer = vGame.getVPlayers().get(i);
                 Player player = new Player(vPlayer.playerId, vPlayer.playerName);
                 player.setCosplayer(vPlayer.getGodPower().cosplay(player));
-                player.restoreWorkers(vPlayer.getWorkers());
+                player.restoreWorkers(vPlayer.getWorkers().clone());
                 if (vPlayer.getNextAction() != null)
                     player.getCosplayer().restoreNextAction(vPlayer.getNextAction());
                 player.getCosplayer().restoreWorkerInAction(vPlayer.getWorkerInAction());
                 player.setCurrentGameBoard(gameBoard);
                 player.setCurrentStatus(vPlayer.getPlayerStatus());
+                player.setReconnecting(true);
                 gameBoard.addPlayer(player);
-                gameLobby.add2AllPlayers(vPlayer.playerName,vPlayer.playerId);
+                gameLobby.add2AllPlayers(vPlayer.playerName, gameId);
             }
             if (!vGame.getAllGodPowers().isEmpty()) {
                 for (GodPower godPower : vGame.getAllGodPowers()) {
@@ -272,10 +291,11 @@ public class GameMaster {
                 }
             }
             gameBoard.setCurrentStatus(vGame.getGameStatus());
+            gameBoard.setReconnecting(true);
             gameBoard.restoreNextPlayer(vGame.getCurrentPlayerId());
             gameLobby.addGameBoard(gameBoard);
             System.out.println("Previous data loaded from GameID "+ gameId);
-            //notify(gameId);
+            notify(gameId, vGame);
             gameId += 1;
             vGame = loadVirtualGame(gameId);
         }
@@ -305,8 +325,14 @@ public class GameMaster {
     // to set player name
     // if player name is ok, show him available games
     public void notify(PlayerServer ps, String playerName){
+            synchronized (observerV) {
+                observerV.get(0).update(ps, playerName, gameLobby);
+            }
+    }
+
+    public void notify(PlayerServer ps, String playerName, int gameId){
         synchronized (observerV) {
-            observerV.get(0).update(ps,playerName,gameLobby);
+            observerV.get(0).update(ps, playerName, gameLobby.getGameBoards().get(gameId));
         }
     }
 
@@ -314,6 +340,12 @@ public class GameMaster {
     public void notify(int gameId){
         synchronized (observerV) {
             observerV.get(0).update(gameLobby.getGameBoards().get(gameId));
+        }
+    }
+
+    public void notify(int gameId, VirtualGame vGame){
+        synchronized (observerV) {
+            observerV.get(0).restoreVGames(vGame);
         }
     }
 }

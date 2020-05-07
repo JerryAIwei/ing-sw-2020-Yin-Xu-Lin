@@ -10,6 +10,8 @@ import java.util.Vector;
  * @author Shaoxun
  */
 public class GameLobby {
+    private static final int NO_GAME_ID = -1;
+    private static final String RECONNECTION = "_RECONNECTION";
     private final Vector<GameBoard> gameBoards;
     private final HashMap<String,Integer> allPlayers;
 
@@ -23,12 +25,23 @@ public class GameLobby {
     }
 
     public String add2AllPlayers(String playerName, int a){
-        if (allPlayers.get(playerName) == null) {
+        if (a == NO_GAME_ID){
+            if (allPlayers.get(playerName) == null) {
+                allPlayers.put(playerName, a);
+                return playerName;
+            }else{
+                int gameId = allPlayers.get(playerName);
+                if(gameBoards.get(gameId).getReconnecting()) {
+                    // if reconnection
+                    return RECONNECTION;
+                }else{
+                    return null;
+                }
+            }
+        }else{
             allPlayers.put(playerName, a);
             return playerName;
         }
-        else
-           return null;
     }
 
     public Vector<GameBoard> getGameBoards() {
