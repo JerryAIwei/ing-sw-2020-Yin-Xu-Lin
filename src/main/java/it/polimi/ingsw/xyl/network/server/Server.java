@@ -2,12 +2,19 @@ package it.polimi.ingsw.xyl.network.server;
 
 import it.polimi.ingsw.xyl.controller.GameController;
 import it.polimi.ingsw.xyl.model.message.LoadDataMessage;
+import it.polimi.ingsw.xyl.util.ColorSetter;
 import it.polimi.ingsw.xyl.view.VirtualView;
 //import org.objectweb.asm.commons.InstructionAdapter;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class for handling new connection
@@ -29,10 +36,12 @@ public class Server
     {
         gc.register(v);
         v.register(gc);
+        checkData();
         v.update(new LoadDataMessage());
         ServerSocket socket;
         try {
             socket = new ServerSocket(SOCKET_PORT);
+            System.out.println("Server started.");
         } catch (IOException e) {
             System.err.println(e.toString());
             return;
@@ -55,4 +64,44 @@ public class Server
             }
         }
     }
+
+     public static void checkData(){
+        File dir = new File("./data/");
+        boolean dirExists = dir.exists();
+        if (!dirExists) {
+            dirExists = dir.mkdirs();
+        }
+         if (dirExists && Objects.requireNonNull(dir.list()).length > 0) {
+             try {
+                 new Thread(() -> {
+                     String input;
+                     do {
+                         System.out.print("Clean previous data? y/n:");
+                         try (Scanner scanner = new Scanner(System.in)) {
+                             input = scanner.nextLine();
+                             if (input.trim().isEmpty()) {
+                                 input = "n";
+                                 System.out.println("Time out, loading data...");
+                             }
+                         }
+                     } while (!input.equals("y") && !input.equals("n"));
+                     if (input.equals("y")) {
+                         boolean deleted = false;
+                         for (File file : Objects.requireNonNull(dir.listFiles()))
+                             if (!file.isDirectory())
+                                 deleted = file.delete();
+                             if (deleted)
+                                 System.out.println("All previous data deleted.");
+                     }
+                 }).start();
+                 Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                 Robot robot = new Robot();
+                 robot.keyPress(KeyEvent.VK_ENTER);
+                 robot.keyRelease(KeyEvent.VK_ENTER);
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
+         }
+    }
+
 }
