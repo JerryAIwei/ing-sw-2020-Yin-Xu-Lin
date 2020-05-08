@@ -4,11 +4,6 @@ import it.polimi.ingsw.xyl.model.message.CreateNewGameMessage;
 import it.polimi.ingsw.xyl.model.message.JoinGameMessage;
 import it.polimi.ingsw.xyl.model.message.NameOKMessage;
 import it.polimi.ingsw.xyl.view.gui.GUI;
-import it.polimi.ingsw.xyl.view.gui.model.Person;
-import javafx.beans.Observable;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -37,6 +32,9 @@ public class GameLobbyController {
     private Label thirdPlayerLabel;
 
     private Vector<Label> labels = new Vector<>();
+
+    private boolean isNewGame = false;
+    private boolean isJoinGame = false;
 
     // Reference to the main application.
     private GUI mainApp;
@@ -96,10 +94,9 @@ public class GameLobbyController {
      */
     @FXML
     private void handleNewGame() {
-        boolean okClicked = true;//= mainApp.(tempPerson);
-        if (okClicked) {
-            mainApp.sendMessage(new CreateNewGameMessage(mainApp.getUserName()));
-        }
+        if(isNewGame) return;
+        isNewGame = true;
+        mainApp.sendMessage(new CreateNewGameMessage(mainApp.getUserName()));
     }
 
     /**
@@ -108,8 +105,10 @@ public class GameLobbyController {
      */
     @FXML
     private void handleJoinGame() {
+        if(isJoinGame) return;
+        isJoinGame = true;
         var selectedGame = gamesTable.getSelectionModel().getSelectedItem();
-        if (selectedGame != null) {
+        if (selectedGame != null&&selectedGame.getCurrentNumber()!=selectedGame.getPlayerNumber()) {
             mainApp.sendMessage(new JoinGameMessage(mainApp.getUserName(), selectedGame.getGameID()));
         } else {
             // Nothing selected.

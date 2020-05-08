@@ -12,6 +12,7 @@ public class NameOKMessage extends Message {
     public class Games implements Serializable {
         private final int gameID;
         private final int playerNumber;
+        private int currentNumber;
         private final ArrayList<String> currentPlayers = new ArrayList<>();
 
         public Games(int id, int num){
@@ -27,11 +28,16 @@ public class NameOKMessage extends Message {
             return playerNumber;
         }
 
+        public int getCurrentNumber() {
+            return currentNumber;
+        }
+
         public ArrayList<String> getCurrentPlayers() {
             return currentPlayers;
         }
     }
     private final ArrayList<Games> games = new ArrayList<>();
+
 
     public NameOKMessage(GameLobby gameLobby){
         for(GameBoard gb:gameLobby.getGameBoards()){
@@ -40,9 +46,11 @@ public class NameOKMessage extends Message {
                 for (Player player : gb.getPlayers().values()) {
                     game.currentPlayers.add(player.getPlayerName());
                 }
+                game.currentNumber = game.currentPlayers.size();
                 games.add(game);
             }
         }
+
     }
 
     public ArrayList<Games> getGames() {

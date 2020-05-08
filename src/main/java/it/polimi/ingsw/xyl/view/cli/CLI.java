@@ -115,8 +115,7 @@ public class CLI extends Thread implements ViewInterface {
                     System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for other player's operations."));
                 break;
             case GAMEENDED:
-                System.out.println("Game End");
-                System.out.println("You " + vGame.getVPlayers().get(id).getPlayerStatus());
+                gameEnd();
                 break;
         }
 
@@ -542,5 +541,23 @@ public class CLI extends Thread implements ViewInterface {
                 chooseBuildOrEnd();
                 break;
         }
+    }
+
+    private void gameEnd(){
+        System.out.println("Game End");
+        System.out.println("You " + vGame.getVPlayers().get(id).getPlayerStatus());
+        int input;
+        do {
+            System.out.println
+                    (ColorSetter.FG_BLUE.setColor("Please input 1 for restart," +
+                            " 0 for end game"));
+            input = new Scanner(System.in).nextInt();
+        } while (input != 0 && input != 1);
+        gameId=-1;
+        id = -1;
+        sendMessage(new EndGameMessage(userName,input));
+        if(input==0)
+            System.exit(0);
+
     }
 }
