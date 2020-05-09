@@ -138,9 +138,23 @@ public class Cosplayer {
             player.setCurrentStatus(PlayerStatus.WIN);
             player.getCurrentGameBoard().setCurrentStatus(GameStatus.GAMEENDED);
         }
-        boolean lose =
-                player.getCosplayer().getAvailableMoves(0).isEmpty()
+        boolean cannotMoveLose = workerInAction == -1 && nextAction == Action.MOVE
+                        && player.getCosplayer().getAvailableMoves(0).isEmpty()
                         && player.getCosplayer().getAvailableMoves(1).isEmpty();
+
+        boolean cannotMoveInOnesTurnLose = workerInAction != -1 && nextAction == Action.MOVE
+                && player.getCosplayer().getAvailableMoves(workerInAction).isEmpty();
+
+        boolean cannotMoveAndBuildLose = workerInAction == -1 && nextAction == Action.MOVEORBUILD
+                && player.getCosplayer().getAvailableMoves(0).isEmpty()
+                && player.getCosplayer().getAvailableMoves(1).isEmpty()
+                && player.getCosplayer().getAvailableBuilds(0).isEmpty()
+                && player.getCosplayer().getAvailableBuilds(1).isEmpty();
+
+        boolean cannotBuildLose = nextAction == Action.BUILD
+                        && player.getCosplayer().getAvailableBuilds(workerInAction).isEmpty();
+
+        boolean lose = cannotMoveLose || cannotMoveInOnesTurnLose || cannotBuildLose || cannotMoveAndBuildLose;
         if (lose) {
             player.setCurrentStatus(PlayerStatus.LOSE);
             int ax = player.getWorkers()[0].getPositionX();
