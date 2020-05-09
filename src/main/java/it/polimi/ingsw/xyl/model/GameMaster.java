@@ -5,6 +5,7 @@ import it.polimi.ingsw.xyl.view.VirtualView;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.logging.*;
 
 
 /**
@@ -15,9 +16,11 @@ import java.util.ArrayList;
  */
 public class GameMaster {
     private static final String RECONNECTION = "_RECONNECTION";
+    private static final String PLACEHOLDER = "_PLACEHOLDER";
+    private final static int NO_GAME_ID = -1;
     private final GameLobby gameLobby;
     private final ArrayList<VirtualView> observerV = new ArrayList<>();
-    private final static int NO_GAME_ID = -1;
+    private static final Logger logger = Logger.getLogger("model.GameMaster");
 
     public GameMaster() {
         this.gameLobby = new GameLobby();
@@ -57,10 +60,11 @@ public class GameMaster {
             int gameId = gameLobby.getAllPlayers().get(playerName);
             GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);
             gameBoard.getPlayer(playerName).setReconnecting(false);
+            logger.log(java.util.logging.Level.INFO, playerName + " rejoined the game " + gameId);
             boolean allReconnected = true;
             int playerSize = gameBoard.getPlayers().size();
             for (int i = 0; i < playerSize; i++){
-                if (gameBoard.getPlayers().get(i).getReconnecting()) {
+                if (gameBoard.getPlayers().get(i).getReconnecting() && gameBoard.getPlayers().get(i).getCurrentStatus() != PlayerStatus.LOSE) {
                     allReconnected = false;
                 }
             }
@@ -69,6 +73,10 @@ public class GameMaster {
             }
             notify(ps,playerName,gameId);
         }else{
+            if (result == null)
+                logger.log(java.util.logging.Level.WARNING, "Player name duplicated: " + playerName);
+            else
+                logger.log(java.util.logging.Level.INFO, playerName + " entered the game lobby.");
             notify(ps, result);
         }
     }
@@ -89,6 +97,7 @@ public class GameMaster {
         player.setCurrentGameBoard(gameBoard);
         gameLobby.getAllPlayers().replace(playerName,gameId);
         gameLobby.addGameBoard(gameBoard);
+        logger.log(java.util.logging.Level.INFO, playerName + " created a game " + gameId);
         notify(gameId);
     }
 
@@ -112,6 +121,7 @@ public class GameMaster {
             // set the game status "waiting start"
             if (gameBoard.getPlayerNumber() == gameBoard.getPlayers().size())
                 gameBoard.setCurrentStatus(GameStatus.WAITINGSTART);
+            logger.log(java.util.logging.Level.INFO, playerName + " joined into game " + gameId);
             notify(gameId);
         }
     }
@@ -125,6 +135,7 @@ public class GameMaster {
     public void setPlayerNumber(int gameId, int playerNumber) {
         gameLobby.getGameBoards().get(gameId).setPlayerNumber(playerNumber);
         gameLobby.getGameBoards().get(gameId).setCurrentStatus(GameStatus.WAITINGPLAYER);
+        logger.log(java.util.logging.Level.INFO, "Player number of game " + gameId + " set to "+ playerNumber);
         notify(gameId);
     }
 
@@ -179,6 +190,7 @@ public class GameMaster {
             gameLobby.getGameBoards().get(gameId).getPlayers().forEach((key, value) -> value.setCurrentStatus(PlayerStatus.WAITING4INIT));
             gameLobby.getGameBoards().get(gameId).toNextPlayer(startPlayerId);
             gameLobby.getGameBoards().get(gameId).setCurrentStatus(GameStatus.INGAME);
+            logger.log(java.util.logging.Level.INFO, "Game " + gameId + " started.");
             notify(gameId);
         }
     }
@@ -258,13 +270,45 @@ public class GameMaster {
     }
 
     /**
+     * After the game ends or partially ends, place related players in game lobby,
+     * and notify them.
+     *
+     * @param gameId game Id
+     */
+    public void afterGame(String playerName, int gameId) {
+        // if gameStatus == GameStatus.GAMEENDED then PLACEHOLDER.equals(playerName)
+        if (PLACEHOLDER.equals(playerName)) {
+            ArrayList<String> players = gameLobby.getGameBoards().get(gameId).getAllPlayerNames();
+            logger.log(java.util.logging.Level.INFO, "Game " + gameId + " ended.");
+            for (String name : players) {
+                gameLobby.getAllPlayers().replace(name, NO_GAME_ID);
+            }
+            notifyGameEnded(gameId);
+        }else{
+            if(gameLobby.getAllPlayers().get(playerName) == gameId){
+                gameLobby.getAllPlayers().replace(playerName, NO_GAME_ID);
+                logger.log(java.util.logging.Level.INFO, playerName+" lost and return to game lobby.");
+                notifyGameEnded(playerName);
+            }
+        }
+    }
+
+    /**
      * To stop the game if any of the players dropped connection with server
+     *
      * @param playerName player name
      */
     public void stopGameOf(String playerName) {
         int gameId = gameLobby.getAllPlayers().get(playerName);
-        gameLobby.getGameBoards().get(gameId).setReconnecting(true);
-        stopGame(gameId,playerName);
+        if (gameId != NO_GAME_ID) {
+            if (!gameLobby.getGameBoards().get(gameId).getReconnecting()) {
+                stopGame(gameId, playerName);
+                gameLobby.getGameBoards().get(gameId).setReconnecting(true);
+                logger.log(java.util.logging.Level.WARNING, "Game " + gameId + " stopped because " + playerName + " " +
+                        "dropped the connection.");
+            }
+        }else
+            gameLobby.getAllPlayers().remove(playerName);
     }
 
 
@@ -305,7 +349,7 @@ public class GameMaster {
             gameBoard.setReconnecting(true);
             gameBoard.restoreNextPlayer(vGame.getCurrentPlayerId());
             gameLobby.addGameBoard(gameBoard);
-            System.out.println("Previous data loaded from GameID "+ gameId);
+            logger.log(java.util.logging.Level.INFO, "Previous data loaded from GameID "+ gameId);
             notify(vGame);
             gameId += 1;
             vGame = loadVirtualGame(gameId);
@@ -320,10 +364,10 @@ public class GameMaster {
      */
     private VirtualGame loadVirtualGame(int gameId){
         VirtualGame vGame = null;
-        File vGameFile = new File("./data/virtualGame_" + gameId + ".ser");
+        File vGameFile = new File("./data/game"+ gameId +"/virtualGame_" + gameId + ".ser");
         if (vGameFile.exists()){
             try{
-                FileInputStream fileIn = new FileInputStream("./data/virtualGame_" + gameId + ".ser");
+                FileInputStream fileIn = new FileInputStream("./data/game"+ gameId +"/virtualGame_" + gameId + ".ser");
                 ObjectInputStream in = new ObjectInputStream(fileIn);
                 vGame = (VirtualGame) in.readObject();
             } catch (IOException | ClassNotFoundException e) {
@@ -333,33 +377,79 @@ public class GameMaster {
         return vGame;
     }
 
-    // to set player name
-    // if player name is ok, show him available games
+    /**
+     * Used by addPlayer, if player name is available,
+     * show available games to player.
+     *
+     * @param ps player server
+     * @param playerName player name
+     */
     public void notify(PlayerServer ps, String playerName){
             synchronized (observerV) {
                 observerV.get(0).update(ps, playerName, gameLobby);
             }
     }
 
+    /**
+     * Used by addPlayer, if the player reconnect with the same nickname,
+     * tell the player to wait for others or resume the game.
+     *
+     * @param ps new player server
+     * @param playerName player name
+     * @param gameId game Id
+     */
     public void notify(PlayerServer ps, String playerName, int gameId){
         synchronized (observerV) {
             observerV.get(0).update(ps, playerName, gameLobby.getGameBoards().get(gameId));
         }
     }
 
-    // in game, update specific vGame
+    /**
+     * notify all players of a game all the necessary data
+     *
+     * @param gameId game Id
+     */
     public void notify(int gameId){
         synchronized (observerV) {
             observerV.get(0).update(gameLobby.getGameBoards().get(gameId));
         }
     }
 
+    /**
+     * If one player wins, the game ends, show all players
+     * of that game available games.
+     *
+     * @param gameId game Id
+     */
+    public void notifyGameEnded(int gameId){
+        synchronized (observerV) {
+            observerV.get(0).update(gameId, gameLobby);
+        }
+    }
+
+    public void notifyGameEnded(String playerName){
+        synchronized (observerV) {
+            observerV.get(0).update(playerName, gameLobby);
+        }
+    }
+
+    /**
+     * Used by loadData, notify virtualView to restore virtual games
+     *
+     * @param vGame reloaded virtual game
+     */
     public void notify(VirtualGame vGame){
         synchronized (observerV) {
             observerV.get(0).restoreVGames(vGame);
         }
     }
 
+    /**
+     * To handle unexpected disconnection or exit game.
+     *
+     * @param gameId unexpectedly exited game id
+     * @param from the nickname of player who dropped the connection
+     */
     public void stopGame(int gameId, String from){
         synchronized (observerV) {
             observerV.get(0).notifyToStopGame(gameId,from);

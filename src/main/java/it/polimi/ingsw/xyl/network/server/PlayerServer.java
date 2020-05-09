@@ -12,6 +12,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class for managing a player
@@ -24,6 +27,7 @@ public class PlayerServer implements Runnable {
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private String playerName;
+    private static final Logger logger = Logger.getLogger("network.server.PlayerServer");
 
     public InetAddress getIp() {
         return ip;
@@ -38,7 +42,7 @@ public class PlayerServer implements Runnable {
         try {
             this.inputStream = new ObjectInputStream(this.client.getInputStream());
             this.outputStream = new ObjectOutputStream(this.client.getOutputStream());
-            System.out.println("Connected to " + client.getInetAddress());
+            logger.log(Level.INFO, "New connection from " + client.getInetAddress());
         } catch (IOException e) {
             System.err.println(e.toString());
         }
@@ -59,9 +63,11 @@ public class PlayerServer implements Runnable {
                     System.out.println(((PlayerNameMessage) clientMessage).getPs().getIp());
                 }
                 vView.update(clientMessage);
-            } catch (ClassNotFoundException | ClassCastException | IOException e) {
+            } catch( ClassNotFoundException e){
                 e.printStackTrace();
+            } catch (IOException e) {
                 vView.update(new ConnectionDroppedMessage(playerName));
+//                logger.log(Level.WARNING, client.getInetAddress() + " connection dropped.");
                 break;
             }
         }
@@ -79,7 +85,8 @@ public class PlayerServer implements Runnable {
         try {
             outputStream.writeObject(message);
             outputStream.reset();
-        } catch (IOException e) {
+        }catch(SocketException ignored){}
+        catch (IOException e) {
             e.printStackTrace();
         }
 

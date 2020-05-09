@@ -73,6 +73,7 @@ public class GameBoard {
     public void restoreNextPlayer(int playerId) {
         currentPlayer = players.get(playerId);
     }
+
     public HashMap<Integer, Player> getPlayers() {
         return players;
     }

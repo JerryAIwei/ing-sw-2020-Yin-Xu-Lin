@@ -2,7 +2,6 @@ package it.polimi.ingsw.xyl.network.server;
 
 import it.polimi.ingsw.xyl.controller.GameController;
 import it.polimi.ingsw.xyl.model.message.LoadDataMessage;
-import it.polimi.ingsw.xyl.util.ColorSetter;
 import it.polimi.ingsw.xyl.view.VirtualView;
 //import org.objectweb.asm.commons.InstructionAdapter;
 
@@ -15,6 +14,8 @@ import java.net.Socket;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class for handling new connection
@@ -27,13 +28,17 @@ import java.util.concurrent.TimeUnit;
 public class Server
 {
     public final static int SOCKET_PORT = 7777;
-    private static GameController gc = GameController.getSingleton();
-    private static VirtualView v = VirtualView.getSingleton();
+    private static final GameController gc = GameController.getSingleton();
+    private static final VirtualView v = VirtualView.getSingleton();
+    private static final Logger logger = Logger.getLogger("network.server.Server");
+
     //private static InstructionAdapter clients;
     //private Vector<Socket> clients = new Vector<>();
 
     public static void main(String[] args)
     {
+
+        logger.log(Level.INFO, "Santorini game server starting.");
         gc.register(v);
         v.register(gc);
         checkData();
@@ -41,7 +46,7 @@ public class Server
         ServerSocket socket;
         try {
             socket = new ServerSocket(SOCKET_PORT);
-            System.out.println("Server started.");
+            logger.log(Level.INFO, "Server started.");
         } catch (IOException e) {
             System.err.println(e.toString());
             return;
@@ -71,6 +76,8 @@ public class Server
         if (!dirExists) {
             dirExists = dir.mkdirs();
         }
+         File gameDir = new File("./data/game0");
+         dirExists = gameDir.exists();
          if (dirExists && Objects.requireNonNull(dir.list()).length > 0) {
              try {
                  new Thread(() -> {
@@ -81,7 +88,7 @@ public class Server
                              input = scanner.nextLine();
                              if (input.trim().isEmpty()) {
                                  input = "n";
-                                 System.out.println("Time out, loading data...");
+                                 logger.log(Level.INFO, "Time out, loading data...");
                              }
                          }
                      } while (!input.equals("y") && !input.equals("n"));
@@ -91,10 +98,10 @@ public class Server
                              if (!file.isDirectory())
                                  deleted = file.delete();
                              if (deleted)
-                                 System.out.println("All previous data deleted.");
+                                 logger.log(Level.INFO,"All previous data deleted.");
                      }
                  }).start();
-                 Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                 Thread.sleep(TimeUnit.SECONDS.toMillis(3));
                  Robot robot = new Robot();
                  robot.keyPress(KeyEvent.VK_ENTER);
                  robot.keyRelease(KeyEvent.VK_ENTER);

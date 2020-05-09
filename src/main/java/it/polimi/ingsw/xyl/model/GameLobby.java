@@ -17,7 +17,7 @@ public class GameLobby {
 
     public GameLobby() {
         gameBoards= new Vector<>();
-        allPlayers = new HashMap<>(); //TODO: when a game end, delete relevant players
+        allPlayers = new HashMap<>();
     }
 
     public HashMap<String,Integer> getAllPlayers() {
@@ -31,7 +31,7 @@ public class GameLobby {
                 return playerName;
             }else{
                 int gameId = allPlayers.get(playerName);
-                if(gameBoards.get(gameId).getReconnecting()) {
+                if(gameId != NO_GAME_ID && gameBoards.get(gameId).getReconnecting()) {
                     // if reconnection
                     return RECONNECTION;
                 }else{

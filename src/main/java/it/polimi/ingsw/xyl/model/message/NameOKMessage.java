@@ -13,6 +13,7 @@ public class NameOKMessage extends Message {
         private final int gameID;
         private final int playerNumber;
         private int currentNumber;
+        private GameStatus gameStatus;
         private final ArrayList<String> currentPlayers = new ArrayList<>();
 
         public Games(int id, int num){
@@ -32,6 +33,14 @@ public class NameOKMessage extends Message {
             return currentNumber;
         }
 
+        public GameStatus getGameStatus() {
+            return gameStatus;
+        }
+
+        public void setGameStatus(GameStatus gameStatus) {
+            this.gameStatus = gameStatus;
+        }
+
         public ArrayList<String> getCurrentPlayers() {
             return currentPlayers;
         }
@@ -43,6 +52,7 @@ public class NameOKMessage extends Message {
         for(GameBoard gb:gameLobby.getGameBoards()){
             if (gb.getCurrentStatus() != GameStatus.WAITINGINIT ) {
                 Games game = new Games(gb.getGameId(), gb.getPlayerNumber());
+                game.setGameStatus(gb.getCurrentStatus());
                 for (Player player : gb.getPlayers().values()) {
                     game.currentPlayers.add(player.getPlayerName());
                 }

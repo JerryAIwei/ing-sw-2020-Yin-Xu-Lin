@@ -7,7 +7,6 @@ import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import it.polimi.ingsw.xyl.view.VirtualView;
 
-import java.io.EOFException;
 import java.util.ArrayList;
 
 
@@ -130,6 +129,11 @@ public class GameController {
         gameMaster.handleBuild(gameId, playerId, workerId, direction, buildDome);
     }
 
+
+    public void handleMessage(AfterGameMessage message){
+        gameMaster.afterGame(message.playerName, message.gameId);
+    }
+
     public void handleMessage(LoadDataMessage message){
         gameMaster.loadData();
     }
@@ -161,6 +165,8 @@ public class GameController {
             handleMessage((MoveMessage) message);
         else if (message.getClass() == BuildMessage.class)
             handleMessage((BuildMessage) message);
+        else if (message.getClass() == AfterGameMessage.class)
+            handleMessage((AfterGameMessage) message);
         else if (message.getClass() == LoadDataMessage.class)
             handleMessage((LoadDataMessage) message);
         else if (message.getClass() == ConnectionDroppedMessage.class)

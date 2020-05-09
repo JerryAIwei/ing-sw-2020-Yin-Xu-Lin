@@ -1,11 +1,10 @@
 package it.polimi.ingsw.xyl.view.cli;
 
 import it.polimi.ingsw.xyl.model.*;
-import it.polimi.ingsw.xyl.model.message.Message;
+import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.network.client.Client;
 import it.polimi.ingsw.xyl.util.ColorSetter;
 import it.polimi.ingsw.xyl.view.ViewInterface;
-import it.polimi.ingsw.xyl.model.message.*;
 
 import java.io.BufferedReader;
 import java.io.EOFException;
@@ -109,7 +108,9 @@ public class CLI extends Thread implements ViewInterface {
             case INGAME:
                 islandBoardCLI.showMaps();
                 islandBoardCLI.showPlayers();
-                if (currentPlayerId == id)
+                if (playerStatus == PlayerStatus.LOSE)
+                    gameEnd();
+                else if (currentPlayerId == id)
                     playGame();
                 else
                     System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for other player's operations."));
@@ -239,7 +240,11 @@ public class CLI extends Thread implements ViewInterface {
         for (NameOKMessage.Games game : games) {
             int playerNum = game.getPlayerNumber();
             int currentNum = game.getCurrentPlayers().size();
-            if (playerNum == currentNum) {
+            GameStatus gameStatus = game.getGameStatus();
+            if (gameStatus == GameStatus.GAMEENDED)
+                System.out.println(ColorSetter.FG_RED.setColor("=======game ID:" + game.getGameID() +
+                        " (Game Ended)" + "======"));
+            else if (playerNum == currentNum) {
                 System.out.println(ColorSetter.FG_RED.setColor("==========game ID:" + game.getGameID() +
                         " (" + currentNum + "/" + playerNum + ")" + "=========="));
             } else {
@@ -518,7 +523,7 @@ public class CLI extends Thread implements ViewInterface {
                 moveOrBuild();
                 break;
             case LOSE:
-                System.out.println(ColorSetter.FG_BLUE.setColor("You Lose"));
+                gameEnd();
                 break;
         }
     }
@@ -545,19 +550,12 @@ public class CLI extends Thread implements ViewInterface {
 
     private void gameEnd(){
         System.out.println("Game End");
-        System.out.println("You " + vGame.getVPlayers().get(id).getPlayerStatus());
-        int input;
-        do {
-            System.out.println
-                    (ColorSetter.FG_BLUE.setColor("Please input 1 for restart," +
-                            " 0 for end game"));
-            input = new Scanner(System.in).nextInt();
-        } while (input != 0 && input != 1);
-        gameId=-1;
+        PlayerStatus playerStatus = vGame.getVPlayers().get(id).getPlayerStatus();
+        if (playerStatus == PlayerStatus.WIN)
+            System.out.println("You win!");
+        else
+            System.out.println("You lose!");
+        gameId = -1;
         id = -1;
-        sendMessage(new EndGameMessage(userName,input));
-        if(input==0)
-            System.exit(0);
-
     }
 }

@@ -76,6 +76,8 @@ public class VirtualGame extends Message {
     private int currentPlayerId;
     private boolean noLevelUp;
 
+    private static int i = 0;
+
     public VirtualGame(int gameId) {
         this.gameId = gameId;
     }
@@ -177,14 +179,19 @@ public class VirtualGame extends Message {
     public void save(){
         try
         {
-            File dir = new File("./data/");
+            File dir = new File("./data/game"+ gameId);
             boolean dirCreated = false;
             if(!dir.exists())
                 dirCreated = dir.mkdirs();
             else
                 dirCreated = true;
             if (dirCreated) {
-                FileOutputStream fileOut = new FileOutputStream("./data/virtualGame_" + gameId + ".ser");
+                File dataFile = new File("./data/game"+ gameId +"/virtualGame_" + gameId + ".ser");
+                File fileBk = new File("./data/game"+gameId+"/virtualGame_" + gameId  + "_"+ i++ + ".ser");
+                if (dataFile.exists())
+                    dataFile.renameTo(fileBk);
+                FileOutputStream fileOut =
+                        new FileOutputStream("./data/game"+ gameId +"/virtualGame_" + gameId + ".ser");
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
                 out.writeObject(this);
                 out.close();
