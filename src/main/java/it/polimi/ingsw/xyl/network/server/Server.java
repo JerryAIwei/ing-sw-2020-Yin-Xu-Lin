@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -94,9 +95,17 @@ public class Server
                      } while (!input.equals("y") && !input.equals("n"));
                      if (input.equals("y")) {
                          boolean deleted = false;
-                         for (File file : Objects.requireNonNull(dir.listFiles()))
-                             if (!file.isDirectory())
-                                 deleted = file.delete();
+                         for (File file : Objects.requireNonNull(dir.listFiles())) {
+                             if (file.isDirectory()) {
+                                 File[] contents = file.listFiles();
+                                 if (contents != null) {
+                                     for (File f : contents) {
+                                         deleted = f.delete();
+                                     }
+                                 }
+                             }
+                             deleted = file.delete();
+                         }
                              if (deleted)
                                  logger.log(Level.INFO,"All previous data deleted.");
                      }
