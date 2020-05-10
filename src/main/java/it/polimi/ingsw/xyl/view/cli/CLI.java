@@ -64,7 +64,7 @@ public class CLI extends Thread implements ViewInterface {
         this.vGame = virtualGame;
         final GameStatus gameStatus = virtualGame.getGameStatus();
 
-        islandBoardCLI.setMaps(virtualGame.getSpaces());
+        islandBoardCLI.setMaps(virtualGame.getSpaces(), id);
         islandBoardCLI.setPlayers(virtualGame);
         //GameStatus gameStatus = virtualGame.getGameStatus();
 
