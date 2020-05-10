@@ -4,6 +4,7 @@ import it.polimi.ingsw.xyl.model.message.CreateNewGameMessage;
 import it.polimi.ingsw.xyl.model.message.JoinGameMessage;
 import it.polimi.ingsw.xyl.model.message.NameOKMessage;
 import it.polimi.ingsw.xyl.view.gui.GUI;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -62,7 +63,7 @@ public class GameLobbyController {
         labels.add(secondPlayerLabel);
         labels.add(thirdPlayerLabel);
 
-        // Clear person details.
+        // Clear game details.
         showGameDetails(null);
 
         // Listen for selection changes and show the person details when changed.
@@ -94,7 +95,7 @@ public class GameLobbyController {
      */
     @FXML
     private void handleNewGame() {
-        if(isNewGame) return;
+        if (isNewGame||isJoinGame) return;
         isNewGame = true;
         mainApp.sendMessage(new CreateNewGameMessage(mainApp.getUserName()));
     }
@@ -105,11 +106,15 @@ public class GameLobbyController {
      */
     @FXML
     private void handleJoinGame() {
-        if(isJoinGame) return;
-        isJoinGame = true;
+        if (isJoinGame||isNewGame) return;
+
         var selectedGame = gamesTable.getSelectionModel().getSelectedItem();
-        if (selectedGame != null&&selectedGame.getCurrentNumber()!=selectedGame.getPlayerNumber()) {
+        if (selectedGame != null && selectedGame.getCurrentNumber() != selectedGame.getPlayerNumber()) {
             mainApp.sendMessage(new JoinGameMessage(mainApp.getUserName(), selectedGame.getGameID()));
+            isJoinGame = true;
+            Platform.runLater(() -> {
+                mainApp.getWaitingStage().showAndWait();
+            });
         } else {
             // Nothing selected.
         }
@@ -120,6 +125,7 @@ public class GameLobbyController {
      * Is called by the main application to give a reference back to itself.
      *
      * @param mainApp
+     * @param games   all games from sever
      */
     public void setMainApp(GUI mainApp, ObservableList<NameOKMessage.Games> games) {
         this.mainApp = mainApp;

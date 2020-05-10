@@ -186,4 +186,8 @@ public enum GodPower implements Serializable {
 
     public abstract Cosplayer cosplay(Player player);
 
+    public String getGodPower(){
+        return super.toString();
+    }
+
 }

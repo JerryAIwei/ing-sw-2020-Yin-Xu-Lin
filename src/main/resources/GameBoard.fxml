@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.xyl.view.gui.controller.AskLoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.xyl.view.gui.controller.AskLoginController">
    <left>
       <AnchorPane prefHeight="300.0" prefWidth="550.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="250.0" prefWidth="250.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="50.0">
+            <AnchorPane AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="50.0">
                <children>
-                  <Rectangle fill="#fbfdff" height="50.0" stroke="BLACK" strokeType="INSIDE" width="50.0" />
+                  <Rectangle fill="#fbfdff" height="50.0" stroke="BLACK" strokeType="INSIDE" width="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <Rectangle fill="#171717" height="50.0" layoutX="50.0" stroke="#171717" strokeType="INSIDE" width="50.0" />
                   <Rectangle fill="#171717" height="50.0" layoutY="50.0" stroke="#171717" strokeType="INSIDE" width="50.0" />
                   <Rectangle fill="#fbfdff" height="50.0" layoutY="100.0" stroke="BLACK" strokeType="INSIDE" width="50.0" />
