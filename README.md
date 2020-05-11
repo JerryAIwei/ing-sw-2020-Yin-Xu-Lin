@@ -15,7 +15,7 @@ The current progress of the project:
 
 - [x] Simplified Rules: finished
 
-- [ ] Complete Rules: nearly finished, waiting for debugging
+- [ ] Complete Rules: nearly finished, debugging: GodPower's checkWin()
 
 - [x] Socket: finished
 
@@ -28,6 +28,8 @@ The current progress of the project:
 - [ ] Advanced Feature - Persistence: finished, debugging
 
 ### Attention
+
+The CLI version of the game is better in the terminal with dark background, we haven't tested whether the color setter code used can run on Windows platform.
 
 Since the project is still under development, the data organization might be changed, especially the local data files stored for the advanced feature Persistence. If the server doesn't run as expected, please delete the data directory manually.
 

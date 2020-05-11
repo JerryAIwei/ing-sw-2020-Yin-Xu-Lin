@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * cannot pass VirtualView test because of the new multi thread code
+ */
 public class VirtualViewTest {
     private GameController gc = GameController.getSingleton();
     private VirtualView v = VirtualView.getSingleton();

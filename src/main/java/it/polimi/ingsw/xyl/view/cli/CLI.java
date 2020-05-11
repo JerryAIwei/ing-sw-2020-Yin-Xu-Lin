@@ -385,6 +385,9 @@ public class CLI extends Thread implements ViewInterface {
 
     private Direction chooseDirection(String action, int workerId) {
         ArrayList<Direction> available = vGame.getVPlayers().get(id).getAvailable(action, workerId);
+        if (available.isEmpty()) {
+            throw new RuntimeException("No available of" + action + "error!");
+        }
         int directionInput;
         do {
             System.out.println

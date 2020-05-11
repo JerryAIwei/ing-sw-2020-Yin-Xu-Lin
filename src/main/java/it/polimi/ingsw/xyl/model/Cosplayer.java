@@ -2,6 +2,7 @@ package it.polimi.ingsw.xyl.model;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -134,7 +135,16 @@ public class Cosplayer {
                 currentIslandBoard.getSpaces()
                         [player.getWorkers()[1].getPositionX()]
                         [player.getWorkers()[1].getPositionY()].getLevel() == Level.LEVEL3);
-        if (win) {
+        boolean onlyMe = true;
+        HashMap<Integer, Player> players = player.getCurrentGameBoard().getPlayers();
+        int playerNumber = player.getCurrentGameBoard().getPlayerNumber();
+        for (int i = 0; i < playerNumber; i++) {
+            if (i != player.getPlayerId() && players.get(i).getCurrentStatus() != PlayerStatus.LOSE) {
+                onlyMe = false;
+                break;
+            }
+        }
+        if (win || onlyMe) {
             player.setCurrentStatus(PlayerStatus.WIN);
             player.getCurrentGameBoard().setCurrentStatus(GameStatus.GAMEENDED);
         }
@@ -163,6 +173,7 @@ public class Cosplayer {
             int by = player.getWorkers()[1].getPositionY();
             player.getCurrentGameBoard().getIslandBoard().getSpaces()[ax][ay].setOccupiedBy(-1);
             player.getCurrentGameBoard().getIslandBoard().getSpaces()[bx][by].setOccupiedBy(-1);
+            player.getCurrentGameBoard().toNextPlayer();
         }
     }
 

@@ -2,6 +2,8 @@ package it.polimi.ingsw.xyl.model.cosplayer;
 
 import it.polimi.ingsw.xyl.model.*;
 
+import java.util.HashMap;
+
 
 public class Pan extends Cosplayer {
 
@@ -35,7 +37,17 @@ public class Pan extends Cosplayer {
                         [player.getWorkers()[1].getPositionX()]
                         [player.getWorkers()[1].getPositionY()].getLevel().toInt() >= 2);
 
-        if (normalWin || powerWin) {
+        boolean onlyMe = true;
+        HashMap<Integer, Player> players = player.getCurrentGameBoard().getPlayers();
+        int playerNumber = player.getCurrentGameBoard().getPlayerNumber();
+        for (int i = 0; i < playerNumber; i++) {
+            if (i != player.getPlayerId() && players.get(i).getCurrentStatus() != PlayerStatus.LOSE) {
+                onlyMe = false;
+                break;
+            }
+        }
+
+        if (normalWin || powerWin || onlyMe) {
             player.setCurrentStatus(PlayerStatus.WIN);
             player.getCurrentGameBoard().setCurrentStatus(GameStatus.GAMEENDED);
         }

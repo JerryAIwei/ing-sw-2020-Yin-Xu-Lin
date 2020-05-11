@@ -75,6 +75,7 @@ public class Prometheus extends Cosplayer {
                 currentIslandBoard.getSpaces()[targetPositionX][targetPositionY].increaseLevel();
                 workerInAction = worker;
                 nextAction = Action.MOVE;
+                checkWin();
             } else {
                 System.out.println("Your build is not available!");
                 throw new RuntimeException("Build not available.");

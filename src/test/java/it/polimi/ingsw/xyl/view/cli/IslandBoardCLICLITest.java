@@ -75,7 +75,7 @@ public class IslandBoardCLICLITest {
         IslandBoardCLI islandBoardCLI = new IslandBoardCLI();
         IslandBoardCLI.Block block = islandBoardCLI.new Block(Level.GROUND,-1);
         System.out.print(block.getContent()+"\n");
-        assertEquals(block.getContent(), ColorSetter.BG_BLUE.setColor("    "));
+        assertEquals(block.getContent(), ColorSetter.BG_GREEN.setColor("    "));
     }
 
     @Test

@@ -187,7 +187,11 @@ public class VirtualGame extends Message {
                 dirCreated = true;
             if (dirCreated) {
                 File dataFile = new File("./data/game"+ gameId +"/virtualGame_" + gameId + ".ser");
-                File fileBk = new File("./data/game"+gameId+"/virtualGame_" + gameId  + "_"+ i++ + ".ser");
+                File fileBk = new File("./data/game"+gameId+"/virtualGame_" + gameId  + "_"+ i + ".ser");
+                while (fileBk.exists()) {
+                    i++;
+                    fileBk = new File("./data/game"+gameId+"/virtualGame_" + gameId  + "_"+ i + ".ser");
+                }
                 if (dataFile.exists())
                     dataFile.renameTo(fileBk);
                 FileOutputStream fileOut =

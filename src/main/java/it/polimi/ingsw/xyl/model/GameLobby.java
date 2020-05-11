@@ -1,7 +1,8 @@
 package it.polimi.ingsw.xyl.model;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class represents a game lobby,
@@ -13,14 +14,14 @@ public class GameLobby {
     private static final int NO_GAME_ID = -1;
     private static final String RECONNECTION = "_RECONNECTION";
     private final Vector<GameBoard> gameBoards;
-    private final HashMap<String,Integer> allPlayers;
+    private final ConcurrentHashMap<String,Integer> allPlayers;
 
     public GameLobby() {
         gameBoards= new Vector<>();
-        allPlayers = new HashMap<>();
+        allPlayers = new ConcurrentHashMap<>();
     }
 
-    public HashMap<String,Integer> getAllPlayers() {
+    public Map<String,Integer> getAllPlayers() {
         return allPlayers;
     }
 
