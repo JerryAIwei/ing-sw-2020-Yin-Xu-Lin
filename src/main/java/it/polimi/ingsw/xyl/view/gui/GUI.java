@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import it.polimi.ingsw.xyl.model.GameStatus;
-import it.polimi.ingsw.xyl.model.GodPower;
-import it.polimi.ingsw.xyl.model.PlayerStatus;
-import it.polimi.ingsw.xyl.model.VirtualGame;
+import it.polimi.ingsw.xyl.model.*;
 import it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage;
 import it.polimi.ingsw.xyl.model.message.Message;
 import it.polimi.ingsw.xyl.model.message.NameOKMessage;
@@ -60,7 +57,7 @@ public class GUI extends Application implements ViewInterface {
     private VirtualGame vGame;
 
     private AskLoginController askLoginController;
-
+    private GamdBoardController gamdBoardController;
 
     private ObservableList<Person> personData = FXCollections.observableArrayList();
 
@@ -132,7 +129,7 @@ public class GUI extends Application implements ViewInterface {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(GUI.class.getResource("/RootLayout.fxml"));
-            rootLayout = (BorderPane) loader.load();
+            rootLayout = loader.load();
             BackgroundImage myBI = new BackgroundImage(new Image("/img/background.jpeg", 1080, 720, false, true),
                     BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.CENTER,
                     BackgroundSize.DEFAULT);
@@ -148,6 +145,9 @@ public class GUI extends Application implements ViewInterface {
         }
     }
 
+    /**
+     * Initializes the waitingStage layout
+     */
     private void initWaitingStage() {
         try {
             waitingStage = new Stage();
@@ -167,6 +167,23 @@ public class GUI extends Application implements ViewInterface {
             //e.printStackTrace();
         }
     }
+
+    /**
+     * set primaryStage to game board layout
+     */
+    public void trans2GameBoard() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUI.class.getResource("/GameBoard.fxml"));
+        try {
+            BorderPane layout = loader.load();
+            gamdBoardController = loader.getController();
+            Scene scene = new Scene(layout);
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * ask player to input server IP and player name
@@ -221,6 +238,8 @@ public class GUI extends Application implements ViewInterface {
             GameLobbyController controller = loader.getController();
             controller.setMainApp(this, games);
             Scene scene = new Scene(layout);
+
+
             Platform.runLater(() -> {
                 primaryStage.setScene(scene);
                 primaryStage.show();
@@ -258,9 +277,8 @@ public class GUI extends Application implements ViewInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
+
 
     /**
      * Shows the person overview inside the root layout.
@@ -450,6 +468,30 @@ public class GUI extends Application implements ViewInterface {
     }
 
     private void setStartPlayer() {
+
+        try {
+            Platform.runLater(() -> {
+                waitingStage.close();
+            });
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUI.class.getResource("/StartPlayer.fxml"));
+            BorderPane page = loader.load();
+            Platform.runLater(() -> {
+                setPlayNumStage.setTitle("Choice Start Player");
+                Scene scene = new Scene(page);
+                setPlayNumStage.setScene(scene);
+                // Set the person into the controller.
+                StartPlayerController controller = loader.getController();
+                controller.setDialogStage(setPlayNumStage);
+                controller.setMainApp(this, gameId,islandBoardCLI.getPlayers().size());
+                // Show the dialog and wait until the user closes it
+                setPlayNumStage.showAndWait();
+                waitingStage.showAndWait();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -477,7 +519,7 @@ public class GUI extends Application implements ViewInterface {
                     GodPowerController controller = loader.getController();
                     LinkedList<GodPower> powers = new LinkedList<>();
                     powers.addAll(availableGodPowers);
-                    controller.setMainApp(this,powers);
+                    controller.setMainApp(this, powers);
                     controller.setStage(godPowerStage);
                     // Show the dialog and wait until the user closes it
                     godPowerStage.showAndWait();
