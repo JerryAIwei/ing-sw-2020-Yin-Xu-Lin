@@ -1,0 +1,541 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameMaster</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameMaster (it.polimi.ingsw.xyl.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameMaster</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    51.9%
+  </span>
+  <span class="absValue">
+    (14/ 27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    43.9%
+  </span>
+  <span class="absValue">
+    (90/ 205)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.network.server.PlayerServer;
+<i>4</i>&nbsp;import it.polimi.ingsw.xyl.view.VirtualView;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.io.*;
+<i>7</i>&nbsp;import java.util.ArrayList;
+<i>8</i>&nbsp;import java.util.logging.*;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * GameMaster is virtual model handle all the other models,
+<i>13</i>&nbsp; * just like a game master (person) can handle all the data of a game.
+<i>14</i>&nbsp; *
+<i>15</i>&nbsp; * @author Shaoxun
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;public class GameMaster {
+<i>18</i>&nbsp;    private static final String RECONNECTION = &quot;_RECONNECTION&quot;;
+<i>19</i>&nbsp;    private static final String PLACEHOLDER = &quot;_PLACEHOLDER&quot;;
+<i>20</i>&nbsp;    private final static int NO_GAME_ID = -1;
+<i>21</i>&nbsp;    private final GameLobby gameLobby;
+<b class="fc"><i>22</i>&nbsp;    private final ArrayList&lt;VirtualView&gt; observerV = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>23</i>&nbsp;    private static final Logger logger = Logger.getLogger(&quot;model.GameMaster&quot;);</b>
+<i>24</i>&nbsp;
+<b class="fc"><i>25</i>&nbsp;    public GameMaster() {</b>
+<b class="fc"><i>26</i>&nbsp;        this.gameLobby = new GameLobby();</b>
+<b class="fc"><i>27</i>&nbsp;    }</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * This method is only used for test, it should never be used in anywhere else.
+<i>31</i>&nbsp;     *
+<i>32</i>&nbsp;     * @return the game lobby.
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    public GameLobby getGameLobby() {
+<b class="fc"><i>35</i>&nbsp;        return gameLobby;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    public void register(VirtualView observer){
+<b class="fc"><i>39</i>&nbsp;        synchronized (observerV) {</b>
+<b class="fc"><i>40</i>&nbsp;            observerV.add(observer);</b>
+<b class="fc"><i>41</i>&nbsp;        }</b>
+<b class="fc"><i>42</i>&nbsp;    }</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    public void deregister(VirtualView observer){
+<b class="nc"><i>45</i>&nbsp;        synchronized (observerV) {</b>
+<b class="nc"><i>46</i>&nbsp;            observerV.remove(observer);</b>
+<b class="nc"><i>47</i>&nbsp;        }</b>
+<b class="nc"><i>48</i>&nbsp;    }</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * This method is used by controller to handle with new player&#39;s connect.
+<i>53</i>&nbsp;     *
+<i>54</i>&nbsp;     * @param ps PlayerServer of a player, used to send messages
+<i>55</i>&nbsp;     * @param playerName the nickname of a player.
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    public synchronized void addPlayer(PlayerServer ps, String playerName){
+<b class="fc"><i>58</i>&nbsp;        String result = gameLobby.add2AllPlayers(playerName, NO_GAME_ID);</b>
+<b class="fc"><i>59</i>&nbsp;        if (RECONNECTION.equals(result)){</b>
+<b class="nc"><i>60</i>&nbsp;            int gameId = gameLobby.getAllPlayers().get(playerName);</b>
+<b class="nc"><i>61</i>&nbsp;            GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);</b>
+<b class="nc"><i>62</i>&nbsp;            gameBoard.getPlayer(playerName).setReconnecting(false);</b>
+<b class="nc"><i>63</i>&nbsp;            logger.log(java.util.logging.Level.INFO, playerName + &quot; rejoined the game &quot; + gameId);</b>
+<b class="nc"><i>64</i>&nbsp;            boolean allReconnected = true;</b>
+<b class="nc"><i>65</i>&nbsp;            int playerSize = gameBoard.getPlayers().size();</b>
+<b class="nc"><i>66</i>&nbsp;            for (int i = 0; i &lt; playerSize; i++){</b>
+<b class="nc"><i>67</i>&nbsp;                if (gameBoard.getPlayers().get(i).getReconnecting() &amp;&amp; gameBoard.getPlayers().get(i).getCurrentStatus() != PlayerStatus.LOSE) {</b>
+<b class="nc"><i>68</i>&nbsp;                    allReconnected = false;</b>
+<i>69</i>&nbsp;                }
+<i>70</i>&nbsp;            }
+<b class="nc"><i>71</i>&nbsp;            if(allReconnected) {</b>
+<b class="nc"><i>72</i>&nbsp;                gameLobby.getGameBoards().get(gameId).setReconnecting(false);</b>
+<i>73</i>&nbsp;            }
+<b class="nc"><i>74</i>&nbsp;            notify(ps,playerName,gameId);</b>
+<b class="nc"><i>75</i>&nbsp;        }else{</b>
+<b class="fc"><i>76</i>&nbsp;            if (result == null)</b>
+<b class="fc"><i>77</i>&nbsp;                logger.log(java.util.logging.Level.WARNING, &quot;Player name duplicated: &quot; + playerName);</b>
+<i>78</i>&nbsp;            else
+<b class="fc"><i>79</i>&nbsp;                logger.log(java.util.logging.Level.INFO, playerName + &quot; entered the game lobby.&quot;);</b>
+<b class="fc"><i>80</i>&nbsp;            notify(ps, result);</b>
+<i>81</i>&nbsp;        }
+<b class="fc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * To create a new game
+<i>86</i>&nbsp;     * @param playerName player name
+<i>87</i>&nbsp;     */
+<i>88</i>&nbsp;    public synchronized void createNewGame(String playerName){
+<b class="fc"><i>89</i>&nbsp;        int gameId = gameLobby.getGameBoards().size();</b>
+<b class="fc"><i>90</i>&nbsp;        GameBoard gameBoard = new GameBoard(gameId);</b>
+<i>91</i>&nbsp;        // set the game status to &quot;waiting other players&quot;
+<b class="fc"><i>92</i>&nbsp;        gameBoard.setCurrentStatus(GameStatus.WAITINGINIT);</b>
+<b class="fc"><i>93</i>&nbsp;        Player player = new Player(0, playerName);</b>
+<i>94</i>&nbsp;        // set the player&#39;s status &quot;in gameBoard&quot;
+<b class="fc"><i>95</i>&nbsp;        player.setCurrentStatus(PlayerStatus.INGAMEBOARD);</b>
+<b class="fc"><i>96</i>&nbsp;        gameBoard.addPlayer(player);</b>
+<b class="fc"><i>97</i>&nbsp;        player.setCurrentGameBoard(gameBoard);</b>
+<b class="fc"><i>98</i>&nbsp;        gameLobby.getAllPlayers().replace(playerName,gameId);</b>
+<b class="fc"><i>99</i>&nbsp;        gameLobby.addGameBoard(gameBoard);</b>
+<b class="fc"><i>100</i>&nbsp;        logger.log(java.util.logging.Level.INFO, playerName + &quot; created a game &quot; + gameId);</b>
+<b class="fc"><i>101</i>&nbsp;        notify(gameId);</b>
+<b class="fc"><i>102</i>&nbsp;    }</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * To join a player into a game
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @param playerName player name
+<i>108</i>&nbsp;     * @param gameId game ID
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    public synchronized void joinGame(String playerName, int gameId){
+<b class="fc"><i>111</i>&nbsp;        GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);</b>
+<b class="fc"><i>112</i>&nbsp;        if(gameBoard != null &amp;&amp; gameBoard.getPlayers().size() &lt; gameBoard.getPlayerNumber()) {</b>
+<b class="fc"><i>113</i>&nbsp;            int playerId = gameBoard.getPlayers().size();</b>
+<b class="fc"><i>114</i>&nbsp;            Player player = new Player(playerId, playerName);</b>
+<i>115</i>&nbsp;            // set the player&#39;s status &quot;in gameBoard&quot;
+<b class="fc"><i>116</i>&nbsp;            player.setCurrentStatus(PlayerStatus.INGAMEBOARD);</b>
+<b class="fc"><i>117</i>&nbsp;            gameLobby.getAllPlayers().replace(playerName,gameId);</b>
+<b class="fc"><i>118</i>&nbsp;            gameBoard.addPlayer(player);</b>
+<b class="fc"><i>119</i>&nbsp;            player.setCurrentGameBoard(gameBoard);</b>
+<i>120</i>&nbsp;            // if the number of players joined to the game equals to playerNumber
+<i>121</i>&nbsp;            // set the game status &quot;waiting start&quot;
+<b class="fc"><i>122</i>&nbsp;            if (gameBoard.getPlayerNumber() == gameBoard.getPlayers().size())</b>
+<b class="fc"><i>123</i>&nbsp;                gameBoard.setCurrentStatus(GameStatus.WAITINGSTART);</b>
+<b class="fc"><i>124</i>&nbsp;            logger.log(java.util.logging.Level.INFO, playerName + &quot; joined into game &quot; + gameId);</b>
+<b class="fc"><i>125</i>&nbsp;            notify(gameId);</b>
+<i>126</i>&nbsp;        }
+<b class="fc"><i>127</i>&nbsp;    }</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    /**
+<i>130</i>&nbsp;     * To set total player number
+<i>131</i>&nbsp;     *
+<i>132</i>&nbsp;     * @param gameId       game ID.
+<i>133</i>&nbsp;     * @param playerNumber how may players are there in this gameBoard.
+<i>134</i>&nbsp;     */
+<i>135</i>&nbsp;    public void setPlayerNumber(int gameId, int playerNumber) {
+<b class="fc"><i>136</i>&nbsp;        gameLobby.getGameBoards().get(gameId).setPlayerNumber(playerNumber);</b>
+<b class="fc"><i>137</i>&nbsp;        gameLobby.getGameBoards().get(gameId).setCurrentStatus(GameStatus.WAITINGPLAYER);</b>
+<b class="fc"><i>138</i>&nbsp;        logger.log(java.util.logging.Level.INFO, &quot;Player number of game &quot; + gameId + &quot; set to &quot;+ playerNumber);</b>
+<b class="fc"><i>139</i>&nbsp;        notify(gameId);</b>
+<b class="fc"><i>140</i>&nbsp;    }</b>
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * This method sets available God powers of gameBoard.
+<i>144</i>&nbsp;     *
+<i>145</i>&nbsp;     * @param gameId             game ID.
+<i>146</i>&nbsp;     * @param availableGodPowers all available powers.
+<i>147</i>&nbsp;     */
+<i>148</i>&nbsp;    public void setAvailableGodPowers(int gameId, ArrayList&lt;GodPower&gt; availableGodPowers) {
+<b class="fc"><i>149</i>&nbsp;        for (GodPower godPower : availableGodPowers)</b>
+<b class="fc"><i>150</i>&nbsp;            gameLobby.getGameBoards().get(gameId).addAvailableGodPowers(godPower);</b>
+<b class="fc"><i>151</i>&nbsp;        gameLobby.getGameBoards().get(gameId).toNextPlayer();</b>
+<b class="fc"><i>152</i>&nbsp;        notify(gameId);</b>
+<b class="fc"><i>153</i>&nbsp;    }</b>
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * This method sets a player&#39;s God Player.
+<i>157</i>&nbsp;     *
+<i>158</i>&nbsp;     * @param gameId   game ID.
+<i>159</i>&nbsp;     * @param playerId player ID.
+<i>160</i>&nbsp;     * @param godPower the God power player chose.
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public void setPower4Player(int gameId, int playerId, GodPower godPower) {
+<i>163</i>&nbsp;        // chosen God power should be available
+<b class="fc"><i>164</i>&nbsp;        ArrayList&lt;GodPower&gt; availableGodPowers = gameLobby.getGameBoards().get(gameId).getAvailableGodPowers();</b>
+<b class="fc"><i>165</i>&nbsp;        if (availableGodPowers.contains(godPower)) {</b>
+<b class="fc"><i>166</i>&nbsp;            Player player = gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId);</b>
+<b class="fc"><i>167</i>&nbsp;            Cosplayer cosplayer = godPower.cosplay(player);</b>
+<b class="fc"><i>168</i>&nbsp;            player.setCosplayer(cosplayer);</b>
+<b class="fc"><i>169</i>&nbsp;            gameLobby.getGameBoards().get(gameId).getAvailableGodPowers().remove(godPower);</b>
+<b class="fc"><i>170</i>&nbsp;            player.setCurrentStatus(PlayerStatus.GODPOWERED);</b>
+<b class="fc"><i>171</i>&nbsp;            if (gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId() == 0)</b>
+<b class="fc"><i>172</i>&nbsp;                player.setCurrentStatus(PlayerStatus.WAITING4START);</b>
+<i>173</i>&nbsp;            else
+<b class="fc"><i>174</i>&nbsp;                gameLobby.getGameBoards().get(gameId).toNextPlayer();</b>
+<b class="fc"><i>175</i>&nbsp;            notify(gameId);</b>
+<i>176</i>&nbsp;        }
+<b class="fc"><i>177</i>&nbsp;    }</b>
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    /**
+<i>180</i>&nbsp;     * This method changes the turn id of a gameBoard to the &quot;Start Player&quot; which is chosen by
+<i>181</i>&nbsp;     * the &quot;Challenger&quot;, in our case, the &quot;owner&quot; of the gameBoard.
+<i>182</i>&nbsp;     *
+<i>183</i>&nbsp;     * @param gameId        game ID.
+<i>184</i>&nbsp;     * @param messageFrom   which player this message is form
+<i>185</i>&nbsp;     * @param startPlayerId the Start Player Id
+<i>186</i>&nbsp;     */
+<i>187</i>&nbsp;    public void startGame(int gameId, String messageFrom, int startPlayerId) {
+<i>188</i>&nbsp;        // only the &quot;owner&quot; of the gameBoard can decide from whom the game will start.
+<b class="fc"><i>189</i>&nbsp;        if (gameLobby.getGameBoards().get(gameId).getPlayers().get(0).getPlayerName().equals(messageFrom)) {</b>
+<b class="fc"><i>190</i>&nbsp;            gameLobby.getGameBoards().get(gameId).getPlayers().forEach((key, value) -&gt; value.setCurrentStatus(PlayerStatus.WAITING4INIT));</b>
+<b class="fc"><i>191</i>&nbsp;            gameLobby.getGameBoards().get(gameId).toNextPlayer(startPlayerId);</b>
+<b class="fc"><i>192</i>&nbsp;            gameLobby.getGameBoards().get(gameId).setCurrentStatus(GameStatus.INGAME);</b>
+<b class="fc"><i>193</i>&nbsp;            logger.log(java.util.logging.Level.INFO, &quot;Game &quot; + gameId + &quot; started.&quot;);</b>
+<b class="fc"><i>194</i>&nbsp;            notify(gameId);</b>
+<i>195</i>&nbsp;        }
+<b class="fc"><i>196</i>&nbsp;    }</b>
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;    /**
+<i>199</i>&nbsp;     * To set workers&#39; initial position of the player.
+<i>200</i>&nbsp;     *
+<i>201</i>&nbsp;     * @param gameId   game ID.
+<i>202</i>&nbsp;     * @param playerId player ID.
+<i>203</i>&nbsp;     * @param ax       the x coordinate of worker 0(A)
+<i>204</i>&nbsp;     * @param ay       the y coordinate of worker 0
+<i>205</i>&nbsp;     * @param bx       the x coordinate of worker 1(B)
+<i>206</i>&nbsp;     * @param by       the y coordinate of worker 1(B)
+<i>207</i>&nbsp;     */
+<i>208</i>&nbsp;    public void setInitialWorkerPosition(int gameId, int playerId, int ax, int ay, int bx, int by) {
+<b class="fc"><i>209</i>&nbsp;        GameBoard gameBoard = gameLobby.getGameBoards().get(gameId);</b>
+<b class="fc"><i>210</i>&nbsp;        Player player = gameBoard.getPlayers().get(playerId);</b>
+<b class="fc"><i>211</i>&nbsp;        IslandBoard islandBoard = gameBoard.getIslandBoard();</b>
+<b class="fc"><i>212</i>&nbsp;        if (islandBoard.getSpaces()[ax][ay].isOccupiedBy() == -1</b>
+<b class="fc"><i>213</i>&nbsp;                &amp;&amp; islandBoard.getSpaces()[bx][by].isOccupiedBy() == -1) {</b>
+<i>214</i>&nbsp;            // set worker position
+<b class="fc"><i>215</i>&nbsp;            player.setWorkers(ax, ay, bx, by);</b>
+<i>216</i>&nbsp;            // set occupied
+<b class="fc"><i>217</i>&nbsp;            islandBoard.getSpaces()[ax][ay].setOccupiedBy(playerId * 10);</b>
+<b class="fc"><i>218</i>&nbsp;            islandBoard.getSpaces()[bx][by].setOccupiedBy(playerId * 10 +1);</b>
+<i>219</i>&nbsp;
+<b class="fc"><i>220</i>&nbsp;            gameBoard.toNextPlayer();</b>
+<b class="fc"><i>221</i>&nbsp;            notify(gameId);</b>
+<i>222</i>&nbsp;        }
+<b class="fc"><i>223</i>&nbsp;    }</b>
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;    /**
+<i>226</i>&nbsp;     * To end one&#39;s turn when no more want to use God power
+<i>227</i>&nbsp;     *
+<i>228</i>&nbsp;     * @param gameId   game ID.
+<i>229</i>&nbsp;     * @param playerId player ID.
+<i>230</i>&nbsp;     * @param finish   end my turn
+<i>231</i>&nbsp;     */
+<i>232</i>&nbsp;    public void endTurn(int gameId, int playerId, boolean finish) {
+<b class="nc"><i>233</i>&nbsp;        int currentPlayerId = gameLobby.getGameBoards().get(gameId).getCurrentPlayer().getPlayerId();</b>
+<b class="nc"><i>234</i>&nbsp;        if (currentPlayerId == playerId &amp;&amp; finish) {</b>
+<b class="nc"><i>235</i>&nbsp;            gameLobby.getGameBoards().get(gameId).toNextPlayer();</b>
+<b class="nc"><i>236</i>&nbsp;            notify(gameId);</b>
+<i>237</i>&nbsp;        }
+<b class="nc"><i>238</i>&nbsp;    }</b>
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;    /**
+<i>241</i>&nbsp;     * To handle player&#39;s &quot;move&quot; action
+<i>242</i>&nbsp;     *
+<i>243</i>&nbsp;     * @param gameId    game ID.
+<i>244</i>&nbsp;     * @param playerId  player ID.
+<i>245</i>&nbsp;     * @param workerId  worker ID.
+<i>246</i>&nbsp;     * @param direction direction
+<i>247</i>&nbsp;     */
+<i>248</i>&nbsp;    public void handleMove(int gameId, int playerId, int workerId, Direction direction) {
+<b class="nc"><i>249</i>&nbsp;        ArrayList&lt;Direction&gt; availableMoves =</b>
+<b class="nc"><i>250</i>&nbsp;                gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().getAvailableMoves(workerId);</b>
+<b class="nc"><i>251</i>&nbsp;        if (availableMoves.contains(direction)) {</b>
+<b class="nc"><i>252</i>&nbsp;            gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().move(workerId, direction);</b>
+<b class="nc"><i>253</i>&nbsp;            notify(gameId);</b>
+<i>254</i>&nbsp;        }
+<b class="nc"><i>255</i>&nbsp;    }</b>
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * To handle player&#39;s &quot;Build&quot; action
+<i>259</i>&nbsp;     *
+<i>260</i>&nbsp;     * @param gameId    game ID.
+<i>261</i>&nbsp;     * @param playerId  player ID.
+<i>262</i>&nbsp;     * @param workerId  worker ID.
+<i>263</i>&nbsp;     * @param direction direction.
+<i>264</i>&nbsp;     * @param buildDome whether build dome directly (only for Atlas).
+<i>265</i>&nbsp;     */
+<i>266</i>&nbsp;    public void handleBuild(int gameId, int playerId, int workerId, Direction direction, boolean buildDome) {
+<b class="nc"><i>267</i>&nbsp;        gameLobby.getGameBoards().get(gameId).getPlayers().get(playerId).getCosplayer().build(workerId, direction,</b>
+<i>268</i>&nbsp;                buildDome);
+<b class="nc"><i>269</i>&nbsp;        notify(gameId);</b>
+<b class="nc"><i>270</i>&nbsp;    }</b>
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;    /**
+<i>273</i>&nbsp;     * After the game ends or partially ends, place related players in game lobby,
+<i>274</i>&nbsp;     * and notify them.
+<i>275</i>&nbsp;     *
+<i>276</i>&nbsp;     * @param gameId game Id
+<i>277</i>&nbsp;     */
+<i>278</i>&nbsp;    public void afterGame(String playerName, int gameId) {
+<i>279</i>&nbsp;        // if gameStatus == GameStatus.GAMEENDED then PLACEHOLDER.equals(playerName)
+<b class="nc"><i>280</i>&nbsp;        if (PLACEHOLDER.equals(playerName)) {</b>
+<b class="nc"><i>281</i>&nbsp;            ArrayList&lt;String&gt; players = gameLobby.getGameBoards().get(gameId).getAllPlayerNames();</b>
+<b class="nc"><i>282</i>&nbsp;            logger.log(java.util.logging.Level.INFO, &quot;Game &quot; + gameId + &quot; ended.&quot;);</b>
+<b class="nc"><i>283</i>&nbsp;            for (String name : players) {</b>
+<b class="nc"><i>284</i>&nbsp;                gameLobby.getAllPlayers().replace(name, NO_GAME_ID);</b>
+<b class="nc"><i>285</i>&nbsp;            }</b>
+<b class="nc"><i>286</i>&nbsp;            notifyGameEnded(gameId);</b>
+<b class="nc"><i>287</i>&nbsp;        }else{</b>
+<b class="nc"><i>288</i>&nbsp;            if(gameLobby.getAllPlayers().get(playerName) == gameId){</b>
+<b class="nc"><i>289</i>&nbsp;                gameLobby.getAllPlayers().replace(playerName, NO_GAME_ID);</b>
+<b class="nc"><i>290</i>&nbsp;                logger.log(java.util.logging.Level.INFO, playerName+&quot; lost and return to game lobby.&quot;);</b>
+<b class="nc"><i>291</i>&nbsp;                notifyGameEnded(playerName);</b>
+<i>292</i>&nbsp;            }
+<i>293</i>&nbsp;        }
+<b class="nc"><i>294</i>&nbsp;    }</b>
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;    /**
+<i>297</i>&nbsp;     * To stop the game if any of the players dropped connection with server
+<i>298</i>&nbsp;     *
+<i>299</i>&nbsp;     * @param playerName player name
+<i>300</i>&nbsp;     */
+<i>301</i>&nbsp;    public void stopGameOf(String playerName) {
+<b class="nc"><i>302</i>&nbsp;        int gameId = gameLobby.getAllPlayers().get(playerName);</b>
+<b class="nc"><i>303</i>&nbsp;        if (gameId != NO_GAME_ID) {</b>
+<b class="nc"><i>304</i>&nbsp;            if (!gameLobby.getGameBoards().get(gameId).getReconnecting()) {</b>
+<b class="nc"><i>305</i>&nbsp;                stopGame(gameId, playerName);</b>
+<b class="nc"><i>306</i>&nbsp;                gameLobby.getGameBoards().get(gameId).setReconnecting(true);</b>
+<b class="nc"><i>307</i>&nbsp;                logger.log(java.util.logging.Level.WARNING, &quot;Game &quot; + gameId + &quot; stopped because &quot; + playerName + &quot; &quot; +</b>
+<i>308</i>&nbsp;                        &quot;dropped the connection.&quot;);
+<i>309</i>&nbsp;            }
+<i>310</i>&nbsp;        }else
+<b class="nc"><i>311</i>&nbsp;            gameLobby.getAllPlayers().remove(playerName);</b>
+<b class="nc"><i>312</i>&nbsp;    }</b>
+<i>313</i>&nbsp;
+<i>314</i>&nbsp;
+<i>315</i>&nbsp;    /**
+<i>316</i>&nbsp;     * loadData is for persistence, the server will firstly
+<i>317</i>&nbsp;     * load previous saved data file in ./data to restore the
+<i>318</i>&nbsp;     * previous status of the server after the unexpected
+<i>319</i>&nbsp;     * crash of the server
+<i>320</i>&nbsp;     */
+<i>321</i>&nbsp;    public void loadData(){
+<b class="nc"><i>322</i>&nbsp;        int gameId = 0;</b>
+<b class="nc"><i>323</i>&nbsp;        VirtualGame vGame = loadVirtualGame(gameId);</b>
+<b class="nc"><i>324</i>&nbsp;        while (vGame != null){</b>
+<b class="nc"><i>325</i>&nbsp;            IslandBoard islandBoard = new IslandBoard(vGame.getSpaces());</b>
+<b class="nc"><i>326</i>&nbsp;            islandBoard.setNoLevelUp(vGame.isNoLevelUp());</b>
+<b class="nc"><i>327</i>&nbsp;            GameBoard gameBoard = new GameBoard(gameId,vGame.getPlayerNumber(),islandBoard);</b>
+<i>328</i>&nbsp;            VirtualGame.VPlayer vPlayer;
+<b class="nc"><i>329</i>&nbsp;            for (int i = 0; i &lt; vGame.getVPlayers().size(); i++){</b>
+<b class="nc"><i>330</i>&nbsp;                vPlayer = vGame.getVPlayers().get(i);</b>
+<b class="nc"><i>331</i>&nbsp;                Player player = new Player(vPlayer.playerId, vPlayer.playerName);</b>
+<b class="nc"><i>332</i>&nbsp;                player.setCosplayer(vPlayer.getGodPower().cosplay(player));</b>
+<b class="nc"><i>333</i>&nbsp;                player.restoreWorkers(vPlayer.getWorkers().clone());</b>
+<b class="nc"><i>334</i>&nbsp;                if (vPlayer.getNextAction() != null)</b>
+<b class="nc"><i>335</i>&nbsp;                    player.getCosplayer().restoreNextAction(vPlayer.getNextAction());</b>
+<b class="nc"><i>336</i>&nbsp;                player.getCosplayer().restoreWorkerInAction(vPlayer.getWorkerInAction());</b>
+<b class="nc"><i>337</i>&nbsp;                player.setCurrentGameBoard(gameBoard);</b>
+<b class="nc"><i>338</i>&nbsp;                player.setReconnecting(true);</b>
+<b class="nc"><i>339</i>&nbsp;                gameBoard.addPlayer(player);  // addPlayer will set player status to INGAMEBOARD !!</b>
+<b class="nc"><i>340</i>&nbsp;                player.setCurrentStatus(vPlayer.getPlayerStatus());</b>
+<b class="nc"><i>341</i>&nbsp;                gameLobby.add2AllPlayers(vPlayer.playerName, gameId);</b>
+<i>342</i>&nbsp;            }
+<b class="nc"><i>343</i>&nbsp;            if (!vGame.getAllGodPowers().isEmpty()) {</b>
+<b class="nc"><i>344</i>&nbsp;                for (GodPower godPower : vGame.getAllGodPowers()) {</b>
+<b class="nc"><i>345</i>&nbsp;                    gameBoard.addAvailableGodPowers(godPower);</b>
+<b class="nc"><i>346</i>&nbsp;                }</b>
+<i>347</i>&nbsp;            }
+<b class="nc"><i>348</i>&nbsp;            gameBoard.setCurrentStatus(vGame.getGameStatus());</b>
+<b class="nc"><i>349</i>&nbsp;            gameBoard.setReconnecting(true);</b>
+<b class="nc"><i>350</i>&nbsp;            gameBoard.restoreNextPlayer(vGame.getCurrentPlayerId());</b>
+<b class="nc"><i>351</i>&nbsp;            gameLobby.addGameBoard(gameBoard);</b>
+<b class="nc"><i>352</i>&nbsp;            logger.log(java.util.logging.Level.INFO, &quot;Previous data loaded from GameID &quot;+ gameId);</b>
+<b class="nc"><i>353</i>&nbsp;            notify(vGame);</b>
+<b class="nc"><i>354</i>&nbsp;            gameId += 1;</b>
+<b class="nc"><i>355</i>&nbsp;            vGame = loadVirtualGame(gameId);</b>
+<b class="nc"><i>356</i>&nbsp;        }</b>
+<b class="nc"><i>357</i>&nbsp;    }</b>
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;    /**
+<i>360</i>&nbsp;     * It&#39;s used by loadData to restore VirtualGame Object from data file
+<i>361</i>&nbsp;     *
+<i>362</i>&nbsp;     * @param gameId game Id
+<i>363</i>&nbsp;     * @return a VirtualGame object or null
+<i>364</i>&nbsp;     */
+<i>365</i>&nbsp;    private VirtualGame loadVirtualGame(int gameId){
+<b class="nc"><i>366</i>&nbsp;        VirtualGame vGame = null;</b>
+<b class="nc"><i>367</i>&nbsp;        File vGameFile = new File(&quot;./data/game&quot;+ gameId +&quot;/virtualGame_&quot; + gameId + &quot;.ser&quot;);</b>
+<b class="nc"><i>368</i>&nbsp;        if (vGameFile.exists()){</b>
+<i>369</i>&nbsp;            try{
+<b class="nc"><i>370</i>&nbsp;                FileInputStream fileIn = new FileInputStream(&quot;./data/game&quot;+ gameId +&quot;/virtualGame_&quot; + gameId + &quot;.ser&quot;);</b>
+<b class="nc"><i>371</i>&nbsp;                ObjectInputStream in = new ObjectInputStream(fileIn);</b>
+<b class="nc"><i>372</i>&nbsp;                vGame = (VirtualGame) in.readObject();</b>
+<b class="nc"><i>373</i>&nbsp;            } catch (IOException | ClassNotFoundException e) {</b>
+<b class="nc"><i>374</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>375</i>&nbsp;            }</b>
+<i>376</i>&nbsp;        }
+<b class="nc"><i>377</i>&nbsp;        return vGame;</b>
+<i>378</i>&nbsp;    }
+<i>379</i>&nbsp;
+<i>380</i>&nbsp;    /**
+<i>381</i>&nbsp;     * Used by addPlayer, if player name is available,
+<i>382</i>&nbsp;     * show available games to player.
+<i>383</i>&nbsp;     *
+<i>384</i>&nbsp;     * @param ps player server
+<i>385</i>&nbsp;     * @param playerName player name
+<i>386</i>&nbsp;     */
+<i>387</i>&nbsp;    public void notify(PlayerServer ps, String playerName){
+<b class="fc"><i>388</i>&nbsp;            synchronized (observerV) {</b>
+<b class="fc"><i>389</i>&nbsp;                observerV.get(0).update(ps, playerName, gameLobby);</b>
+<b class="fc"><i>390</i>&nbsp;            }</b>
+<b class="fc"><i>391</i>&nbsp;    }</b>
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;    /**
+<i>394</i>&nbsp;     * Used by addPlayer, if the player reconnect with the same nickname,
+<i>395</i>&nbsp;     * tell the player to wait for others or resume the game.
+<i>396</i>&nbsp;     *
+<i>397</i>&nbsp;     * @param ps new player server
+<i>398</i>&nbsp;     * @param playerName player name
+<i>399</i>&nbsp;     * @param gameId game Id
+<i>400</i>&nbsp;     */
+<i>401</i>&nbsp;    public void notify(PlayerServer ps, String playerName, int gameId){
+<b class="nc"><i>402</i>&nbsp;        synchronized (observerV) {</b>
+<b class="nc"><i>403</i>&nbsp;            observerV.get(0).update(ps, playerName, gameLobby.getGameBoards().get(gameId));</b>
+<b class="nc"><i>404</i>&nbsp;        }</b>
+<b class="nc"><i>405</i>&nbsp;    }</b>
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;    /**
+<i>408</i>&nbsp;     * notify all players of a game all the necessary data
+<i>409</i>&nbsp;     *
+<i>410</i>&nbsp;     * @param gameId game Id
+<i>411</i>&nbsp;     */
+<i>412</i>&nbsp;    public void notify(int gameId){
+<b class="fc"><i>413</i>&nbsp;        synchronized (observerV) {</b>
+<b class="fc"><i>414</i>&nbsp;            observerV.get(0).update(gameLobby.getGameBoards().get(gameId));</b>
+<b class="fc"><i>415</i>&nbsp;        }</b>
+<b class="fc"><i>416</i>&nbsp;    }</b>
+<i>417</i>&nbsp;
+<i>418</i>&nbsp;    /**
+<i>419</i>&nbsp;     * If one player wins, the game ends, show all players
+<i>420</i>&nbsp;     * of that game available games.
+<i>421</i>&nbsp;     *
+<i>422</i>&nbsp;     * @param gameId game Id
+<i>423</i>&nbsp;     */
+<i>424</i>&nbsp;    public void notifyGameEnded(int gameId){
+<b class="nc"><i>425</i>&nbsp;        synchronized (observerV) {</b>
+<b class="nc"><i>426</i>&nbsp;            observerV.get(0).update(gameId, gameLobby);</b>
+<b class="nc"><i>427</i>&nbsp;        }</b>
+<b class="nc"><i>428</i>&nbsp;    }</b>
+<i>429</i>&nbsp;
+<i>430</i>&nbsp;    public void notifyGameEnded(String playerName){
+<b class="nc"><i>431</i>&nbsp;        synchronized (observerV) {</b>
+<b class="nc"><i>432</i>&nbsp;            observerV.get(0).update(playerName, gameLobby);</b>
+<b class="nc"><i>433</i>&nbsp;        }</b>
+<b class="nc"><i>434</i>&nbsp;    }</b>
+<i>435</i>&nbsp;
+<i>436</i>&nbsp;    /**
+<i>437</i>&nbsp;     * Used by loadData, notify virtualView to restore virtual games
+<i>438</i>&nbsp;     *
+<i>439</i>&nbsp;     * @param vGame reloaded virtual game
+<i>440</i>&nbsp;     */
+<i>441</i>&nbsp;    public void notify(VirtualGame vGame){
+<b class="nc"><i>442</i>&nbsp;        synchronized (observerV) {</b>
+<b class="nc"><i>443</i>&nbsp;            observerV.get(0).restoreVGames(vGame);</b>
+<b class="nc"><i>444</i>&nbsp;        }</b>
+<b class="nc"><i>445</i>&nbsp;    }</b>
+<i>446</i>&nbsp;
+<i>447</i>&nbsp;    /**
+<i>448</i>&nbsp;     * To handle unexpected disconnection or exit game.
+<i>449</i>&nbsp;     *
+<i>450</i>&nbsp;     * @param gameId unexpectedly exited game id
+<i>451</i>&nbsp;     * @param from the nickname of player who dropped the connection
+<i>452</i>&nbsp;     */
+<i>453</i>&nbsp;    public void stopGame(int gameId, String from){
+<b class="nc"><i>454</i>&nbsp;        synchronized (observerV) {</b>
+<b class="nc"><i>455</i>&nbsp;            observerV.get(0).notifyToStopGame(gameId,from);</b>
+<b class="nc"><i>456</i>&nbsp;        }</b>
+<b class="nc"><i>457</i>&nbsp;    }</b>
+<i>458</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 13:38</div>
+</div>
+</body>
+</html>

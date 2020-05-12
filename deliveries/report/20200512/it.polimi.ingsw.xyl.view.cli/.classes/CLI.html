@@ -1,0 +1,665 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CLI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.view.cli</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CLI (it.polimi.ingsw.xyl.view.cli)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CLI</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.8%
+  </span>
+  <span class="absValue">
+    (1/ 36)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.6%
+  </span>
+  <span class="absValue">
+    (8/ 302)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CLI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    2.7%
+  </span>
+  <span class="absValue">
+    (1/ 37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.6%
+  </span>
+  <span class="absValue">
+    (8/ 304)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.view.cli;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.xyl.model.message.*;
+<i>5</i>&nbsp;import it.polimi.ingsw.xyl.network.client.Client;
+<i>6</i>&nbsp;import it.polimi.ingsw.xyl.util.ColorSetter;
+<i>7</i>&nbsp;import it.polimi.ingsw.xyl.view.ViewInterface;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.io.BufferedReader;
+<i>10</i>&nbsp;import java.io.EOFException;
+<i>11</i>&nbsp;import java.io.InputStreamReader;
+<i>12</i>&nbsp;import java.net.ConnectException;
+<i>13</i>&nbsp;import java.util.ArrayList;
+<i>14</i>&nbsp;import java.util.Scanner;
+<i>15</i>&nbsp;import java.util.concurrent.ExecutorService;
+<i>16</i>&nbsp;import java.util.concurrent.Executors;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;/**
+<i>20</i>&nbsp; * Class for Display CLI messages.
+<i>21</i>&nbsp; *
+<i>22</i>&nbsp; * @author yaw
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;public class CLI extends Thread implements ViewInterface {
+<b class="fc"><i>26</i>&nbsp;    private IslandBoardCLI islandBoardCLI = new IslandBoardCLI();</b>
+<i>27</i>&nbsp;    private Client client;
+<i>28</i>&nbsp;    private String userName;
+<b class="fc"><i>29</i>&nbsp;    private int id = -1;</b>
+<b class="fc"><i>30</i>&nbsp;    private int gameId = -1;</b>
+<i>31</i>&nbsp;    private int currentPlayerId;
+<i>32</i>&nbsp;    private ArrayList&lt;GodPower&gt; availableGodPowers;
+<i>33</i>&nbsp;    private PlayerStatus playerStatus;
+<i>34</i>&nbsp;    private String nextAction;
+<b class="fc"><i>35</i>&nbsp;    private int workerInAction = -1;</b>
+<i>36</i>&nbsp;    private VirtualGame vGame;
+<b class="fc"><i>37</i>&nbsp;    private final ExecutorService executor = Executors.newSingleThreadExecutor();</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    public static void main(String[] args) {
+<b class="nc"><i>40</i>&nbsp;        System.out.println(&quot;new a cli&quot;);</b>
+<b class="nc"><i>41</i>&nbsp;        CLI cli = new CLI();</b>
+<b class="nc"><i>42</i>&nbsp;        cli.launch();</b>
+<i>43</i>&nbsp;        while (true) {
+<i>44</i>&nbsp;            try {
+<b class="nc"><i>45</i>&nbsp;                Thread.sleep(1);</b>
+<b class="nc"><i>46</i>&nbsp;            } catch (InterruptedException e) {</b>
+<b class="nc"><i>47</i>&nbsp;                System.err.println(e.toString());</b>
+<b class="nc"><i>48</i>&nbsp;                return;</b>
+<b class="nc"><i>49</i>&nbsp;            }</b>
+<i>50</i>&nbsp;        }
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<b class="fc"><i>53</i>&nbsp;    public CLI() {</b>
+<b class="fc"><i>54</i>&nbsp;        client = new Client(this);</b>
+<b class="fc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * update and show what to do next
+<i>59</i>&nbsp;     *
+<i>60</i>&nbsp;     * @param virtualGame virtualGame received from server
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    @Override
+<i>63</i>&nbsp;    public void update(VirtualGame virtualGame) {
+<b class="nc"><i>64</i>&nbsp;        System.out.println(&quot;aaa&quot;);</b>
+<b class="nc"><i>65</i>&nbsp;        this.vGame = virtualGame;</b>
+<b class="nc"><i>66</i>&nbsp;        final GameStatus gameStatus = virtualGame.getGameStatus();</b>
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;        islandBoardCLI.setPlayers(virtualGame);</b>
+<i>69</i>&nbsp;        //GameStatus gameStatus = virtualGame.getGameStatus();
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;        if (id == -1 &amp;&amp; gameId == -1) {</b>
+<b class="nc"><i>72</i>&nbsp;            for (Integer id : islandBoardCLI.getPlayers().keySet()) {</b>
+<b class="nc"><i>73</i>&nbsp;                if (islandBoardCLI.getPlayers().get(id).getPlayerName().equals(this.userName)) {</b>
+<b class="nc"><i>74</i>&nbsp;                    this.id = id;</b>
+<b class="nc"><i>75</i>&nbsp;                    System.out.println(&quot;My ID: &quot; + id);</b>
+<i>76</i>&nbsp;                }
+<b class="nc"><i>77</i>&nbsp;            }</b>
+<b class="nc"><i>78</i>&nbsp;            this.gameId = virtualGame.getGameId();</b>
+<b class="nc"><i>79</i>&nbsp;            System.out.println(&quot;Game ID: &quot; + gameId);</b>
+<i>80</i>&nbsp;        }
+<b class="nc"><i>81</i>&nbsp;        islandBoardCLI.setMaps(virtualGame.getSpaces(), id);</b>
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;
+<b class="nc"><i>84</i>&nbsp;        playerStatus = virtualGame.getVPlayers().get(id).getPlayerStatus();</b>
+<b class="nc"><i>85</i>&nbsp;        availableGodPowers = virtualGame.getAvailableGodPowers();</b>
+<b class="nc"><i>86</i>&nbsp;        nextAction = virtualGame.getVPlayers().get(id).getNextAction();</b>
+<b class="nc"><i>87</i>&nbsp;        workerInAction = virtualGame.getVPlayers().get(id).getWorkerInAction();</b>
+<b class="nc"><i>88</i>&nbsp;        currentPlayerId = virtualGame.getCurrentPlayerId();</b>
+<b class="nc"><i>89</i>&nbsp;        System.out.println(&quot;Player: &quot; + currentPlayerId + &quot; is playing&quot;);</b>
+<b class="nc"><i>90</i>&nbsp;        switch (gameStatus) {</b>
+<i>91</i>&nbsp;            case WAITINGINIT:
+<b class="nc"><i>92</i>&nbsp;                if (id == 0 &amp;&amp; virtualGame.getCurrentPlayerId() == 0) {</b>
+<b class="nc"><i>93</i>&nbsp;                    setPlayNum();</b>
+<i>94</i>&nbsp;                } else {//do nothing
+<b class="nc"><i>95</i>&nbsp;                    System.err.println(ColorSetter.FG_RED.setColor(&quot;Wrong gameStatus&quot;));</b>
+<i>96</i>&nbsp;                }
+<b class="nc"><i>97</i>&nbsp;                break;</b>
+<i>98</i>&nbsp;            case WAITINGPLAYER:
+<b class="nc"><i>99</i>&nbsp;                islandBoardCLI.showPlayers();</b>
+<b class="nc"><i>100</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Please wait for other players join the game.&quot;));</b>
+<b class="nc"><i>101</i>&nbsp;                break;</b>
+<i>102</i>&nbsp;            case WAITINGSTART:
+<b class="nc"><i>103</i>&nbsp;                islandBoardCLI.showPlayers();</b>
+<b class="nc"><i>104</i>&nbsp;                if (currentPlayerId == id)</b>
+<b class="nc"><i>105</i>&nbsp;                    setUpGame();</b>
+<i>106</i>&nbsp;                else
+<b class="nc"><i>107</i>&nbsp;                    System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Waiting for Start&quot;));</b>
+<b class="nc"><i>108</i>&nbsp;                break;</b>
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;            case INGAME:
+<b class="nc"><i>111</i>&nbsp;                islandBoardCLI.showMaps();</b>
+<b class="nc"><i>112</i>&nbsp;                islandBoardCLI.showPlayers();</b>
+<b class="nc"><i>113</i>&nbsp;                if (playerStatus == PlayerStatus.LOSE)</b>
+<b class="nc"><i>114</i>&nbsp;                    gameEnd();</b>
+<b class="nc"><i>115</i>&nbsp;                else if (currentPlayerId == id)</b>
+<b class="nc"><i>116</i>&nbsp;                    playGame();</b>
+<i>117</i>&nbsp;                else
+<b class="nc"><i>118</i>&nbsp;                    System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Waiting for other player&#39;s operations.&quot;));</b>
+<b class="nc"><i>119</i>&nbsp;                break;</b>
+<i>120</i>&nbsp;            case GAMEENDED:
+<b class="nc"><i>121</i>&nbsp;                gameEnd();</b>
+<i>122</i>&nbsp;                break;
+<i>123</i>&nbsp;        }
+<i>124</i>&nbsp;
+<b class="nc"><i>125</i>&nbsp;    }</b>
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    @Override
+<i>128</i>&nbsp;    public void update(Exception e)  {
+<b class="nc"><i>129</i>&nbsp;        if (e instanceof ConnectException) {</b>
+<b class="nc"><i>130</i>&nbsp;            System.err.println(&quot;Connection refused&quot;);</b>
+<i>131</i>&nbsp;            //askLogin();
+<b class="nc"><i>132</i>&nbsp;        }else if (e instanceof EOFException){</b>
+<b class="nc"><i>133</i>&nbsp;            System.err.println(&quot;Connection failed! If you want to rejoin the game,\n&quot; +</b>
+<i>134</i>&nbsp;                    &quot;please restart the game and login with the same username!&quot;);
+<b class="nc"><i>135</i>&nbsp;            System.exit(0);</b>
+<i>136</i>&nbsp;        }else{
+<b class="nc"><i>137</i>&nbsp;            e.printStackTrace();</b>
+<i>138</i>&nbsp;        }
+<b class="nc"><i>139</i>&nbsp;    }</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * used at the begin of the game
+<i>143</i>&nbsp;     *
+<i>144</i>&nbsp;     * @param message message about set name and join game
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    public void update(Message message) {
+<b class="nc"><i>147</i>&nbsp;        if (message instanceof AskPlayerNameMessage) {</b>
+<b class="nc"><i>148</i>&nbsp;            setUserName();</b>
+<b class="nc"><i>149</i>&nbsp;        } else if (message instanceof NameOKMessage) {</b>
+<b class="nc"><i>150</i>&nbsp;            joinOrCreate((NameOKMessage) message);</b>
+<b class="nc"><i>151</i>&nbsp;        } else if (message instanceof WaitingReconnectionMessage){</b>
+<b class="nc"><i>152</i>&nbsp;            System.out.println(&quot;Please waiting for other players&#39; reconnection.&quot;);</b>
+<b class="nc"><i>153</i>&nbsp;        } else if (message instanceof ConnectionDroppedMessage){</b>
+<b class="nc"><i>154</i>&nbsp;            System.err.println(((ConnectionDroppedMessage) message).playerName + &quot; dropped the connection with &quot; +</b>
+<i>155</i>&nbsp;                    &quot;server, &quot; +
+<i>156</i>&nbsp;                    &quot;the game stopped.&quot;);
+<b class="nc"><i>157</i>&nbsp;            System.exit(0);</b>
+<i>158</i>&nbsp;        }else {
+<b class="nc"><i>159</i>&nbsp;            System.err.println(&quot;Wrong Message Received:&quot; + message.getClass().toString());</b>
+<i>160</i>&nbsp;        }
+<i>161</i>&nbsp;
+<b class="nc"><i>162</i>&nbsp;    }</b>
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    @Override
+<i>165</i>&nbsp;    public void sendMessage(Message message) {
+<i>166</i>&nbsp;        //debugView.update(message);
+<b class="nc"><i>167</i>&nbsp;        client.sendMessage(message);</b>
+<b class="nc"><i>168</i>&nbsp;    }</b>
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    public void launch() {
+<b class="nc"><i>172</i>&nbsp;        splashScreen();</b>
+<b class="nc"><i>173</i>&nbsp;        askLogin();</b>
+<b class="nc"><i>174</i>&nbsp;    }</b>
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /**
+<i>177</i>&nbsp;     * show welcome when start a new CLI
+<i>178</i>&nbsp;     */
+<i>179</i>&nbsp;    private void splashScreen() {
+<i>180</i>&nbsp;
+<b class="nc"><i>181</i>&nbsp;        System.out.println();</b>
+<i>182</i>&nbsp;
+<b class="nc"><i>183</i>&nbsp;        System.out.println(ColorSetter.FG_BLUE.setColor(</b>
+<i>184</i>&nbsp;                &quot;   _____         _   _ _______ ____  _____  _____ _   _ _____ \n&quot; +
+<i>185</i>&nbsp;                        &quot;  / ____|  /\\   | \\ | |__   __/ __ \\|  __ \\|_   _| \\ | |_   _|\n&quot; +
+<i>186</i>&nbsp;                        &quot; | (___   /  \\  |  \\| |  | | | |  | | |__) | | | |  \\| | | |  \n&quot; +
+<i>187</i>&nbsp;                        &quot;  \\___ \\ / /\\ \\ | . ` |  | | | |  | |  _  /  | | | . ` | | |  \n&quot; +
+<i>188</i>&nbsp;                        &quot;  ____) / ____ \\| |\\  |  | | | |__| | | \\ \\ _| |_| |\\  |_| |_ \n&quot; +
+<i>189</i>&nbsp;                        &quot; |_____/_/    \\_\\_| \\_|  |_|  \\____/|_|  \\_\\_____|_| \\_|_____|\n&quot; +
+<i>190</i>&nbsp;                        &quot;                                                              \n&quot; +
+<i>191</i>&nbsp;                        &quot;                                                              &quot;
+<i>192</i>&nbsp;        ));
+<b class="nc"><i>193</i>&nbsp;        System.out.println();</b>
+<b class="nc"><i>194</i>&nbsp;        System.out.println(&quot;Made by&quot; + ColorSetter.FG_GREEN.setColor(&quot; XU Shaoxun,&quot;) + ColorSetter.FG_RED.setColor(&quot; YIN Aiwei&quot;) + &quot; and&quot; + ColorSetter.FG_YELLOW.setColor(&quot; LIN Xin&quot;));</b>
+<b class="nc"><i>195</i>&nbsp;    }</b>
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    /**
+<i>198</i>&nbsp;     * Set ip and username
+<i>199</i>&nbsp;     * connect to server
+<i>200</i>&nbsp;     * called when start a new CLI
+<i>201</i>&nbsp;     */
+<i>202</i>&nbsp;    private void askLogin() {
+<b class="nc"><i>203</i>&nbsp;        System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Please Enter Server IP&quot;));</b>
+<i>204</i>&nbsp;//        Scanner scanner = new Scanner(System.in);
+<i>205</i>&nbsp;//        String ip = scanner.next();
+<b class="nc"><i>206</i>&nbsp;        String ip = &quot;127.0.0.1&quot;;</b>
+<b class="nc"><i>207</i>&nbsp;        System.out.println(&quot;Use default server ip: localhost&quot;);</b>
+<b class="nc"><i>208</i>&nbsp;        client.init(ip);</b>
+<b class="nc"><i>209</i>&nbsp;    }</b>
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    private void setUserName() {
+<b class="nc"><i>212</i>&nbsp;        System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Please Enter Login Name&quot;));</b>
+<b class="nc"><i>213</i>&nbsp;        executor.execute(() -&gt; {</b>
+<b class="nc"><i>214</i>&nbsp;            userName = new Scanner(System.in).nextLine();</b>
+<b class="nc"><i>215</i>&nbsp;            sendMessage(new PlayerNameMessage(userName));</b>
+<b class="nc"><i>216</i>&nbsp;        });</b>
+<b class="nc"><i>217</i>&nbsp;    }</b>
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;    private void setPlayNum() {
+<b class="nc"><i>220</i>&nbsp;        executor.execute(() -&gt; {</b>
+<i>221</i>&nbsp;            int playNum;
+<i>222</i>&nbsp;            do {
+<b class="nc"><i>223</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Please set number of players, 2 or 3&quot;));</b>
+<b class="nc"><i>224</i>&nbsp;                playNum = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>225</i>&nbsp;            } while (playNum != 2 &amp;&amp; playNum != 3);</b>
+<b class="nc"><i>226</i>&nbsp;            System.out.println(&quot;Play Number:&quot; + playNum);</b>
+<b class="nc"><i>227</i>&nbsp;            sendMessage(new SetPlayerNumberMessage(gameId, playNum));</b>
+<b class="nc"><i>228</i>&nbsp;        });</b>
+<b class="nc"><i>229</i>&nbsp;    }</b>
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;    private void joinOrCreate(NameOKMessage nameOKMessage) {
+<b class="nc"><i>232</i>&nbsp;        var games = nameOKMessage.getGames();</b>
+<b class="nc"><i>233</i>&nbsp;        for (NameOKMessage.Games game : games) {</b>
+<b class="nc"><i>234</i>&nbsp;            int playerNum = game.getPlayerNumber();</b>
+<b class="nc"><i>235</i>&nbsp;            int currentNum = game.getCurrentPlayers().size();</b>
+<b class="nc"><i>236</i>&nbsp;            GameStatus gameStatus = game.getGameStatus();</b>
+<b class="nc"><i>237</i>&nbsp;            if (gameStatus == GameStatus.GAMEENDED)</b>
+<b class="nc"><i>238</i>&nbsp;                System.out.println(ColorSetter.FG_RED.setColor(&quot;=======game ID:&quot; + game.getGameID() +</b>
+<i>239</i>&nbsp;                        &quot; (Game Ended)&quot; + &quot;======&quot;));
+<b class="nc"><i>240</i>&nbsp;            else if (playerNum == currentNum) {</b>
+<b class="nc"><i>241</i>&nbsp;                System.out.println(ColorSetter.FG_RED.setColor(&quot;==========game ID:&quot; + game.getGameID() +</b>
+<i>242</i>&nbsp;                        &quot; (&quot; + currentNum + &quot;/&quot; + playerNum + &quot;)&quot; + &quot;==========&quot;));
+<i>243</i>&nbsp;            } else {
+<b class="nc"><i>244</i>&nbsp;                System.out.println(ColorSetter.BG_BLUE.setColor(&quot;==========game ID:&quot; + game.getGameID() +</b>
+<i>245</i>&nbsp;                        &quot; (&quot; + currentNum + &quot;/&quot; + playerNum + &quot;)&quot; + &quot;==========&quot;));
+<i>246</i>&nbsp;            }
+<b class="nc"><i>247</i>&nbsp;            var players = game.getCurrentPlayers();</b>
+<b class="nc"><i>248</i>&nbsp;            System.out.println(&quot;Players:&quot;);</b>
+<b class="nc"><i>249</i>&nbsp;            for (int i = 0; i &lt; players.size(); i++)</b>
+<b class="nc"><i>250</i>&nbsp;                System.out.print(&quot;\t&quot; + players.get(i));</b>
+<b class="nc"><i>251</i>&nbsp;            System.out.println(&quot;\n&quot;);</b>
+<b class="nc"><i>252</i>&nbsp;        }</b>
+<i>253</i>&nbsp;
+<b class="nc"><i>254</i>&nbsp;        executor.execute(() -&gt; {</b>
+<i>255</i>&nbsp;            int input;
+<b class="nc"><i>256</i>&nbsp;            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));</b>
+<i>257</i>&nbsp;            do {
+<b class="nc"><i>258</i>&nbsp;                if (!games.isEmpty())</b>
+<b class="nc"><i>259</i>&nbsp;                    System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Input game ID to join the game&quot;));</b>
+<b class="nc"><i>260</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Input -1 to create a new game&quot;));</b>
+<b class="nc"><i>261</i>&nbsp;                input = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>262</i>&nbsp;            } while (input &lt; -1 || input &gt;= games.size()</b>
+<b class="nc"><i>263</i>&nbsp;                    || (input != -1 &amp;&amp; games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));</b>
+<i>264</i>&nbsp;
+<b class="nc"><i>265</i>&nbsp;            if (input == -1) {</b>
+<b class="nc"><i>266</i>&nbsp;                sendMessage(new CreateNewGameMessage(userName));</b>
+<i>267</i>&nbsp;            } else {
+<b class="nc"><i>268</i>&nbsp;                sendMessage(new JoinGameMessage(userName, input));</b>
+<i>269</i>&nbsp;            }
+<b class="nc"><i>270</i>&nbsp;        });</b>
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;        
+<b class="nc"><i>273</i>&nbsp;    }</b>
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    private void setAvailableGodPowers() {
+<i>276</i>&nbsp;
+<b class="nc"><i>277</i>&nbsp;        int playNum = islandBoardCLI.getPlayers().size();</b>
+<b class="nc"><i>278</i>&nbsp;        executor.execute(() -&gt; {</b>
+<b class="nc"><i>279</i>&nbsp;            int[] godPowers = {-1, -1, -1};</b>
+<b class="nc"><i>280</i>&nbsp;            int countDown = playNum;</b>
+<b class="nc"><i>281</i>&nbsp;            System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Input number to select available god power&quot;));</b>
+<b class="nc"><i>282</i>&nbsp;            System.out.println(ColorSetter.FG_RED.setColor(&quot;If you choose 0 Anonymous, your will start a game&quot; +</b>
+<i>283</i>&nbsp;                    &quot;without God Powers.&quot;));
+<i>284</i>&nbsp;            do {
+<b class="nc"><i>285</i>&nbsp;                System.out.println(countDown + &quot; need to choose&quot;);</b>
+<b class="nc"><i>286</i>&nbsp;                for (int i = 0; i &lt; GodPower.values().length; i++) {</b>
+<b class="nc"><i>287</i>&nbsp;                    if (i != godPowers[0] &amp;&amp; i != godPowers[1] &amp;&amp; i != godPowers[2])</b>
+<b class="nc"><i>288</i>&nbsp;                        System.out.println(i + &quot;:&quot; + GodPower.values()[i].toString() + &quot;:&quot;);</b>
+<b class="nc"><i>289</i>&nbsp;                    System.out.println(&quot;\t&quot; + GodPower.values()[i].description());</b>
+<i>290</i>&nbsp;                }
+<b class="nc"><i>291</i>&nbsp;                int input = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>292</i>&nbsp;                if (input &gt;= 0 &amp;&amp; input &lt; GodPower.values().length &amp;&amp;</b>
+<i>293</i>&nbsp;                        input != godPowers[0] &amp;&amp; input != godPowers[1]
+<i>294</i>&nbsp;                        &amp;&amp; input != godPowers[2]
+<i>295</i>&nbsp;                ) {
+<b class="nc"><i>296</i>&nbsp;                    if (input == 0) {</b>
+<b class="nc"><i>297</i>&nbsp;                        for (int i = 0; i &lt; playNum; i++) {</b>
+<b class="nc"><i>298</i>&nbsp;                            godPowers[i] = input;</b>
+<i>299</i>&nbsp;                        }
+<b class="nc"><i>300</i>&nbsp;                        countDown = 0;</b>
+<i>301</i>&nbsp;                    } else {
+<b class="nc"><i>302</i>&nbsp;                        godPowers[countDown - 1] = input;</b>
+<b class="nc"><i>303</i>&nbsp;                        countDown--;</b>
+<i>304</i>&nbsp;                    }
+<i>305</i>&nbsp;                }
+<b class="nc"><i>306</i>&nbsp;            } while (countDown &gt; 0);</b>
+<b class="nc"><i>307</i>&nbsp;            if (playNum == 2)</b>
+<b class="nc"><i>308</i>&nbsp;                sendMessage(new AvailableGodPowersMessage</b>
+<b class="nc"><i>309</i>&nbsp;                        (gameId, GodPower.values()[godPowers[0]],</b>
+<b class="nc"><i>310</i>&nbsp;                                GodPower.values()[godPowers[1]]));</b>
+<b class="nc"><i>311</i>&nbsp;            else if (playNum == 3) {</b>
+<b class="nc"><i>312</i>&nbsp;                sendMessage(new AvailableGodPowersMessage</b>
+<b class="nc"><i>313</i>&nbsp;                        (gameId, GodPower.values()[godPowers[0]],</b>
+<b class="nc"><i>314</i>&nbsp;                                GodPower.values()[godPowers[1]],</b>
+<b class="nc"><i>315</i>&nbsp;                                GodPower.values()[godPowers[2]]));</b>
+<i>316</i>&nbsp;            } else {
+<b class="nc"><i>317</i>&nbsp;                System.err.println(&quot;in setAvailableGodPowers(): playNum!=2&amp;&amp;playNum!=3&quot;);</b>
+<i>318</i>&nbsp;            }
+<b class="nc"><i>319</i>&nbsp;        });</b>
+<i>320</i>&nbsp;
+<b class="nc"><i>321</i>&nbsp;    }</b>
+<i>322</i>&nbsp;
+<i>323</i>&nbsp;    private void setGodPower() {
+<b class="nc"><i>324</i>&nbsp;        if (availableGodPowers.get(0) == GodPower.ANONYMOUS) {</b>
+<b class="nc"><i>325</i>&nbsp;            System.out.println(ColorSetter.FG_BLUE.setColor(&quot;This is a no-GodPowers game!&quot;));</b>
+<b class="nc"><i>326</i>&nbsp;            sendMessage(new PlayerChooseGodPowerMessage</b>
+<b class="nc"><i>327</i>&nbsp;                    (gameId, id, availableGodPowers.get(0)));</b>
+<i>328</i>&nbsp;        } else {
+<b class="nc"><i>329</i>&nbsp;            executor.execute(() -&gt; {</b>
+<b class="nc"><i>330</i>&nbsp;                int input = 0;</b>
+<i>331</i>&nbsp;                do {
+<b class="nc"><i>332</i>&nbsp;                    System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Input number to select your god power&quot;));</b>
+<b class="nc"><i>333</i>&nbsp;                    int i = 0;</b>
+<b class="nc"><i>334</i>&nbsp;                    for (GodPower godPower : availableGodPowers) {</b>
+<b class="nc"><i>335</i>&nbsp;                        System.out.println(i + &quot;:&quot; + godPower.toString() + &quot;:&quot;);</b>
+<b class="nc"><i>336</i>&nbsp;                        System.out.println(&quot;\t&quot; + godPower.description());</b>
+<b class="nc"><i>337</i>&nbsp;                        i++;</b>
+<b class="nc"><i>338</i>&nbsp;                    }</b>
+<b class="nc"><i>339</i>&nbsp;                    input = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>340</i>&nbsp;                } while (input &lt; 0 || input &gt;= availableGodPowers.size());</b>
+<b class="nc"><i>341</i>&nbsp;                sendMessage(new PlayerChooseGodPowerMessage</b>
+<b class="nc"><i>342</i>&nbsp;                        (gameId, id, availableGodPowers.get(input)));</b>
+<b class="nc"><i>343</i>&nbsp;            });</b>
+<i>344</i>&nbsp;        }
+<b class="nc"><i>345</i>&nbsp;    }</b>
+<i>346</i>&nbsp;
+<i>347</i>&nbsp;    private void setStartPlayer() {
+<b class="nc"><i>348</i>&nbsp;        int playNum = islandBoardCLI.getPlayers().size();</b>
+<b class="nc"><i>349</i>&nbsp;        executor.execute(() -&gt; {</b>
+<i>350</i>&nbsp;            int input;
+<i>351</i>&nbsp;            do {
+<b class="nc"><i>352</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Input number to choose who start first&quot;));</b>
+<b class="nc"><i>353</i>&nbsp;                islandBoardCLI.showPlayers();</b>
+<b class="nc"><i>354</i>&nbsp;                input = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>355</i>&nbsp;            } while (input &lt; 0 || input &gt;= playNum);</b>
+<b class="nc"><i>356</i>&nbsp;            sendMessage(new StartGameMessage(gameId, userName, input));</b>
+<b class="nc"><i>357</i>&nbsp;        });</b>
+<b class="nc"><i>358</i>&nbsp;    }</b>
+<i>359</i>&nbsp;
+<i>360</i>&nbsp;    private void setInitialWorkPosition() {
+<i>361</i>&nbsp;
+<b class="nc"><i>362</i>&nbsp;        System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Set initial worker position&quot;));</b>
+<b class="nc"><i>363</i>&nbsp;        executor.execute(() -&gt; {</b>
+<i>364</i>&nbsp;            int ax, ay, bx, by;
+<i>365</i>&nbsp;            do {
+<b class="nc"><i>366</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;First worker x, please input 0 - 4&quot;));</b>
+<b class="nc"><i>367</i>&nbsp;                ax = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>368</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;First worker y, please input 0 - 4&quot;));</b>
+<b class="nc"><i>369</i>&nbsp;                ay = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>370</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Second worker x, please input 0 - 4&quot;));</b>
+<b class="nc"><i>371</i>&nbsp;                bx = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>372</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Second worker y, please input 0 - 4&quot;));</b>
+<b class="nc"><i>373</i>&nbsp;                by = new Scanner(System.in).nextInt();</b>
+<i>374</i>&nbsp;            } while (false/*todo:check available*/);
+<b class="nc"><i>375</i>&nbsp;            sendMessage(new SetInitialWorkerPositionMessage(gameId, id, ax, ay, bx, by));</b>
+<b class="nc"><i>376</i>&nbsp;        });</b>
+<b class="nc"><i>377</i>&nbsp;    }</b>
+<i>378</i>&nbsp;
+<i>379</i>&nbsp;    private Direction chooseDirection(String action, int workerId) {
+<b class="nc"><i>380</i>&nbsp;        ArrayList&lt;Direction&gt; available = vGame.getVPlayers().get(id).getAvailable(action, workerId);</b>
+<b class="nc"><i>381</i>&nbsp;        if (available.isEmpty()) {</b>
+<b class="nc"><i>382</i>&nbsp;            throw new RuntimeException(&quot;No available of&quot; + action + &quot;error!&quot;);</b>
+<i>383</i>&nbsp;        }
+<i>384</i>&nbsp;        int directionInput;
+<i>385</i>&nbsp;        do {
+<b class="nc"><i>386</i>&nbsp;            System.out.println</b>
+<b class="nc"><i>387</i>&nbsp;                    (ColorSetter.FG_BLUE.setColor(&quot;Please input number to select direction&quot;));</b>
+<b class="nc"><i>388</i>&nbsp;            for (int i = 0; i &lt; available.size(); i++) {</b>
+<b class="nc"><i>389</i>&nbsp;                System.out.println(i + &quot; &quot; + available.get(i).toSymbol() + &quot; &quot; + available.get(i).toString());</b>
+<i>390</i>&nbsp;            }
+<b class="nc"><i>391</i>&nbsp;            directionInput = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>392</i>&nbsp;        } while (directionInput &lt; 0 || directionInput &gt;= available.size());</b>
+<b class="nc"><i>393</i>&nbsp;        return available.get(directionInput);</b>
+<i>394</i>&nbsp;    }
+<i>395</i>&nbsp;
+<i>396</i>&nbsp;    private void move() {
+<b class="nc"><i>397</i>&nbsp;        executor.execute(() -&gt; {</b>
+<i>398</i>&nbsp;            int workerId;
+<b class="nc"><i>399</i>&nbsp;            if (workerInAction != -1) {</b>
+<b class="nc"><i>400</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;You should use worker &quot; + workerInAction + &quot; to move.&quot;));</b>
+<b class="nc"><i>401</i>&nbsp;                workerId = workerInAction;</b>
+<i>402</i>&nbsp;            } else {
+<i>403</i>&nbsp;
+<i>404</i>&nbsp;                do {
+<b class="nc"><i>405</i>&nbsp;                    System.out.println</b>
+<b class="nc"><i>406</i>&nbsp;                            (ColorSetter.FG_BLUE.setColor(&quot;Input 0 or 1 to choose your worker to move&quot;));</b>
+<b class="nc"><i>407</i>&nbsp;                    workerId = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>408</i>&nbsp;                } while (workerId != 1 &amp;&amp; workerId != 0);</b>
+<i>409</i>&nbsp;            }
+<b class="nc"><i>410</i>&nbsp;            Direction direction = chooseDirection(&quot;Move&quot;, workerId);</b>
+<b class="nc"><i>411</i>&nbsp;            sendMessage(new MoveMessage</b>
+<i>412</i>&nbsp;                    (gameId, id, workerId, direction));
+<b class="nc"><i>413</i>&nbsp;        });</b>
+<b class="nc"><i>414</i>&nbsp;    }</b>
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;    private void build() {
+<b class="nc"><i>417</i>&nbsp;        executor.execute(() -&gt; {</b>
+<i>418</i>&nbsp;            int workerId;
+<i>419</i>&nbsp;
+<b class="nc"><i>420</i>&nbsp;            if (workerInAction != -1) {</b>
+<b class="nc"><i>421</i>&nbsp;                System.out.println(ColorSetter.FG_BLUE.setColor(&quot;You should use worker &quot; + workerInAction + &quot; to build.&quot;));</b>
+<b class="nc"><i>422</i>&nbsp;                workerId = workerInAction;</b>
+<i>423</i>&nbsp;            } else {
+<i>424</i>&nbsp;                do {
+<b class="nc"><i>425</i>&nbsp;                    System.out.println</b>
+<b class="nc"><i>426</i>&nbsp;                            (ColorSetter.FG_BLUE.setColor(&quot;Input 0 or 1 to choose your worker to build&quot;));</b>
+<b class="nc"><i>427</i>&nbsp;                    workerId = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>428</i>&nbsp;                } while (workerId != 1 &amp;&amp; workerId != 0);</b>
+<i>429</i>&nbsp;            }
+<b class="nc"><i>430</i>&nbsp;            Direction direction = chooseDirection(&quot;Build&quot;, workerId);</b>
+<b class="nc"><i>431</i>&nbsp;            boolean isDome = false;</b>
+<i>432</i>&nbsp;            int input;
+<i>433</i>&nbsp;            //special for Atlas
+<b class="nc"><i>434</i>&nbsp;            if (islandBoardCLI.getPlayers().get(id).getGodPower()</b>
+<i>435</i>&nbsp;                    == GodPower.ATLAS)
+<i>436</i>&nbsp;                do {
+<b class="nc"><i>437</i>&nbsp;                    System.out.println</b>
+<b class="nc"><i>438</i>&nbsp;                            (&quot;Please input 1 for building a dome,&quot; +</b>
+<i>439</i>&nbsp;                                    &quot; 0 for normal building&quot;);
+<b class="nc"><i>440</i>&nbsp;                    input = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>441</i>&nbsp;                    if (input == 1) isDome = true;</b>
+<b class="nc"><i>442</i>&nbsp;                } while (input != 1 &amp;&amp; input != 0);</b>
+<i>443</i>&nbsp;
+<i>444</i>&nbsp;
+<b class="nc"><i>445</i>&nbsp;            sendMessage(new BuildMessage</b>
+<i>446</i>&nbsp;                    (gameId, id, workerId, direction, isDome));
+<i>447</i>&nbsp;
+<b class="nc"><i>448</i>&nbsp;        });</b>
+<b class="nc"><i>449</i>&nbsp;    }</b>
+<i>450</i>&nbsp;
+<i>451</i>&nbsp;    private void chooseMoveOrBuild() {
+<b class="nc"><i>452</i>&nbsp;        executor.execute(() -&gt; {</b>
+<i>453</i>&nbsp;            int input;
+<i>454</i>&nbsp;            do {
+<b class="nc"><i>455</i>&nbsp;                System.out.println</b>
+<b class="nc"><i>456</i>&nbsp;                        (ColorSetter.FG_BLUE.setColor(&quot;Please input 1 for moving,&quot; +</b>
+<i>457</i>&nbsp;                                &quot; 0 for building&quot;));
+<b class="nc"><i>458</i>&nbsp;                input = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>459</i>&nbsp;            } while (input != 0 &amp;&amp; input != 1);</b>
+<b class="nc"><i>460</i>&nbsp;            if (input == 1)</b>
+<b class="nc"><i>461</i>&nbsp;                move();</b>
+<i>462</i>&nbsp;            else
+<b class="nc"><i>463</i>&nbsp;                build();</b>
+<b class="nc"><i>464</i>&nbsp;        });</b>
+<b class="nc"><i>465</i>&nbsp;    }</b>
+<i>466</i>&nbsp;
+<i>467</i>&nbsp;    private void chooseBuildOrEnd() {
+<b class="nc"><i>468</i>&nbsp;        executor.execute(() -&gt; {</b>
+<i>469</i>&nbsp;            int input;
+<i>470</i>&nbsp;            do {
+<b class="nc"><i>471</i>&nbsp;                System.out.println</b>
+<b class="nc"><i>472</i>&nbsp;                        (ColorSetter.FG_BLUE.setColor(&quot;Please input 1 for building,&quot; +</b>
+<i>473</i>&nbsp;                                &quot; 0 for end your turn&quot;));
+<b class="nc"><i>474</i>&nbsp;                input = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>475</i>&nbsp;            } while (input != 0 &amp;&amp; input != 1);</b>
+<i>476</i>&nbsp;
+<b class="nc"><i>477</i>&nbsp;            if (input == 1)</b>
+<b class="nc"><i>478</i>&nbsp;                build();</b>
+<i>479</i>&nbsp;            else
+<b class="nc"><i>480</i>&nbsp;                sendMessage(new MyTurnFinishedMessage(gameId, id));</b>
+<b class="nc"><i>481</i>&nbsp;        });</b>
+<b class="nc"><i>482</i>&nbsp;    }</b>
+<i>483</i>&nbsp;
+<i>484</i>&nbsp;    /**
+<i>485</i>&nbsp;     * Method used to set god power and choose who to start first
+<i>486</i>&nbsp;     */
+<i>487</i>&nbsp;    private void setUpGame() {
+<b class="nc"><i>488</i>&nbsp;        switch (playerStatus) {</b>
+<i>489</i>&nbsp;            case INGAMEBOARD:
+<b class="nc"><i>490</i>&nbsp;                if (availableGodPowers.isEmpty()) {</b>
+<b class="nc"><i>491</i>&nbsp;                    if (id == 0)</b>
+<b class="nc"><i>492</i>&nbsp;                        setAvailableGodPowers();</b>
+<i>493</i>&nbsp;                    else {
+<b class="nc"><i>494</i>&nbsp;                        System.out.println(ColorSetter.FG_BLUE.setColor(&quot;Waiting for setting Available God Power&quot;));</b>
+<i>495</i>&nbsp;                    }
+<i>496</i>&nbsp;                } else {
+<b class="nc"><i>497</i>&nbsp;                    setGodPower();</b>
+<i>498</i>&nbsp;                }
+<b class="nc"><i>499</i>&nbsp;                break;</b>
+<i>500</i>&nbsp;            case GODPOWERED://do nothing
+<b class="nc"><i>501</i>&nbsp;                break;</b>
+<i>502</i>&nbsp;            case WAITING4START:
+<b class="nc"><i>503</i>&nbsp;                setStartPlayer();</b>
+<i>504</i>&nbsp;                break;
+<i>505</i>&nbsp;        }
+<i>506</i>&nbsp;
+<b class="nc"><i>507</i>&nbsp;    }</b>
+<i>508</i>&nbsp;
+<i>509</i>&nbsp;    /**
+<i>510</i>&nbsp;     * my turn, play game based on playerStatus and nextAction
+<i>511</i>&nbsp;     */
+<i>512</i>&nbsp;    private void playGame() {
+<b class="nc"><i>513</i>&nbsp;        switch (playerStatus) {</b>
+<i>514</i>&nbsp;            case WAITING4INIT:
+<b class="nc"><i>515</i>&nbsp;                setInitialWorkPosition();</b>
+<b class="nc"><i>516</i>&nbsp;                break;</b>
+<i>517</i>&nbsp;            case WORKERPREPARED:
+<b class="nc"><i>518</i>&nbsp;                moveOrBuild();</b>
+<b class="nc"><i>519</i>&nbsp;                break;</b>
+<i>520</i>&nbsp;            case LOSE:
+<b class="nc"><i>521</i>&nbsp;                gameEnd();</b>
+<i>522</i>&nbsp;                break;
+<i>523</i>&nbsp;        }
+<b class="nc"><i>524</i>&nbsp;    }</b>
+<i>525</i>&nbsp;
+<i>526</i>&nbsp;    /**
+<i>527</i>&nbsp;     * deside what to do based on nextAction
+<i>528</i>&nbsp;     */
+<i>529</i>&nbsp;    private void moveOrBuild() {
+<b class="nc"><i>530</i>&nbsp;        switch (nextAction) {</b>
+<i>531</i>&nbsp;            case &quot;MOVE&quot;:
+<b class="nc"><i>532</i>&nbsp;                move();</b>
+<b class="nc"><i>533</i>&nbsp;                break;</b>
+<i>534</i>&nbsp;            case &quot;BUILD&quot;:
+<b class="nc"><i>535</i>&nbsp;                build();</b>
+<b class="nc"><i>536</i>&nbsp;                break;</b>
+<i>537</i>&nbsp;            case &quot;MOVEORBUILD&quot;:
+<b class="nc"><i>538</i>&nbsp;                chooseMoveOrBuild();</b>
+<b class="nc"><i>539</i>&nbsp;                break;</b>
+<i>540</i>&nbsp;            case &quot;BUILDOREND&quot;:
+<b class="nc"><i>541</i>&nbsp;                chooseBuildOrEnd();</b>
+<i>542</i>&nbsp;                break;
+<i>543</i>&nbsp;        }
+<b class="nc"><i>544</i>&nbsp;    }</b>
+<i>545</i>&nbsp;
+<i>546</i>&nbsp;    private void gameEnd(){
+<b class="nc"><i>547</i>&nbsp;        System.out.println(&quot;Game End&quot;);</b>
+<b class="nc"><i>548</i>&nbsp;        PlayerStatus playerStatus = vGame.getVPlayers().get(id).getPlayerStatus();</b>
+<b class="nc"><i>549</i>&nbsp;        if (playerStatus == PlayerStatus.WIN)</b>
+<b class="nc"><i>550</i>&nbsp;            System.out.println(&quot;You win!&quot;);</b>
+<i>551</i>&nbsp;        else
+<b class="nc"><i>552</i>&nbsp;            System.out.println(&quot;You lose!&quot;);</b>
+<b class="nc"><i>553</i>&nbsp;        gameId = -1;</b>
+<b class="nc"><i>554</i>&nbsp;        id = -1;</b>
+<b class="nc"><i>555</i>&nbsp;    }</b>
+<i>556</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 13:38</div>
+</div>
+</body>
+</html>

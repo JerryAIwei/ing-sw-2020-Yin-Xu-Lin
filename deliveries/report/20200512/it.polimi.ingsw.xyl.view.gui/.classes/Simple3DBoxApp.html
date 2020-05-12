@@ -1,0 +1,359 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Simple3DBoxApp</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.view.gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Simple3DBoxApp (it.polimi.ingsw.xyl.view.gui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Simple3DBoxApp</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 71)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Simple3DBoxApp$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Simple3DBoxApp$SmartGroup</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 82)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.view.gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import java.io.File;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import it.polimi.ingsw.xyl.util.Loader;
+<i>7</i>&nbsp;import javafx.application.Application;
+<i>8</i>&nbsp;import javafx.beans.property.DoubleProperty;
+<i>9</i>&nbsp;import javafx.beans.property.SimpleDoubleProperty;
+<i>10</i>&nbsp;import javafx.beans.value.ObservableValue;
+<i>11</i>&nbsp;import javafx.scene.Group;
+<i>12</i>&nbsp;import javafx.scene.image.Image;
+<i>13</i>&nbsp;import javafx.scene.Parent;
+<i>14</i>&nbsp;import javafx.scene.PerspectiveCamera;
+<i>15</i>&nbsp;import javafx.scene.Scene;
+<i>16</i>&nbsp;import javafx.scene.SubScene;
+<i>17</i>&nbsp;import javafx.scene.input.KeyEvent;
+<i>18</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>19</i>&nbsp;import javafx.scene.input.ScrollEvent;
+<i>20</i>&nbsp;import javafx.scene.paint.Color;
+<i>21</i>&nbsp;import javafx.scene.paint.PhongMaterial;
+<i>22</i>&nbsp;import javafx.scene.shape.DrawMode;
+<i>23</i>&nbsp;import javafx.scene.shape.MeshView;
+<i>24</i>&nbsp;import javafx.scene.transform.*;
+<i>25</i>&nbsp;import javafx.stage.Stage;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;import java.io.File;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import javafx.application.Application;
+<i>30</i>&nbsp;import javafx.scene.Group;
+<i>31</i>&nbsp;import javafx.scene.image.Image;
+<i>32</i>&nbsp;import javafx.scene.Parent;
+<i>33</i>&nbsp;import javafx.scene.PerspectiveCamera;
+<i>34</i>&nbsp;import javafx.scene.Scene;
+<i>35</i>&nbsp;import javafx.scene.SubScene;
+<i>36</i>&nbsp;import javafx.scene.paint.Color;
+<i>37</i>&nbsp;import javafx.scene.paint.PhongMaterial;
+<i>38</i>&nbsp;import javafx.scene.shape.DrawMode;
+<i>39</i>&nbsp;import javafx.scene.shape.MeshView;
+<i>40</i>&nbsp;import javafx.scene.transform.Rotate;
+<i>41</i>&nbsp;import javafx.scene.transform.Translate;
+<i>42</i>&nbsp;import javafx.stage.Stage;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;/**
+<i>45</i>&nbsp; * Main.java
+<i>46</i>&nbsp; * &lt;p&gt;
+<i>47</i>&nbsp; * Handles high-level game logic, including game state and handling time
+<i>48</i>&nbsp; * dependant loops.
+<i>49</i>&nbsp; **/
+<b class="nc"><i>50</i>&nbsp;public class Simple3DBoxApp extends Application {</b>
+<i>51</i>&nbsp;    private static final boolean obj = true;
+<i>52</i>&nbsp;    private static final boolean filled = true;
+<i>53</i>&nbsp;    private Stage primaryStage;
+<i>54</i>&nbsp;    private double anchorX, anchorY;
+<b class="nc"><i>55</i>&nbsp;    private double anchorAngleX = 0;</b>
+<b class="nc"><i>56</i>&nbsp;    private double anchorAngleY = 0;</b>
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;    private final DoubleProperty angleX = new SimpleDoubleProperty(0);</b>
+<b class="nc"><i>59</i>&nbsp;    private final DoubleProperty angleY = new SimpleDoubleProperty(0);</b>
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     *
+<i>62</i>&nbsp;     **/
+<i>63</i>&nbsp;    public Parent createContent() throws Exception {
+<i>64</i>&nbsp;        /* Import STL model */
+<i>65</i>&nbsp;        MeshView example, board,innerWall;
+<i>66</i>&nbsp;        if (obj) {
+<b class="nc"><i>67</i>&nbsp;            example = Loader.loadObj</b>
+<b class="nc"><i>68</i>&nbsp;                    (&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Board/Cliff.obj&quot;);</b>
+<b class="nc"><i>69</i>&nbsp;            board = Loader.loadObj(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Board/Board.obj&quot;);</b>
+<b class="nc"><i>70</i>&nbsp;            innerWall = Loader.loadObj(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Board/InnerWalls.obj&quot;);</b>
+<i>71</i>&nbsp;        } else {
+<i>72</i>&nbsp;            example = Loader.loadStl(&quot;src/main/resources/models/computer.stl&quot;);
+<i>73</i>&nbsp;        }
+<i>74</i>&nbsp;        if (filled) {
+<b class="nc"><i>75</i>&nbsp;            PhongMaterial boardPm = new PhongMaterial();</b>
+<b class="nc"><i>76</i>&nbsp;            boardPm.setDiffuseMap(new Image((new File</b>
+<b class="nc"><i>77</i>&nbsp;                    (&quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/Cliff_v001.png&quot;).toURI().toString())));</b>
+<b class="nc"><i>78</i>&nbsp;            boardPm.setSpecularColor(Color.WHITE);</b>
+<b class="nc"><i>79</i>&nbsp;            example.setMaterial(boardPm);</b>
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;            innerWall.setMaterial(new PhongMaterial(Color.BLUE));</b>
+<i>83</i>&nbsp;
+<b class="nc"><i>84</i>&nbsp;            board.setMaterial(new PhongMaterial(Color.RED));</b>
+<i>85</i>&nbsp;        } else {
+<i>86</i>&nbsp;            example.setMaterial(new PhongMaterial(Color.RED));
+<i>87</i>&nbsp;            example.setDrawMode(DrawMode.LINE);
+<i>88</i>&nbsp;        }
+<i>89</i>&nbsp;        //board.getTransforms().add(new Rotate(-90,Rotate.X_AXIS));
+<i>90</i>&nbsp;        //example.getTransforms().add(new Rotate(180,Rotate.X_AXIS));
+<i>91</i>&nbsp;        /* Position the camera in the scene */
+<b class="nc"><i>92</i>&nbsp;        PerspectiveCamera camera = new PerspectiveCamera(true);</b>
+<i>93</i>&nbsp;        if (obj) {
+<b class="nc"><i>94</i>&nbsp;            camera.getTransforms().addAll(</b>
+<i>95</i>&nbsp;                    new Rotate(0, Rotate.Y_AXIS),
+<i>96</i>&nbsp;                    new Rotate(0, Rotate.X_AXIS),
+<i>97</i>&nbsp;                    new Translate(0, 0, -10)
+<i>98</i>&nbsp;            );
+<i>99</i>&nbsp;        } else {
+<i>100</i>&nbsp;            camera.getTransforms().addAll(
+<i>101</i>&nbsp;                    new Rotate(5, Rotate.Y_AXIS),
+<i>102</i>&nbsp;                    new Rotate(-110, Rotate.X_AXIS),
+<i>103</i>&nbsp;                    new Translate(0, 0, -20)
+<i>104</i>&nbsp;            );
+<i>105</i>&nbsp;        }
+<i>106</i>&nbsp;
+<b class="nc"><i>107</i>&nbsp;        camera.setNearClip(1);</b>
+<b class="nc"><i>108</i>&nbsp;        camera.setFarClip(1000);</b>
+<i>109</i>&nbsp;
+<b class="nc"><i>110</i>&nbsp;        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -&gt; {</b>
+<b class="nc"><i>111</i>&nbsp;            switch (event.getCode()) {</b>
+<i>112</i>&nbsp;                case W:
+<b class="nc"><i>113</i>&nbsp;                    camera.translateZProperty().set(camera.getTranslateZ() + 10);</b>
+<b class="nc"><i>114</i>&nbsp;                    break;</b>
+<i>115</i>&nbsp;                case S:
+<b class="nc"><i>116</i>&nbsp;                    camera.translateZProperty().set(camera.getTranslateZ() - 10);</b>
+<i>117</i>&nbsp;                    break;
+<i>118</i>&nbsp;            }
+<i>119</i>&nbsp;        });
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;        innerWall.translateXProperty().set(0);</b>
+<b class="nc"><i>123</i>&nbsp;        innerWall.translateYProperty().set(0);</b>
+<b class="nc"><i>124</i>&nbsp;        innerWall.translateZProperty().set(0);</b>
+<b class="nc"><i>125</i>&nbsp;        board.translateXProperty().set(0);</b>
+<b class="nc"><i>126</i>&nbsp;        board.translateYProperty().set(0);</b>
+<b class="nc"><i>127</i>&nbsp;        board.translateZProperty().set(0);</b>
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;        innerWall.addEventHandler(KeyEvent.KEY_PRESSED,keyEvent -&gt; {</b>
+<b class="nc"><i>130</i>&nbsp;            switch (keyEvent.getCode()){</b>
+<b class="nc"><i>131</i>&nbsp;                case D: innerWall.translateXProperty().set(innerWall.getTranslateX()+10);break;</b>
+<b class="nc"><i>132</i>&nbsp;                case A: innerWall.translateXProperty().set(innerWall.getTranslateX()-10);break;</b>
+<b class="nc"><i>133</i>&nbsp;                case W: innerWall.translateYProperty().set(innerWall.getTranslateY()+10);break;</b>
+<b class="nc"><i>134</i>&nbsp;                case S: innerWall.translateYProperty().set(innerWall.getTranslateY()-10);break;</b>
+<b class="nc"><i>135</i>&nbsp;                case E: innerWall.translateZProperty().set(innerWall.getTranslateZ()+10);break;</b>
+<b class="nc"><i>136</i>&nbsp;                case Q: innerWall.translateZProperty().set(innerWall.getTranslateZ()-10);break;</b>
+<i>137</i>&nbsp;            }
+<i>138</i>&nbsp;        });
+<i>139</i>&nbsp;
+<b class="nc"><i>140</i>&nbsp;        SmartGroup objs = new SmartGroup();</b>
+<i>141</i>&nbsp;        //objs.getChildren().add(example);
+<i>142</i>&nbsp;
+<b class="nc"><i>143</i>&nbsp;        objs.getChildren().add(board);</b>
+<b class="nc"><i>144</i>&nbsp;        objs.getChildren().add(innerWall);</b>
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;        /* Build the Scene Graph */
+<b class="nc"><i>149</i>&nbsp;        Group root = new Group();</b>
+<b class="nc"><i>150</i>&nbsp;        root.getChildren().add(camera);</b>
+<b class="nc"><i>151</i>&nbsp;        root.getChildren().add(objs);</b>
+<i>152</i>&nbsp;        /* Use a SubScene */
+<b class="nc"><i>153</i>&nbsp;        SubScene subScene = new SubScene(root, 1280, 900);</b>
+<b class="nc"><i>154</i>&nbsp;        subScene.setFill(Color.ALICEBLUE);</b>
+<b class="nc"><i>155</i>&nbsp;        subScene.setCamera(camera);</b>
+<b class="nc"><i>156</i>&nbsp;        Group group = new Group();</b>
+<b class="nc"><i>157</i>&nbsp;        group.getChildren().add(subScene);</b>
+<i>158</i>&nbsp;
+<b class="nc"><i>159</i>&nbsp;        primaryStage.addEventHandler(ScrollEvent.SCROLL, event -&gt; {</b>
+<i>160</i>&nbsp;            //Get how much scroll was done in Y axis.
+<b class="nc"><i>161</i>&nbsp;            double delta = event.getDeltaY()/10;</b>
+<i>162</i>&nbsp;            //Add it to the Z-axis location.
+<b class="nc"><i>163</i>&nbsp;            objs.translateZProperty().set(objs.getTranslateZ() + delta);</b>
+<i>164</i>&nbsp;        });
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;        Rotate xRotate;
+<i>167</i>&nbsp;        Rotate yRotate;
+<b class="nc"><i>168</i>&nbsp;        objs.getTransforms().addAll(</b>
+<i>169</i>&nbsp;                xRotate = new Rotate(0, Rotate.X_AXIS),
+<i>170</i>&nbsp;                yRotate = new Rotate(0, Rotate.Y_AXIS)
+<i>171</i>&nbsp;        );
+<i>172</i>&nbsp;
+<b class="nc"><i>173</i>&nbsp;        xRotate.angleProperty().bind(angleX);</b>
+<b class="nc"><i>174</i>&nbsp;        yRotate.angleProperty().bind(angleY);</b>
+<b class="nc"><i>175</i>&nbsp;        primaryStage.addEventHandler(MouseEvent.MOUSE_PRESSED,event-&gt;{</b>
+<b class="nc"><i>176</i>&nbsp;            anchorX = event.getSceneX();</b>
+<b class="nc"><i>177</i>&nbsp;            anchorY = event.getSceneY();</b>
+<b class="nc"><i>178</i>&nbsp;            anchorAngleX = angleX.get();</b>
+<b class="nc"><i>179</i>&nbsp;            anchorAngleY = angleY.get();</b>
+<i>180</i>&nbsp;                }
+<i>181</i>&nbsp;        );
+<b class="nc"><i>182</i>&nbsp;        primaryStage.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -&gt; {</b>
+<b class="nc"><i>183</i>&nbsp;            angleX.set(anchorAngleX - (anchorY - event.getSceneY()));</b>
+<b class="nc"><i>184</i>&nbsp;            angleY.set(anchorAngleY + anchorX - event.getSceneX());</b>
+<i>185</i>&nbsp;        });
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;
+<b class="nc"><i>188</i>&nbsp;        return group;</b>
+<i>189</i>&nbsp;    }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    @Override
+<i>192</i>&nbsp;    public void start(Stage primaryStage) throws Exception {
+<b class="nc"><i>193</i>&nbsp;        this.primaryStage = primaryStage;</b>
+<b class="nc"><i>194</i>&nbsp;        primaryStage.setResizable(false);</b>
+<b class="nc"><i>195</i>&nbsp;        Scene scene = new Scene(createContent(),-1,-1,true);</b>
+<b class="nc"><i>196</i>&nbsp;        primaryStage.setScene(scene);</b>
+<b class="nc"><i>197</i>&nbsp;        primaryStage.show();</b>
+<i>198</i>&nbsp;    }
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    /**
+<i>201</i>&nbsp;     * main()
+<i>202</i>&nbsp;     * &lt;p&gt;
+<i>203</i>&nbsp;     * Pass along the command line arguments to an instance of the Main class.
+<i>204</i>&nbsp;     *
+<i>205</i>&nbsp;     * @param args The command line arguments.
+<i>206</i>&nbsp;     **/
+<i>207</i>&nbsp;    public static void main(String[] args) {
+<i>208</i>&nbsp;        /* TODO: Make decision about parsing command line arguments. */
+<b class="nc"><i>209</i>&nbsp;        launch(args);</b>
+<i>210</i>&nbsp;    }
+<i>211</i>&nbsp;
+<b class="nc"><i>212</i>&nbsp;    class SmartGroup extends Group {</b>
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;        Rotate r;
+<b class="nc"><i>215</i>&nbsp;        Transform t = new Rotate();</b>
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;        void rotateByX(int ang) {
+<b class="nc"><i>218</i>&nbsp;            r = new Rotate(ang, Rotate.X_AXIS);</b>
+<b class="nc"><i>219</i>&nbsp;            t = t.createConcatenation(r);</b>
+<b class="nc"><i>220</i>&nbsp;            this.getTransforms().clear();</b>
+<b class="nc"><i>221</i>&nbsp;            this.getTransforms().addAll(t);</b>
+<i>222</i>&nbsp;        }
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;        void rotateByY(int ang) {
+<b class="nc"><i>225</i>&nbsp;            r = new Rotate(ang, Rotate.Y_AXIS);</b>
+<b class="nc"><i>226</i>&nbsp;            t = t.createConcatenation(r);</b>
+<b class="nc"><i>227</i>&nbsp;            this.getTransforms().clear();</b>
+<b class="nc"><i>228</i>&nbsp;            this.getTransforms().addAll(t);</b>
+<i>229</i>&nbsp;        }
+<i>230</i>&nbsp;    }
+<i>231</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 13:38</div>
+</div>
+</body>
+</html>

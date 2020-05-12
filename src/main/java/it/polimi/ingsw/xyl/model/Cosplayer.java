@@ -119,6 +119,7 @@ public class Cosplayer {
      * all the eight spaces are occupied by another workers or domes,
      * but you can never get into a hole after an effective move.)
      */
+
     public void checkWin() {
         /* Civilian Mod */
         // If your worker is forced onto the third level,

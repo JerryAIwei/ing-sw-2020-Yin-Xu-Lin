@@ -1,0 +1,232 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameLobbyController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.view.gui.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameLobbyController (it.polimi.ingsw.xyl.view.gui.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameLobbyController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.view.gui.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.message.CreateNewGameMessage;
+<i>4</i>&nbsp;import it.polimi.ingsw.xyl.model.message.JoinGameMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.xyl.model.message.NameOKMessage;
+<i>6</i>&nbsp;import it.polimi.ingsw.xyl.util.Loader;
+<i>7</i>&nbsp;import it.polimi.ingsw.xyl.view.gui.GUI;
+<i>8</i>&nbsp;import javafx.application.Platform;
+<i>9</i>&nbsp;import javafx.collections.ObservableList;
+<i>10</i>&nbsp;import javafx.fxml.FXML;
+<i>11</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i>12</i>&nbsp;import javafx.scene.Scene;
+<i>13</i>&nbsp;import javafx.scene.control.Label;
+<i>14</i>&nbsp;import javafx.scene.control.TableColumn;
+<i>15</i>&nbsp;import javafx.scene.control.TableView;
+<i>16</i>&nbsp;import javafx.scene.control.cell.PropertyValueFactory;
+<i>17</i>&nbsp;import javafx.scene.layout.AnchorPane;
+<i>18</i>&nbsp;import javafx.scene.layout.BorderPane;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.Vector;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;public class GameLobbyController {
+<i>25</i>&nbsp;    @FXML
+<i>26</i>&nbsp;    private TableView&lt;NameOKMessage.Games&gt; gamesTable;
+<i>27</i>&nbsp;    @FXML
+<i>28</i>&nbsp;    private TableColumn&lt;NameOKMessage.Games, Integer&gt; gameID;
+<i>29</i>&nbsp;    @FXML
+<i>30</i>&nbsp;    private TableColumn&lt;NameOKMessage.Games, Integer&gt; CurrentNum;
+<i>31</i>&nbsp;    @FXML
+<i>32</i>&nbsp;    private TableColumn&lt;NameOKMessage.Games, Integer&gt; TotalNum;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @FXML
+<i>35</i>&nbsp;    private Label firstPlayerLabel;
+<i>36</i>&nbsp;    @FXML
+<i>37</i>&nbsp;    private Label secondPlayerLabel;
+<i>38</i>&nbsp;    @FXML
+<i>39</i>&nbsp;    private Label thirdPlayerLabel;
+<i>40</i>&nbsp;
+<b class="nc"><i>41</i>&nbsp;    private Vector&lt;Label&gt; labels = new Vector&lt;&gt;();</b>
+<i>42</i>&nbsp;
+<b class="nc"><i>43</i>&nbsp;    private boolean isNewGame = false;</b>
+<b class="nc"><i>44</i>&nbsp;    private boolean isJoinGame = false;</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    // Reference to the main application.
+<i>47</i>&nbsp;    private GUI mainApp;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * The constructor.
+<i>51</i>&nbsp;     * The constructor is called before the initialize() method.
+<i>52</i>&nbsp;     */
+<b class="nc"><i>53</i>&nbsp;    public GameLobbyController() {</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Initializes the controller class. This method is automatically called
+<i>59</i>&nbsp;     * after the fxml file has been loaded.
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    @FXML
+<i>62</i>&nbsp;    private void initialize() {
+<i>63</i>&nbsp;        // Initialize the person table with the two columns.
+<b class="nc"><i>64</i>&nbsp;        gameID.setCellValueFactory(new PropertyValueFactory&lt;NameOKMessage.Games, Integer&gt;(&quot;gameID&quot;));</b>
+<b class="nc"><i>65</i>&nbsp;        CurrentNum.setCellValueFactory(new PropertyValueFactory&lt;NameOKMessage.Games, Integer&gt;(&quot;currentNumber&quot;));</b>
+<b class="nc"><i>66</i>&nbsp;        TotalNum.setCellValueFactory(new PropertyValueFactory&lt;NameOKMessage.Games, Integer&gt;(&quot;playerNumber&quot;));</b>
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;        labels.add(firstPlayerLabel);</b>
+<b class="nc"><i>69</i>&nbsp;        labels.add(secondPlayerLabel);</b>
+<b class="nc"><i>70</i>&nbsp;        labels.add(thirdPlayerLabel);</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;        // Clear game details.
+<b class="nc"><i>73</i>&nbsp;        showGameDetails(null);</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;        // Listen for selection changes and show the person details when changed.
+<b class="nc"><i>76</i>&nbsp;        gamesTable.getSelectionModel().selectedItemProperty().addListener(</b>
+<b class="nc"><i>77</i>&nbsp;                (observable, oldValue, newValue) -&gt; showGameDetails(newValue));</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * Fills all text fields to show details about the game.
+<i>82</i>&nbsp;     * If the specified person is null, all text fields are cleared.
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @param game the game or null
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    private void showGameDetails(NameOKMessage.Games game) {
+<b class="nc"><i>87</i>&nbsp;        for (var label : labels)</b>
+<b class="nc"><i>88</i>&nbsp;            label.setText(&quot;&quot;);</b>
+<b class="nc"><i>89</i>&nbsp;        if (game != null) {</b>
+<i>90</i>&nbsp;            // Fill the labels with info from the person object.
+<b class="nc"><i>91</i>&nbsp;            var players = game.getCurrentPlayers();</b>
+<b class="nc"><i>92</i>&nbsp;            for (int i = 0; i &lt; players.size(); i++) {</b>
+<b class="nc"><i>93</i>&nbsp;                labels.get(i).setText(players.get(i));</b>
+<i>94</i>&nbsp;            }
+<i>95</i>&nbsp;        }
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    /**
+<i>99</i>&nbsp;     * Called when the user clicks the new button. Opens a dialog to edit
+<i>100</i>&nbsp;     * details for a new person.
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    @FXML
+<i>103</i>&nbsp;    private void handleNewGame() {
+<b class="nc"><i>104</i>&nbsp;        if (isNewGame || isJoinGame) return;</b>
+<b class="nc"><i>105</i>&nbsp;        isNewGame = true;</b>
+<b class="nc"><i>106</i>&nbsp;        mainApp.trans2GameBoard();</b>
+<b class="nc"><i>107</i>&nbsp;        mainApp.sendMessage(new CreateNewGameMessage(mainApp.getUserName()));</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * Called when the user clicks the edit button. Opens a dialog to edit
+<i>112</i>&nbsp;     * details for the selected person.
+<i>113</i>&nbsp;     */
+<i>114</i>&nbsp;    @FXML
+<i>115</i>&nbsp;    private void handleJoinGame() {
+<b class="nc"><i>116</i>&nbsp;        if (isJoinGame || isNewGame) return;</b>
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;        var selectedGame = gamesTable.getSelectionModel().getSelectedItem();</b>
+<b class="nc"><i>119</i>&nbsp;        if (selectedGame != null &amp;&amp; selectedGame.getCurrentNumber() != selectedGame.getPlayerNumber()) {</b>
+<b class="nc"><i>120</i>&nbsp;            mainApp.sendMessage(new JoinGameMessage(mainApp.getUserName(), selectedGame.getGameID()));</b>
+<b class="nc"><i>121</i>&nbsp;            isJoinGame = true;</b>
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;
+<b class="nc"><i>124</i>&nbsp;            mainApp.trans2GameBoard();</b>
+<i>125</i>&nbsp;
+<b class="nc"><i>126</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>127</i>&nbsp;                mainApp.getWaitingStage().showAndWait();</b>
+<i>128</i>&nbsp;            });
+<i>129</i>&nbsp;        } else {
+<i>130</i>&nbsp;            // Nothing selected.
+<i>131</i>&nbsp;        }
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Is called by the main application to give a reference back to itself.
+<i>137</i>&nbsp;     *
+<i>138</i>&nbsp;     * @param mainApp
+<i>139</i>&nbsp;     * @param games   all games from sever
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    public void setMainApp(GUI mainApp, ObservableList&lt;NameOKMessage.Games&gt; games) {
+<b class="nc"><i>142</i>&nbsp;        this.mainApp = mainApp;</b>
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;        // Add observable list data to the table
+<b class="nc"><i>145</i>&nbsp;        gamesTable.setItems(games);</b>
+<i>146</i>&nbsp;    }
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 13:38</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NameOKMessage</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model.message</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NameOKMessage (it.polimi.ingsw.xyl.model.message)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NameOKMessage</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (13/ 14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">NameOKMessage$Games</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (2/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    58.3%
+  </span>
+  <span class="absValue">
+    (7/ 12)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (3/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.9%
+  </span>
+  <span class="absValue">
+    (20/ 26)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model.message;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.GameBoard;
+<i>4</i>&nbsp;import it.polimi.ingsw.xyl.model.GameLobby;
+<i>5</i>&nbsp;import it.polimi.ingsw.xyl.model.GameStatus;
+<i>6</i>&nbsp;import it.polimi.ingsw.xyl.model.Player;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.Serializable;
+<i>9</i>&nbsp;import java.util.ArrayList;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;public class NameOKMessage extends Message {
+<i>12</i>&nbsp;    public class Games implements Serializable {
+<i>13</i>&nbsp;        private final int gameID;
+<i>14</i>&nbsp;        private final int playerNumber;
+<i>15</i>&nbsp;        private int currentNumber;
+<i>16</i>&nbsp;        private GameStatus gameStatus;
+<b class="fc"><i>17</i>&nbsp;        private final ArrayList&lt;String&gt; currentPlayers = new ArrayList&lt;&gt;();</b>
+<i>18</i>&nbsp;
+<b class="fc"><i>19</i>&nbsp;        public Games(int id, int num){</b>
+<b class="fc"><i>20</i>&nbsp;            gameID = id;</b>
+<b class="fc"><i>21</i>&nbsp;            playerNumber = num;</b>
+<b class="fc"><i>22</i>&nbsp;        }</b>
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;        public int getGameID() {
+<b class="nc"><i>25</i>&nbsp;            return gameID;</b>
+<i>26</i>&nbsp;        }
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;        public int getPlayerNumber() {
+<b class="nc"><i>29</i>&nbsp;            return playerNumber;</b>
+<i>30</i>&nbsp;        }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;        public int getCurrentNumber() {
+<b class="nc"><i>33</i>&nbsp;            return currentNumber;</b>
+<i>34</i>&nbsp;        }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;        public GameStatus getGameStatus() {
+<b class="nc"><i>37</i>&nbsp;            return gameStatus;</b>
+<i>38</i>&nbsp;        }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;        public void setGameStatus(GameStatus gameStatus) {
+<b class="fc"><i>41</i>&nbsp;            this.gameStatus = gameStatus;</b>
+<b class="fc"><i>42</i>&nbsp;        }</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;        public ArrayList&lt;String&gt; getCurrentPlayers() {
+<b class="nc"><i>45</i>&nbsp;            return currentPlayers;</b>
+<i>46</i>&nbsp;        }
+<i>47</i>&nbsp;    }
+<b class="fc"><i>48</i>&nbsp;    private final ArrayList&lt;Games&gt; games = new ArrayList&lt;&gt;();</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;    public NameOKMessage(GameLobby gameLobby){</b>
+<b class="fc"><i>52</i>&nbsp;        for(GameBoard gb:gameLobby.getGameBoards()){</b>
+<b class="fc"><i>53</i>&nbsp;            if (gb.getCurrentStatus() != GameStatus.WAITINGINIT ) {</b>
+<b class="fc"><i>54</i>&nbsp;                Games game = new Games(gb.getGameId(), gb.getPlayerNumber());</b>
+<b class="fc"><i>55</i>&nbsp;                game.setGameStatus(gb.getCurrentStatus());</b>
+<b class="fc"><i>56</i>&nbsp;                for (Player player : gb.getPlayers().values()) {</b>
+<b class="fc"><i>57</i>&nbsp;                    game.currentPlayers.add(player.getPlayerName());</b>
+<b class="fc"><i>58</i>&nbsp;                }</b>
+<b class="fc"><i>59</i>&nbsp;                game.currentNumber = game.currentPlayers.size();</b>
+<b class="fc"><i>60</i>&nbsp;                games.add(game);</b>
+<i>61</i>&nbsp;            }
+<b class="fc"><i>62</i>&nbsp;        }</b>
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;    }</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    public ArrayList&lt;Games&gt; getGames() {
+<b class="nc"><i>67</i>&nbsp;        return games;</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 13:38</div>
+</div>
+</body>
+</html>
