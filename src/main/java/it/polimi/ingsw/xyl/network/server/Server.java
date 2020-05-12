@@ -79,7 +79,7 @@ public class Server
         }
          File gameDir = new File("./data/game0");
          dirExists = gameDir.exists();
-         if (dirExists && Objects.requireNonNull(dir.list()).length > 0) {
+         if (dirExists && Objects.requireNonNull(gameDir.list()).length > 0) {
              try {
                  new Thread(() -> {
                      String input;

@@ -61,10 +61,10 @@ public class CLI extends Thread implements ViewInterface {
      */
     @Override
     public void update(VirtualGame virtualGame) {
+        System.out.println("aaa");
         this.vGame = virtualGame;
         final GameStatus gameStatus = virtualGame.getGameStatus();
 
-        islandBoardCLI.setMaps(virtualGame.getSpaces(), id);
         islandBoardCLI.setPlayers(virtualGame);
         //GameStatus gameStatus = virtualGame.getGameStatus();
 
@@ -78,6 +78,8 @@ public class CLI extends Thread implements ViewInterface {
             this.gameId = virtualGame.getGameId();
             System.out.println("Game ID: " + gameId);
         }
+        islandBoardCLI.setMaps(virtualGame.getSpaces(), id);
+
 
         playerStatus = virtualGame.getVPlayers().get(id).getPlayerStatus();
         availableGodPowers = virtualGame.getAvailableGodPowers();
@@ -210,15 +212,6 @@ public class CLI extends Thread implements ViewInterface {
         System.out.println(ColorSetter.FG_BLUE.setColor("Please Enter Login Name"));
         executor.execute(() -> {
             userName = new Scanner(System.in).nextLine();
-//            String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-//            Random random = new Random();
-//            StringBuffer sb = new StringBuffer();
-//            for (int i = 0; i < 5; i++) {
-//                int number = random.nextInt(62);
-//                sb.append(str.charAt(number));
-//            }
-//            userName = sb.toString();
-//            System.out.println(ColorSetter.FG_BLUE.setColor("Your player name is " + userName));
             sendMessage(new PlayerNameMessage(userName));
         });
     }
@@ -517,7 +510,6 @@ public class CLI extends Thread implements ViewInterface {
      * my turn, play game based on playerStatus and nextAction
      */
     private void playGame() {
-
         switch (playerStatus) {
             case WAITING4INIT:
                 setInitialWorkPosition();
