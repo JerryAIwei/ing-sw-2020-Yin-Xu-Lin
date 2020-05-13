@@ -129,7 +129,6 @@ public class GameController {
         gameMaster.handleBuild(gameId, playerId, workerId, direction, buildDome);
     }
 
-
     public void handleMessage(AfterGameMessage message){
         gameMaster.afterGame(message.playerName, message.gameId);
     }
@@ -140,6 +139,10 @@ public class GameController {
 
     public void handleMessage(ConnectionDroppedMessage message){
         gameMaster.stopGameOf(message.playerName);
+    }
+
+    public void handleMessage(RefreshMessage message){
+        gameMaster.notify(message.playerName);
     }
 
     public void update(Message message) {
@@ -171,6 +174,8 @@ public class GameController {
             handleMessage((LoadDataMessage) message);
         else if (message.getClass() == ConnectionDroppedMessage.class)
             handleMessage((ConnectionDroppedMessage) message);
+        else if (message.getClass() == RefreshMessage.class)
+            handleMessage((RefreshMessage) message);
     }
 
 }

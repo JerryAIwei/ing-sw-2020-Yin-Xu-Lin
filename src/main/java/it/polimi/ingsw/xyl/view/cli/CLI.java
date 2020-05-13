@@ -61,7 +61,6 @@ public class CLI extends Thread implements ViewInterface {
      */
     @Override
     public void update(VirtualGame virtualGame) {
-        System.out.println("aaa");
         this.vGame = virtualGame;
         final GameStatus gameStatus = virtualGame.getGameStatus();
 
@@ -257,14 +256,18 @@ public class CLI extends Thread implements ViewInterface {
             do {
                 if (!games.isEmpty())
                     System.out.println(ColorSetter.FG_BLUE.setColor("Input game ID to join the game"));
-                System.out.println(ColorSetter.FG_BLUE.setColor("Input -1 to create a new game"));
+                System.out.println(ColorSetter.FG_BLUE.setColor("Input -1 to create a new game, input -2 to refresh " +
+                        "the game lobby."));
                 input = new Scanner(System.in).nextInt();
-            } while (input < -1 || input >= games.size()
-                    || (input != -1 && games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));
+            } while (input < -2 || input >= games.size()
+                    || (input != -1 && input != -2 && games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));
 
             if (input == -1) {
                 sendMessage(new CreateNewGameMessage(userName));
-            } else {
+            } else if (input == -2){
+                sendMessage(new RefreshMessage(userName));
+            }
+            else {
                 sendMessage(new JoinGameMessage(userName, input));
             }
         });

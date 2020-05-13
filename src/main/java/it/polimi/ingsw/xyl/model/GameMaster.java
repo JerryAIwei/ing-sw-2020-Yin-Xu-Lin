@@ -288,7 +288,7 @@ public class GameMaster {
             if(gameLobby.getAllPlayers().get(playerName) == gameId){
                 gameLobby.getAllPlayers().replace(playerName, NO_GAME_ID);
                 logger.log(java.util.logging.Level.INFO, playerName+" lost and return to game lobby.");
-                notifyGameEnded(playerName);
+                notify(playerName);
             }
         }
     }
@@ -331,14 +331,17 @@ public class GameMaster {
                 Player player = new Player(vPlayer.playerId, vPlayer.playerName);
                 player.setCosplayer(vPlayer.getGodPower().cosplay(player));
                 player.restoreWorkers(vPlayer.getWorkers().clone());
-                if (vPlayer.getNextAction() != null)
+                if (vPlayer.getNextAction() != null) {
                     player.getCosplayer().restoreNextAction(vPlayer.getNextAction());
+                }
                 player.getCosplayer().restoreWorkerInAction(vPlayer.getWorkerInAction());
                 player.setCurrentGameBoard(gameBoard);
                 player.setReconnecting(true);
                 gameBoard.addPlayer(player);  // addPlayer will set player status to INGAMEBOARD !!
                 player.setCurrentStatus(vPlayer.getPlayerStatus());
-                gameLobby.add2AllPlayers(vPlayer.playerName, gameId);
+                if (vPlayer.getPlayerStatus() != PlayerStatus.LOSE && vPlayer.getPlayerStatus() != PlayerStatus.WIN) {
+                    gameLobby.add2AllPlayers(vPlayer.playerName, gameId);
+                }
             }
             if (!vGame.getAllGodPowers().isEmpty()) {
                 for (GodPower godPower : vGame.getAllGodPowers()) {
@@ -415,19 +418,12 @@ public class GameMaster {
         }
     }
 
-    /**
-     * If one player wins, the game ends, show all players
-     * of that game available games.
-     *
-     * @param gameId game Id
-     */
-    public void notifyGameEnded(int gameId){
-        synchronized (observerV) {
-            observerV.get(0).update(gameId, gameLobby);
-        }
-    }
 
-    public void notifyGameEnded(String playerName){
+    /**
+     * notify the player all available games
+     * @param playerName player's nickname
+     */
+    public void notify(String playerName){
         synchronized (observerV) {
             observerV.get(0).update(playerName, gameLobby);
         }
@@ -441,6 +437,18 @@ public class GameMaster {
     public void notify(VirtualGame vGame){
         synchronized (observerV) {
             observerV.get(0).restoreVGames(vGame);
+        }
+    }
+
+    /**
+     * If one player wins, the game ends, show all players
+     * of that game available games.
+     *
+     * @param gameId game Id
+     */
+    public void notifyGameEnded(int gameId){
+        synchronized (observerV) {
+            observerV.get(0).update(gameId, gameLobby);
         }
     }
 

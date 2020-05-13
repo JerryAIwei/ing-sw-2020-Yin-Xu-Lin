@@ -6,7 +6,7 @@
 
 Santorini is an abstract strategy board game for 2-4 players, the name was inspired by the architecture of cliffside villages on Santorini Island in Greece. The game is played on a grid where each turn players build a town by placing building pieces up to three levels high. To win the game, players must move one of their two characters to the third level of the town. Normally a game takes about 20-30 minutes.
 
-### Anout the project
+### About the project
 
 This is the repo of the fianl project of the Polimi Software Engineering course. The project is developed by Lin Xin, Xu Shaoxun and Yin Aiwei.
 

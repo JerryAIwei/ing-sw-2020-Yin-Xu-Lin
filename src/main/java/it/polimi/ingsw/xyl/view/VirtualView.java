@@ -8,8 +8,6 @@ import it.polimi.ingsw.xyl.network.server.PlayerServer;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.*;
 
 public class VirtualView {
@@ -20,7 +18,6 @@ public class VirtualView {
     private final Map<String, PlayerServer> playerName2PlayerServer;
     private final Map<Integer, Vector<String>> gameID2PlayerNames;
     private static final Logger logger = Logger.getLogger("view.VirtualView");
-    private final ExecutorService executor = Executors.newCachedThreadPool();
     private boolean test = false;
 
     private VirtualView() {
@@ -57,11 +54,10 @@ public class VirtualView {
      * @param gl the whole game lobby, to get all games
      */
     public void update(PlayerServer ps, String playerName, GameLobby gl) {
-        executor.submit(() -> {
-            if (playerName != null) {
+        if (playerName != null) {
             // normal player name, update playerName2PlayerServer and send nameOkMessage
             NameOKMessage nameOkMessage = new NameOKMessage(gl);
-            if (!test){
+            if (!test) {
                 playerName2PlayerServer.put(playerName, ps);
                 ps.sendMessage(nameOkMessage);
             }
@@ -69,33 +65,31 @@ public class VirtualView {
             // name is duplicated, re-ask for another name
             if (!test)
                 ps.sendMessage(new AskPlayerNameMessage());
-        }});
+        }
     }
 
     /**
      * After receiving previously existed player name to re-login the game,
      * send message to the player, if all the previous player rejoined the game,
      * send previous vGame to all players, otherwise send a waitingReconnection message.
-     * @param ps new player server of the server
+     *
+     * @param ps         new player server of the server
      * @param playerName player's previous nickname
-     * @param gameBoard the gameBoard of the player
+     * @param gameBoard  the gameBoard of the player
      */
-    public void update(PlayerServer ps, String playerName, GameBoard gameBoard){
-        executor.submit(() -> {
-            playerName2PlayerServer.put(playerName, ps);
-            if (gameBoard.getReconnecting()){
-                ps.sendMessage(new WaitingReconnectionMessage());
-            }else {
-                try {
-                    update(gameBoard);
-                    int gameId = gameBoard.getGameId();
-                    logger.log(java.util.logging.Level.INFO, "game " + gameId + " resumed.");
-                } catch (NullPointerException e) {
-                    logger.log(java.util.logging.Level.WARNING, "Re-connection related error.");
-                }
+    public void update(PlayerServer ps, String playerName, GameBoard gameBoard) {
+        playerName2PlayerServer.put(playerName, ps);
+        if (gameBoard.getReconnecting()) {
+            ps.sendMessage(new WaitingReconnectionMessage());
+        } else {
+            try {
+                update(gameBoard);
+                int gameId = gameBoard.getGameId();
+                logger.log(java.util.logging.Level.INFO, "game " + gameId + " resumed.");
+            } catch (NullPointerException e) {
+                logger.log(java.util.logging.Level.WARNING, "Re-connection related error.");
             }
-        });
-
+        }
     }
 
     /**
@@ -104,49 +98,47 @@ public class VirtualView {
      * @param gameBoard gameBoard of the game
      */
     public void update(GameBoard gameBoard) {
-        executor.submit(() -> {
-            int gameId = gameBoard.getGameId();
-            gameID2PlayerNames.computeIfAbsent(gameId, k -> new Vector<>());
-            if (gameID2PlayerNames.get(gameId).size() < gameBoard.getPlayers().size()) {
-                for (String playerName : gameBoard.getAllPlayerNames()) {
-                    if (!gameID2PlayerNames.get(gameId).contains(playerName))
-                        gameID2PlayerNames.get(gameId).add(playerName);
-                }
+        int gameId = gameBoard.getGameId();
+        gameID2PlayerNames.computeIfAbsent(gameId, k -> new Vector<>());
+        if (gameID2PlayerNames.get(gameId).size() < gameBoard.getPlayers().size()) {
+            for (String playerName : gameBoard.getAllPlayerNames()) {
+                if (!gameID2PlayerNames.get(gameId).contains(playerName))
+                    gameID2PlayerNames.get(gameId).add(playerName);
             }
-            vGames.computeIfAbsent(gameId, k -> new VirtualGame(gameId));
-            VirtualGame vGame = vGames.get(gameBoard.getGameId());
-            vGame.setNoLevelUp(gameBoard.getIslandBoard().isNoLevelUp());
-            vGame.setPlayerNumber(gameBoard.getPlayerNumber());
-            vGame.setGameStatus(gameBoard.getCurrentStatus());
-            vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
-            vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
-            vGame.updateVPlayers(gameBoard.getPlayers().values());
-            vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
-            vGame.save();
-            if (!test)
-                sendMessage(gameId, vGame);
+        }
+        vGames.computeIfAbsent(gameId, k -> new VirtualGame(gameId));
+        VirtualGame vGame = vGames.get(gameBoard.getGameId());
+        vGame.setNoLevelUp(gameBoard.getIslandBoard().isNoLevelUp());
+        vGame.setPlayerNumber(gameBoard.getPlayerNumber());
+        vGame.setGameStatus(gameBoard.getCurrentStatus());
+        vGame.setCurrentPlayerId(gameBoard.getCurrentPlayer().getPlayerId());
+        vGame.setAvailableGodPowers(gameBoard.getAvailableGodPowers());
+        vGame.updateVPlayers(gameBoard.getPlayers().values());
+        vGame.setSpaces(gameBoard.getIslandBoard().getSpaces());
+        vGame.save();
+        if (!test)
+            sendMessage(gameId, vGame);
 
-            GameStatus gameStatus = vGame.getGameStatus();
+        GameStatus gameStatus = vGame.getGameStatus();
 
-            if (vGame.getPlayerNumber() == 3 && !gameID2PlayerNames.get(gameId).contains(PLACEHOLDER)){
-                var players = vGame.getVPlayers();
-                for(var entry : players.entrySet()) {
-                    if (entry.getValue().getPlayerStatus() == PlayerStatus.LOSE){
-                        String playerName = entry.getValue().getPlayerName();
-                        Vector<String> playerNames = gameID2PlayerNames.get(gameId);
-                        playerNames.remove(playerName);
-                        if (playerNames.size() == 2) {
-                            playerNames.add(PLACEHOLDER);
-                        }
-                        gameController.update(new AfterGameMessage(playerName, gameId));
-                        break;
+        if (vGame.getPlayerNumber() == 3 && !gameID2PlayerNames.get(gameId).contains(PLACEHOLDER)) {
+            var players = vGame.getVPlayers();
+            for (var entry : players.entrySet()) {
+                if (entry.getValue().getPlayerStatus() == PlayerStatus.LOSE) {
+                    String playerName = entry.getValue().getPlayerName();
+                    Vector<String> playerNames = gameID2PlayerNames.get(gameId);
+                    playerNames.remove(playerName);
+                    if (playerNames.size() == 2) {
+                        playerNames.add(PLACEHOLDER);
                     }
+                    gameController.update(new AfterGameMessage(playerName, gameId));
+                    break;
                 }
             }
-            if(gameStatus == GameStatus.GAMEENDED){
-                gameController.update(new AfterGameMessage(PLACEHOLDER, gameId));
-            }
-        });
+        }
+        if (gameStatus == GameStatus.GAMEENDED) {
+            gameController.update(new AfterGameMessage(PLACEHOLDER, gameId));
+        }
     }
 
     /**
@@ -156,9 +148,7 @@ public class VirtualView {
      * @param message message
      */
     public void update(Message message) {
-        executor.submit(() -> {
-            gameController.update(message);
-        });
+        gameController.update(message);
     }
 
     /**
