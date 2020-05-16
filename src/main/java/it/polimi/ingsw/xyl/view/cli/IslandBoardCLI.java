@@ -94,10 +94,10 @@ public class IslandBoardCLI {
             updateContent(-1);
         }
 
-        public boolean setLevel(Level lever){
-            if(this.level ==lever) return false;
+        public boolean setLevel(Level level){
+            if(this.level ==level) return false;
             else{
-                this.level = lever;
+                this.level = level;
                 upDateContent();
                 return true;
             }

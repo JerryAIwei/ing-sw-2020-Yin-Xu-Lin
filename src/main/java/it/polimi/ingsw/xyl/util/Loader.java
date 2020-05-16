@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
 import java.util.ArrayList;
+
+import javafx.scene.shape.Mesh;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
@@ -22,7 +24,7 @@ public abstract class Loader{
      * @param path The file path to load the OBJ from.
      * @return The mesh of the selected file.
      **/
-    public static MeshView loadObj(String path){
+    public static Mesh loadMesh(String path){
         TriangleMesh mesh = new TriangleMesh(VertexFormat.POINT_NORMAL_TEXCOORD);
         ArrayList<String> lines = readTextFile(path);
         for(int x = 0; x < lines.size(); x++){
@@ -103,7 +105,20 @@ public abstract class Loader{
                 }
             }
         }
-        return new MeshView(mesh);
+        return mesh;
+    }
+
+
+    /**
+     * loadObj()
+     *
+     * Loads an OBJ file from disk and convert it to a mesh.
+     *
+     * @param path The file path to load the OBJ from.
+     * @return The mesh of the selected file.
+     **/
+    public static MeshView loadObj(String path){
+        return new MeshView(loadMesh(path));
     }
 
     /**

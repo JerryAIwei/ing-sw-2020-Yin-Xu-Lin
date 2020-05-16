@@ -20,9 +20,12 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -72,6 +75,8 @@ public class GUI extends Application implements ViewInterface {
 
     private Stage waitingStage;
     private BorderPane rootLayout;
+
+    private GameBoardGUI gameBoardGUI;
 
     private WaitingStageController waitingStageController;
 
@@ -172,16 +177,34 @@ public class GUI extends Application implements ViewInterface {
      * set primaryStage to game board layout
      */
     public void trans2GameBoard() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUI.class.getResource("/GameBoard.fxml"));
-        try {
-            BorderPane layout = loader.load();
-            gamdBoardController = loader.getController();
-            Scene scene = new Scene(layout);
-            primaryStage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gameBoardGUI = new GameBoardGUI();
+        gamdBoardController = new GamdBoardController(gameBoardGUI, primaryStage);
+        Scene scene = new Scene(gameBoardGUI.getObjs(), -1, -1, true);
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        camera.getTransforms().addAll(
+                new Rotate(0, Rotate.Y_AXIS),
+                new Rotate(90, Rotate.X_AXIS),
+                new Translate(0, 0, -80)
+        );
+        camera.setNearClip(1);
+        camera.setFarClip(1000);
+        scene.setCamera(camera);
+        gameBoardGUI.setMap(0,0,Level.LEVEL1,10);
+
+        gameBoardGUI.setMap(1,1,Level.LEVEL1,-1);
+        gameBoardGUI.setMap(1,1,Level.LEVEL2,11);
+
+        gameBoardGUI.setMap(2,2,Level.LEVEL1,-1);
+        gameBoardGUI.setMap(2,2,Level.LEVEL2,-1);
+        gameBoardGUI.setMap(2,2,Level.LEVEL3,21);
+
+        gameBoardGUI.setMap(3,3,Level.LEVEL1,-1);
+        gameBoardGUI.setMap(3,3,Level.LEVEL2,-1);
+        gameBoardGUI.setMap(3,3,Level.LEVEL3,-1);
+        gameBoardGUI.setMap(3,3,Level.DOME,-1);
+
+        gameBoardGUI.setMap(4,4,Level.GROUND,1);
+        primaryStage.setScene(scene);
     }
 
 
@@ -484,7 +507,7 @@ public class GUI extends Application implements ViewInterface {
                 // Set the person into the controller.
                 StartPlayerController controller = loader.getController();
                 controller.setDialogStage(setPlayNumStage);
-                controller.setMainApp(this, gameId,islandBoardCLI.getPlayers().size());
+                controller.setMainApp(this, gameId, islandBoardCLI.getPlayers().size());
                 // Show the dialog and wait until the user closes it
                 setPlayNumStage.showAndWait();
                 waitingStage.showAndWait();
