@@ -262,7 +262,6 @@ public class GUI extends Application implements ViewInterface {
             controller.setMainApp(this, games);
             Scene scene = new Scene(layout);
 
-
             Platform.runLater(() -> {
                 primaryStage.setScene(scene);
                 primaryStage.show();
@@ -281,6 +280,7 @@ public class GUI extends Application implements ViewInterface {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(GUI.class.getResource("/SetUpGame.fxml"));
             BorderPane page = (BorderPane) loader.load();
+
             Platform.runLater(() -> {
                 // Create the dialog Stage.
                 setPlayNumStage = new Stage();

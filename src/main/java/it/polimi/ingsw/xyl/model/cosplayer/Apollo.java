@@ -36,6 +36,7 @@ public class Apollo extends Cosplayer {
         ArrayList<Direction> availableMoves = getAvailableMoves(worker);
         if (targetOccupiedBy != -1 && availableMoves.contains(direction)) {
             int opponentWorkerId = targetOccupiedBy % 10;
+
             int opponentPlayerId = targetOccupiedBy / 10;
             player.getCurrentGameBoard().getIslandBoard().getSpaces()
                     [originalPositionX][originalPositionY].setOccupiedBy(-1);
