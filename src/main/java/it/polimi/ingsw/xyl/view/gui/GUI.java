@@ -27,7 +27,6 @@ import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class GUI extends Application implements ViewInterface {
@@ -60,7 +59,8 @@ public class GUI extends Application implements ViewInterface {
     private VirtualGame vGame;
 
     private AskLoginController askLoginController;
-    private GamdBoardController gamdBoardController;
+    private GameBoardController gameBoardController;
+    private WaitingStageController waitingStageController;
 
     private ObservableList<Person> personData = FXCollections.observableArrayList();
 
@@ -68,18 +68,16 @@ public class GUI extends Application implements ViewInterface {
     private Stage setPlayNumStage;
     private Stage loginStage;
     private Stage godPowerStage;
-
-    public Stage getWaitingStage() {
-        return waitingStage;
-    }
-
     private Stage waitingStage;
+
     private BorderPane rootLayout;
 
     private GameBoardGUI gameBoardGUI;
 
-    private WaitingStageController waitingStageController;
 
+    public Stage getWaitingStage() {
+        return waitingStage;
+    }
 
     public void initClient(String IP) {
         client.init(IP);
@@ -178,12 +176,12 @@ public class GUI extends Application implements ViewInterface {
      */
     public void trans2GameBoard() {
         gameBoardGUI = new GameBoardGUI();
-        gamdBoardController = new GamdBoardController(gameBoardGUI, primaryStage);
+        gameBoardController = new GameBoardController(gameBoardGUI, primaryStage);
         Scene scene = new Scene(gameBoardGUI.getObjs(), -1, -1, true);
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.getTransforms().addAll(
-                new Rotate(0, Rotate.Y_AXIS),
-                new Rotate(90, Rotate.X_AXIS),
+                new Rotate(-10, Rotate.Y_AXIS),
+                new Rotate(110, Rotate.X_AXIS),
                 new Translate(0, 0, -80)
         );
         camera.setNearClip(1);
