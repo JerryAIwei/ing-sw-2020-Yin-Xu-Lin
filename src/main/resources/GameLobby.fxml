@@ -23,7 +23,7 @@
     <children>
         <SplitPane dividerPositions="0.568561872909699" layoutX="130.0" layoutY="40.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="225.0">
+                <AnchorPane fx:id="label_gamesTable" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="225.0">
                     <children>
                         <TableView fx:id="gamesTable" layoutX="5.0" layoutY="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <columns>
@@ -55,17 +55,17 @@
                                  <children>
                                     <Label fx:id="firstPlayerLabel" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="JUSTIFY">
                                        <font>
-                                          <Font size="25.0" />
+                                          <Font size="19.0" />
                                        </font>
                                     </Label>
                                     <Label fx:id="secondPlayerLabel" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="JUSTIFY" GridPane.rowIndex="1">
                                        <font>
-                                          <Font size="25.0" />
+                                          <Font size="19.0" />
                                        </font>
                                     </Label>
                                     <Label fx:id="thirdPlayerLabel" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="JUSTIFY" GridPane.rowIndex="2">
                                        <font>
-                                          <Font size="25.0" />
+                                          <Font size="19.0" />
                                        </font>
                                     </Label>
                                  </children>
@@ -76,8 +76,14 @@
                   </TitledPane>
                         <HBox layoutX="60.0" layoutY="290.0" prefHeight="79.0" prefWidth="135.0" spacing="10.0" AnchorPane.bottomAnchor="29.0" AnchorPane.rightAnchor="59.0">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#handleNewGame" prefHeight="44.0" prefWidth="60.0" text="New" />
-                        <Button mnemonicParsing="false" onAction="#handleJoinGame" prefHeight="44.0" prefWidth="60.0" text="Join" />
+                                <Button mnemonicParsing="false" onAction="#handleNewGame" prefHeight="44.0" prefWidth="64.0" text="New">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Button>
+                        <Button mnemonicParsing="false" onAction="#handleJoinGame" prefHeight="44.0" prefWidth="60.0" text="Join">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Button>
                             </children>
                             <padding>
                                 <Insets bottom="20.0" />

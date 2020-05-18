@@ -22,7 +22,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
@@ -136,7 +138,7 @@ public class GUI extends Application implements ViewInterface {
             BackgroundImage myBI = new BackgroundImage(new Image("/img/background.jpeg", 1080, 720, false, true),
                     BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.CENTER,
                     BackgroundSize.DEFAULT);
-//then you set to your node
+            //then you set to your node
             rootLayout.setBackground(new Background(myBI));
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
@@ -258,7 +260,21 @@ public class GUI extends Application implements ViewInterface {
             // Give the controller access to the main app.
             GameLobbyController controller = loader.getController();
             controller.setMainApp(this, games);
+
+            /*
+            Image image = new Image(getClass().getResourceAsStream("santorini_risorse-grafiche-2/Sprite/clp_bg.png"),1080,720,false,true);
+            GameLobbyController.label_gamesTable.setGraphic(new ImageView(image));
+             */
+
             Scene scene = new Scene(layout);
+
+            /*Image image = new Image("santorini_risorse-grafiche-2/Sprite/clp_bg.png");
+            ImageView imageview2 = new ImageView(image);
+            imageview2.setFitHeight(600);
+            imageview2.setFitWidth(720);
+            layout.getChildren().add(imageview2);
+
+             */
 
             Platform.runLater(() -> {
                 primaryStage.setScene(scene);

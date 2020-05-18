@@ -16,6 +16,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -31,6 +32,10 @@ public class GameLobbyController {
     @FXML
     private TableColumn<NameOKMessage.Games, Integer> TotalNum;
 
+    @FXML
+    public static Pane label_gamesTable;
+    //@FXML
+    //public static Label label_gamesTable;
     @FXML
     private Label firstPlayerLabel;
     @FXML
