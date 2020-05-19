@@ -1,0 +1,539 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameBoardGUI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.view.gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameBoardGUI (it.polimi.ingsw.xyl.view.gui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameBoardGUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 65)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameBoardGUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameBoardGUI$Block</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 87)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GameBoardGUI$Builder</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 163)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.view.gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.Direction;
+<i>4</i>&nbsp;import it.polimi.ingsw.xyl.model.Level;
+<i>5</i>&nbsp;import it.polimi.ingsw.xyl.model.Space;
+<i>6</i>&nbsp;import it.polimi.ingsw.xyl.util.Loader;
+<i>7</i>&nbsp;import it.polimi.ingsw.xyl.util.SmartGroup;
+<i>8</i>&nbsp;import javafx.scene.Group;
+<i>9</i>&nbsp;import javafx.scene.image.Image;
+<i>10</i>&nbsp;import javafx.scene.paint.Color;
+<i>11</i>&nbsp;import javafx.scene.paint.PhongMaterial;
+<i>12</i>&nbsp;import javafx.scene.shape.Box;
+<i>13</i>&nbsp;import javafx.scene.shape.Cylinder;
+<i>14</i>&nbsp;import javafx.scene.shape.Mesh;
+<i>15</i>&nbsp;import javafx.scene.shape.MeshView;
+<i>16</i>&nbsp;import javafx.scene.transform.Translate;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;import java.io.File;
+<i>19</i>&nbsp;import java.util.ArrayList;
+<i>20</i>&nbsp;import java.util.Arrays;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Coordinate
+<i>24</i>&nbsp; * ---&gt;x
+<i>25</i>&nbsp; * |
+<i>26</i>&nbsp; * z
+<i>27</i>&nbsp; * Class to show the builder and building
+<i>28</i>&nbsp; *
+<i>29</i>&nbsp; * @author yaw
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;public class GameBoardGUI {
+<i>32</i>&nbsp;    //height of the buiding
+<b class="nc"><i>33</i>&nbsp;    final double LEVEL1_HEIGHT = 1.0;</b>
+<b class="nc"><i>34</i>&nbsp;    final double LEVEL2_HEIGHT = 4.9;</b>
+<b class="nc"><i>35</i>&nbsp;    final double LEVEL3_HEIGHT = 8.0;</b>
+<b class="nc"><i>36</i>&nbsp;    final double DOME_HEIGHT = 10.5;</b>
+<i>37</i>&nbsp;    //height of the builder
+<b class="nc"><i>38</i>&nbsp;    final double BUILDER_GROUND = 1.4;</b>
+<b class="nc"><i>39</i>&nbsp;    final double BUILDER_LEVEL1 = 3.6;</b>
+<b class="nc"><i>40</i>&nbsp;    final double BUILDER_LEVEL2 = 5.7;</b>
+<b class="nc"><i>41</i>&nbsp;    final double BUILDER_LEVEL3 = 6.6;</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    //height of the target
+<b class="nc"><i>44</i>&nbsp;    final double TARGET_GROUND = 2.0;</b>
+<b class="nc"><i>45</i>&nbsp;    final double TARGET_LEVEL1 = 5.5;</b>
+<b class="nc"><i>46</i>&nbsp;    final double TARGET_LEVEL2 = 9.5;</b>
+<b class="nc"><i>47</i>&nbsp;    final double TARGET_LEVEL3 = 11.0;</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    //GameBoard cube size
+<b class="nc"><i>50</i>&nbsp;    final double CUBE_WIDTH = 6.0;</b>
+<b class="nc"><i>51</i>&nbsp;    final double CUBE_HEIGHT = 2.0;</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    //Target Cylinder size
+<b class="nc"><i>54</i>&nbsp;    final double TARGET_R = 2.5;</b>
+<b class="nc"><i>55</i>&nbsp;    final double TARGET_H = 0.5;</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    //distance between cube
+<b class="nc"><i>59</i>&nbsp;    final double CUBE_DISTANCE = 1.0;</b>
+<i>60</i>&nbsp;    //ratio of the builder
+<b class="nc"><i>61</i>&nbsp;    final double RATIO_BUILDER = 1.8;</b>
+<i>62</i>&nbsp;    int id;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    public Builder[] getMaleBuilders() {
+<b class="nc"><i>65</i>&nbsp;        return maleBuilders;</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    public Builder[] getFemaleBuilders() {
+<b class="nc"><i>69</i>&nbsp;        return femaleBuilders;</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;    private static final Builder[] maleBuilders = new Builder[3];</b>
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;    private static final Builder[] femaleBuilders = new Builder[3];</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;
+<b class="nc"><i>77</i>&nbsp;    private SmartGroup objs = new SmartGroup();</b>
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;    private ArrayList&lt;Direction&gt; availableMove = new ArrayList&lt;&gt;(Arrays.asList(Direction.values()));</b>
+<b class="nc"><i>80</i>&nbsp;    private ArrayList&lt;Direction&gt; availableBuild = new ArrayList&lt;&gt;(Arrays.asList(Direction.values()));</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;    private Block[][] maps = new Block[5][5];</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * Load mesh from file
+<i>86</i>&nbsp;     *
+<i>87</i>&nbsp;     * @param meshPath path of the mesh
+<i>88</i>&nbsp;     * @param pmPath   path of the 2D Texture
+<i>89</i>&nbsp;     */
+<i>90</i>&nbsp;    private MeshView setUPMeshView(String meshPath, String pmPath) {
+<i>91</i>&nbsp;        MeshView meshView;
+<b class="nc"><i>92</i>&nbsp;        meshView = Loader.loadObj(meshPath);</b>
+<b class="nc"><i>93</i>&nbsp;        PhongMaterial boardPm = new PhongMaterial();</b>
+<b class="nc"><i>94</i>&nbsp;        boardPm.setDiffuseMap(new Image((new File</b>
+<b class="nc"><i>95</i>&nbsp;                (pmPath).toURI().toString())));</b>
+<b class="nc"><i>96</i>&nbsp;        meshView.setMaterial(boardPm);</b>
+<b class="nc"><i>97</i>&nbsp;        return meshView;</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Load dome from file
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    private MeshView setUPMeshView() {
+<i>104</i>&nbsp;        MeshView meshView;
+<b class="nc"><i>105</i>&nbsp;        meshView = Loader.loadObj(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Buildings/Dome.obj&quot;);</b>
+<b class="nc"><i>106</i>&nbsp;        meshView.setMaterial(new PhongMaterial(Color.BLUE));</b>
+<b class="nc"><i>107</i>&nbsp;        return meshView;</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    public class Builder extends MeshView {
+<b class="nc"><i>111</i>&nbsp;        private int[] position = {-1, -1};</b>
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;        public int[] getPosition() {
+<b class="nc"><i>114</i>&nbsp;            return position;</b>
+<i>115</i>&nbsp;        }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;        public void setPosition(int x, int y) {
+<b class="nc"><i>118</i>&nbsp;            position[0] = x;</b>
+<b class="nc"><i>119</i>&nbsp;            position[1] = y;</b>
+<i>120</i>&nbsp;        }
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;        public Builder(String meshPath, String pmPath) {</b>
+<b class="nc"><i>123</i>&nbsp;            super(Loader.loadMesh(meshPath));</b>
+<b class="nc"><i>124</i>&nbsp;            PhongMaterial boardPm = new PhongMaterial();</b>
+<b class="nc"><i>125</i>&nbsp;            boardPm.setDiffuseMap(new Image((new File</b>
+<b class="nc"><i>126</i>&nbsp;                    (pmPath).toURI().toString())));</b>
+<b class="nc"><i>127</i>&nbsp;            this.setMaterial(boardPm);</b>
+<i>128</i>&nbsp;        }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    public class Block extends Group {
+<i>133</i>&nbsp;
+<b class="nc"><i>134</i>&nbsp;        private Level level = Level.GROUND;</b>
+<b class="nc"><i>135</i>&nbsp;        private int occupiedBy = -1;//-1: Block is empty</b>
+<i>136</i>&nbsp;        private MeshView building01, building02, building03, dome;
+<i>137</i>&nbsp;        private Cylinder target;//used for selection the block to move or build
+<b class="nc"><i>138</i>&nbsp;        private int[] position = {-1, -1};</b>
+<b class="nc"><i>139</i>&nbsp;        private boolean domed = false;</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;        int[] getPosition() {
+<b class="nc"><i>142</i>&nbsp;            return position;</b>
+<i>143</i>&nbsp;        }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;        void setPosition(int x, int y) {
+<b class="nc"><i>146</i>&nbsp;            position[0] = x;</b>
+<b class="nc"><i>147</i>&nbsp;            position[1] = y;</b>
+<i>148</i>&nbsp;        }
+<i>149</i>&nbsp;
+<b class="nc"><i>150</i>&nbsp;        public Block() {</b>
+<i>151</i>&nbsp;
+<b class="nc"><i>152</i>&nbsp;            building01 = setUPMeshView(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock01.obj&quot;</b>
+<i>153</i>&nbsp;                    , &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/BuildingBlock01_v001.png&quot;
+<i>154</i>&nbsp;            );
+<b class="nc"><i>155</i>&nbsp;            building02 = setUPMeshView(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock02.obj&quot;</b>
+<i>156</i>&nbsp;                    , &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/BuildingBlock02_v001.png&quot;
+<i>157</i>&nbsp;            );
+<b class="nc"><i>158</i>&nbsp;            building03 = setUPMeshView(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock03.obj&quot;</b>
+<i>159</i>&nbsp;                    , &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/BuildingBlock03_v001.png&quot;
+<i>160</i>&nbsp;            );
+<b class="nc"><i>161</i>&nbsp;            dome = setUPMeshView();</b>
+<b class="nc"><i>162</i>&nbsp;            building01.getTransforms().addAll(this.getTransforms());</b>
+<b class="nc"><i>163</i>&nbsp;            building01.getTransforms().add(new Translate(0, LEVEL1_HEIGHT, 0));</b>
+<b class="nc"><i>164</i>&nbsp;            building02.getTransforms().addAll(this.getTransforms());</b>
+<b class="nc"><i>165</i>&nbsp;            building02.getTransforms().add(new Translate(0, LEVEL2_HEIGHT, 0));</b>
+<b class="nc"><i>166</i>&nbsp;            building03.getTransforms().addAll(this.getTransforms());</b>
+<b class="nc"><i>167</i>&nbsp;            building03.getTransforms().add(new Translate(0, LEVEL3_HEIGHT, 0));</b>
+<b class="nc"><i>168</i>&nbsp;            dome.getTransforms().addAll(this.getTransforms());</b>
+<i>169</i>&nbsp;
+<b class="nc"><i>170</i>&nbsp;            target = new Cylinder(TARGET_R, TARGET_H);</b>
+<b class="nc"><i>171</i>&nbsp;            target.setMaterial(new PhongMaterial(Color.ORANGERED));</b>
+<i>172</i>&nbsp;
+<b class="nc"><i>173</i>&nbsp;            var box = new Box(CUBE_WIDTH, CUBE_HEIGHT, CUBE_WIDTH);</b>
+<b class="nc"><i>174</i>&nbsp;            box.setMaterial(new PhongMaterial(Color.BURLYWOOD));</b>
+<b class="nc"><i>175</i>&nbsp;            box.getTransforms().addAll(this.getTransforms());</b>
+<b class="nc"><i>176</i>&nbsp;            this.getChildren().add(box);</b>
+<i>177</i>&nbsp;        }
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;        public void setLevel(Level level) {
+<b class="nc"><i>180</i>&nbsp;            if (this.level != level) {</b>
+<b class="nc"><i>181</i>&nbsp;                if (level != Level.DOME)</b>
+<b class="nc"><i>182</i>&nbsp;                    this.level = level;</b>
+<i>183</i>&nbsp;                else
+<b class="nc"><i>184</i>&nbsp;                    domed = true;</b>
+<b class="nc"><i>185</i>&nbsp;                update(-1, true);</b>
+<i>186</i>&nbsp;            }
+<i>187</i>&nbsp;        }
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;        public void levelUp(boolean isDome){
+<b class="nc"><i>190</i>&nbsp;            if(isDome) {setLevel(Level.DOME);return;}</b>
+<b class="nc"><i>191</i>&nbsp;            switch (this.level){</b>
+<b class="nc"><i>192</i>&nbsp;                case GROUND:setLevel(Level.LEVEL1);break;</b>
+<b class="nc"><i>193</i>&nbsp;                case LEVEL1:setLevel(Level.LEVEL2);break;</b>
+<b class="nc"><i>194</i>&nbsp;                case LEVEL2:setLevel(Level.LEVEL3);break;</b>
+<b class="nc"><i>195</i>&nbsp;                case LEVEL3:setLevel(Level.DOME);break;</b>
+<i>196</i>&nbsp;            }
+<i>197</i>&nbsp;        }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;        public void setOccupiedBy(int occupiedBy) {
+<b class="nc"><i>200</i>&nbsp;            if (this.occupiedBy != occupiedBy) {</b>
+<b class="nc"><i>201</i>&nbsp;                this.occupiedBy = occupiedBy;</b>
+<b class="nc"><i>202</i>&nbsp;                update(-1, false);</b>
+<i>203</i>&nbsp;            }
+<i>204</i>&nbsp;        }
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;        public int getOccupiedBy() {
+<b class="nc"><i>207</i>&nbsp;            return this.occupiedBy;</b>
+<i>208</i>&nbsp;        }
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;        /**
+<i>211</i>&nbsp;         * should be used after any update to the Block
+<i>212</i>&nbsp;         */
+<i>213</i>&nbsp;        private void update(int id, boolean isLevel) {
+<b class="nc"><i>214</i>&nbsp;            if (isLevel) {</b>
+<b class="nc"><i>215</i>&nbsp;                switch (this.level) {</b>
+<i>216</i>&nbsp;                    case GROUND:
+<b class="nc"><i>217</i>&nbsp;                        if(domed) dome.getTransforms().add(new Translate(0,LEVEL1_HEIGHT+0.5, 0));</b>
+<i>218</i>&nbsp;                        break;
+<i>219</i>&nbsp;                    case LEVEL1:
+<b class="nc"><i>220</i>&nbsp;                        if(domed) dome.getTransforms().add(new Translate(0,LEVEL2_HEIGHT+0.5, 0));</b>
+<b class="nc"><i>221</i>&nbsp;                        else this.getChildren().addAll(building01);</b>
+<b class="nc"><i>222</i>&nbsp;                        break;</b>
+<i>223</i>&nbsp;                    case LEVEL2:
+<b class="nc"><i>224</i>&nbsp;                        if(domed) dome.getTransforms().add(new Translate(0,LEVEL3_HEIGHT+1, 0));</b>
+<b class="nc"><i>225</i>&nbsp;                        else this.getChildren().addAll(building02);</b>
+<b class="nc"><i>226</i>&nbsp;                        break;</b>
+<i>227</i>&nbsp;                    case LEVEL3:
+<b class="nc"><i>228</i>&nbsp;                        if(domed) dome.getTransforms().add(new Translate(0,DOME_HEIGHT, 0));</b>
+<b class="nc"><i>229</i>&nbsp;                        else this.getChildren().addAll(building03);</b>
+<i>230</i>&nbsp;                        break;
+<i>231</i>&nbsp;                }
+<b class="nc"><i>232</i>&nbsp;                if(domed)this.getChildren().addAll(dome);</b>
+<i>233</i>&nbsp;            } else {
+<b class="nc"><i>234</i>&nbsp;                if (occupiedBy != -1) {</b>
+<b class="nc"><i>235</i>&nbsp;                    int playerID = occupiedBy / 10;</b>
+<b class="nc"><i>236</i>&nbsp;                    var builder = occupiedBy % 10 == 0 ? maleBuilders[playerID] : femaleBuilders[playerID];</b>
+<b class="nc"><i>237</i>&nbsp;                    builder.setPosition(position[0], position[1]);</b>
+<i>238</i>&nbsp;                    //builder.getTransforms().addAll(this.getTransforms());
+<b class="nc"><i>239</i>&nbsp;                    builder.getTransforms().clear();</b>
+<b class="nc"><i>240</i>&nbsp;                    builder.setScaleX(RATIO_BUILDER);</b>
+<b class="nc"><i>241</i>&nbsp;                    builder.setScaleY(RATIO_BUILDER);</b>
+<b class="nc"><i>242</i>&nbsp;                    builder.setScaleZ(RATIO_BUILDER);</b>
+<b class="nc"><i>243</i>&nbsp;                    switch (this.level) {</b>
+<i>244</i>&nbsp;                        case GROUND:
+<b class="nc"><i>245</i>&nbsp;                            builder.getTransforms().add(new Translate(0, BUILDER_GROUND, 0));</b>
+<b class="nc"><i>246</i>&nbsp;                            break;</b>
+<i>247</i>&nbsp;                        case LEVEL1:
+<b class="nc"><i>248</i>&nbsp;                            builder.getTransforms().add(new Translate(0, BUILDER_LEVEL1, 0));</b>
+<b class="nc"><i>249</i>&nbsp;                            break;</b>
+<i>250</i>&nbsp;                        case LEVEL2:
+<b class="nc"><i>251</i>&nbsp;                            builder.getTransforms().add(new Translate(0, BUILDER_LEVEL2, 0));</b>
+<b class="nc"><i>252</i>&nbsp;                            break;</b>
+<i>253</i>&nbsp;                        case LEVEL3:
+<b class="nc"><i>254</i>&nbsp;                            builder.getTransforms().add(new Translate(0, BUILDER_LEVEL3, 0));</b>
+<i>255</i>&nbsp;                            break;
+<i>256</i>&nbsp;                    }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;
+<b class="nc"><i>259</i>&nbsp;                    this.getChildren().add(builder);</b>
+<i>260</i>&nbsp;                }
+<i>261</i>&nbsp;            }
+<i>262</i>&nbsp;
+<i>263</i>&nbsp;        }
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;        public void showTarget() {
+<b class="nc"><i>266</i>&nbsp;            target.getTransforms().clear();</b>
+<b class="nc"><i>267</i>&nbsp;            switch (this.level) {</b>
+<i>268</i>&nbsp;                case GROUND:
+<b class="nc"><i>269</i>&nbsp;                    target.getTransforms().add(new Translate(0, TARGET_GROUND, 0));</b>
+<b class="nc"><i>270</i>&nbsp;                    break;</b>
+<i>271</i>&nbsp;                case LEVEL1:
+<b class="nc"><i>272</i>&nbsp;                    target.getTransforms().add(new Translate(0, TARGET_LEVEL1, 0));</b>
+<b class="nc"><i>273</i>&nbsp;                    break;</b>
+<i>274</i>&nbsp;                case LEVEL2:
+<b class="nc"><i>275</i>&nbsp;                    target.getTransforms().add(new Translate(0, TARGET_LEVEL2, 0));</b>
+<b class="nc"><i>276</i>&nbsp;                    break;</b>
+<i>277</i>&nbsp;                case LEVEL3:
+<b class="nc"><i>278</i>&nbsp;                    target.getTransforms().add(new Translate(0, TARGET_LEVEL3, 0));</b>
+<i>279</i>&nbsp;                    break;
+<i>280</i>&nbsp;            }
+<i>281</i>&nbsp;            try {
+<b class="nc"><i>282</i>&nbsp;                this.getChildren().add(target);</b>
+<b class="nc"><i>283</i>&nbsp;            } catch (Exception e) {</b>
+<b class="nc"><i>284</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>285</i>&nbsp;            }</b>
+<i>286</i>&nbsp;        }
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;        public void removeTarget() {
+<i>289</i>&nbsp;            try {
+<b class="nc"><i>290</i>&nbsp;                this.getChildren().remove(target);</b>
+<b class="nc"><i>291</i>&nbsp;            } catch (Exception e) {</b>
+<b class="nc"><i>292</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>293</i>&nbsp;            }</b>
+<i>294</i>&nbsp;        }
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;        public Cylinder getTarget() {
+<b class="nc"><i>297</i>&nbsp;            return target;</b>
+<i>298</i>&nbsp;        }
+<i>299</i>&nbsp;    }
+<i>300</i>&nbsp;
+<b class="nc"><i>301</i>&nbsp;    public GameBoardGUI() {</b>
+<b class="nc"><i>302</i>&nbsp;        maleBuilders[0] = new Builder(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj&quot;,</b>
+<i>303</i>&nbsp;                &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Blue_v001.png&quot;);
+<b class="nc"><i>304</i>&nbsp;        maleBuilders[1] = new Builder(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj&quot;,</b>
+<i>305</i>&nbsp;                &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Orange_v001.png&quot;);
+<b class="nc"><i>306</i>&nbsp;        maleBuilders[2] = new Builder(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj&quot;,</b>
+<i>307</i>&nbsp;                &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Pink_v001.png&quot;);
+<b class="nc"><i>308</i>&nbsp;        femaleBuilders[0] = new Builder(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj&quot;,</b>
+<i>309</i>&nbsp;                &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Blue_v001.png&quot;);
+<b class="nc"><i>310</i>&nbsp;        femaleBuilders[1] = new Builder(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj&quot;,</b>
+<i>311</i>&nbsp;                &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Orange_v001.png&quot;);
+<b class="nc"><i>312</i>&nbsp;        femaleBuilders[2] = new Builder(&quot;src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj&quot;,</b>
+<i>313</i>&nbsp;                &quot;src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Pink_v001.png&quot;);
+<i>314</i>&nbsp;
+<b class="nc"><i>315</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="nc"><i>316</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>317</i>&nbsp;                maps[i][j] = new Block();</b>
+<b class="nc"><i>318</i>&nbsp;                maps[i][j].getTransforms().addAll</b>
+<b class="nc"><i>319</i>&nbsp;                        (new Translate((CUBE_WIDTH + CUBE_DISTANCE) * i - (2.5 * CUBE_WIDTH + 2 * CUBE_DISTANCE),</b>
+<i>320</i>&nbsp;                                0, (CUBE_WIDTH + CUBE_DISTANCE) * j - (2.5 * CUBE_WIDTH + 2 * CUBE_DISTANCE)));
+<b class="nc"><i>321</i>&nbsp;                maps[i][j].setPosition(i, j);</b>
+<b class="nc"><i>322</i>&nbsp;                objs.getChildren().add(maps[i][j]);</b>
+<i>323</i>&nbsp;            }
+<i>324</i>&nbsp;        }
+<i>325</i>&nbsp;
+<i>326</i>&nbsp;
+<i>327</i>&nbsp;    }
+<i>328</i>&nbsp;
+<i>329</i>&nbsp;    public void setId(int id) {
+<b class="nc"><i>330</i>&nbsp;        this.id = id;</b>
+<i>331</i>&nbsp;    }
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;    public int getId() {
+<b class="nc"><i>334</i>&nbsp;        return this.id;</b>
+<i>335</i>&nbsp;    }
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    /**
+<i>338</i>&nbsp;     * set up one block, used for debug
+<i>339</i>&nbsp;     *
+<i>340</i>&nbsp;     * @param x      col of the block
+<i>341</i>&nbsp;     * @param y      row of the block
+<i>342</i>&nbsp;     * @param level  set the level of the block
+<i>343</i>&nbsp;     * @param player play id on the block
+<i>344</i>&nbsp;     */
+<i>345</i>&nbsp;    public void setMap(int x, int y, Level level, int player) {
+<b class="nc"><i>346</i>&nbsp;        if (x &lt; 0 || x &gt; 4) return;</b>
+<b class="nc"><i>347</i>&nbsp;        if (y &lt; 0 || y &gt; 4) return;</b>
+<b class="nc"><i>348</i>&nbsp;        maps[x][y].setLevel(level);</b>
+<b class="nc"><i>349</i>&nbsp;        maps[x][y].setOccupiedBy(player);</b>
+<i>350</i>&nbsp;    }
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;    /**
+<i>353</i>&nbsp;     * transfer the game from game to the gameBoard in GUI
+<i>354</i>&nbsp;     *
+<i>355</i>&nbsp;     * @param spaces 5*5 space metric from vGame
+<i>356</i>&nbsp;     */
+<i>357</i>&nbsp;    public void setMaps(Space[][] spaces) {
+<b class="nc"><i>358</i>&nbsp;        for (int i = 0; i &lt; 5; i++)</b>
+<b class="nc"><i>359</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>360</i>&nbsp;                maps[i][j].setLevel(spaces[i][j].getLevel());</b>
+<b class="nc"><i>361</i>&nbsp;                maps[i][j].setOccupiedBy(spaces[i][j].isOccupiedBy());</b>
+<i>362</i>&nbsp;            }
+<i>363</i>&nbsp;    }
+<i>364</i>&nbsp;
+<i>365</i>&nbsp;    public Block[][] getMaps() {
+<b class="nc"><i>366</i>&nbsp;        return maps;</b>
+<i>367</i>&nbsp;    }
+<i>368</i>&nbsp;
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;    public void setAvailableMove(ArrayList&lt;Direction&gt; availableMove) {
+<b class="nc"><i>371</i>&nbsp;        this.availableMove = availableMove;</b>
+<i>372</i>&nbsp;    }
+<i>373</i>&nbsp;
+<i>374</i>&nbsp;    public void setAvailableBuild(ArrayList&lt;Direction&gt; availableBuild) {
+<b class="nc"><i>375</i>&nbsp;        this.availableBuild = availableBuild;</b>
+<i>376</i>&nbsp;    }
+<i>377</i>&nbsp;
+<i>378</i>&nbsp;    public ArrayList&lt;Direction&gt; getAvailableMove() {
+<b class="nc"><i>379</i>&nbsp;        return availableMove;</b>
+<i>380</i>&nbsp;    }
+<i>381</i>&nbsp;
+<i>382</i>&nbsp;    public ArrayList&lt;Direction&gt; getAvailableBuild() {
+<b class="nc"><i>383</i>&nbsp;        return availableBuild;</b>
+<i>384</i>&nbsp;    }
+<i>385</i>&nbsp;
+<i>386</i>&nbsp;
+<i>387</i>&nbsp;    public SmartGroup getObjs() {
+<b class="nc"><i>388</i>&nbsp;        return objs;</b>
+<i>389</i>&nbsp;    }
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 15:07</div>
+</div>
+</body>
+</html>

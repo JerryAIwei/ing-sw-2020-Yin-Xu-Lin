@@ -1,0 +1,398 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameBoardController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.view.gui.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameBoardController (it.polimi.ingsw.xyl.view.gui.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameBoardController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 154)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameBoardController$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 156)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.view.gui.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.view.gui.GameBoardGUI;
+<i>4</i>&nbsp;import javafx.beans.property.DoubleProperty;
+<i>5</i>&nbsp;import javafx.beans.property.SimpleDoubleProperty;
+<i>6</i>&nbsp;import javafx.scene.input.KeyEvent;
+<i>7</i>&nbsp;import javafx.scene.input.MouseButton;
+<i>8</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>9</i>&nbsp;import javafx.scene.input.ScrollEvent;
+<i>10</i>&nbsp;import javafx.scene.transform.Rotate;
+<i>11</i>&nbsp;import javafx.stage.Stage;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.util.concurrent.atomic.AtomicInteger;
+<i>14</i>&nbsp;import java.util.concurrent.atomic.AtomicReference;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;public class GameBoardController {
+<i>17</i>&nbsp;    private GameBoardGUI gameBoardGUI;
+<i>18</i>&nbsp;    private Stage stage;
+<i>19</i>&nbsp;    //Variants for rotation
+<i>20</i>&nbsp;    private double anchorX, anchorY;
+<b class="nc"><i>21</i>&nbsp;    private double anchorAngleX = 0;</b>
+<b class="nc"><i>22</i>&nbsp;    private double anchorAngleY = 0;</b>
+<i>23</i>&nbsp;
+<b class="nc"><i>24</i>&nbsp;    private final DoubleProperty angleX = new SimpleDoubleProperty(0);</b>
+<b class="nc"><i>25</i>&nbsp;    private final DoubleProperty angleY = new SimpleDoubleProperty(0);</b>
+<i>26</i>&nbsp;
+<b class="nc"><i>27</i>&nbsp;    private Boolean isMove = false;//true:move, false:build</b>
+<b class="nc"><i>28</i>&nbsp;    private Boolean isTurn = false;//true:you turn, can move or build</b>
+<b class="nc"><i>29</i>&nbsp;    private Boolean isDome = true;//special for a god power</b>
+<b class="nc"><i>30</i>&nbsp;    private AtomicInteger status = new AtomicInteger(0);//0:nothing select 1:select builder</b>
+<b class="nc"><i>31</i>&nbsp;    AtomicReference&lt;GameBoardGUI.Builder&gt; selectBuilder = new AtomicReference&lt;&gt;();</b>
+<i>32</i>&nbsp;
+<b class="nc"><i>33</i>&nbsp;    public GameBoardController(GameBoardGUI gameBoardGUI, Stage stage) {</b>
+<b class="nc"><i>34</i>&nbsp;        this.gameBoardGUI = gameBoardGUI;</b>
+<b class="nc"><i>35</i>&nbsp;        this.stage = stage;</b>
+<b class="nc"><i>36</i>&nbsp;        setStageEvent();</b>
+<b class="nc"><i>37</i>&nbsp;        setBuilderEvent();</b>
+<b class="nc"><i>38</i>&nbsp;        testPosition();</b>
+<b class="nc"><i>39</i>&nbsp;        setTargetEvent();</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    private void setStageEvent() {
+<i>43</i>&nbsp;        Rotate xRotate;
+<i>44</i>&nbsp;        Rotate yRotate;
+<b class="nc"><i>45</i>&nbsp;        gameBoardGUI.getObjs().getTransforms().addAll(</b>
+<i>46</i>&nbsp;                xRotate = new Rotate(0, Rotate.X_AXIS),
+<i>47</i>&nbsp;                yRotate = new Rotate(0, Rotate.Y_AXIS)
+<i>48</i>&nbsp;        );
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;        xRotate.angleProperty().bind(angleX);</b>
+<b class="nc"><i>51</i>&nbsp;        yRotate.angleProperty().bind(angleY);</b>
+<b class="nc"><i>52</i>&nbsp;        stage.addEventHandler(MouseEvent.MOUSE_PRESSED, event -&gt; {</b>
+<b class="nc"><i>53</i>&nbsp;                    anchorX = event.getSceneX();</b>
+<b class="nc"><i>54</i>&nbsp;                    anchorY = event.getSceneY();</b>
+<b class="nc"><i>55</i>&nbsp;                    anchorAngleX = angleX.get();</b>
+<b class="nc"><i>56</i>&nbsp;                    anchorAngleY = angleY.get();</b>
+<i>57</i>&nbsp;                }
+<i>58</i>&nbsp;        );
+<b class="nc"><i>59</i>&nbsp;        stage.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -&gt; {</b>
+<b class="nc"><i>60</i>&nbsp;            angleX.set(anchorAngleX - (anchorY - event.getSceneY()));</b>
+<b class="nc"><i>61</i>&nbsp;            angleY.set(anchorAngleY + anchorX - event.getSceneX());</b>
+<i>62</i>&nbsp;        });
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;        stage.addEventHandler(KeyEvent.KEY_PRESSED, event -&gt; {</b>
+<b class="nc"><i>65</i>&nbsp;            switch (event.getCode()) {</b>
+<i>66</i>&nbsp;                case RIGHT:
+<b class="nc"><i>67</i>&nbsp;                    gameBoardGUI.getObjs().translateXProperty().set(gameBoardGUI.getObjs().getTranslateX() + 0.5);</b>
+<b class="nc"><i>68</i>&nbsp;                    break;</b>
+<i>69</i>&nbsp;                case LEFT:
+<b class="nc"><i>70</i>&nbsp;                    gameBoardGUI.getObjs().translateXProperty().set(gameBoardGUI.getObjs().getTranslateX() - 0.5);</b>
+<b class="nc"><i>71</i>&nbsp;                    break;</b>
+<i>72</i>&nbsp;                case DOWN:
+<b class="nc"><i>73</i>&nbsp;                    gameBoardGUI.getObjs().translateZProperty().set(gameBoardGUI.getObjs().getTranslateZ() + 0.5);</b>
+<b class="nc"><i>74</i>&nbsp;                    break;</b>
+<i>75</i>&nbsp;                case UP:
+<b class="nc"><i>76</i>&nbsp;                    gameBoardGUI.getObjs().translateZProperty().set(gameBoardGUI.getObjs().getTranslateZ() - 0.5);</b>
+<b class="nc"><i>77</i>&nbsp;                    break;</b>
+<b class="nc"><i>78</i>&nbsp;                case M: isMove = true;break;</b>
+<b class="nc"><i>79</i>&nbsp;                case B: isMove = false;break;</b>
+<b class="nc"><i>80</i>&nbsp;                case O: isDome = true;break;</b>
+<b class="nc"><i>81</i>&nbsp;                case L:isDome = false;break;</b>
+<i>82</i>&nbsp;            }
+<i>83</i>&nbsp;        });
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;        stage.addEventHandler(ScrollEvent.SCROLL, event -&gt; {</b>
+<i>86</i>&nbsp;            //Get how much scroll was done in Y axis.
+<b class="nc"><i>87</i>&nbsp;            double delta = event.getDeltaY() / 10;</b>
+<i>88</i>&nbsp;            //Add it to the Z-axis location.
+<b class="nc"><i>89</i>&nbsp;            gameBoardGUI.getObjs().translateYProperty().set(gameBoardGUI.getObjs().getTranslateY() + delta);</b>
+<i>90</i>&nbsp;        });
+<b class="nc"><i>91</i>&nbsp;        stage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -&gt; {</b>
+<b class="nc"><i>92</i>&nbsp;            if(event.getButton()== MouseButton.SECONDARY)</b>
+<b class="nc"><i>93</i>&nbsp;                if(status.get()==1){</b>
+<b class="nc"><i>94</i>&nbsp;                    hideTargets();</b>
+<b class="nc"><i>95</i>&nbsp;                    selectBuilder.set(null);</b>
+<b class="nc"><i>96</i>&nbsp;                    status.set(0);</b>
+<i>97</i>&nbsp;                }
+<i>98</i>&nbsp;        });
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    private void setBuilderEvent() {
+<b class="nc"><i>102</i>&nbsp;        for (int i = 0; i &lt; 3; i++) {</b>
+<b class="nc"><i>103</i>&nbsp;            var builder = gameBoardGUI.getMaleBuilders()[i];</b>
+<b class="nc"><i>104</i>&nbsp;            int finalI = i;</b>
+<b class="nc"><i>105</i>&nbsp;            builder.addEventHandler(MouseEvent.MOUSE_CLICKED, keyEvent -&gt; {</b>
+<b class="nc"><i>106</i>&nbsp;                if (status.get() == 0) {</b>
+<b class="nc"><i>107</i>&nbsp;                    selectBuilder.set(builder);</b>
+<i>108</i>&nbsp;                    if (true/*isTurn&amp;&amp;gameBoardGUI.getId()== finalI*/) {
+<b class="nc"><i>109</i>&nbsp;                        showTargets();</b>
+<b class="nc"><i>110</i>&nbsp;                        if (isMove) move();</b>
+<b class="nc"><i>111</i>&nbsp;                        else build();</b>
+<i>112</i>&nbsp;                    }
+<i>113</i>&nbsp;                }
+<i>114</i>&nbsp;            });
+<i>115</i>&nbsp;        }
+<b class="nc"><i>116</i>&nbsp;        for (int i = 0; i &lt; 3; i++) {</b>
+<b class="nc"><i>117</i>&nbsp;            var builder = gameBoardGUI.getFemaleBuilders()[i];</b>
+<b class="nc"><i>118</i>&nbsp;            int finalI = i;</b>
+<b class="nc"><i>119</i>&nbsp;            builder.addEventHandler(MouseEvent.MOUSE_PRESSED, keyEvent -&gt; {</b>
+<b class="nc"><i>120</i>&nbsp;                if (status.get() == 0) {</b>
+<b class="nc"><i>121</i>&nbsp;                    selectBuilder.set(builder);</b>
+<i>122</i>&nbsp;                    if (true/*isTurn&amp;&amp;gameBoardGUI.getId()== finalI*/) {
+<b class="nc"><i>123</i>&nbsp;                        showTargets();</b>
+<b class="nc"><i>124</i>&nbsp;                        if (isMove) move();</b>
+<b class="nc"><i>125</i>&nbsp;                        else build();</b>
+<i>126</i>&nbsp;                    }
+<i>127</i>&nbsp;                }
+<i>128</i>&nbsp;            });
+<i>129</i>&nbsp;        }
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    private void setTargetEvent() {
+<b class="nc"><i>133</i>&nbsp;        for (var maps : gameBoardGUI.getMaps()) {</b>
+<b class="nc"><i>134</i>&nbsp;            for (var map : maps) {</b>
+<b class="nc"><i>135</i>&nbsp;                map.getTarget().addEventHandler(MouseEvent.MOUSE_CLICKED, event -&gt; {</b>
+<b class="nc"><i>136</i>&nbsp;                    var builder = selectBuilder.get();</b>
+<b class="nc"><i>137</i>&nbsp;                    hideTargets();</b>
+<b class="nc"><i>138</i>&nbsp;                    if (isMove) {</b>
+<b class="nc"><i>139</i>&nbsp;                        var oldLocation = gameBoardGUI.getMaps()</b>
+<b class="nc"><i>140</i>&nbsp;                                [builder.getPosition()[0]]</b>
+<b class="nc"><i>141</i>&nbsp;                                [builder.getPosition()[1]];</b>
+<b class="nc"><i>142</i>&nbsp;                        int occupiedBy = oldLocation.getOccupiedBy();</b>
+<b class="nc"><i>143</i>&nbsp;                        oldLocation.setOccupiedBy(-1);</b>
+<b class="nc"><i>144</i>&nbsp;                        map.setOccupiedBy(occupiedBy);</b>
+<b class="nc"><i>145</i>&nbsp;                    } else {</b>
+<b class="nc"><i>146</i>&nbsp;                        map.levelUp(isDome);</b>
+<i>147</i>&nbsp;                    }
+<i>148</i>&nbsp;                });
+<i>149</i>&nbsp;            }
+<i>150</i>&nbsp;        }
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    private void showTargets() {
+<b class="nc"><i>154</i>&nbsp;        status.set(1);</b>
+<b class="nc"><i>155</i>&nbsp;        int x = selectBuilder.get().getPosition()[0];</b>
+<b class="nc"><i>156</i>&nbsp;        int y = selectBuilder.get().getPosition()[1];</b>
+<b class="nc"><i>157</i>&nbsp;        var directions = isMove ? gameBoardGUI.getAvailableMove() : gameBoardGUI.getAvailableBuild();</b>
+<b class="nc"><i>158</i>&nbsp;        for (var direction : directions) {</b>
+<b class="nc"><i>159</i>&nbsp;            switch (direction) {</b>
+<i>160</i>&nbsp;                case UP:
+<b class="nc"><i>161</i>&nbsp;                    gameBoardGUI.getMaps()[x][y - 1].showTarget();</b>
+<b class="nc"><i>162</i>&nbsp;                    break;</b>
+<i>163</i>&nbsp;                case UPRIGHT:
+<b class="nc"><i>164</i>&nbsp;                    gameBoardGUI.getMaps()[x + 1][y - 1].showTarget();</b>
+<b class="nc"><i>165</i>&nbsp;                    break;</b>
+<i>166</i>&nbsp;                case RIGHT:
+<b class="nc"><i>167</i>&nbsp;                    gameBoardGUI.getMaps()[x + 1][y].showTarget();</b>
+<b class="nc"><i>168</i>&nbsp;                    break;</b>
+<i>169</i>&nbsp;                case DOWNRIGHT:
+<b class="nc"><i>170</i>&nbsp;                    gameBoardGUI.getMaps()[x + 1][y + 1].showTarget();</b>
+<b class="nc"><i>171</i>&nbsp;                    break;</b>
+<i>172</i>&nbsp;                case DOWN:
+<b class="nc"><i>173</i>&nbsp;                    gameBoardGUI.getMaps()[x][y + 1].showTarget();</b>
+<b class="nc"><i>174</i>&nbsp;                    break;</b>
+<i>175</i>&nbsp;                case DOWNLEFT:
+<b class="nc"><i>176</i>&nbsp;                    gameBoardGUI.getMaps()[x - 1][y + 1].showTarget();</b>
+<b class="nc"><i>177</i>&nbsp;                    break;</b>
+<i>178</i>&nbsp;                case LEFT:
+<b class="nc"><i>179</i>&nbsp;                    gameBoardGUI.getMaps()[x - 1][y].showTarget();</b>
+<b class="nc"><i>180</i>&nbsp;                    break;</b>
+<i>181</i>&nbsp;                case UPLEFT:
+<b class="nc"><i>182</i>&nbsp;                    gameBoardGUI.getMaps()[x - 1][y - 1].showTarget();</b>
+<i>183</i>&nbsp;                    break;
+<i>184</i>&nbsp;            }
+<b class="nc"><i>185</i>&nbsp;        }</b>
+<i>186</i>&nbsp;    }
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;    private void hideTargets() {
+<b class="nc"><i>189</i>&nbsp;        status.set(0);</b>
+<b class="nc"><i>190</i>&nbsp;        int x = selectBuilder.get().getPosition()[0];</b>
+<b class="nc"><i>191</i>&nbsp;        int y = selectBuilder.get().getPosition()[1];</b>
+<b class="nc"><i>192</i>&nbsp;        var directions = isMove ? gameBoardGUI.getAvailableMove() : gameBoardGUI.getAvailableBuild();</b>
+<b class="nc"><i>193</i>&nbsp;        for (var direction : directions) {</b>
+<b class="nc"><i>194</i>&nbsp;            switch (direction) {</b>
+<i>195</i>&nbsp;                case UP:
+<b class="nc"><i>196</i>&nbsp;                    gameBoardGUI.getMaps()[x][y - 1].removeTarget();</b>
+<b class="nc"><i>197</i>&nbsp;                    break;</b>
+<i>198</i>&nbsp;                case UPRIGHT:
+<b class="nc"><i>199</i>&nbsp;                    gameBoardGUI.getMaps()[x + 1][y - 1].removeTarget();</b>
+<b class="nc"><i>200</i>&nbsp;                    break;</b>
+<i>201</i>&nbsp;                case RIGHT:
+<b class="nc"><i>202</i>&nbsp;                    gameBoardGUI.getMaps()[x + 1][y].removeTarget();</b>
+<b class="nc"><i>203</i>&nbsp;                    break;</b>
+<i>204</i>&nbsp;                case DOWNRIGHT:
+<b class="nc"><i>205</i>&nbsp;                    gameBoardGUI.getMaps()[x + 1][y + 1].removeTarget();</b>
+<b class="nc"><i>206</i>&nbsp;                    break;</b>
+<i>207</i>&nbsp;                case DOWN:
+<b class="nc"><i>208</i>&nbsp;                    gameBoardGUI.getMaps()[x][y + 1].removeTarget();</b>
+<b class="nc"><i>209</i>&nbsp;                    break;</b>
+<i>210</i>&nbsp;                case DOWNLEFT:
+<b class="nc"><i>211</i>&nbsp;                    gameBoardGUI.getMaps()[x - 1][y + 1].removeTarget();</b>
+<b class="nc"><i>212</i>&nbsp;                    break;</b>
+<i>213</i>&nbsp;                case LEFT:
+<b class="nc"><i>214</i>&nbsp;                    gameBoardGUI.getMaps()[x - 1][y].removeTarget();</b>
+<b class="nc"><i>215</i>&nbsp;                    break;</b>
+<i>216</i>&nbsp;                case UPLEFT:
+<b class="nc"><i>217</i>&nbsp;                    gameBoardGUI.getMaps()[x - 1][y - 1].removeTarget();</b>
+<i>218</i>&nbsp;                    break;
+<i>219</i>&nbsp;            }
+<b class="nc"><i>220</i>&nbsp;        }</b>
+<i>221</i>&nbsp;    }
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    private void testPosition() {
+<b class="nc"><i>224</i>&nbsp;        stage.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -&gt; {</b>
+<b class="nc"><i>225</i>&nbsp;            switch (keyEvent.getCode()) {</b>
+<i>226</i>&nbsp;//                case D: example.translateXProperty().set(example.getTranslateX()+0.5);break;
+<i>227</i>&nbsp;//                case A: example.translateXProperty().set(example.getTranslateX()-0.5);break;
+<i>228</i>&nbsp;                case A:
+<b class="nc"><i>229</i>&nbsp;                    selectBuilder.get().translateXProperty().set(selectBuilder.get().getTranslateX() - 7);</b>
+<b class="nc"><i>230</i>&nbsp;                    break;</b>
+<i>231</i>&nbsp;                case D:
+<b class="nc"><i>232</i>&nbsp;                    selectBuilder.get().translateXProperty().set(selectBuilder.get().getTranslateX() + 7);</b>
+<b class="nc"><i>233</i>&nbsp;                    break;</b>
+<i>234</i>&nbsp;                case S:
+<b class="nc"><i>235</i>&nbsp;                    selectBuilder.get().translateZProperty().set(selectBuilder.get().getTranslateZ() + 7);</b>
+<b class="nc"><i>236</i>&nbsp;                    break;</b>
+<i>237</i>&nbsp;                case W:
+<b class="nc"><i>238</i>&nbsp;                    selectBuilder.get().translateZProperty().set(selectBuilder.get().getTranslateZ() - 7);</b>
+<i>239</i>&nbsp;
+<b class="nc"><i>240</i>&nbsp;                    break;</b>
+<i>241</i>&nbsp;                case Q:
+<b class="nc"><i>242</i>&nbsp;                    selectBuilder.get().translateYProperty().set(selectBuilder.get().getTranslateY() - 0.1);</b>
+<b class="nc"><i>243</i>&nbsp;                    System.out.println(&quot;Q: &quot; + selectBuilder.get().translateYProperty());</b>
+<b class="nc"><i>244</i>&nbsp;                    break;</b>
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;                case E:
+<b class="nc"><i>247</i>&nbsp;                    selectBuilder.get().translateYProperty().set(selectBuilder.get().getTranslateY() + 0.1);</b>
+<b class="nc"><i>248</i>&nbsp;                    System.out.println(&quot;Q: &quot; + selectBuilder.get().translateYProperty());</b>
+<b class="nc"><i>249</i>&nbsp;                    break;</b>
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;                case C:
+<b class="nc"><i>252</i>&nbsp;                    selectBuilder.get().scaleXProperty().setValue(selectBuilder.get().getScaleX() - 0.005);</b>
+<b class="nc"><i>253</i>&nbsp;                    selectBuilder.get().scaleYProperty().setValue(selectBuilder.get().getScaleY() - 0.005);</b>
+<b class="nc"><i>254</i>&nbsp;                    selectBuilder.get().scaleZProperty().setValue(selectBuilder.get().getScaleZ() - 0.005);</b>
+<b class="nc"><i>255</i>&nbsp;                    System.out.println(selectBuilder.get().scaleXProperty().getValue() + &quot; &quot; + selectBuilder.get().scaleYProperty().getValue() + &quot; &quot; + selectBuilder.get().scaleZProperty().getValue());</b>
+<b class="nc"><i>256</i>&nbsp;                    break;</b>
+<i>257</i>&nbsp;                case Z:
+<b class="nc"><i>258</i>&nbsp;                    selectBuilder.get().scaleXProperty().setValue(selectBuilder.get().getScaleX() + 0.005);</b>
+<b class="nc"><i>259</i>&nbsp;                    selectBuilder.get().scaleYProperty().setValue(selectBuilder.get().getScaleY() + 0.005);</b>
+<b class="nc"><i>260</i>&nbsp;                    selectBuilder.get().scaleZProperty().setValue(selectBuilder.get().getScaleZ() + 0.005);</b>
+<b class="nc"><i>261</i>&nbsp;                    System.out.println(selectBuilder.get().scaleXProperty().getValue() + &quot; &quot; + selectBuilder.get().scaleYProperty().getValue() + &quot; &quot; + selectBuilder.get().scaleZProperty().getValue());</b>
+<i>262</i>&nbsp;                    break;
+<i>263</i>&nbsp;            }
+<i>264</i>&nbsp;        });
+<i>265</i>&nbsp;    }
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;    private void build() {
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    }
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    private void move() {
+<i>272</i>&nbsp;
+<i>273</i>&nbsp;    }
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    public void setMove() {
+<b class="nc"><i>276</i>&nbsp;        isMove = true;</b>
+<i>277</i>&nbsp;    }
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    public void setBuild() {
+<b class="nc"><i>280</i>&nbsp;        isMove = false;</b>
+<i>281</i>&nbsp;    }
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;    public void moveOrBuild() {
+<i>284</i>&nbsp;    }
+<i>285</i>&nbsp;
+<i>286</i>&nbsp;    public void setIsTurn() {
+<b class="nc"><i>287</i>&nbsp;        isTurn = true;</b>
+<i>288</i>&nbsp;    }
+<i>289</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 15:07</div>
+</div>
+</body>
+</html>

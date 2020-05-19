@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Athena</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model.cosplayer</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Athena (it.polimi.ingsw.xyl.model.cosplayer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Athena</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (22/ 22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model.cosplayer;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * This class represents the role of the Player: Athena
+<i>7</i>&nbsp; * Athena&#39;s power: if one of your workers moved up on
+<i>8</i>&nbsp; * your last turn, opponent workers cannot move up this turn.
+<i>9</i>&nbsp; *
+<i>10</i>&nbsp; * @author Lin Xin
+<i>11</i>&nbsp; * @author Shaoxun
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;public class Athena extends Cosplayer {
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    public Athena(Player player) {
+<b class="fc"><i>17</i>&nbsp;        super(player);</b>
+<b class="fc"><i>18</i>&nbsp;        super.godPower = GodPower.ATHENA;</b>
+<b class="fc"><i>19</i>&nbsp;    }</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    @Override
+<i>22</i>&nbsp;    public void prepare(){
+<b class="fc"><i>23</i>&nbsp;        player.getCurrentGameBoard().getIslandBoard().setNoLevelUp(false);</b>
+<b class="fc"><i>24</i>&nbsp;        workerInAction = -1;</b>
+<b class="fc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /**
+<i>28</i>&nbsp;     * Athena&#39;s power: if one of your workers moved up on
+<i>29</i>&nbsp;     * your last turn, opponent workers cannot move up this turn.
+<i>30</i>&nbsp;     *
+<i>31</i>&nbsp;     * @param worker    &#39;0&#39; or &#39;1&#39; represent two workers (we call them worker A and B) of a player.
+<i>32</i>&nbsp;     * @param direction see Direction class.
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    @Override
+<i>35</i>&nbsp;    public void move(int worker, Direction direction) {
+<b class="fc"><i>36</i>&nbsp;        if (getAvailableMoves(worker).contains(direction)) {</b>
+<b class="fc"><i>37</i>&nbsp;            int currentX = player.getWorkers()[worker].getPositionX();</b>
+<b class="fc"><i>38</i>&nbsp;            int currentY = player.getWorkers()[worker].getPositionY();</b>
+<b class="fc"><i>39</i>&nbsp;            IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();</b>
+<b class="fc"><i>40</i>&nbsp;            Space currentSpace =</b>
+<b class="fc"><i>41</i>&nbsp;                    currentIslandBoard.getSpaces()[currentX][currentY];</b>
+<b class="fc"><i>42</i>&nbsp;            int targetX = currentX + direction.toMarginalPosition()[0];</b>
+<b class="fc"><i>43</i>&nbsp;            int targetY = currentY + direction.toMarginalPosition()[1];</b>
+<b class="fc"><i>44</i>&nbsp;            Space targetSpace = currentIslandBoard.getSpaces()[targetX][targetY];</b>
+<b class="fc"><i>45</i>&nbsp;            super.move(worker, direction);  // nextAction updated</b>
+<i>46</i>&nbsp;            // if one of Athena&#39;s workers leveled up
+<b class="fc"><i>47</i>&nbsp;            if (targetSpace.getLevel().toInt() - currentSpace.getLevel().toInt() == 1) {</b>
+<i>48</i>&nbsp;                // set current island board noLevelUp
+<b class="fc"><i>49</i>&nbsp;                currentIslandBoard.setNoLevelUp(true);</b>
+<i>50</i>&nbsp;            }
+<b class="fc"><i>51</i>&nbsp;        } else {</b>
+<b class="fc"><i>52</i>&nbsp;            System.out.println(&quot;Your move is not available!&quot;);</b>
+<b class="fc"><i>53</i>&nbsp;            throw new RuntimeException(&quot;Move not available.&quot;);</b>
+<i>54</i>&nbsp;        }
+<b class="fc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 15:07</div>
+</div>
+</body>
+</html>

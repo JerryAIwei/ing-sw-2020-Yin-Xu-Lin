@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Pan</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.model.cosplayer</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Pan (it.polimi.ingsw.xyl.model.cosplayer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Pan</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (39/ 52)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.model.cosplayer;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.HashMap;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public class Pan extends Cosplayer {
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;    public Pan(Player player) {
+<b class="fc"><i>11</i>&nbsp;        super(player);</b>
+<b class="fc"><i>12</i>&nbsp;        super.godPower = GodPower.PAN;</b>
+<b class="fc"><i>13</i>&nbsp;    }</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    /**
+<i>16</i>&nbsp;     * Pan will win if the worker moves down two or more levels
+<i>17</i>&nbsp;     */
+<i>18</i>&nbsp;    @Override
+<i>19</i>&nbsp;    public void checkWin() {
+<b class="fc"><i>20</i>&nbsp;        IslandBoard currentIslandBoard = player.getCurrentGameBoard().getIslandBoard();</b>
+<i>21</i>&nbsp;
+<b class="fc"><i>22</i>&nbsp;        boolean normalWin = (player.getWorkers()[0].fromLevel() != 3 &amp;&amp;</b>
+<b class="fc"><i>23</i>&nbsp;                !player.getWorkers()[0].isForced() &amp;&amp;</b>
+<b class="fc"><i>24</i>&nbsp;                currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>25</i>&nbsp;                        [player.getWorkers()[0].getPositionX()]</b>
+<b class="fc"><i>26</i>&nbsp;                        [player.getWorkers()[0].getPositionY()].getLevel() == Level.LEVEL3)</b>
+<b class="fc"><i>27</i>&nbsp;                || (player.getWorkers()[1].fromLevel() != 3 &amp;&amp;</b>
+<b class="fc"><i>28</i>&nbsp;                !player.getWorkers()[1].isForced() &amp;&amp;</b>
+<b class="fc"><i>29</i>&nbsp;                currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>30</i>&nbsp;                        [player.getWorkers()[1].getPositionX()]</b>
+<b class="fc"><i>31</i>&nbsp;                        [player.getWorkers()[1].getPositionY()].getLevel() == Level.LEVEL3);</b>
+<i>32</i>&nbsp;
+<b class="fc"><i>33</i>&nbsp;        boolean powerWin = (player.getWorkers()[0].fromLevel() -</b>
+<b class="fc"><i>34</i>&nbsp;                currentIslandBoard.getSpaces()[player.getWorkers()[0].getPositionX()]</b>
+<b class="fc"><i>35</i>&nbsp;                        [player.getWorkers()[0].getPositionY()].getLevel().toInt() &gt;= 2)</b>
+<b class="fc"><i>36</i>&nbsp;                || (player.getWorkers()[1].fromLevel() - currentIslandBoard.getSpaces()</b>
+<b class="fc"><i>37</i>&nbsp;                        [player.getWorkers()[1].getPositionX()]</b>
+<b class="fc"><i>38</i>&nbsp;                        [player.getWorkers()[1].getPositionY()].getLevel().toInt() &gt;= 2);</b>
+<i>39</i>&nbsp;
+<b class="fc"><i>40</i>&nbsp;        boolean onlyMe = true;</b>
+<b class="fc"><i>41</i>&nbsp;        HashMap&lt;Integer, Player&gt; players = player.getCurrentGameBoard().getPlayers();</b>
+<b class="fc"><i>42</i>&nbsp;        int playerNumber = player.getCurrentGameBoard().getPlayerNumber();</b>
+<b class="fc"><i>43</i>&nbsp;        for (int i = 0; i &lt; playerNumber; i++) {</b>
+<b class="fc"><i>44</i>&nbsp;            if (i != player.getPlayerId() &amp;&amp; players.get(i).getCurrentStatus() != PlayerStatus.LOSE) {</b>
+<b class="fc"><i>45</i>&nbsp;                onlyMe = false;</b>
+<b class="fc"><i>46</i>&nbsp;                break;</b>
+<i>47</i>&nbsp;            }
+<i>48</i>&nbsp;        }
+<i>49</i>&nbsp;
+<b class="fc"><i>50</i>&nbsp;        if (normalWin || powerWin || onlyMe) {</b>
+<b class="fc"><i>51</i>&nbsp;            player.setCurrentStatus(PlayerStatus.WIN);</b>
+<b class="fc"><i>52</i>&nbsp;            player.getCurrentGameBoard().setCurrentStatus(GameStatus.GAMEENDED);</b>
+<i>53</i>&nbsp;        }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;        /* lose will keep same as Civilian Mod */
+<b class="fc"><i>56</i>&nbsp;        boolean cannotMoveLose = workerInAction == -1 &amp;&amp; nextAction == Action.MOVE</b>
+<b class="fc"><i>57</i>&nbsp;                &amp;&amp; player.getCosplayer().getAvailableMoves(0).isEmpty()</b>
+<b class="nc"><i>58</i>&nbsp;                &amp;&amp; player.getCosplayer().getAvailableMoves(1).isEmpty();</b>
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;        boolean cannotMoveInOnesTurnLose = workerInAction != -1 &amp;&amp; nextAction == Action.MOVE</b>
+<b class="nc"><i>61</i>&nbsp;                &amp;&amp; player.getCosplayer().getAvailableMoves(workerInAction).isEmpty();</b>
+<i>62</i>&nbsp;
+<b class="fc"><i>63</i>&nbsp;        boolean cannotMoveAndBuildLose = workerInAction == -1 &amp;&amp; nextAction == Action.MOVEORBUILD</b>
+<b class="nc"><i>64</i>&nbsp;                &amp;&amp; player.getCosplayer().getAvailableMoves(0).isEmpty()</b>
+<b class="nc"><i>65</i>&nbsp;                &amp;&amp; player.getCosplayer().getAvailableMoves(1).isEmpty()</b>
+<b class="nc"><i>66</i>&nbsp;                &amp;&amp; player.getCosplayer().getAvailableBuilds(0).isEmpty()</b>
+<b class="nc"><i>67</i>&nbsp;                &amp;&amp; player.getCosplayer().getAvailableBuilds(1).isEmpty();</b>
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;        boolean cannotBuildLose = nextAction == Action.BUILD</b>
+<b class="fc"><i>70</i>&nbsp;                &amp;&amp; player.getCosplayer().getAvailableBuilds(workerInAction).isEmpty();</b>
+<i>71</i>&nbsp;
+<b class="fc"><i>72</i>&nbsp;        boolean lose = cannotMoveLose || cannotMoveInOnesTurnLose || cannotBuildLose || cannotMoveAndBuildLose;</b>
+<i>73</i>&nbsp;
+<b class="fc"><i>74</i>&nbsp;        if (lose) {</b>
+<b class="nc"><i>75</i>&nbsp;            player.setCurrentStatus(PlayerStatus.LOSE);</b>
+<b class="nc"><i>76</i>&nbsp;            int ax = player.getWorkers()[0].getPositionX();</b>
+<b class="nc"><i>77</i>&nbsp;            int ay = player.getWorkers()[0].getPositionY();</b>
+<b class="nc"><i>78</i>&nbsp;            int bx = player.getWorkers()[1].getPositionX();</b>
+<b class="nc"><i>79</i>&nbsp;            int by = player.getWorkers()[1].getPositionY();</b>
+<b class="nc"><i>80</i>&nbsp;            player.getCurrentGameBoard().getIslandBoard().getSpaces()[ax][ay].setOccupiedBy(-1);</b>
+<b class="nc"><i>81</i>&nbsp;            player.getCurrentGameBoard().getIslandBoard().getSpaces()[bx][by].setOccupiedBy(-1);</b>
+<i>82</i>&nbsp;        }
+<b class="fc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 15:07</div>
+</div>
+</body>
+</html>

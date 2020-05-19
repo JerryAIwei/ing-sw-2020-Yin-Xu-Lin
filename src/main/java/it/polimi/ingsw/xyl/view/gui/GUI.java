@@ -1,5 +1,6 @@
 package it.polimi.ingsw.xyl.view.gui;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,6 +31,8 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 
 public class GUI extends Application implements ViewInterface {
 
@@ -273,7 +276,20 @@ public class GUI extends Application implements ViewInterface {
             imageview2.setFitHeight(600);
             imageview2.setFitWidth(720);
             layout.getChildren().add(imageview2);
+             */
 
+            /*JFrame frame = new JFrame();
+            frame.setSize(200,200);
+            frame.setResizable(false);
+            frame.setLayout(new GridLayout());
+
+            ImageIcon image = new ImageIcon(getClass().getResource("santorini_risorse-grafiche-2/Sprite/clp_bg.png"));
+            Image scaledImg = image.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            JLabel imageLabel = new JLabel(new ImageIcon(scaledImg));
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+            frame.add(imageLabel);
+            frame.setVisible(true);
              */
 
             Platform.runLater(() -> {

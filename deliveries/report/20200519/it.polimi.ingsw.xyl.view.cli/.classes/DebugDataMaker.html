@@ -1,0 +1,239 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DebugDataMaker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.view.cli</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DebugDataMaker (it.polimi.ingsw.xyl.view.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DebugDataMaker</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 99)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.view.cli;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.xyl.model.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.ArrayList;
+<i>6</i>&nbsp;import java.util.Collection;
+<i>7</i>&nbsp;import java.util.Scanner;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * For debugging
+<i>11</i>&nbsp; */
+<b class="nc"><i>12</i>&nbsp;public class DebugDataMaker {</b>
+<b class="nc"><i>13</i>&nbsp;    private static final GameBoard gameBoard = new GameBoard(0);</b>
+<b class="nc"><i>14</i>&nbsp;    private static final VirtualGame vGame = new VirtualGame(0);</b>
+<b class="nc"><i>15</i>&nbsp;    private static final Player playerA = new Player(0,&quot;11&quot;);</b>
+<b class="nc"><i>16</i>&nbsp;    private static final Player playerB = new Player(1, &quot;22&quot;);</b>
+<b class="nc"><i>17</i>&nbsp;    private static final Player playerC = new Player(2, &quot;33&quot;);</b>
+<b class="nc"><i>18</i>&nbsp;    private static final Player[] playerList = {playerA,playerB,playerC};</b>
+<b class="nc"><i>19</i>&nbsp;    private static final Collection&lt;Player&gt; players = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>20</i>&nbsp;    private static final Space[][] spaces = gameBoard.getIslandBoard().getSpaces();</b>
+<b class="nc"><i>21</i>&nbsp;    private static final ArrayList&lt;GodPower&gt; availableGodPowers = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>22</i>&nbsp;    private static final IslandBoardCLI islandBoardCLI = new IslandBoardCLI();</b>
+<b class="nc"><i>23</i>&nbsp;    private static boolean noLevelUp = false;</b>
+<b class="nc"><i>24</i>&nbsp;    private static int playerNumber = 3;</b>
+<b class="nc"><i>25</i>&nbsp;    private static int currentPlayerId = 0;</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public static void main(String[] args) {
+<b class="nc"><i>29</i>&nbsp;        init();</b>
+<b class="nc"><i>30</i>&nbsp;        setPlayerNumber();</b>
+<b class="nc"><i>31</i>&nbsp;        setAvailableGodPowers();</b>
+<b class="nc"><i>32</i>&nbsp;        setPlayers();</b>
+<b class="nc"><i>33</i>&nbsp;        setSpace();</b>
+<b class="nc"><i>34</i>&nbsp;        saveData();</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public static void init(){
+<b class="nc"><i>38</i>&nbsp;        for (int i = 0; i !=5; i++){</b>
+<b class="nc"><i>39</i>&nbsp;            for (int j = 0; j !=5; j++){</b>
+<b class="nc"><i>40</i>&nbsp;                spaces[i][j]= new Space();</b>
+<i>41</i>&nbsp;            }
+<i>42</i>&nbsp;        }
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    public static void setPlayerNumber(){
+<b class="nc"><i>46</i>&nbsp;        System.out.print(&quot;Input the total player number: &quot;);</b>
+<b class="nc"><i>47</i>&nbsp;        playerNumber = new Scanner(System.in).nextInt();</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    public static void setAvailableGodPowers(){
+<b class="nc"><i>51</i>&nbsp;        for (int i = 0; i &lt; GodPower.values().length; i++) {</b>
+<b class="nc"><i>52</i>&nbsp;            System.out.println(i + &quot;:&quot; + GodPower.values()[i].toString());</b>
+<i>53</i>&nbsp;        }
+<b class="nc"><i>54</i>&nbsp;        System.out.println(&quot;Please select &quot; + playerNumber + &quot; God Powers:&quot;);</b>
+<b class="nc"><i>55</i>&nbsp;        for (int i = 0; i &lt; playerNumber; i++) {</b>
+<b class="nc"><i>56</i>&nbsp;            availableGodPowers.add(GodPower.values()[new Scanner(System.in).nextInt()]);</b>
+<i>57</i>&nbsp;        }
+<b class="nc"><i>58</i>&nbsp;        saveVGame();</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    public static void setPlayers(){
+<b class="nc"><i>62</i>&nbsp;        players.add(playerA);</b>
+<b class="nc"><i>63</i>&nbsp;        players.add(playerB);</b>
+<b class="nc"><i>64</i>&nbsp;        if(playerNumber == 3)</b>
+<b class="nc"><i>65</i>&nbsp;            players.add(playerC);</b>
+<i>66</i>&nbsp;
+<b class="nc"><i>67</i>&nbsp;        for(int i = 0; i &lt;playerNumber;i++){</b>
+<b class="nc"><i>68</i>&nbsp;            playerList[i].setCurrentGameBoard(gameBoard);</b>
+<i>69</i>&nbsp;        }
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;        for (int i = 0; i &lt; availableGodPowers.size(); i++) {</b>
+<b class="nc"><i>72</i>&nbsp;            System.out.println(i + &quot;:&quot; + availableGodPowers.get(i).toString());</b>
+<i>73</i>&nbsp;        }
+<i>74</i>&nbsp;
+<b class="nc"><i>75</i>&nbsp;        for(int i = 0 ; i &lt;playerNumber; i++){</b>
+<b class="nc"><i>76</i>&nbsp;            System.out.print(&quot;Input the god power of player &quot; + i + &quot;: &quot;);</b>
+<b class="nc"><i>77</i>&nbsp;            int power =  new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>78</i>&nbsp;            playerList[i].setCosplayer(availableGodPowers.get(power).cosplay(playerList[i]));</b>
+<b class="nc"><i>79</i>&nbsp;            System.out.println(playerList[i].getCosplayer().getGodPower().toString());</b>
+<i>80</i>&nbsp;        }
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;        for (int j =0 ;j&lt; playerNumber;j++) {</b>
+<b class="nc"><i>83</i>&nbsp;            System.out.println(&quot;Input the worker position of player &quot; + j + &quot;: &quot;);</b>
+<b class="nc"><i>84</i>&nbsp;            int[] xys = new int[4];</b>
+<b class="nc"><i>85</i>&nbsp;            for (int i = 0; i &lt; 4; i++) {</b>
+<b class="nc"><i>86</i>&nbsp;                xys[i] = new Scanner(System.in).nextInt();</b>
+<i>87</i>&nbsp;            }
+<b class="nc"><i>88</i>&nbsp;            playerList[j].setWorkers(xys[0], xys[1], xys[2], xys[3]);</b>
+<b class="nc"><i>89</i>&nbsp;            spaces[xys[0]][xys[1]].setOccupiedBy(j*10);</b>
+<b class="nc"><i>90</i>&nbsp;            spaces[xys[2]][xys[3]].setOccupiedBy(j*10+1);</b>
+<i>91</i>&nbsp;
+<b class="nc"><i>92</i>&nbsp;            vGame.updateVPlayers(players);</b>
+<b class="nc"><i>93</i>&nbsp;            saveVGame();</b>
+<b class="nc"><i>94</i>&nbsp;            islandBoardCLI.setPlayers(vGame);</b>
+<b class="nc"><i>95</i>&nbsp;            islandBoardCLI.setMaps(spaces,0);</b>
+<b class="nc"><i>96</i>&nbsp;            islandBoardCLI.showMaps();</b>
+<i>97</i>&nbsp;        }
+<i>98</i>&nbsp;
+<b class="nc"><i>99</i>&nbsp;        System.out.println(&quot;Input the current player ID:&quot;);</b>
+<b class="nc"><i>100</i>&nbsp;        currentPlayerId = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>101</i>&nbsp;        saveVGame();</b>
+<b class="nc"><i>102</i>&nbsp;        islandBoardCLI.setPlayers(vGame);</b>
+<b class="nc"><i>103</i>&nbsp;        islandBoardCLI.setMaps(spaces,0);</b>
+<b class="nc"><i>104</i>&nbsp;        islandBoardCLI.showMaps();</b>
+<i>105</i>&nbsp;    }
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    public static void setSpace(){
+<b class="nc"><i>108</i>&nbsp;        for (int i = 0; i &lt; Level.values().length; i++) {</b>
+<b class="nc"><i>109</i>&nbsp;            System.out.println(i + &quot;:&quot; + Level.values()[i].toString());</b>
+<i>110</i>&nbsp;        }
+<b class="nc"><i>111</i>&nbsp;        for (int i = 0; i&lt;5; i++){</b>
+<b class="nc"><i>112</i>&nbsp;            for (int j = 0; j&lt;5;j++){</b>
+<b class="nc"><i>113</i>&nbsp;                islandBoardCLI.showMaps();</b>
+<b class="nc"><i>114</i>&nbsp;                System.out.println(&quot;Input the level of position (&quot; +j+&quot;,&quot;+i+&quot;).&quot;);</b>
+<b class="nc"><i>115</i>&nbsp;                spaces[j][i].setLevel(Level.values()[new Scanner(System.in).nextInt()]);</b>
+<b class="nc"><i>116</i>&nbsp;                saveVGame();</b>
+<b class="nc"><i>117</i>&nbsp;                islandBoardCLI.setMaps(spaces,0);</b>
+<i>118</i>&nbsp;            }
+<i>119</i>&nbsp;        }
+<b class="nc"><i>120</i>&nbsp;        saveVGame();</b>
+<b class="nc"><i>121</i>&nbsp;        islandBoardCLI.setPlayers(vGame);</b>
+<b class="nc"><i>122</i>&nbsp;        islandBoardCLI.setMaps(spaces,0);</b>
+<b class="nc"><i>123</i>&nbsp;        islandBoardCLI.showMaps();</b>
+<b class="nc"><i>124</i>&nbsp;        System.out.println(&quot;Type 1 for no level up this turn, 0 to exit:&quot;);</b>
+<b class="nc"><i>125</i>&nbsp;        int input = new Scanner(System.in).nextInt();</b>
+<b class="nc"><i>126</i>&nbsp;        if (input == 1)</b>
+<b class="nc"><i>127</i>&nbsp;            noLevelUp = true;</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    public static void saveVGame(){
+<b class="nc"><i>131</i>&nbsp;        vGame.setNoLevelUp(noLevelUp);</b>
+<b class="nc"><i>132</i>&nbsp;        vGame.setPlayerNumber(playerNumber);</b>
+<b class="nc"><i>133</i>&nbsp;        vGame.setGameStatus(GameStatus.INGAME);</b>
+<b class="nc"><i>134</i>&nbsp;        vGame.setCurrentPlayerId(currentPlayerId);</b>
+<b class="nc"><i>135</i>&nbsp;        vGame.setAvailableGodPowers(availableGodPowers);</b>
+<b class="nc"><i>136</i>&nbsp;        vGame.setSpaces(spaces);</b>
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    public static void saveData(){
+<b class="nc"><i>140</i>&nbsp;        vGame.setNoLevelUp(noLevelUp);</b>
+<b class="nc"><i>141</i>&nbsp;        vGame.setPlayerNumber(playerNumber);</b>
+<b class="nc"><i>142</i>&nbsp;        vGame.setGameStatus(GameStatus.INGAME);</b>
+<b class="nc"><i>143</i>&nbsp;        vGame.setCurrentPlayerId(currentPlayerId);</b>
+<b class="nc"><i>144</i>&nbsp;        vGame.setAvailableGodPowers(availableGodPowers);</b>
+<b class="nc"><i>145</i>&nbsp;        vGame.setSpaces(spaces);</b>
+<b class="nc"><i>146</i>&nbsp;        for (Player player :players){</b>
+<b class="nc"><i>147</i>&nbsp;            player.setCurrentStatus(PlayerStatus.WORKERPREPARED);</b>
+<b class="nc"><i>148</i>&nbsp;            player.getCosplayer().prepare();</b>
+<b class="nc"><i>149</i>&nbsp;        }</b>
+<b class="nc"><i>150</i>&nbsp;        vGame.updateVPlayers(players);</b>
+<b class="nc"><i>151</i>&nbsp;        vGame.save();</b>
+<b class="nc"><i>152</i>&nbsp;        System.out.println(&quot;Data saved, you can start server &quot; +</b>
+<i>153</i>&nbsp;                &quot;and login with nickname 11, 22 (and 33 if 3-player game).&quot;);
+<i>154</i>&nbsp;    }
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 15:07</div>
+</div>
+</body>
+</html>
