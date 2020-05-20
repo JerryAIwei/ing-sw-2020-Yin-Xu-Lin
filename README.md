@@ -15,17 +15,17 @@ The current progress of the project:
 
 - [x] Simplified Rules: finished
 
-- [ ] Complete Rules: nearly finished, debugging: GodPower's checkWin()
+- [x] Complete Rules: finished
 
 - [x] Socket: finished
 
-- [ ] CLI: nearly finished
+- [x] CLI: finished
 
 - [ ] GUI: WIP
 
-- [ ] Advanced Feature - Multiple Games: finished, debugging
+- [x] Advanced Feature - Multiple Games: finished
 
-- [ ] Advanced Feature - Persistence: finished, debugging
+- [x] Advanced Feature - Persistence: finished
 
 ### Attention
 

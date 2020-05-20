@@ -220,7 +220,11 @@ public class CLI extends Thread implements ViewInterface {
             int playNum;
             do {
                 System.out.println(ColorSetter.FG_BLUE.setColor("Please set number of players, 2 or 3"));
-                playNum = new Scanner(System.in).nextInt();
+                try {
+                    playNum = new Scanner(System.in).nextInt();
+                }catch(Exception ignored) {
+                    playNum = -1;
+                }
             } while (playNum != 2 && playNum != 3);
             System.out.println("Play Number:" + playNum);
             sendMessage(new SetPlayerNumberMessage(gameId, playNum));
@@ -258,7 +262,11 @@ public class CLI extends Thread implements ViewInterface {
                     System.out.println(ColorSetter.FG_BLUE.setColor("Input game ID to join the game"));
                 System.out.println(ColorSetter.FG_BLUE.setColor("Input -1 to create a new game, input -2 to refresh " +
                         "the game lobby."));
+                try{
                 input = new Scanner(System.in).nextInt();
+                }catch(Exception ignored){
+                    input = -3;
+                }
             } while (input < -2 || input >= games.size()
                     || (input != -1 && input != -2 && games.get(input).getPlayerNumber() == games.get(input).getCurrentPlayers().size()));
 
@@ -291,7 +299,12 @@ public class CLI extends Thread implements ViewInterface {
                         System.out.println(i + ":" + GodPower.values()[i].toString() + ":");
                     System.out.println("\t" + GodPower.values()[i].description());
                 }
-                int input = new Scanner(System.in).nextInt();
+                int input;
+                try {
+                    input = new Scanner(System.in).nextInt();
+                }catch (Exception ignored){
+                    input = 1000;
+                }
                 if (input >= 0 && input < GodPower.values().length &&
                         input != godPowers[0] && input != godPowers[1]
                         && input != godPowers[2]
@@ -339,7 +352,11 @@ public class CLI extends Thread implements ViewInterface {
                         System.out.println("\t" + godPower.description());
                         i++;
                     }
-                    input = new Scanner(System.in).nextInt();
+                    try {
+                        input = new Scanner(System.in).nextInt();
+                    }catch (Exception ignored){
+                        input = -1;
+                    }
                 } while (input < 0 || input >= availableGodPowers.size());
                 sendMessage(new PlayerChooseGodPowerMessage
                         (gameId, id, availableGodPowers.get(input)));
@@ -354,7 +371,11 @@ public class CLI extends Thread implements ViewInterface {
             do {
                 System.out.println(ColorSetter.FG_BLUE.setColor("Input number to choose who start first"));
                 islandBoardCLI.showPlayers();
-                input = new Scanner(System.in).nextInt();
+                try {
+                    input = new Scanner(System.in).nextInt();
+                }catch (Exception ignored){
+                    input = -1;
+                }
             } while (input < 0 || input >= playNum);
             sendMessage(new StartGameMessage(gameId, userName, input));
         });
@@ -366,16 +387,38 @@ public class CLI extends Thread implements ViewInterface {
         executor.execute(() -> {
             int ax, ay, bx, by;
             do {
-                System.out.println(ColorSetter.FG_BLUE.setColor("First worker x, please input 0 - 4"));
-                ax = new Scanner(System.in).nextInt();
-                System.out.println(ColorSetter.FG_BLUE.setColor("First worker y, please input 0 - 4"));
-                ay = new Scanner(System.in).nextInt();
-                System.out.println(ColorSetter.FG_BLUE.setColor("Second worker x, please input 0 - 4"));
-                bx = new Scanner(System.in).nextInt();
-                System.out.println(ColorSetter.FG_BLUE.setColor("Second worker y, please input 0 - 4"));
-                by = new Scanner(System.in).nextInt();
-            } while (false/*todo:check available*/);
+                try {
+                    System.out.println(ColorSetter.FG_BLUE.setColor("First worker x, please input 0 - 4"));
+                    ax = new Scanner(System.in).nextInt();
+                    System.out.println(ColorSetter.FG_BLUE.setColor("First worker y, please input 0 - 4"));
+                    ay = new Scanner(System.in).nextInt();
+                } catch (Exception ignored) {
+                    ax = -1;
+                    ay = -1;
+                }
+                if (ax != -1 && ay != -1 && vGame.getSpaces()[ax][ay].isOccupiedBy() != -1) {
+                    System.out.println(ColorSetter.FG_RED.setColor("The position is occupied! Please choose another " +
+                            "position."));
+                }
+            } while (ax == -1 || ay == -1 || vGame.getSpaces()[ax][ay].isOccupiedBy() != -1);
+            do {
+                try {
+                    System.out.println(ColorSetter.FG_BLUE.setColor("Second worker x, please input 0 - 4"));
+                    bx = new Scanner(System.in).nextInt();
+                    System.out.println(ColorSetter.FG_BLUE.setColor("Second worker y, please input 0 - 4"));
+                    by = new Scanner(System.in).nextInt();
+                } catch (Exception ignored) {
+                    bx = -1;
+                    by = -1;
+                }
+                if (bx != -1 && by != -1 && vGame.getSpaces()[bx][by].isOccupiedBy() != -1) {
+                    System.out.println(ColorSetter.FG_RED.setColor("The position is occupied! Please choose another " +
+                            "position."));
+                }
+            } while (bx == -1 || by == -1 || vGame.getSpaces()[bx][by].isOccupiedBy() != -1);
             sendMessage(new SetInitialWorkerPositionMessage(gameId, id, ax, ay, bx, by));
+            System.out.println(ColorSetter.FG_RED.setColor("The red numbers represent your Workers," +
+                    "the most right-hand digit of the red numbers represents the Worker ID."));
         });
     }
 
@@ -391,7 +434,11 @@ public class CLI extends Thread implements ViewInterface {
             for (int i = 0; i < available.size(); i++) {
                 System.out.println(i + " " + available.get(i).toSymbol() + " " + available.get(i).toString());
             }
-            directionInput = new Scanner(System.in).nextInt();
+            try {
+                directionInput = new Scanner(System.in).nextInt();
+            }catch(Exception ignored){
+                directionInput = -1;
+            }
         } while (directionInput < 0 || directionInput >= available.size());
         return available.get(directionInput);
     }
@@ -407,8 +454,16 @@ public class CLI extends Thread implements ViewInterface {
                 do {
                     System.out.println
                             (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to move"));
-                    workerId = new Scanner(System.in).nextInt();
-                } while (workerId != 1 && workerId != 0);
+                    try {
+                        workerId = new Scanner(System.in).nextInt();
+                    }catch (Exception ignored){
+                        workerId = -1;
+                    }
+                    if ( vGame.getVPlayers().get(id).getAvailable("Move", workerId).isEmpty())
+                        System.out.println(ColorSetter.FG_RED.setColor("No available action of worker " + workerId +
+                                "."));
+                } while ((workerId != 1 && workerId != 0) || vGame.getVPlayers().get(id).getAvailable("Move",
+                        workerId).isEmpty());
             }
             Direction direction = chooseDirection("Move", workerId);
             sendMessage(new MoveMessage
@@ -427,8 +482,16 @@ public class CLI extends Thread implements ViewInterface {
                 do {
                     System.out.println
                             (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to build"));
-                    workerId = new Scanner(System.in).nextInt();
-                } while (workerId != 1 && workerId != 0);
+                    try {
+                        workerId = new Scanner(System.in).nextInt();
+                    }catch (Exception ignored){
+                        workerId = -1;
+                    }
+                    if (vGame.getVPlayers().get(id).getAvailable("Build", workerId).isEmpty())
+                        System.out.println(ColorSetter.FG_RED.setColor("No available action of worker " + workerId +
+                                "."));
+                } while ((workerId != 1 && workerId != 0) || vGame.getVPlayers().get(id).getAvailable("Build",
+                        workerId).isEmpty());
             }
             Direction direction = chooseDirection("Build", workerId);
             boolean isDome = false;
@@ -440,7 +503,11 @@ public class CLI extends Thread implements ViewInterface {
                     System.out.println
                             ("Please input 1 for building a dome," +
                                     " 0 for normal building");
-                    input = new Scanner(System.in).nextInt();
+                    try {
+                        input = new Scanner(System.in).nextInt();
+                    }catch(Exception ignored){
+                        input = -1;
+                    }
                     if (input == 1) isDome = true;
                 } while (input != 1 && input != 0);
 
@@ -458,7 +525,11 @@ public class CLI extends Thread implements ViewInterface {
                 System.out.println
                         (ColorSetter.FG_BLUE.setColor("Please input 1 for moving," +
                                 " 0 for building"));
-                input = new Scanner(System.in).nextInt();
+                try {
+                    input = new Scanner(System.in).nextInt();
+                }catch(Exception ignored){
+                    input = -1;
+                }
             } while (input != 0 && input != 1);
             if (input == 1)
                 move();
@@ -474,7 +545,11 @@ public class CLI extends Thread implements ViewInterface {
                 System.out.println
                         (ColorSetter.FG_BLUE.setColor("Please input 1 for building," +
                                 " 0 for end your turn"));
-                input = new Scanner(System.in).nextInt();
+                try {
+                    input = new Scanner(System.in).nextInt();
+                }catch(Exception ignored){
+                    input = -1;
+                }
             } while (input != 0 && input != 1);
 
             if (input == 1)
