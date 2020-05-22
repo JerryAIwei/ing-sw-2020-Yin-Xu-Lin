@@ -63,7 +63,7 @@ public class GUI extends Application implements ViewInterface {
     private int workerInAction = -1;
     private VirtualGame vGame;
 
-    private AskLoginController askLoginController;
+    private NewLoginController askLoginController;
     private GameBoardController gameBoardController;
     private WaitingStageController waitingStageController;
 
@@ -116,16 +116,20 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Santorini");
-        this.primaryStage.getIcons().add(new Image(
-                GUI.class.getResourceAsStream("/img/icon.png")));
-        this.primaryStage.setMinWidth(PREF_MIN_WIDTH);
-        this.primaryStage.setMinHeight(PREF_MIN_HEIGHT);
-        initRootLayout();
-        initWaitingStage();
-
-        askLogin();
+        try {
+            askLogin();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            this.primaryStage = primaryStage;
+            this.primaryStage.setTitle("Santorini");
+            this.primaryStage.getIcons().add(new Image(
+                    GUI.class.getResourceAsStream("/img/icon.png")));
+            this.primaryStage.setMinWidth(PREF_MIN_WIDTH);
+            this.primaryStage.setMinHeight(PREF_MIN_HEIGHT);
+            initRootLayout();
+            initWaitingStage();
+        }
         //showPersonOverview();
     }
 
@@ -218,11 +222,13 @@ public class GUI extends Application implements ViewInterface {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("/AskLogin.fxml"));
+            loader.setLocation(GUI.class.getResource("/newLogin.fxml"));
+            //loader.setRoot(rootLayout);
             BorderPane loginLayout = loader.load();
 
             loginStage = new Stage();
             loginStage.setResizable(false);
+            loginStage.centerOnScreen();
             loginStage.setTitle("Login");
             loginStage.setAlwaysOnTop(true);
             loginStage.initOwner(primaryStage);
@@ -421,7 +427,7 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void update(Message message) {
         if (message instanceof AskPlayerNameMessage) {
-            askLoginController.setUserName();
+//            askLoginController.setUserName();
         } else if (message instanceof NameOKMessage) {
             joinOrCreate((NameOKMessage) message);
         } else {
