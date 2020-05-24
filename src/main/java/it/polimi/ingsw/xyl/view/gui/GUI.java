@@ -1,6 +1,5 @@
 package it.polimi.ingsw.xyl.view.gui;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,16 +22,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import javax.swing.*;
 
 public class GUI extends Application implements ViewInterface {
 
@@ -116,20 +111,17 @@ public class GUI extends Application implements ViewInterface {
 
     @Override
     public void start(Stage primaryStage) {
-        try {
-            askLogin();
-        }catch (Exception e) {
-            e.printStackTrace();
-        }finally{
-            this.primaryStage = primaryStage;
-            this.primaryStage.setTitle("Santorini");
-            this.primaryStage.getIcons().add(new Image(
-                    GUI.class.getResourceAsStream("/img/icon.png")));
-            this.primaryStage.setMinWidth(PREF_MIN_WIDTH);
-            this.primaryStage.setMinHeight(PREF_MIN_HEIGHT);
-            initRootLayout();
-            initWaitingStage();
-        }
+
+
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Santorini");
+        this.primaryStage.getIcons().add(new Image(
+                GUI.class.getResourceAsStream("/img/icon.png")));
+        this.primaryStage.setMinWidth(PREF_MIN_WIDTH);
+        this.primaryStage.setMinHeight(PREF_MIN_HEIGHT);
+        initRootLayout();
+        initWaitingStage();
+        askLogin();
         //showPersonOverview();
     }
 
@@ -150,7 +142,7 @@ public class GUI extends Application implements ViewInterface {
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
-            primaryStage.show();
+            //primaryStage.show();
         } catch (IOException e) {
             System.err.println("GUI.class.getResource(\"\")" + GUI.class.getResource(""));
             //e.printStackTrace();
@@ -185,7 +177,7 @@ public class GUI extends Application implements ViewInterface {
      */
     public void trans2GameBoard() {
         gameBoardGUI = new GameBoardGUI();
-        gameBoardController = new GameBoardController(gameBoardGUI, primaryStage);
+        gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);
         Scene scene = new Scene(gameBoardGUI.getObjs(), -1, -1, true);
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.getTransforms().addAll(
@@ -196,21 +188,21 @@ public class GUI extends Application implements ViewInterface {
         camera.setNearClip(1);
         camera.setFarClip(1000);
         scene.setCamera(camera);
-        gameBoardGUI.setMap(0,0,Level.LEVEL1,10);
-
-        gameBoardGUI.setMap(1,1,Level.LEVEL1,-1);
-        gameBoardGUI.setMap(1,1,Level.LEVEL2,11);
-
-        gameBoardGUI.setMap(2,2,Level.LEVEL1,-1);
-        gameBoardGUI.setMap(2,2,Level.LEVEL2,-1);
-        gameBoardGUI.setMap(2,2,Level.LEVEL3,21);
-
-        gameBoardGUI.setMap(3,3,Level.LEVEL1,-1);
-        gameBoardGUI.setMap(3,3,Level.LEVEL2,-1);
-        gameBoardGUI.setMap(3,3,Level.LEVEL3,-1);
-        gameBoardGUI.setMap(3,3,Level.DOME,-1);
-
-        gameBoardGUI.setMap(4,4,Level.GROUND,1);
+//        gameBoardGUI.setMap(0, 0, Level.LEVEL1, 10);
+//
+//        gameBoardGUI.setMap(1, 1, Level.LEVEL1, -1);
+//        gameBoardGUI.setMap(1, 1, Level.LEVEL2, 11);
+//
+//        gameBoardGUI.setMap(2, 2, Level.LEVEL1, -1);
+//        gameBoardGUI.setMap(2, 2, Level.LEVEL2, -1);
+//        gameBoardGUI.setMap(2, 2, Level.LEVEL3, 21);
+//
+//        gameBoardGUI.setMap(3, 3, Level.LEVEL1, -1);
+//        gameBoardGUI.setMap(3, 3, Level.LEVEL2, -1);
+//        gameBoardGUI.setMap(3, 3, Level.LEVEL3, -1);
+//        gameBoardGUI.setMap(3, 3, Level.DOME, -1);
+//
+//        gameBoardGUI.setMap(4, 4, Level.GROUND, 1);
         primaryStage.setScene(scene);
     }
 
@@ -256,6 +248,7 @@ public class GUI extends Application implements ViewInterface {
     private void joinOrCreate(NameOKMessage nameOKMessage) {
         Platform.runLater(() -> {
             loginStage.close();
+            primaryStage.show();
         });
         ObservableList<NameOKMessage.Games> games = FXCollections.observableArrayList();
         for (var game : nameOKMessage.getGames()) {
@@ -308,7 +301,9 @@ public class GUI extends Application implements ViewInterface {
         }
     }
 
-
+    /**
+     * choose to number of player(2 or 3) in game
+     */
     public void setPlayNum() {
         try {
 
@@ -398,9 +393,7 @@ public class GUI extends Application implements ViewInterface {
     }
 
     /**
-     * Returns the main stage.
-     *
-     * @return
+     * @return main stage
      */
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -410,9 +403,6 @@ public class GUI extends Application implements ViewInterface {
         return personData;
     }
 
-    private void playGame() {
-
-    }
 
     public static void main(String[] args) {
         launch(args);
@@ -448,21 +438,25 @@ public class GUI extends Application implements ViewInterface {
         final GameStatus gameStatus = virtualGame.getGameStatus();
 
 
-        islandBoardCLI.setMaps(virtualGame.getSpaces());
-        islandBoardCLI.setPlayers(virtualGame);
+        islandBoardCLI.setMaps(virtualGame.getSpaces());//debug
+        islandBoardCLI.setPlayers(virtualGame);//debug
+        Platform.runLater(() -> {
+            gameBoardGUI.setMaps(virtualGame.getSpaces());
+            gameBoardGUI.setPlayers(virtualGame);//todo:record player information
+        });
         //GameStatus gameStatus = virtualGame.getGameStatus();
 
         if (id == -1 && gameId == -1) {
             for (Integer id : islandBoardCLI.getPlayers().keySet()) {
-                if (islandBoardCLI.getPlayers().get(id).getPlayerName().equals(this.userName)) {
+                if (islandBoardCLI.getPlayers().get(id).getPlayerName().equals(this.userName)) {//todo:use gameBoard rather than isLandBoard
                     this.id = id;
+                    gameBoardGUI.setId(id);
                     System.out.println("My ID: " + id);
                 }
             }
             this.gameId = virtualGame.getGameId();
             System.out.println("Game ID: " + gameId);
         }
-
         playerStatus = virtualGame.getVPlayers().get(id).getPlayerStatus();
         availableGodPowers = virtualGame.getAvailableGodPowers();
         nextAction = virtualGame.getVPlayers().get(id).getNextAction();
@@ -561,9 +555,7 @@ public class GUI extends Application implements ViewInterface {
                     (gameId, id, availableGodPowers.get(0)));
         } else {
             try {
-                Platform.runLater(() -> {
-                    waitingStage.close();
-                });
+                Platform.runLater(() -> waitingStage.close());
                 // Load the fxml file and create a new stage for the popup dialog.
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(GUI.class.getResource("/GodPower.fxml"));
@@ -619,6 +611,61 @@ public class GUI extends Application implements ViewInterface {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * my turn, play game based on playerStatus and nextAction
+     */
+    private void playGame() {
+        Platform.runLater(() -> waitingStage.close());
+        gameBoardController.setIsTurn();
+        switch (playerStatus) {
+            case WAITING4INIT:
+                setInitialWorkerPosition();
+                break;
+            case WORKERPREPARED:
+                moveOrBuild();
+                break;
+            case LOSE:
+                //gameEnd();
+                break;
+        }
+    }
+
+    private void setInitialWorkerPosition() {
+        Platform.runLater(() -> gameBoardGUI.initialWorkerPosition());
+    }
+
+    /**
+     * deside what to do based on nextAction
+     */
+    private void moveOrBuild() {
+        switch (nextAction) {
+            case "MOVE":
+                Platform.runLater(() -> {
+                    gameBoardGUI.setAvailable
+                            (vGame.getVPlayers().get(id).getAvailable("Move", 0), true, 0);
+                    gameBoardGUI.setAvailable
+                            (vGame.getVPlayers().get(id).getAvailable("Move", 1), true, 1);
+                    gameBoardController.setMove();
+                });
+                break;
+            case "BUILD":
+                gameBoardGUI.setAvailable
+                        (vGame.getVPlayers().get(id).getAvailable("Build", 0), false, 0);
+                gameBoardGUI.setAvailable
+                        (vGame.getVPlayers().get(id).getAvailable("Build", 1), false, 1);
+                Platform.runLater(() -> gameBoardController.setBuild());
+                break;
+            case "MOVEORBUILD":
+                System.out.println("MOVEORBUILD");
+                //chooseMoveOrBuild();
+                break;
+            case "BUILDOREND":
+                System.out.println("MOVEORBUILD");
+                //chooseBuildOrEnd();
+                break;
         }
     }
 

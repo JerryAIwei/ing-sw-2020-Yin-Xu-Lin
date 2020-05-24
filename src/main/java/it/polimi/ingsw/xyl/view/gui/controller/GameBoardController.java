@@ -1,5 +1,10 @@
 package it.polimi.ingsw.xyl.view.gui.controller;
 
+import it.polimi.ingsw.xyl.model.Direction;
+import it.polimi.ingsw.xyl.model.message.BuildMessage;
+import it.polimi.ingsw.xyl.model.message.MoveMessage;
+import it.polimi.ingsw.xyl.model.message.SetInitialWorkerPositionMessage;
+import it.polimi.ingsw.xyl.view.gui.GUI;
 import it.polimi.ingsw.xyl.view.gui.GameBoardGUI;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -10,12 +15,15 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GameBoardController {
     private GameBoardGUI gameBoardGUI;
     private Stage stage;
+    private GUI gui;
     //Variants for rotation
     private double anchorX, anchorY;
     private double anchorAngleX = 0;
@@ -26,13 +34,17 @@ public class GameBoardController {
 
     private Boolean isMove = false;//true:move, false:build
     private Boolean isTurn = false;//true:you turn, can move or build
-    private Boolean isDome = true;//special for a god power
+    private Boolean isDome = false;//special for a god power
+    private int initial = 0;//0:none workers on board, 1,2:all workers position has been set
+    private int[] positionX = {-1, -1};//initial worker x position
+    private int[] positionY = {-1, -1};//initial worker y position
     private AtomicInteger status = new AtomicInteger(0);//0:nothing select 1:select builder
     AtomicReference<GameBoardGUI.Builder> selectBuilder = new AtomicReference<>();
 
-    public GameBoardController(GameBoardGUI gameBoardGUI, Stage stage) {
+    public GameBoardController(GameBoardGUI gameBoardGUI, Stage stage, GUI gui) {
         this.gameBoardGUI = gameBoardGUI;
         this.stage = stage;
+        this.gui = gui;
         setStageEvent();
         setBuilderEvent();
         testPosition();
@@ -75,10 +87,18 @@ public class GameBoardController {
                 case UP:
                     gameBoardGUI.getObjs().translateZProperty().set(gameBoardGUI.getObjs().getTranslateZ() - 0.5);
                     break;
-                case M: isMove = true;break;
-                case B: isMove = false;break;
-                case O: isDome = true;break;
-                case L:isDome = false;break;
+                case M:
+                    isMove = true;
+                    break;
+                case B:
+                    isMove = false;
+                    break;
+                case O:
+                    isDome = true;
+                    break;
+                case L:
+                    isDome = false;
+                    break;
             }
         });
 
@@ -89,8 +109,8 @@ public class GameBoardController {
             gameBoardGUI.getObjs().translateYProperty().set(gameBoardGUI.getObjs().getTranslateY() + delta);
         });
         stage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if(event.getButton()== MouseButton.SECONDARY)
-                if(status.get()==1){
+            if (event.getButton() == MouseButton.SECONDARY)
+                if (status.get() == 1) {
                     hideTargets();
                     selectBuilder.set(null);
                     status.set(0);
@@ -103,12 +123,11 @@ public class GameBoardController {
             var builder = gameBoardGUI.getMaleBuilders()[i];
             int finalI = i;
             builder.addEventHandler(MouseEvent.MOUSE_CLICKED, keyEvent -> {
+                if (!isTurn) return;
                 if (status.get() == 0) {
                     selectBuilder.set(builder);
-                    if (true/*isTurn&&gameBoardGUI.getId()== finalI*/) {
+                    if (gameBoardGUI.getId() == finalI) {
                         showTargets();
-                        if (isMove) move();
-                        else build();
                     }
                 }
             });
@@ -116,13 +135,11 @@ public class GameBoardController {
         for (int i = 0; i < 3; i++) {
             var builder = gameBoardGUI.getFemaleBuilders()[i];
             int finalI = i;
-            builder.addEventHandler(MouseEvent.MOUSE_PRESSED, keyEvent -> {
+            builder.addEventHandler(MouseEvent.MOUSE_CLICKED, keyEvent -> {
                 if (status.get() == 0) {
                     selectBuilder.set(builder);
-                    if (true/*isTurn&&gameBoardGUI.getId()== finalI*/) {
+                    if (isTurn && gameBoardGUI.getId() == finalI) {
                         showTargets();
-                        if (isMove) move();
-                        else build();
                     }
                 }
             });
@@ -130,20 +147,42 @@ public class GameBoardController {
     }
 
     private void setTargetEvent() {
-        for (var maps : gameBoardGUI.getMaps()) {
-            for (var map : maps) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                var map = gameBoardGUI.getMaps()[i][j];
+                int finalI = i;
+                int finalJ = j;
                 map.getTarget().addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                    var builder = selectBuilder.get();
-                    hideTargets();
-                    if (isMove) {
-                        var oldLocation = gameBoardGUI.getMaps()
-                                [builder.getPosition()[0]]
-                                [builder.getPosition()[1]];
-                        int occupiedBy = oldLocation.getOccupiedBy();
-                        oldLocation.setOccupiedBy(-1);
-                        map.setOccupiedBy(occupiedBy);
+
+                    if (!isTurn) return;
+                    //initial position
+                    if (initial != 2) {
+                        map.setOccupiedBy(gameBoardGUI.getId() * 10 + initial);
+                        positionX[initial] = finalI;
+                        positionY[initial] = finalJ;
+                        initial++;
+                        if (initial == 2) {
+                            gameBoardGUI.removeTargets();
+                            gui.sendMessage(new SetInitialWorkerPositionMessage
+                                    (gui.getGameId(), gui.getId(), positionX[0], positionY[0], positionX[1], positionY[1]));
+                            isTurn = false;
+                        }
                     } else {
-                        map.levelUp(isDome);
+                        var builder = selectBuilder.get();
+                        hideTargets();
+                        int x1 = builder.getPosition()[0];
+                        int y1 = builder.getPosition()[1];
+                        var oldLocation = gameBoardGUI.getMaps()[x1][y1];
+                        int occupiedBy = oldLocation.getOccupiedBy();
+                        var direction = intToDirection(x1, y1, finalI, finalJ);
+                        if (isMove) {
+                            map.setOccupiedBy(occupiedBy);
+                            oldLocation.setOccupiedBy(-1);
+                            move(occupiedBy % 10, direction);
+                        } else {
+                            map.levelUp(isDome);
+                            build(occupiedBy % 10, direction);
+                        }
                     }
                 });
             }
@@ -151,35 +190,38 @@ public class GameBoardController {
     }
 
     private void showTargets() {
+        System.out.println("show Targets");
         status.set(1);
         int x = selectBuilder.get().getPosition()[0];
         int y = selectBuilder.get().getPosition()[1];
-        var directions = isMove ? gameBoardGUI.getAvailableMove() : gameBoardGUI.getAvailableBuild();
+        ArrayList<Direction> directions = gameBoardGUI.getAvailable(isMove, selectBuilder.get().getWorkerId());
+        //ArrayList<Direction> directions = new ArrayList<>(Arrays.asList(Direction.values()));
+
         for (var direction : directions) {
             switch (direction) {
                 case UP:
-                    gameBoardGUI.getMaps()[x][y - 1].showTarget();
+                    gameBoardGUI.getMaps()[x][y + 1].showTarget();
                     break;
                 case UPRIGHT:
-                    gameBoardGUI.getMaps()[x + 1][y - 1].showTarget();
+                    gameBoardGUI.getMaps()[x + 1][y + 1].showTarget();
                     break;
                 case RIGHT:
                     gameBoardGUI.getMaps()[x + 1][y].showTarget();
                     break;
                 case DOWNRIGHT:
-                    gameBoardGUI.getMaps()[x + 1][y + 1].showTarget();
+                    gameBoardGUI.getMaps()[x + 1][y - 1].showTarget();
                     break;
                 case DOWN:
-                    gameBoardGUI.getMaps()[x][y + 1].showTarget();
+                    gameBoardGUI.getMaps()[x][y - 1].showTarget();
                     break;
                 case DOWNLEFT:
-                    gameBoardGUI.getMaps()[x - 1][y + 1].showTarget();
+                    gameBoardGUI.getMaps()[x - 1][y - 1].showTarget();
                     break;
                 case LEFT:
                     gameBoardGUI.getMaps()[x - 1][y].showTarget();
                     break;
                 case UPLEFT:
-                    gameBoardGUI.getMaps()[x - 1][y - 1].showTarget();
+                    gameBoardGUI.getMaps()[x - 1][y + 1].showTarget();
                     break;
             }
         }
@@ -187,39 +229,12 @@ public class GameBoardController {
 
     private void hideTargets() {
         status.set(0);
-        int x = selectBuilder.get().getPosition()[0];
-        int y = selectBuilder.get().getPosition()[1];
-        var directions = isMove ? gameBoardGUI.getAvailableMove() : gameBoardGUI.getAvailableBuild();
-        for (var direction : directions) {
-            switch (direction) {
-                case UP:
-                    gameBoardGUI.getMaps()[x][y - 1].removeTarget();
-                    break;
-                case UPRIGHT:
-                    gameBoardGUI.getMaps()[x + 1][y - 1].removeTarget();
-                    break;
-                case RIGHT:
-                    gameBoardGUI.getMaps()[x + 1][y].removeTarget();
-                    break;
-                case DOWNRIGHT:
-                    gameBoardGUI.getMaps()[x + 1][y + 1].removeTarget();
-                    break;
-                case DOWN:
-                    gameBoardGUI.getMaps()[x][y + 1].removeTarget();
-                    break;
-                case DOWNLEFT:
-                    gameBoardGUI.getMaps()[x - 1][y + 1].removeTarget();
-                    break;
-                case LEFT:
-                    gameBoardGUI.getMaps()[x - 1][y].removeTarget();
-                    break;
-                case UPLEFT:
-                    gameBoardGUI.getMaps()[x - 1][y - 1].removeTarget();
-                    break;
-            }
-        }
+        gameBoardGUI.removeTargets();
     }
 
+    /**
+     * Change the worker position via keyboard, used for debug
+     */
     private void testPosition() {
         stage.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
             switch (keyEvent.getCode()) {
@@ -264,12 +279,25 @@ public class GameBoardController {
         });
     }
 
-    private void build() {
-
+    private Direction intToDirection(int x1, int y1, int x2, int y2) {
+        int dx = x2 - x1;
+        int dy = y2 - y1;
+        for (var dir : Direction.values()) {
+            if (dx == dir.toMarginalPosition()[0] && dy == dir.toMarginalPosition()[1])
+                return dir;
+        }
+        return null;
     }
 
-    private void move() {
+    private void build(int worker, Direction direction) {
+        gui.sendMessage(new BuildMessage(gui.getGameId(), gui.getId(), worker, direction, isDome));
+        isTurn = false;
+    }
 
+    private void move(int worker, Direction direction) {
+        gui.sendMessage(new MoveMessage(gui.getGameId(), gui.getId(), worker, direction));
+        System.out.println("sent move");
+        isTurn = false;
     }
 
     public void setMove() {

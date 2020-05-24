@@ -3,6 +3,7 @@ package it.polimi.ingsw.xyl.view.gui;
 import it.polimi.ingsw.xyl.model.Direction;
 import it.polimi.ingsw.xyl.model.Level;
 import it.polimi.ingsw.xyl.model.Space;
+import it.polimi.ingsw.xyl.model.VirtualGame;
 import it.polimi.ingsw.xyl.util.Loader;
 import it.polimi.ingsw.xyl.util.SmartGroup;
 import javafx.scene.Group;
@@ -59,7 +60,7 @@ public class GameBoardGUI {
     final double CUBE_DISTANCE = 1.0;
     //ratio of the builder
     final double RATIO_BUILDER = 1.8;
-    int id;
+    int id = -1;
 
     public Builder[] getMaleBuilders() {
         return maleBuilders;
@@ -76,8 +77,10 @@ public class GameBoardGUI {
 
     private SmartGroup objs = new SmartGroup();
 
-    private ArrayList<Direction> availableMove = new ArrayList<>(Arrays.asList(Direction.values()));
-    private ArrayList<Direction> availableBuild = new ArrayList<>(Arrays.asList(Direction.values()));
+    private ArrayList<Direction> availableMove0 = new ArrayList<>(Arrays.asList(Direction.values()));
+    private ArrayList<Direction> availableMove1 = new ArrayList<>(Arrays.asList(Direction.values()));
+    private ArrayList<Direction> availableBuild0 = new ArrayList<>(Arrays.asList(Direction.values()));
+    private ArrayList<Direction> availableBuild1 = new ArrayList<>(Arrays.asList(Direction.values()));
 
     private Block[][] maps = new Block[5][5];
 
@@ -107,8 +110,15 @@ public class GameBoardGUI {
         return meshView;
     }
 
+
     public class Builder extends MeshView {
         private int[] position = {-1, -1};
+
+        public int getWorkerId() {
+            return workerId;
+        }
+
+        private int workerId;
 
         public int[] getPosition() {
             return position;
@@ -119,12 +129,18 @@ public class GameBoardGUI {
             position[1] = y;
         }
 
-        public Builder(String meshPath, String pmPath) {
+        /**
+         * @param meshPath path of the model
+         * @param pmPath   path of the material
+         * @param workerId 0:male worker, 1:female worker
+         */
+        public Builder(String meshPath, String pmPath, int workerId) {
             super(Loader.loadMesh(meshPath));
             PhongMaterial boardPm = new PhongMaterial();
             boardPm.setDiffuseMap(new Image((new File
                     (pmPath).toURI().toString())));
             this.setMaterial(boardPm);
+            this.workerId = workerId;
         }
 
     }
@@ -137,6 +153,7 @@ public class GameBoardGUI {
         private Cylinder target;//used for selection the block to move or build
         private int[] position = {-1, -1};
         private boolean domed = false;
+        private boolean isTarget = false;
 
         int[] getPosition() {
             return position;
@@ -177,7 +194,7 @@ public class GameBoardGUI {
         }
 
         public void setLevel(Level level) {
-            if (this.level != level) {
+            if (this.level != level && !domed) {
                 if (level != Level.DOME)
                     this.level = level;
                 else
@@ -186,13 +203,24 @@ public class GameBoardGUI {
             }
         }
 
-        public void levelUp(boolean isDome){
-            if(isDome) {setLevel(Level.DOME);return;}
-            switch (this.level){
-                case GROUND:setLevel(Level.LEVEL1);break;
-                case LEVEL1:setLevel(Level.LEVEL2);break;
-                case LEVEL2:setLevel(Level.LEVEL3);break;
-                case LEVEL3:setLevel(Level.DOME);break;
+        public void levelUp(boolean isDome) {
+            if (isDome) {
+                setLevel(Level.DOME);
+                return;
+            }
+            switch (this.level) {
+                case GROUND:
+                    setLevel(Level.LEVEL1);
+                    break;
+                case LEVEL1:
+                    setLevel(Level.LEVEL2);
+                    break;
+                case LEVEL2:
+                    setLevel(Level.LEVEL3);
+                    break;
+                case LEVEL3:
+                    setLevel(Level.DOME);
+                    break;
             }
         }
 
@@ -214,22 +242,22 @@ public class GameBoardGUI {
             if (isLevel) {
                 switch (this.level) {
                     case GROUND:
-                        if(domed) dome.getTransforms().add(new Translate(0,LEVEL1_HEIGHT+0.5, 0));
+                        if (domed) dome.getTransforms().add(new Translate(0, LEVEL1_HEIGHT + 0.5, 0));
                         break;
                     case LEVEL1:
-                        if(domed) dome.getTransforms().add(new Translate(0,LEVEL2_HEIGHT+0.5, 0));
+                        if (domed) dome.getTransforms().add(new Translate(0, LEVEL2_HEIGHT + 0.5, 0));
                         else this.getChildren().addAll(building01);
                         break;
                     case LEVEL2:
-                        if(domed) dome.getTransforms().add(new Translate(0,LEVEL3_HEIGHT+1, 0));
+                        if (domed) dome.getTransforms().add(new Translate(0, LEVEL3_HEIGHT + 1, 0));
                         else this.getChildren().addAll(building02);
                         break;
                     case LEVEL3:
-                        if(domed) dome.getTransforms().add(new Translate(0,DOME_HEIGHT, 0));
+                        if (domed) dome.getTransforms().add(new Translate(0, DOME_HEIGHT, 0));
                         else this.getChildren().addAll(building03);
                         break;
                 }
-                if(domed)this.getChildren().addAll(dome);
+                if (domed) this.getChildren().addAll(dome);
             } else {
                 if (occupiedBy != -1) {
                     int playerID = occupiedBy / 10;
@@ -263,6 +291,8 @@ public class GameBoardGUI {
         }
 
         public void showTarget() {
+            if (isTarget) return;
+            isTarget = true;
             target.getTransforms().clear();
             switch (this.level) {
                 case GROUND:
@@ -286,6 +316,8 @@ public class GameBoardGUI {
         }
 
         public void removeTarget() {
+            if (!isTarget) return;
+            isTarget = false;
             try {
                 this.getChildren().remove(target);
             } catch (Exception e) {
@@ -296,21 +328,25 @@ public class GameBoardGUI {
         public Cylinder getTarget() {
             return target;
         }
+
+        public void clear() {
+            this.getChildren().clear();
+        }
     }
 
     public GameBoardGUI() {
         maleBuilders[0] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Blue_v001.png");
+                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Blue_v001.png", 0);
         maleBuilders[1] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Orange_v001.png");
+                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Orange_v001.png", 0);
         maleBuilders[2] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Pink_v001.png");
+                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Pink_v001.png", 0);
         femaleBuilders[0] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Blue_v001.png");
+                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Blue_v001.png", 1);
         femaleBuilders[1] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Orange_v001.png");
+                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Orange_v001.png", 1);
         femaleBuilders[2] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Pink_v001.png");
+                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Pink_v001.png", 1);
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -366,21 +402,24 @@ public class GameBoardGUI {
         return maps;
     }
 
+    public void setPlayers(VirtualGame virtualGame) {
 
-    public void setAvailableMove(ArrayList<Direction> availableMove) {
-        this.availableMove = availableMove;
     }
 
-    public void setAvailableBuild(ArrayList<Direction> availableBuild) {
-        this.availableBuild = availableBuild;
+
+    public void setAvailable(ArrayList<Direction> available, boolean isMove, int id) {
+        if (isMove) {
+            if (id == 0) availableMove0 = available;
+            else availableMove1 = available;
+        } else {
+            if (id == 0) availableBuild0 = available;
+            else availableBuild1 = available;
+        }
     }
 
-    public ArrayList<Direction> getAvailableMove() {
-        return availableMove;
-    }
-
-    public ArrayList<Direction> getAvailableBuild() {
-        return availableBuild;
+    public ArrayList<Direction> getAvailable(boolean isMove, int id) {
+        if (id == 0) return isMove ? availableMove0 : availableBuild0;
+        else return isMove ? availableMove1 : availableBuild1;
     }
 
 
@@ -389,4 +428,21 @@ public class GameBoardGUI {
     }
 
 
+    /**
+     * used at the beginning of the game, let play choose the initial position
+     */
+    public void initialWorkerPosition() {
+        for (var line : maps)
+            for (var map : line) {
+                if (map.occupiedBy == -1)
+                    map.showTarget();
+            }
+    }
+
+    public void removeTargets() {
+        for (var line : maps)
+            for (var map : line) {
+                map.removeTarget();
+            }
+    }
 }

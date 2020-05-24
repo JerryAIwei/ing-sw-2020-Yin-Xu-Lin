@@ -122,15 +122,12 @@ public class GameLobbyController {
 
         var selectedGame = gamesTable.getSelectionModel().getSelectedItem();
         if (selectedGame != null && selectedGame.getCurrentNumber() != selectedGame.getPlayerNumber()) {
-            mainApp.sendMessage(new JoinGameMessage(mainApp.getUserName(), selectedGame.getGameID()));
-            isJoinGame = true;
-
-
             mainApp.trans2GameBoard();
-
+            isJoinGame = true;
             Platform.runLater(() -> {
                 mainApp.getWaitingStage().showAndWait();
             });
+            mainApp.sendMessage(new JoinGameMessage(mainApp.getUserName(), selectedGame.getGameID()));
         } else {
             // Nothing selected.
         }
