@@ -1,9 +1,6 @@
 package it.polimi.ingsw.xyl.view.gui;
 
-import it.polimi.ingsw.xyl.model.Direction;
-import it.polimi.ingsw.xyl.model.Level;
-import it.polimi.ingsw.xyl.model.Space;
-import it.polimi.ingsw.xyl.model.VirtualGame;
+import it.polimi.ingsw.xyl.model.*;
 import it.polimi.ingsw.xyl.util.Loader;
 import it.polimi.ingsw.xyl.util.SmartGroup;
 import javafx.scene.Group;
@@ -83,6 +80,7 @@ public class GameBoardGUI {
     private ArrayList<Direction> availableBuild1 = new ArrayList<>(Arrays.asList(Direction.values()));
 
     private Block[][] maps = new Block[5][5];
+    private GodPower godPower;
 
     /**
      * Load mesh from file
@@ -110,6 +108,12 @@ public class GameBoardGUI {
         return meshView;
     }
 
+    public void setGodPower(GodPower godPower) {
+        this.godPower = godPower;
+    }
+    public GodPower getGodPower() {
+        return this.godPower;
+    }
 
     public class Builder extends MeshView {
         private int[] position = {-1, -1};

@@ -181,7 +181,7 @@ public class GUI extends Application implements ViewInterface {
     public void trans2GameBoard() {
         gameBoardGUI = new GameBoardGUI();
         gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);
-        SubScene scene = new SubScene(gameBoardGUI.getObjs(), PREF_MIN_WIDTH, PREF_MIN_HEIGHT-100);
+        SubScene scene = new SubScene(gameBoardGUI.getObjs(), PREF_MIN_WIDTH, PREF_MIN_HEIGHT);
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.getTransforms().addAll(
                 new Rotate(-10, Rotate.Y_AXIS),
@@ -195,7 +195,7 @@ public class GUI extends Application implements ViewInterface {
         BorderPane thislayout = new BorderPane();
         thislayout.setLeft(gameBoardController.getGridPane());
         thislayout.setCenter(scene);
-        primaryStage.setScene(new Scene(thislayout));
+        primaryStage.setScene(new Scene(thislayout));//have to set true for view 3D model normally
 
 //        gameBoardGUI.setMap(0, 0, Level.LEVEL1, 10);
 //
@@ -449,32 +449,29 @@ public class GUI extends Application implements ViewInterface {
 
         islandBoardCLI.setMaps(virtualGame.getSpaces());//debug
         islandBoardCLI.setPlayers(virtualGame);//debug
-        Platform.runLater(() -> {
-            gameBoardGUI.setMaps(virtualGame.getSpaces());
-            gameBoardGUI.setPlayers(virtualGame);//todo:record player information
-            gameBoardController.getUsernameLabel().setText("Username: "+ userName);
-            gameBoardController.getGameIdLabel().setText("Game ID: " + gameId);
-            gameBoardController.getPlayerIDLabel().setText("Player ID: " + id);
-            String action = "";
-            if (currentPlayerId == id && playerStatus == PlayerStatus.WORKERPREPARED){
-                action = nextAction;
-            }
-            gameBoardController.getShowStatus().setText("Status: " + virtualGame.getCurrentPlayerId()+ " " +
-                    "playing " + action);
-        });
-        //GameStatus gameStatus = virtualGame.getGameStatus();
 
         if (id == -1 && gameId == -1) {
-            for (Integer id : islandBoardCLI.getPlayers().keySet()) {
-                if (islandBoardCLI.getPlayers().get(id).getPlayerName().equals(this.userName)) {//todo:use gameBoard rather than isLandBoard
+            for (Integer id : vGame.getVPlayers().keySet()) {
+                if (vGame.getVPlayers().get(id).getPlayerName().equals(this.userName)) {
                     this.id = id;
                     gameBoardGUI.setId(id);
                     System.out.println("My ID: " + id);
                 }
             }
             this.gameId = virtualGame.getGameId();
+            Platform.runLater(() ->{
+                gameBoardController.getUsernameLabel().setText("Username: "+ userName);
+                gameBoardController.getGameIdLabel().setText("Game ID: " + gameId);
+                gameBoardController.getPlayerIDLabel().setText("Player ID: " + id);});
             System.out.println("Game ID: " + gameId);
         }
+
+        Platform.runLater(() -> {
+            gameBoardGUI.setMaps(virtualGame.getSpaces());
+            gameBoardGUI.setGodPower(vGame.getVPlayers().get(id).getGodPower());
+            gameBoardController.refresh();
+        });
+
         playerStatus = virtualGame.getVPlayers().get(id).getPlayerStatus();
         availableGodPowers = virtualGame.getAvailableGodPowers();
         nextAction = virtualGame.getVPlayers().get(id).getNextAction();
@@ -646,9 +643,13 @@ public class GUI extends Application implements ViewInterface {
                 moveOrBuild();
                 break;
             case LOSE:
-                //gameEnd();
+                gameEnd();
                 break;
         }
+    }
+
+    private void gameEnd() {
+
     }
 
     private void setInitialWorkerPosition() {
@@ -659,35 +660,31 @@ public class GUI extends Application implements ViewInterface {
      * deside what to do based on nextAction
      */
     private void moveOrBuild() {
+        gameBoardGUI.setAvailable
+                (vGame.getVPlayers().get(id).getAvailable("Build", 0), false, 0);
+        gameBoardGUI.setAvailable
+                (vGame.getVPlayers().get(id).getAvailable("Build", 1), false, 1);
+        gameBoardGUI.setAvailable
+                (vGame.getVPlayers().get(id).getAvailable("Move", 0), true, 0);
+        gameBoardGUI.setAvailable
+                (vGame.getVPlayers().get(id).getAvailable("Move", 1), true, 1);
         switch (nextAction) {
             case "MOVE":
-                Platform.runLater(() -> {
-                    gameBoardGUI.setAvailable
-                            (vGame.getVPlayers().get(id).getAvailable("Move", 0), true, 0);
-                    gameBoardGUI.setAvailable
-                            (vGame.getVPlayers().get(id).getAvailable("Move", 1), true, 1);
-                    gameBoardController.setMove();
-                });
+                Platform.runLater(() -> gameBoardController.setMove());
                 break;
             case "BUILD":
-                gameBoardGUI.setAvailable
-                        (vGame.getVPlayers().get(id).getAvailable("Build", 0), false, 0);
-                gameBoardGUI.setAvailable
-                        (vGame.getVPlayers().get(id).getAvailable("Build", 1), false, 1);
                 Platform.runLater(() -> gameBoardController.setBuild());
                 break;
             case "MOVEORBUILD":
                 System.out.println("MOVEORBUILD");
-                //chooseMoveOrBuild();
+                Platform.runLater(()->gameBoardController.setMoveOrBuild());
                 break;
             case "BUILDOREND":
                 System.out.println("MOVEORBUILD");
-                //chooseBuildOrEnd();
+                Platform.runLater(()->gameBoardController.setBuildOrEnd());
                 break;
         }
     }
-
-
     @Override
     public void sendMessage(Message message) {
         client.sendMessage(message);

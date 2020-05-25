@@ -1,31 +1,33 @@
 package it.polimi.ingsw.xyl.view.gui.controller;
 
 import it.polimi.ingsw.xyl.model.Direction;
+import it.polimi.ingsw.xyl.model.GodPower;
 import it.polimi.ingsw.xyl.model.message.BuildMessage;
 import it.polimi.ingsw.xyl.model.message.MoveMessage;
+import it.polimi.ingsw.xyl.model.message.MyTurnFinishedMessage;
 import it.polimi.ingsw.xyl.model.message.SetInitialWorkerPositionMessage;
 import it.polimi.ingsw.xyl.view.gui.GUI;
 import it.polimi.ingsw.xyl.view.gui.GameBoardGUI;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GameBoardController {
     private GameBoardGUI gameBoardGUI;
+    private boolean moveOrBuild = false;
+    private boolean buildOrEnd = false;
+    private boolean domeOrBuild = false;
 
     public GridPane getGridPane() {
         return gridPane;
@@ -49,10 +51,12 @@ public class GameBoardController {
         return playerIDLabel;
     }
 
+    private Label godPowerDescribe = new Label();
     private Label showStatus = new Label();
     private Label usernameLabel = new Label();
-    private Label gameIdLabel = new Label();;
-    private Label playerIDLabel = new Label();;
+    private Label gameIdLabel = new Label();
+    private Label playerIDLabel = new Label();
+    private Label godPower = new Label();
     private Stage stage;
     private GUI gui;
     //Variants for rotation
@@ -78,12 +82,15 @@ public class GameBoardController {
         this.gui = gui;
         setStageEvent();
         setBuilderEvent();
-        testPosition();
+        //testPosition();
         setTargetEvent();
-        gridPane.add(usernameLabel,0,0);
-        gridPane.add(gameIdLabel,0,2);
-        gridPane.add(playerIDLabel,0,4);
-        gridPane.add(showStatus,0,6);
+        // Listen for selection changes and show the person details when changed.
+        gridPane.add(usernameLabel, 0, 0);
+        gridPane.add(gameIdLabel, 0, 2);
+        gridPane.add(playerIDLabel, 0, 4);
+        gridPane.add(showStatus, 0, 6);
+        gridPane.add(godPower, 0, 8);
+        gridPane.add(godPowerDescribe, 0, 10);
     }
 
     private void setStageEvent() {
@@ -109,8 +116,11 @@ public class GameBoardController {
         });
 
         stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()) {
-                case RIGHT:
+            if (!isTurn) return;
+            ;
+            if (moveOrBuild)
+                switch (event.getCode()) {
+/*                case RIGHT:
                     gameBoardGUI.getObjs().translateXProperty().set(gameBoardGUI.getObjs().getTranslateX() + 0.5);
                     break;
                 case LEFT:
@@ -121,20 +131,33 @@ public class GameBoardController {
                     break;
                 case UP:
                     gameBoardGUI.getObjs().translateZProperty().set(gameBoardGUI.getObjs().getTranslateZ() - 0.5);
-                    break;
-                case M:
-                    isMove = true;
-                    break;
-                case B:
-                    isMove = false;
-                    break;
-                case O:
-                    isDome = true;
-                    break;
-                case L:
-                    isDome = false;
-                    break;
-            }
+                    break;*/
+                    case M:
+                        setMove();
+                        break;
+                    case B:
+                        setBuild();
+                        break;
+                }
+            else if (buildOrEnd)
+                switch (event.getCode()) {
+                    case E:
+                        endTurn();
+                        break;
+                }
+            else if (domeOrBuild)
+                switch (event.getCode()) {
+                    case L:
+                        showStatus.setText("Build: Normal");
+                        isDome = false;
+                        break;
+                    case O:
+                        showStatus.setText("Build: Dome");
+                        isDome = true;
+                        break;
+                }
+
+
         });
 
         stage.addEventHandler(ScrollEvent.SCROLL, event -> {
@@ -171,6 +194,7 @@ public class GameBoardController {
             var builder = gameBoardGUI.getFemaleBuilders()[i];
             int finalI = i;
             builder.addEventHandler(MouseEvent.MOUSE_CLICKED, keyEvent -> {
+                if (!isTurn) return;
                 if (status.get() == 0) {
                     selectBuilder.set(builder);
                     if (isTurn && gameBoardGUI.getId() == finalI) {
@@ -268,7 +292,7 @@ public class GameBoardController {
     }
 
     /**
-     * Change the worker position via keyboard, used for debug
+     * Change the worker position via keyboard, Debug Only
      */
     private void testPosition() {
         stage.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
@@ -326,27 +350,63 @@ public class GameBoardController {
 
     private void build(int worker, Direction direction) {
         gui.sendMessage(new BuildMessage(gui.getGameId(), gui.getId(), worker, direction, isDome));
-        isTurn = false;
+        endTurn();
     }
 
     private void move(int worker, Direction direction) {
         gui.sendMessage(new MoveMessage(gui.getGameId(), gui.getId(), worker, direction));
-        System.out.println("sent move");
+        endTurn();
+    }
+
+    private void endTurn() {
         isTurn = false;
+        moveOrBuild = false;
+        domeOrBuild = false;
+        isDome = false;
+        if (buildOrEnd)
+            gui.sendMessage(new MyTurnFinishedMessage(gui.getGameId(), gui.getId()));
+        buildOrEnd = false;
+        showStatus.setText("Waiting for other player");
     }
 
     public void setMove() {
+        showStatus.setText("Move");
         isMove = true;
     }
 
     public void setBuild() {
+        showStatus.setText("Build");
+        if (gameBoardGUI.getGodPower() == GodPower.ATLAS) {
+            domeOrBuild = true;
+            showStatus.setText("Build: Normal");
+            godPowerDescribe.setText("Press O to Dome\nL to build normally");
+        }
         isMove = false;
     }
 
-    public void moveOrBuild() {
+    public void setMoveOrBuild() {
+        showStatus.setText("Move");
+        godPowerDescribe.setText("Press M to Move, B to Build");
+        moveOrBuild = true;
     }
+
+    public void setBuildOrEnd() {
+        showStatus.setText("Build");
+        godPowerDescribe.setText("Press E to End Turn");
+        buildOrEnd = true;
+        isMove = false;
+    }
+
 
     public void setIsTurn() {
         isTurn = true;
     }
+
+    public void refresh() {
+        if(gameBoardGUI.getGodPower()!=null)
+            godPower.setText(gameBoardGUI.getGodPower().getGodPower());
+        godPowerDescribe.setText("");
+        showStatus.setText("Waiting for other player");
+    }
+
 }
