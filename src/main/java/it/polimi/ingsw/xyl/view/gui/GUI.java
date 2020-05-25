@@ -17,11 +17,15 @@ import it.polimi.ingsw.xyl.view.gui.controller.*;
 import it.polimi.ingsw.xyl.view.gui.model.Person;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.SubScene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
@@ -57,7 +61,6 @@ public class GUI extends Application implements ViewInterface {
     private String nextAction;
     private int workerInAction = -1;
     private VirtualGame vGame;
-
     private NewLoginController askLoginController;
     private GameBoardController gameBoardController;
     private WaitingStageController waitingStageController;
@@ -178,7 +181,7 @@ public class GUI extends Application implements ViewInterface {
     public void trans2GameBoard() {
         gameBoardGUI = new GameBoardGUI();
         gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);
-        Scene scene = new Scene(gameBoardGUI.getObjs(), -1, -1, true);
+        SubScene scene = new SubScene(gameBoardGUI.getObjs(), PREF_MIN_WIDTH, PREF_MIN_HEIGHT-100);
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.getTransforms().addAll(
                 new Rotate(-10, Rotate.Y_AXIS),
@@ -188,6 +191,12 @@ public class GUI extends Application implements ViewInterface {
         camera.setNearClip(1);
         camera.setFarClip(1000);
         scene.setCamera(camera);
+
+        BorderPane thislayout = new BorderPane();
+        thislayout.setLeft(gameBoardController.getGridPane());
+        thislayout.setCenter(scene);
+        primaryStage.setScene(new Scene(thislayout));
+
 //        gameBoardGUI.setMap(0, 0, Level.LEVEL1, 10);
 //
 //        gameBoardGUI.setMap(1, 1, Level.LEVEL1, -1);
@@ -203,7 +212,7 @@ public class GUI extends Application implements ViewInterface {
 //        gameBoardGUI.setMap(3, 3, Level.DOME, -1);
 //
 //        gameBoardGUI.setMap(4, 4, Level.GROUND, 1);
-        primaryStage.setScene(scene);
+    //    primaryStage.setScene(scene);
     }
 
 
@@ -443,6 +452,15 @@ public class GUI extends Application implements ViewInterface {
         Platform.runLater(() -> {
             gameBoardGUI.setMaps(virtualGame.getSpaces());
             gameBoardGUI.setPlayers(virtualGame);//todo:record player information
+            gameBoardController.getUsernameLabel().setText("Username: "+ userName);
+            gameBoardController.getGameIdLabel().setText("Game ID: " + gameId);
+            gameBoardController.getPlayerIDLabel().setText("Player ID: " + id);
+            String action = "";
+            if (currentPlayerId == id && playerStatus == PlayerStatus.WORKERPREPARED){
+                action = nextAction;
+            }
+            gameBoardController.getShowStatus().setText("Status: " + virtualGame.getCurrentPlayerId()+ " " +
+                    "playing " + action);
         });
         //GameStatus gameStatus = virtualGame.getGameStatus();
 

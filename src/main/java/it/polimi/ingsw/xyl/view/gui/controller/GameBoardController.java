@@ -8,10 +8,14 @@ import it.polimi.ingsw.xyl.view.gui.GUI;
 import it.polimi.ingsw.xyl.view.gui.GameBoardGUI;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -22,6 +26,33 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class GameBoardController {
     private GameBoardGUI gameBoardGUI;
+
+    public GridPane getGridPane() {
+        return gridPane;
+    }
+
+    GridPane gridPane = new GridPane();
+
+    public Label getShowStatus() {
+        return showStatus;
+    }
+
+    public Label getUsernameLabel() {
+        return usernameLabel;
+    }
+
+    public Label getGameIdLabel() {
+        return gameIdLabel;
+    }
+
+    public Label getPlayerIDLabel() {
+        return playerIDLabel;
+    }
+
+    private Label showStatus = new Label();
+    private Label usernameLabel = new Label();
+    private Label gameIdLabel = new Label();;
+    private Label playerIDLabel = new Label();;
     private Stage stage;
     private GUI gui;
     //Variants for rotation
@@ -49,6 +80,10 @@ public class GameBoardController {
         setBuilderEvent();
         testPosition();
         setTargetEvent();
+        gridPane.add(usernameLabel,0,0);
+        gridPane.add(gameIdLabel,0,2);
+        gridPane.add(playerIDLabel,0,4);
+        gridPane.add(showStatus,0,6);
     }
 
     private void setStageEvent() {
