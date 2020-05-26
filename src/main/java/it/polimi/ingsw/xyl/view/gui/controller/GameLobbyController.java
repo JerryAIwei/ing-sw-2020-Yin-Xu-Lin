@@ -108,7 +108,7 @@ public class GameLobbyController {
     private void handleNewGame() {
         if (isNewGame || isJoinGame) return;
         isNewGame = true;
-        mainApp.trans2GameBoard();
+        //mainApp.trans2GameBoard();
         mainApp.sendMessage(new CreateNewGameMessage(mainApp.getUserName()));
     }
 
@@ -122,7 +122,7 @@ public class GameLobbyController {
 
         var selectedGame = gamesTable.getSelectionModel().getSelectedItem();
         if (selectedGame != null && selectedGame.getCurrentNumber() != selectedGame.getPlayerNumber()) {
-            mainApp.trans2GameBoard();
+           // mainApp.trans2GameBoard();
             isJoinGame = true;
             Platform.runLater(() -> {
                 mainApp.getWaitingStage().showAndWait();

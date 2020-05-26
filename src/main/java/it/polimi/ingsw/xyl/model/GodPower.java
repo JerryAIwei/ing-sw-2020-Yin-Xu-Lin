@@ -16,8 +16,8 @@ public enum GodPower implements Serializable {
 
         @Override
         public String description() {
-            return "This is a normal game without God Powers,\n" +
-                    "\tyou are a normal player.";
+            return "This is a normal game without God Powers, " +
+                    "you are a normal player.";
         }
 
         @Override
@@ -33,9 +33,9 @@ public enum GodPower implements Serializable {
 
         @Override
         public String description() {
-            return "Your worker may move into an opponent worker's\n" +
-                    "\tspace by forcing their worker to the space to the\n" +
-                    "\tspace yours just vacated.";
+            return "Your worker may move into an opponent worker's " +
+                    "space by forcing their worker to the space to the " +
+                    "space yours just vacated.";
         }
 
         @Override
@@ -51,8 +51,8 @@ public enum GodPower implements Serializable {
 
         @Override
         public String description() {
-            return "Your worker may move one additional time,\n" +
-                    "\tbut not back to its initial space.";
+            return "Your worker may move one additional time, " +
+                    "but not back to its initial space.";
         }
 
         @Override
@@ -68,9 +68,9 @@ public enum GodPower implements Serializable {
 
         @Override
         public String description() {
-            return "If one of your workers moved up(means to\n" +
-                    "\ta higher level) on your last turn,\n" +
-                    "\topponent workers cannot move up this turn.";
+            return "If one of your workers moved up(means to " +
+                    "a higher level) on your last turn, " +
+                    "opponent workers cannot move up this turn.";
         }
 
         @Override
@@ -102,8 +102,8 @@ public enum GodPower implements Serializable {
 
         @Override
         public String description() {
-            return "Your worker may build one additional time,\n" +
-                    "\tbut not on the same space.";
+            return "Your worker may build one additional time, " +
+                    "but not on the same space.";
         }
 
         @Override
@@ -119,8 +119,8 @@ public enum GodPower implements Serializable {
 
         @Override
         public String description() {
-            return "Your worker may build one additional\n" +
-                    "\tblock(not dome) on top of your first block.";
+            return "Your worker may build one additional " +
+                    "block(not dome) on top of your first block.";
         }
 
         @Override
@@ -136,10 +136,10 @@ public enum GodPower implements Serializable {
 
         @Override
         public String description() {
-            return "Your worker may move into an opponent\n" +
-                    "\tworker's space, if their worker can be\n" +
-                    "\tforced one space straight backwards to\n" +
-                    "\tan unoccupied space at any level.";
+            return "Your worker may move into an opponent " +
+                    "worker's space, if their worker can be " +
+                    "forced one space straight backwards to " +
+                    "an unoccupied space at any level.";
         }
 
         @Override
@@ -171,9 +171,9 @@ public enum GodPower implements Serializable {
 
         @Override
         public String description() {
-            return "If your worker does not move up(means\n" +
-                    "\tto a higher level), it may build both\n" +
-                    "\tbefore and after moving.";
+            return "If your worker does not move up(means " +
+                    "to a higher level), it may build both " +
+                    "before and after moving.";
         }
 
         @Override

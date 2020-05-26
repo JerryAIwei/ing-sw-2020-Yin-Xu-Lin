@@ -14,15 +14,12 @@ import it.polimi.ingsw.xyl.util.ColorSetter;
 import it.polimi.ingsw.xyl.view.ViewInterface;
 import it.polimi.ingsw.xyl.view.cli.IslandBoardCLI;
 import it.polimi.ingsw.xyl.view.gui.controller.*;
-import it.polimi.ingsw.xyl.view.gui.model.Person;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
-import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
@@ -32,48 +29,35 @@ import javafx.stage.Stage;
 
 public class GUI extends Application implements ViewInterface {
 
+    private Stage primaryStage;
+    private Stage setPlayNumStage;
+    private Stage loginStage;
+    private Stage godPowerStage;
+    private Stage waitingStage;
+    private GameBoardGUI gameBoardGUI;
+    private final Client client;
+    private AskLoginController askLoginController;
+    private GameBoardController gameBoardController;
+    private WaitingStageController waitingStageController;
+    private final IslandBoardCLI islandBoardCLI = new IslandBoardCLI();
 
-    private final int PREF_MIN_WIDTH = 1080;
-    private final int PREF_MIN_HEIGHT = 800;
-
-    private IslandBoardCLI islandBoardCLI = new IslandBoardCLI();
-    private Client client;
     private String userName;
-
-
-    public int getId() {
-        return id;
-    }
-
-    private int id = -1;
-
-    public int getGameId() {
-        return gameId;
-    }
-
     private int gameId = -1;
+    private int id = -1;
     private int currentPlayerId;
     private ArrayList<GodPower> availableGodPowers;
     private PlayerStatus playerStatus;
     private String nextAction;
     private int workerInAction = -1;
     private VirtualGame vGame;
-    private NewLoginController askLoginController;
-    private GameBoardController gameBoardController;
-    private WaitingStageController waitingStageController;
 
-    private ObservableList<Person> personData = FXCollections.observableArrayList();
 
-    private Stage primaryStage;
-    private Stage setPlayNumStage;
-    private Stage loginStage;
-    private Stage godPowerStage;
-    private Stage waitingStage;
-
-    private BorderPane rootLayout;
-
-    private GameBoardGUI gameBoardGUI;
-
+    public int getId() {
+        return id;
+    }
+    public int getGameId() {
+        return gameId;
+    }
 
     public Stage getWaitingStage() {
         return waitingStage;
@@ -92,62 +76,24 @@ public class GUI extends Application implements ViewInterface {
     }
 
     public GUI() {
-
         client = new Client(this);
-
-        personData.add(new Person("Hans", "Muster"));
-        personData.add(new Person("Ruth", "Mueller"));
-        personData.add(new Person("Heinz", "Kurz"));
-        personData.add(new Person("Cornelia", "Meier"));
-        personData.add(new Person("Werner", "Meyer"));
-        personData.add(new Person("Lydia", "Kunz"));
-        personData.add(new Person("Anna", "Best"));
-        personData.add(new Person("Stefan", "Meier"));
-        personData.add(new Person("Martin", "Mueller"));
-
-
     }
 
 
     @Override
     public void start(Stage primaryStage) {
-
-
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Santorini");
         this.primaryStage.getIcons().add(new Image(
                 GUI.class.getResourceAsStream("/img/icon.png")));
-        this.primaryStage.setMinWidth(PREF_MIN_WIDTH);
-        this.primaryStage.setMinHeight(PREF_MIN_HEIGHT);
-        initRootLayout();
+        // load necessary 3D resource and init gameBoardGUI
+        new Thread(() -> {
+            gameBoardGUI = new GameBoardGUI();
+        }).start();
         initWaitingStage();
         askLogin();
-        //showPersonOverview();
     }
 
-    /**
-     * Initializes the root layout.
-     */
-    private void initRootLayout() {
-        try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("/RootLayout.fxml"));
-            rootLayout = loader.load();
-            BackgroundImage myBI = new BackgroundImage(new Image("/img/background.jpeg", 1080, 720, false, true),
-                    BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.CENTER,
-                    BackgroundSize.DEFAULT);
-            //then you set to your node
-            rootLayout.setBackground(new Background(myBI));
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            //primaryStage.show();
-        } catch (IOException e) {
-            System.err.println("GUI.class.getResource(\"\")" + GUI.class.getResource(""));
-            //e.printStackTrace();
-        }
-    }
 
     /**
      * Initializes the waitingStage layout
@@ -176,9 +122,10 @@ public class GUI extends Application implements ViewInterface {
      * set primaryStage to game board layout
      */
     public void trans2GameBoard() {
-        gameBoardGUI = new GameBoardGUI();
-        gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);
-        SubScene scene = new SubScene(gameBoardGUI.getObjs(), PREF_MIN_WIDTH, PREF_MIN_HEIGHT,true,SceneAntialiasing.BALANCED);
+        int PREF_MIN_WIDTH = 1080;
+        int PREF_MIN_HEIGHT = 800;
+        SubScene scene = new SubScene(gameBoardGUI.getObjs(), PREF_MIN_WIDTH, PREF_MIN_HEIGHT,true,
+                SceneAntialiasing.BALANCED);
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.getTransforms().addAll(
                 new Rotate(-10, Rotate.Y_AXIS),
@@ -188,28 +135,11 @@ public class GUI extends Application implements ViewInterface {
         camera.setNearClip(1);
         camera.setFarClip(1000);
         scene.setCamera(camera);
+        BorderPane gameBoardLayout = new BorderPane();
+        gameBoardLayout.setLeft(gameBoardController.getGridPane());
+        gameBoardLayout.setCenter(scene);
+        primaryStage.setScene(new Scene(gameBoardLayout));
 
-        BorderPane thislayout = new BorderPane();
-        thislayout.setLeft(gameBoardController.getGridPane());
-        thislayout.setCenter(scene);
-        primaryStage.setScene(new Scene(thislayout));//have to set true for view 3D model normally
-
-//        gameBoardGUI.setMap(0, 0, Level.LEVEL1, 10);
-//
-//        gameBoardGUI.setMap(1, 1, Level.LEVEL1, -1);
-//        gameBoardGUI.setMap(1, 1, Level.LEVEL2, 11);
-//
-//        gameBoardGUI.setMap(2, 2, Level.LEVEL1, -1);
-//        gameBoardGUI.setMap(2, 2, Level.LEVEL2, -1);
-//        gameBoardGUI.setMap(2, 2, Level.LEVEL3, 21);
-//
-//        gameBoardGUI.setMap(3, 3, Level.LEVEL1, -1);
-//        gameBoardGUI.setMap(3, 3, Level.LEVEL2, -1);
-//        gameBoardGUI.setMap(3, 3, Level.LEVEL3, -1);
-//        gameBoardGUI.setMap(3, 3, Level.DOME, -1);
-//
-//        gameBoardGUI.setMap(4, 4, Level.GROUND, 1);
-    //    primaryStage.setScene(scene);
     }
 
 
@@ -220,14 +150,14 @@ public class GUI extends Application implements ViewInterface {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("/newLogin.fxml"));
+            loader.setLocation(GUI.class.getResource("/askLogin.fxml"));
             //loader.setRoot(rootLayout);
             BorderPane loginLayout = loader.load();
 
             loginStage = new Stage();
             loginStage.setResizable(false);
             loginStage.centerOnScreen();
-            loginStage.setTitle("Login");
+            loginStage.setTitle("Santorini : Login");
             loginStage.setAlwaysOnTop(true);
             loginStage.initOwner(primaryStage);
             Scene scene = new Scene(loginLayout);
@@ -252,14 +182,9 @@ public class GUI extends Application implements ViewInterface {
      * show existed games, player can choose join a game or create new game
      */
     private void joinOrCreate(NameOKMessage nameOKMessage) {
-        Platform.runLater(() -> {
-            loginStage.close();
-            primaryStage.show();
-        });
         ObservableList<NameOKMessage.Games> games = FXCollections.observableArrayList();
-        for (var game : nameOKMessage.getGames()) {
-            games.add(game);
-        }
+        games.addAll(nameOKMessage.getGames());
+
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -298,12 +223,14 @@ public class GUI extends Application implements ViewInterface {
              */
 
             Platform.runLater(() -> {
-                primaryStage.setScene(scene);
-                primaryStage.show();
+                if(loginStage.isShowing()) {
+                    loginStage.close();
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                }
             });
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -340,63 +267,6 @@ public class GUI extends Application implements ViewInterface {
     }
 
 
-    /**
-     * Shows the person overview inside the root layout.
-     */
-    public void showPersonOverview() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("/PersonOverview.fxml"));
-            rootLayout = (BorderPane) loader.load();
-            // Give the controller access to the main app.
-            PersonOverviewController controller = loader.getController();
-            controller.setMainApp(this);
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Opens a dialog to edit details for the specified person. If the user
-     * clicks OK, the changes are saved into the provided person object and true
-     * is returned.
-     *
-     * @param person the person object to be edited
-     * @return true if the user clicked OK, false otherwise.
-     */
-    public boolean showPersonEditDialog(Person person) {
-        try {
-            // Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("/PersonEditDialog.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-
-            // Create the dialog Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-
-            // Set the person into the controller.
-            PersonEditDialogController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setPerson(person);
-
-            // Show the dialog and wait until the user closes it
-            dialogStage.showAndWait();
-
-            return controller.isOkClicked();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     /**
      * @return main stage
@@ -405,9 +275,6 @@ public class GUI extends Application implements ViewInterface {
         return primaryStage;
     }
 
-    public ObservableList<Person> getPersonData() {
-        return personData;
-    }
 
 
     public static void main(String[] args) {
@@ -448,6 +315,8 @@ public class GUI extends Application implements ViewInterface {
         islandBoardCLI.setPlayers(virtualGame);//debug
 
         if (id == -1 && gameId == -1) {
+            gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);
+            Platform.runLater(this::trans2GameBoard);
             for (Integer id : vGame.getVPlayers().keySet()) {
                 if (vGame.getVPlayers().get(id).getPlayerName().equals(this.userName)) {
                     this.id = id;

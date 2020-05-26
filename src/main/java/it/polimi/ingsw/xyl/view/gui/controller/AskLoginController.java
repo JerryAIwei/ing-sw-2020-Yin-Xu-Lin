@@ -2,7 +2,6 @@ package it.polimi.ingsw.xyl.view.gui.controller;
 
 import it.polimi.ingsw.xyl.model.message.PlayerNameMessage;
 import it.polimi.ingsw.xyl.view.gui.GUI;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,23 +10,28 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 public class AskLoginController {
-
     @FXML
-    private TextField textField;
-
+    private TextField hostnameTextfield;
     @FXML
-    private Label label;
+    private TextField portTextfield;
+    @FXML
+    private TextField usernameTextfield;
+    @FXML
+    private Label hostnameLabel;
 
     private GUI mainApp;
     private Stage dialogStage;
-    private boolean isStart = false;
+
+    public AskLoginController() {
+    }
 
     @FXML
     private void initialize() {
-        textField.setText("127.0.0.1");
-        textField.setPromptText("127.0.0.1");
+        hostnameTextfield.setText("127.0.0.1");
+        hostnameTextfield.setPromptText("127.0.0.1");
+        portTextfield.setText("7777");
+        portTextfield.setPromptText("7777");
     }
-
 
     /**
      * Is called by the main application to give a reference back to itself.
@@ -37,7 +41,6 @@ public class AskLoginController {
     public void setMainApp(GUI mainApp) {
         this.mainApp = mainApp;
     }
-
     /**
      * Sets the stage of this dialog.
      *
@@ -46,8 +49,6 @@ public class AskLoginController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
-
-
     private boolean isInputValid() {
         String errorMessage = "";
         final String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
@@ -55,10 +56,12 @@ public class AskLoginController {
                 + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
                 + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
 
-        if (textField.getText() == null || textField.getText().length() == 0)
+        if (hostnameTextfield.getText() == null || hostnameTextfield.getText().length() == 0)
             errorMessage += "No valid Input!\n";
-        if (Objects.equals(label.getText(), "Server IP") && !textField.getText().matches(regex))
+        if (Objects.equals(hostnameLabel.getText(), "Hostname: ") && !hostnameTextfield.getText().matches(regex))
             errorMessage += "No valid IP!\n";
+        if (usernameTextfield.getText().isEmpty() || usernameTextfield.getText().trim().isEmpty())
+            errorMessage += "No valid username!\n";
         if (errorMessage.length() == 0) {
             return true;
         } else {
@@ -67,39 +70,21 @@ public class AskLoginController {
         }
     }
 
-    public void setUserName() {
-        Platform.runLater(() -> {
-            label.setText("User Name");
-            textField.setText("");
-            textField.setPromptText("UserName");
-            isStart = false;
-        });
-    }
-
     /**
      * Called when the user clicks Start.
      */
     @FXML
     private void handleStart() {
-        if (isInputValid() && !isStart) {
-            if (label.getText().equals("Server IP")) {
-                System.out.println("initClient: "+textField.getText());
-                mainApp.initClient(textField.getText());
-                isStart = true;
-            } else { //User Name
-                System.out.println("setUserName: " +textField.getText());
-                mainApp.setUserName(textField.getText());
-                mainApp.sendMessage(new PlayerNameMessage(textField.getText()));
-                isStart = true;
-            }
-        } else {
-            if(isStart) {
-                textField.setText("");
-                textField.setPromptText("Waiting...");
-            }
-            else {
-                textField.setText("");
-                textField.setPromptText("Invalid " + label.getText());
+        if (isInputValid()) {
+            try {
+                System.out.println("initClient: " + hostnameTextfield.getText());
+                mainApp.initClient(hostnameTextfield.getText());
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                System.out.println("setUserName: " + usernameTextfield.getText());
+                mainApp.setUserName(usernameTextfield.getText());
+                mainApp.sendMessage(new PlayerNameMessage(usernameTextfield.getText()));
             }
         }
     }
