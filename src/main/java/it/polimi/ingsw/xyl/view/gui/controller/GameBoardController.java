@@ -134,9 +134,13 @@ public class GameBoardController {
                     break;*/
                     case M:
                         setMove();
+                        hideTargets();
+                        showTargets();
                         break;
                     case B:
                         setBuild();
+                        hideTargets();
+                        showTargets();
                         break;
                 }
             else if (buildOrEnd)
@@ -363,6 +367,7 @@ public class GameBoardController {
         moveOrBuild = false;
         domeOrBuild = false;
         isDome = false;
+        isMove = true;
         if (buildOrEnd)
             gui.sendMessage(new MyTurnFinishedMessage(gui.getGameId(), gui.getId()));
         buildOrEnd = false;
