@@ -3,14 +3,19 @@ package it.polimi.ingsw.xyl.view.gui;
 import it.polimi.ingsw.xyl.model.*;
 import it.polimi.ingsw.xyl.util.Loader;
 import it.polimi.ingsw.xyl.util.SmartGroup;
-import javafx.scene.Group;
+import javafx.scene.*;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Mesh;
 import javafx.scene.shape.MeshView;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
 import java.io.File;
@@ -58,6 +63,35 @@ public class GameBoardGUI {
     //ratio of the builder
     final double RATIO_BUILDER = 1.8;
     int id = -1;
+
+    // for whole game board gui layout
+    private final GridPane gridPane = new GridPane();
+    private final Label godPowerDescribe = new Label();
+    private final Label showStatus = new Label();
+    private final Label usernameLabel = new Label();
+    private final Label gameIdLabel = new Label();
+    private final Label playerIdLabel = new Label();
+    private final Label godPowerLabel = new Label();
+
+    public void setShowStatus(String status){
+        showStatus.setText(status);
+    }
+
+    public void setGodPowerDescribe(String description){
+        godPowerDescribe.setText(description);
+    }
+
+    public void setGodPowerLabel(String godPower){
+        godPowerLabel.setText(godPower);
+    }
+
+    public void setUserNameLabel(String userName){
+        usernameLabel.setText(userName);
+    }
+
+    public void setGameIdLabel(String gameID){
+        gameIdLabel.setText(gameID);
+    }
 
     public Builder[] getMaleBuilders() {
         return maleBuilders;
@@ -366,8 +400,42 @@ public class GameBoardGUI {
 
     }
 
+
+    /**
+     * Setup the whole game board gui layout
+     *
+     * @return a scene of game board
+     */
+    public Scene toGameBoard(){
+        int PREF_MIN_WIDTH = 1080;
+        int PREF_MIN_HEIGHT = 800;
+        SubScene scene = new SubScene(objs, PREF_MIN_WIDTH, PREF_MIN_HEIGHT,true,
+                SceneAntialiasing.BALANCED);
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        camera.getTransforms().addAll(
+                new Rotate(-10, Rotate.Y_AXIS),
+                new Rotate(110, Rotate.X_AXIS),
+                new Translate(0, 0, -80)
+        );
+        camera.setNearClip(1);
+        camera.setFarClip(1000);
+        scene.setCamera(camera);
+
+        gridPane.add(usernameLabel, 0, 0);
+        gridPane.add(gameIdLabel, 0, 2);
+        gridPane.add(playerIdLabel, 0, 4);
+        gridPane.add(showStatus, 0, 6);
+        gridPane.add(godPowerLabel, 0, 8);
+        gridPane.add(godPowerDescribe, 0, 10);
+        BorderPane gameBoardLayout = new BorderPane();
+        gameBoardLayout.setTop(gridPane);
+        gameBoardLayout.setCenter(scene);
+        return new Scene(gameBoardLayout);
+    }
+
     public void setId(int id) {
         this.id = id;
+        this.playerIdLabel.setText("Player ID: " + id);
     }
 
     public int getId() {

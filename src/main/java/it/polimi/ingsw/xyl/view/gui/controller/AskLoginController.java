@@ -76,16 +76,17 @@ public class AskLoginController {
     @FXML
     private void handleStart() {
         if (isInputValid()) {
+            boolean isOK = false;
             try {
                 System.out.println("initClient: " + hostnameTextfield.getText());
                 mainApp.initClient(hostnameTextfield.getText());
-            }catch (Exception e){
-                e.printStackTrace();
-            }finally {
+            }catch (Exception ignored){
+            }
+            try{
                 System.out.println("setUserName: " + usernameTextfield.getText());
                 mainApp.setUserName(usernameTextfield.getText());
                 mainApp.sendMessage(new PlayerNameMessage(usernameTextfield.getText()));
-            }
+            }catch (Exception ignored){}
         }
     }
 

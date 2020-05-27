@@ -3,6 +3,7 @@ package it.polimi.ingsw.xyl.view.gui.controller;
 import it.polimi.ingsw.xyl.model.message.CreateNewGameMessage;
 import it.polimi.ingsw.xyl.model.message.JoinGameMessage;
 import it.polimi.ingsw.xyl.model.message.NameOKMessage;
+import it.polimi.ingsw.xyl.model.message.RefreshMessage;
 import it.polimi.ingsw.xyl.util.Loader;
 import it.polimi.ingsw.xyl.view.gui.GUI;
 import javafx.application.Platform;
@@ -124,15 +125,19 @@ public class GameLobbyController {
         if (selectedGame != null && selectedGame.getCurrentNumber() != selectedGame.getPlayerNumber()) {
            // mainApp.trans2GameBoard();
             isJoinGame = true;
-            Platform.runLater(() -> {
-                mainApp.getWaitingStage().showAndWait();
-            });
+//            Platform.runLater(() -> {
+//                mainApp.getWaitingStage().showAndWait();
+//            });
             mainApp.sendMessage(new JoinGameMessage(mainApp.getUserName(), selectedGame.getGameID()));
         } else {
             // Nothing selected.
         }
     }
 
+    @FXML
+    private void handleRefresh() {
+        mainApp.sendMessage(new RefreshMessage(mainApp.getUserName()));
+    }
 
     /**
      * Is called by the main application to give a reference back to itself.

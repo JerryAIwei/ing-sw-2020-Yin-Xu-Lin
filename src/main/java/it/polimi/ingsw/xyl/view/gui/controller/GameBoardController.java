@@ -10,12 +10,10 @@ import it.polimi.ingsw.xyl.view.gui.GUI;
 import it.polimi.ingsw.xyl.view.gui.GameBoardGUI;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -29,34 +27,6 @@ public class GameBoardController {
     private boolean buildOrEnd = false;
     private boolean domeOrBuild = false;
 
-    public GridPane getGridPane() {
-        return gridPane;
-    }
-
-    GridPane gridPane = new GridPane();
-
-    public Label getShowStatus() {
-        return showStatus;
-    }
-
-    public Label getUsernameLabel() {
-        return usernameLabel;
-    }
-
-    public Label getGameIdLabel() {
-        return gameIdLabel;
-    }
-
-    public Label getPlayerIDLabel() {
-        return playerIDLabel;
-    }
-
-    private Label godPowerDescribe = new Label();
-    private Label showStatus = new Label();
-    private Label usernameLabel = new Label();
-    private Label gameIdLabel = new Label();
-    private Label playerIDLabel = new Label();
-    private Label godPower = new Label();
     private Stage stage;
     private GUI gui;
     //Variants for rotation
@@ -85,12 +55,6 @@ public class GameBoardController {
         //testPosition();
         setTargetEvent();
         // Listen for selection changes and show the person details when changed.
-        gridPane.add(usernameLabel, 0, 0);
-        gridPane.add(gameIdLabel, 0, 2);
-        gridPane.add(playerIDLabel, 0, 4);
-        gridPane.add(showStatus, 0, 6);
-        gridPane.add(godPower, 0, 8);
-        gridPane.add(godPowerDescribe, 0, 10);
     }
 
     private void setStageEvent() {
@@ -152,11 +116,12 @@ public class GameBoardController {
             else if (domeOrBuild)
                 switch (event.getCode()) {
                     case L:
-                        showStatus.setText("Build: Normal");
+                        gameBoardGUI.setShowStatus("Build: Normal");
+                       // showStatus.setText("Build: Normal");
                         isDome = false;
                         break;
                     case O:
-                        showStatus.setText("Build: Dome");
+                        gameBoardGUI.setShowStatus("Build: Dome");
                         isDome = true;
                         break;
                 }
@@ -371,33 +336,33 @@ public class GameBoardController {
         if (buildOrEnd)
             gui.sendMessage(new MyTurnFinishedMessage(gui.getGameId(), gui.getId()));
         buildOrEnd = false;
-        showStatus.setText("Waiting for other player");
+        gameBoardGUI.setShowStatus("Waiting for other player");
     }
 
     public void setMove() {
-        showStatus.setText("Move");
+        gameBoardGUI.setShowStatus("Move");
         isMove = true;
     }
 
     public void setBuild() {
-        showStatus.setText("Build");
+        gameBoardGUI.setShowStatus("Build");
         if (gameBoardGUI.getGodPower() == GodPower.ATLAS) {
             domeOrBuild = true;
-            showStatus.setText("Build: Normal");
-            godPowerDescribe.setText("Press O to Dome\nL to build normally");
+            gameBoardGUI.setShowStatus("Build: Normal");
+            gameBoardGUI.setGodPowerDescribe("Press O to Dome\nL to build normally");
         }
         isMove = false;
     }
 
     public void setMoveOrBuild() {
-        showStatus.setText("Move");
-        godPowerDescribe.setText("Press M to Move, B to Build");
+        gameBoardGUI.setShowStatus("Move");
+        gameBoardGUI.setGodPowerDescribe("Press M to Move, B to Build");
         moveOrBuild = true;
     }
 
     public void setBuildOrEnd() {
-        showStatus.setText("Build");
-        godPowerDescribe.setText("Press E to End Turn");
+        gameBoardGUI.setShowStatus("Build");
+        gameBoardGUI.setGodPowerDescribe("Press E to End Turn");
         buildOrEnd = true;
         isMove = false;
     }
@@ -409,9 +374,10 @@ public class GameBoardController {
 
     public void refresh() {
         if(gameBoardGUI.getGodPower()!=null)
-            godPower.setText(gameBoardGUI.getGodPower().getGodPower());
-        godPowerDescribe.setText("");
-        showStatus.setText("Waiting for other player");
+            gameBoardGUI.setGodPowerLabel(gameBoardGUI.getGodPower().getGodPower());
+        gameBoardGUI.setGodPowerDescribe("");
+        gameBoardGUI.setShowStatus("Waiting for other player");
     }
+
 
 }
