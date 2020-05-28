@@ -374,7 +374,7 @@ public class GameBoardController {
 
     public void refresh() {
         if(gameBoardGUI.getGodPower()!=null)
-            gameBoardGUI.setGodPowerLabel(gameBoardGUI.getGodPower().getGodPower());
+            gameBoardGUI.setGodPowerLabel(gameBoardGUI.getGodPower());
         gameBoardGUI.setGodPowerDescribe("");
         gameBoardGUI.setShowStatus("Waiting for other player");
     }

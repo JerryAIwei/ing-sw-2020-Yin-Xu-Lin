@@ -3,24 +3,29 @@ package it.polimi.ingsw.xyl.view.gui;
 import it.polimi.ingsw.xyl.model.*;
 import it.polimi.ingsw.xyl.util.Loader;
 import it.polimi.ingsw.xyl.util.SmartGroup;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Mesh;
 import javafx.scene.shape.MeshView;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 /**
  * Coordinate
@@ -65,13 +70,17 @@ public class GameBoardGUI {
     int id = -1;
 
     // for whole game board gui layout
-    private final GridPane gridPane = new GridPane();
     private final Label godPowerDescribe = new Label();
     private final Label showStatus = new Label();
     private final Label usernameLabel = new Label();
     private final Label gameIdLabel = new Label();
     private final Label playerIdLabel = new Label();
     private final Label godPowerLabel = new Label();
+    private final ImageView godPowerImage = new ImageView();
+    private final VBox vsPlayerVBox = new VBox(4);
+//    private final ArrayList<ImageView> vsPlayerImage = new ArrayList<>(2);
+//    private final ArrayList<Label> vsPlayerNameLabel = new ArrayList<>(2);
+//    private final ArrayList<Label> vsPlayerPowerLabel = new ArrayList<>(2);
 
     public void setShowStatus(String status){
         showStatus.setText(status);
@@ -81,8 +90,10 @@ public class GameBoardGUI {
         godPowerDescribe.setText(description);
     }
 
-    public void setGodPowerLabel(String godPower){
-        godPowerLabel.setText(godPower);
+    public void setGodPowerLabel(GodPower godPower){
+        godPowerLabel.setText(godPower.toString());
+        godPowerImage.setImage(new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                "/"+ godPower.getGodPower() + ".png").toURI().toString()));
     }
 
     public void setUserNameLabel(String userName){
@@ -397,10 +408,51 @@ public class GameBoardGUI {
             }
         }
 
-
+        usernameLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
+        gameIdLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
+        playerIdLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
+        showStatus.setFont(Font.font("System", FontWeight.BOLD, 20));
+        godPowerDescribe.setFont(Font.font("System", FontWeight.BOLD, 20));
+        godPowerLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
+        Image anonymousImage = new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                "/ANONYMOUS.png").toURI().toString());
+        godPowerImage.setImage(anonymousImage);
+        godPowerImage.setScaleX(0.7);
+        godPowerImage.setScaleY(0.7);
+        godPowerImage.setScaleZ(0.7);
+//        vsPlayerImage.add(new ImageView());
+//        vsPlayerImage.add(new ImageView());
+//        vsPlayerImage.get(0).setImage(anonymousImage);
+//        vsPlayerImage.get(0).setScaleX(0.7);
+//        vsPlayerImage.get(0).setScaleY(0.7);
+//        vsPlayerImage.get(0).setScaleZ(0.7);
+//        vsPlayerImage.get(1).setScaleX(0.7);
+//        vsPlayerImage.get(1).setScaleY(0.7);
+//        vsPlayerImage.get(1).setScaleZ(0.7);
+//        vsPlayerImage.get(1).setImage(anonymousImage);
+//        vsPlayerNameLabel.add(new Label());
+//        vsPlayerNameLabel.add(new Label());
+//        vsPlayerNameLabel.get(0).setFont(Font.font("System", FontWeight.BOLD, 20));
+//        vsPlayerNameLabel.get(1).setFont(Font.font("System", FontWeight.BOLD, 20));
+//        vsPlayerPowerLabel.add(new Label());
+//        vsPlayerPowerLabel.add(new Label());
+//        vsPlayerPowerLabel.get(0).setFont(Font.font("System", FontWeight.BOLD, 20));
+//        vsPlayerPowerLabel.get(1).setFont(Font.font("System", FontWeight.BOLD, 20));
     }
 
-
+//    public void updateVSGodPowers(VirtualGame virtualGame){
+//        for(Integer i:virtualGame.getVPlayers().keySet()){
+//            if (i != this.id) {
+//                VirtualGame.VPlayer vPlayer = virtualGame.getVPlayers().get(id);
+//                String name = vPlayer.getPlayerName();
+//                vsPlayerNameLabel.get(i).setText(name);
+//                GodPower power = vPlayer.getGodPower();
+//                vsPlayerPowerLabel.get(i).setText(power.toString());
+//                vsPlayerImage.get(i).setImage(new Image(new File("src/main/resources/santorini_risorse" +
+//                        "-grafiche-2/Sprite/Cards/Full/"+ godPower.getGodPower() + ".png").toURI().toString()));
+//            }
+//        }
+//    }
     /**
      * Setup the whole game board gui layout
      *
@@ -420,16 +472,36 @@ public class GameBoardGUI {
         camera.setNearClip(1);
         camera.setFarClip(1000);
         scene.setCamera(camera);
-
+        GridPane gridPane = new GridPane();
+        GridPane gridPane2 = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(15, 15, 15, 15));
+        gridPane2.setAlignment(Pos.CENTER);
+        gridPane2.setHgap(10);
+        VBox labelVBox = new VBox(2);
         gridPane.add(usernameLabel, 0, 0);
-        gridPane.add(gameIdLabel, 0, 2);
-        gridPane.add(playerIdLabel, 0, 4);
-        gridPane.add(showStatus, 0, 6);
-        gridPane.add(godPowerLabel, 0, 8);
-        gridPane.add(godPowerDescribe, 0, 10);
+        gridPane.add(gameIdLabel, 2, 0);
+        gridPane.add(playerIdLabel, 4, 0);
+        gridPane2.add(showStatus, 0, 0);
+        gridPane2.add(godPowerDescribe, 2, 0);
+        labelVBox.getChildren().add(0,gridPane);
+        labelVBox.getChildren().add(1,gridPane2);
+        VBox powerVBox = new VBox(2);
+        powerVBox.getChildren().add(0,godPowerImage);
+        powerVBox.getChildren().add(1,godPowerLabel);
+        powerVBox.setAlignment(Pos.CENTER);
+        vsPlayerVBox.setAlignment(Pos.CENTER);
         BorderPane gameBoardLayout = new BorderPane();
-        gameBoardLayout.setTop(gridPane);
+        gameBoardLayout.setTop(labelVBox);
         gameBoardLayout.setCenter(scene);
+        gameBoardLayout.setLeft(powerVBox);
+        gameBoardLayout.setRight(vsPlayerVBox);
+//        vsPlayerVBox.getChildren().add(0,vsPlayerImage.get(0));
+//        vsPlayerVBox.getChildren().add(1,vsPlayerNameLabel.get(0));
+//        vsPlayerVBox.getChildren().add(2,vsPlayerImage.get(1));
+//        vsPlayerVBox.getChildren().add(3,vsPlayerNameLabel.get(1));
         return new Scene(gameBoardLayout);
     }
 
