@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="pane" prefHeight="518.0" prefWidth="474.0" styleClass="background-defeat" stylesheets="@css/endGameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fill="#9a1919" fontSmoothingType="LCD" layoutX="88.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DEFEAT!" wrappingWidth="297.6123046875">
+         <font>
+            <Font name="System Bold Italic" size="60.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

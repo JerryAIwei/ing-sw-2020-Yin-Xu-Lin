@@ -339,13 +339,17 @@ public class GameBoardController {
         gameBoardGUI.setShowStatus("Waiting for other player");
     }
 
+
     public void setMove() {
         gameBoardGUI.setShowStatus("Move");
+        initial = 2;// having finished set initial builder position
         isMove = true;
     }
 
     public void setBuild() {
         gameBoardGUI.setShowStatus("Build");
+        initial = 2;//having finished set initial builder position
+        //special for ATLAS
         if (gameBoardGUI.getGodPower() == GodPower.ATLAS) {
             domeOrBuild = true;
             gameBoardGUI.setShowStatus("Build: Normal");

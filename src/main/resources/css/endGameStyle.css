@@ -1,0 +1,11 @@
+.background-defeat{
+    -fx-background-image: url("../santorini_risorse-grafiche-2/Sprite/Layouts/Endgame/endgame_windowdefeat.png");
+    -fx-background-size: contain;
+    -fx-background-color: #3d3756;
+}
+
+.background-win{
+    -fx-background-image: url("../santorini_risorse-grafiche-2/Sprite/Layouts/Endgame/endgame_victorywin.png");
+    -fx-background-size: contain;
+    -fx-background-color: #5ab4f5;
+}

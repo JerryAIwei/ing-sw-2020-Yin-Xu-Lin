@@ -50,6 +50,7 @@ public class GUI extends Application implements ViewInterface {
     public int getId() {
         return id;
     }
+
     public int getGameId() {
         return gameId;
     }
@@ -193,7 +194,7 @@ public class GUI extends Application implements ViewInterface {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(GUI.class.getResource("/SetUpGame.fxml"));
-            BorderPane page = (BorderPane) loader.load();
+            BorderPane page = loader.load();
 
             Platform.runLater(() -> {
                 // Create the dialog Stage.
@@ -215,7 +216,6 @@ public class GUI extends Application implements ViewInterface {
     }
 
 
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -225,11 +225,11 @@ public class GUI extends Application implements ViewInterface {
     public void update(Exception e) {
         if (e instanceof ConnectException) {
             System.err.println("Connection refused");
-        }else if (e instanceof EOFException){
+        } else if (e instanceof EOFException) {
             System.err.println("Connection failed! If you want to rejoin the game,\n" +
                     "please restart the game and login with the same username!");
             System.exit(0);
-        }else{
+        } else {
             e.printStackTrace();
         }
     }
@@ -240,7 +240,7 @@ public class GUI extends Application implements ViewInterface {
             // tell player the name is not available
         } else if (message instanceof NameOKMessage) {
             joinOrCreate((NameOKMessage) message);
-        } else if(message instanceof WaitingReconnectionMessage){
+        } else if (message instanceof WaitingReconnectionMessage) {
             // tell player to wait for other players' reconnection
         } else {
             System.err.println("Wrong Message Received:" + message.getClass().toString());
@@ -264,7 +264,7 @@ public class GUI extends Application implements ViewInterface {
 
         if (id == -1 && gameId == -1) {
             gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);
-            Platform.runLater(()-> {
+            Platform.runLater(() -> {
                 if (loginStage.isShowing())
                     loginStage.close();
                 trans2GameBoard();
@@ -277,8 +277,8 @@ public class GUI extends Application implements ViewInterface {
                 }
             }
             this.gameId = virtualGame.getGameId();
-            Platform.runLater(() ->{
-                gameBoardGUI.setUserNameLabel("Username: "+ userName);
+            Platform.runLater(() -> {
+                gameBoardGUI.setUserNameLabel("Username: " + userName);
                 gameBoardGUI.setGameIdLabel("Game ID: " + gameId);
             });
             System.out.println("Game ID: " + gameId);
@@ -327,6 +327,7 @@ public class GUI extends Application implements ViewInterface {
             case GAMEENDED:
                 System.out.println("Game End");
                 System.out.println("You " + vGame.getVPlayers().get(id).getPlayerStatus());
+                gameEnd(vGame.getVPlayers().get(id).getPlayerStatus()==PlayerStatus.WIN);
                 break;
         }
 
@@ -340,8 +341,8 @@ public class GUI extends Application implements ViewInterface {
                         setAvailableGodPowers();
                     else {
                         Platform.runLater(() -> {
-                                    gameBoardGUI.setShowStatus("Waiting for setting Available God Power");
-                                });
+                            gameBoardGUI.setShowStatus("Waiting for setting Available God Power");
+                        });
                         System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for setting Available God Power"));
                     }
                 } else {
@@ -458,13 +459,32 @@ public class GUI extends Application implements ViewInterface {
                 moveOrBuild();
                 break;
             case LOSE:
-                gameEnd();
+                gameEnd(false);
                 break;
         }
     }
 
-    private void gameEnd() {
 
+    /**
+     * When you lose or win the game, show the the game result.
+     * @param isWin true if win the game; false if lose the game
+     */
+    private void gameEnd(Boolean isWin) {
+        FXMLLoader loader = new FXMLLoader();
+        if (isWin) loader.setLocation(GUI.class.getResource("/EndGameWin.fxml"));
+        else loader.setLocation(GUI.class.getResource("/EndGameLose.fxml"));
+        try {
+            AnchorPane layout = loader.load();
+            Scene scene = new Scene(layout);
+            Platform.runLater(() -> {
+                Stage endGameStage = new Stage();
+                endGameStage.setScene(scene);
+                endGameStage.setAlwaysOnTop(true);
+                endGameStage.show();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setInitialWorkerPosition() {
@@ -495,14 +515,15 @@ public class GUI extends Application implements ViewInterface {
                 break;
             case "MOVEORBUILD":
                 System.out.println("MOVEORBUILD");
-                Platform.runLater(()->gameBoardController.setMoveOrBuild());
+                Platform.runLater(() -> gameBoardController.setMoveOrBuild());
                 break;
             case "BUILDOREND":
                 System.out.println("MOVEORBUILD");
-                Platform.runLater(()->gameBoardController.setBuildOrEnd());
+                Platform.runLater(() -> gameBoardController.setBuildOrEnd());
                 break;
         }
     }
+
     @Override
     public void sendMessage(Message message) {
         client.sendMessage(message);
