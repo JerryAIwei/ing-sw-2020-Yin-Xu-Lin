@@ -62,8 +62,12 @@ public class Hephaestus extends Cosplayer {
 
     @Override
     public ArrayList<Direction> getAvailableBuilds(int worker) {
-        if (nextAction == Action.BUILDOREND)
-            return new ArrayList<>(){{add(firstBuildDirection);}};
-        return super.getAvailableBuilds(worker);
+        if (nextAction == Action.BUILDOREND) {
+            ArrayList<Direction> availableBuilds = new ArrayList<>();
+            availableBuilds.add(firstBuildDirection);
+            return availableBuilds;
+        }
+        else
+            return super.getAvailableBuilds(worker);
     }
 }
