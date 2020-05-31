@@ -82,25 +82,25 @@ public class GameBoardGUI {
 //    private final ArrayList<Label> vsPlayerNameLabel = new ArrayList<>(2);
 //    private final ArrayList<Label> vsPlayerPowerLabel = new ArrayList<>(2);
 
-    public void setShowStatus(String status){
+    public void setShowStatus(String status) {
         showStatus.setText(status);
     }
 
-    public void setGodPowerDescribe(String description){
+    public void setGodPowerDescribe(String description) {
         godPowerDescribe.setText(description);
     }
 
-    public void setGodPowerLabel(GodPower godPower){
+    public void setGodPowerLabel(GodPower godPower) {
         godPowerLabel.setText(godPower.toString());
         godPowerImage.setImage(new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
-                "/"+ godPower.getGodPower() + ".png").toURI().toString()));
+                "/" + godPower.getGodPower() + ".png").toURI().toString()));
     }
 
-    public void setUserNameLabel(String userName){
+    public void setUserNameLabel(String userName) {
         usernameLabel.setText(userName);
     }
 
-    public void setGameIdLabel(String gameID){
+    public void setGameIdLabel(String gameID) {
         gameIdLabel.setText(gameID);
     }
 
@@ -156,6 +156,7 @@ public class GameBoardGUI {
     public void setGodPower(GodPower godPower) {
         this.godPower = godPower;
     }
+
     public GodPower getGodPower() {
         return this.godPower;
     }
@@ -203,6 +204,7 @@ public class GameBoardGUI {
         private int[] position = {-1, -1};
         private boolean domed = false;
         private boolean isTarget = false;
+        private Box box;
 
         int[] getPosition() {
             return position;
@@ -236,7 +238,7 @@ public class GameBoardGUI {
             target = new Cylinder(TARGET_R, TARGET_H);
             target.setMaterial(new PhongMaterial(Color.ORANGERED));
 
-            var box = new Box(CUBE_WIDTH, CUBE_HEIGHT, CUBE_WIDTH);
+            box = new Box(CUBE_WIDTH, CUBE_HEIGHT, CUBE_WIDTH);
             box.setMaterial(new PhongMaterial(Color.BURLYWOOD));
             box.getTransforms().addAll(this.getTransforms());
             this.getChildren().add(box);
@@ -289,21 +291,26 @@ public class GameBoardGUI {
          */
         private void update(int id, boolean isLevel) {
             if (isLevel) {
+                this.getChildren().clear();
+                this.getChildren().add(box);
                 switch (this.level) {
                     case GROUND:
                         if (domed) dome.getTransforms().add(new Translate(0, LEVEL1_HEIGHT + 0.5, 0));
                         break;
                     case LEVEL1:
                         if (domed) dome.getTransforms().add(new Translate(0, LEVEL2_HEIGHT + 0.5, 0));
-                        else this.getChildren().addAll(building01);
+                        this.getChildren().addAll(building01);
                         break;
                     case LEVEL2:
                         if (domed) dome.getTransforms().add(new Translate(0, LEVEL3_HEIGHT + 1, 0));
-                        else this.getChildren().addAll(building02);
+                        this.getChildren().addAll(building01);
+                        this.getChildren().addAll(building02);
                         break;
                     case LEVEL3:
                         if (domed) dome.getTransforms().add(new Translate(0, DOME_HEIGHT, 0));
-                        else this.getChildren().addAll(building03);
+                        this.getChildren().addAll(building01);
+                        this.getChildren().addAll(building02);
+                        this.getChildren().addAll(building03);
                         break;
                 }
                 if (domed) this.getChildren().addAll(dome);
@@ -453,15 +460,16 @@ public class GameBoardGUI {
 //            }
 //        }
 //    }
+
     /**
      * Setup the whole game board gui layout
      *
      * @return a scene of game board
      */
-    public Scene toGameBoard(){
+    public Scene toGameBoard() {
         int PREF_MIN_WIDTH = 1080;
         int PREF_MIN_HEIGHT = 800;
-        SubScene scene = new SubScene(objs, PREF_MIN_WIDTH, PREF_MIN_HEIGHT,true,
+        SubScene scene = new SubScene(objs, PREF_MIN_WIDTH, PREF_MIN_HEIGHT, true,
                 SceneAntialiasing.BALANCED);
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.getTransforms().addAll(
@@ -486,11 +494,11 @@ public class GameBoardGUI {
         gridPane.add(playerIdLabel, 4, 0);
         gridPane2.add(showStatus, 0, 0);
         gridPane2.add(godPowerDescribe, 2, 0);
-        labelVBox.getChildren().add(0,gridPane);
-        labelVBox.getChildren().add(1,gridPane2);
+        labelVBox.getChildren().add(0, gridPane);
+        labelVBox.getChildren().add(1, gridPane2);
         VBox powerVBox = new VBox(2);
-        powerVBox.getChildren().add(0,godPowerImage);
-        powerVBox.getChildren().add(1,godPowerLabel);
+        powerVBox.getChildren().add(0, godPowerImage);
+        powerVBox.getChildren().add(1, godPowerLabel);
         powerVBox.setAlignment(Pos.CENTER);
         vsPlayerVBox.setAlignment(Pos.CENTER);
         BorderPane gameBoardLayout = new BorderPane();

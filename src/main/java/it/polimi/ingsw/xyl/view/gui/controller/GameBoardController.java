@@ -40,7 +40,8 @@ public class GameBoardController {
     private Boolean isMove = false;//true:move, false:build
     private Boolean isTurn = false;//true:you turn, can move or build
     private Boolean isDome = false;//special for a god power
-    private int initial = 0;//0:none workers on board, 1,2:all workers position has been set
+    private int initial = 0;//0:none workers on board, 2:all workers position has been set
+    private int workerInAction = -1; //the worker we want to use
     private int[] positionX = {-1, -1};//initial worker x position
     private int[] positionY = {-1, -1};//initial worker y position
     private AtomicInteger status = new AtomicInteger(0);//0:nothing select 1:select builder
@@ -117,7 +118,7 @@ public class GameBoardController {
                 switch (event.getCode()) {
                     case L:
                         gameBoardGUI.setShowStatus("Build: Normal");
-                       // showStatus.setText("Build: Normal");
+                        // showStatus.setText("Build: Normal");
                         isDome = false;
                         break;
                     case O:
@@ -150,7 +151,7 @@ public class GameBoardController {
             var builder = gameBoardGUI.getMaleBuilders()[i];
             int finalI = i;
             builder.addEventHandler(MouseEvent.MOUSE_CLICKED, keyEvent -> {
-                if (!isTurn) return;
+                if (!isTurn || workerInAction == 1) return;
                 if (status.get() == 0) {
                     selectBuilder.set(builder);
                     if (gameBoardGUI.getId() == finalI) {
@@ -163,7 +164,7 @@ public class GameBoardController {
             var builder = gameBoardGUI.getFemaleBuilders()[i];
             int finalI = i;
             builder.addEventHandler(MouseEvent.MOUSE_CLICKED, keyEvent -> {
-                if (!isTurn) return;
+                if (!isTurn || workerInAction == 0) return;
                 if (status.get() == 0) {
                     selectBuilder.set(builder);
                     if (isTurn && gameBoardGUI.getId() == finalI) {
@@ -185,6 +186,7 @@ public class GameBoardController {
                     if (!isTurn) return;
                     //initial position
                     if (initial != 2) {
+                        if (map.getOccupiedBy() != -1) return;
                         map.setOccupiedBy(gameBoardGUI.getId() * 10 + initial);
                         positionX[initial] = finalI;
                         positionY[initial] = finalJ;
@@ -195,7 +197,7 @@ public class GameBoardController {
                                     (gui.getGameId(), gui.getId(), positionX[0], positionY[0], positionX[1], positionY[1]));
                             isTurn = false;
                         }
-                    } else {
+                    } else {//build or move
                         var builder = selectBuilder.get();
                         hideTargets();
                         int x1 = builder.getPosition()[0];
@@ -362,6 +364,7 @@ public class GameBoardController {
         gameBoardGUI.setShowStatus("Move");
         gameBoardGUI.setGodPowerDescribe("Press M to Move, B to Build");
         moveOrBuild = true;
+        initial = 2;
     }
 
     public void setBuildOrEnd() {
@@ -369,6 +372,7 @@ public class GameBoardController {
         gameBoardGUI.setGodPowerDescribe("Press E to End Turn");
         buildOrEnd = true;
         isMove = false;
+        initial = 2;
     }
 
 
@@ -377,11 +381,14 @@ public class GameBoardController {
     }
 
     public void refresh() {
-        if(gameBoardGUI.getGodPower()!=null)
+        if (gameBoardGUI.getGodPower() != null)
             gameBoardGUI.setGodPowerLabel(gameBoardGUI.getGodPower());
         gameBoardGUI.setGodPowerDescribe("");
         gameBoardGUI.setShowStatus("Waiting for other player");
     }
 
 
+    public void setWorkerInAction(int workerInAction) {
+        this.workerInAction = workerInAction;
+    }
 }

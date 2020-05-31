@@ -257,10 +257,10 @@ public class GUI extends Application implements ViewInterface {
     public void update(VirtualGame virtualGame) {
 
         this.vGame = virtualGame;
-        final GameStatus gameStatus = virtualGame.getGameStatus();
+        final GameStatus gameStatus = vGame.getGameStatus();
 
-        islandBoardCLI.setMaps(virtualGame.getSpaces());//debug
-        islandBoardCLI.setPlayers(virtualGame);//debug
+        islandBoardCLI.setMaps(vGame.getSpaces());//debug
+        islandBoardCLI.setPlayers(vGame);//debug
 
         if (id == -1 && gameId == -1) {
             gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);
@@ -269,6 +269,7 @@ public class GUI extends Application implements ViewInterface {
                     loginStage.close();
                 trans2GameBoard();
             });
+
             for (Integer id : vGame.getVPlayers().keySet()) {
                 if (vGame.getVPlayers().get(id).getPlayerName().equals(this.userName)) {
                     this.id = id;
@@ -276,7 +277,7 @@ public class GUI extends Application implements ViewInterface {
                     System.out.println("My ID: " + id);
                 }
             }
-            this.gameId = virtualGame.getGameId();
+            this.gameId = vGame.getGameId();
             Platform.runLater(() -> {
                 gameBoardGUI.setUserNameLabel("Username: " + userName);
                 gameBoardGUI.setGameIdLabel("Game ID: " + gameId);
@@ -285,20 +286,20 @@ public class GUI extends Application implements ViewInterface {
         }
 
         Platform.runLater(() -> {
-            gameBoardGUI.setMaps(virtualGame.getSpaces());
+            gameBoardGUI.setMaps(vGame.getSpaces());
             gameBoardGUI.setGodPower(vGame.getVPlayers().get(id).getGodPower());
+            gameBoardController.setWorkerInAction(vGame.getVPlayers().get(id).getWorkerInAction());
             gameBoardController.refresh();
         });
 
-        playerStatus = virtualGame.getVPlayers().get(id).getPlayerStatus();
-        availableGodPowers = virtualGame.getAvailableGodPowers();
-        nextAction = virtualGame.getVPlayers().get(id).getNextAction();
-        workerInAction = virtualGame.getVPlayers().get(id).getWorkerInAction();
-        currentPlayerId = virtualGame.getCurrentPlayerId();
+        playerStatus = vGame.getVPlayers().get(id).getPlayerStatus();
+        availableGodPowers = vGame.getAvailableGodPowers();
+        nextAction = vGame.getVPlayers().get(id).getNextAction();
+        currentPlayerId = vGame.getCurrentPlayerId();
         System.out.println("Player: " + currentPlayerId + " is playing");
         switch (gameStatus) {
             case WAITINGINIT:
-                if (id == 0 && virtualGame.getCurrentPlayerId() == 0) {
+                if (id == 0 && vGame.getCurrentPlayerId() == 0) {
                     setPlayNum();
                 } else {//do nothing
                     System.err.println(ColorSetter.FG_RED.setColor("Wrong gameStatus"));

@@ -22,6 +22,8 @@ public class AskLoginController {
     private GUI mainApp;
     private Stage dialogStage;
 
+    boolean isOK =true;
+
     public AskLoginController() {
     }
 
@@ -76,7 +78,13 @@ public class AskLoginController {
     @FXML
     private void handleStart() {
         if (isInputValid()) {
-            boolean isOK = false;
+            usernameTextfield.setText("");
+            usernameTextfield.setPromptText("Waiting...");
+            hostnameTextfield.setText("");
+            hostnameTextfield.setPromptText("Waiting...");
+            portTextfield.setText("");
+            portTextfield.setPromptText("Waiting...");
+            isOK = false;
             try {
                 System.out.println("initClient: " + hostnameTextfield.getText());
                 mainApp.initClient(hostnameTextfield.getText());
