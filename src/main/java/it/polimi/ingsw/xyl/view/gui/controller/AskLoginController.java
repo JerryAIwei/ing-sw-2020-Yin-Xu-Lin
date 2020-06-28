@@ -3,10 +3,12 @@ package it.polimi.ingsw.xyl.view.gui.controller;
 import it.polimi.ingsw.xyl.model.message.PlayerNameMessage;
 import it.polimi.ingsw.xyl.view.gui.GUI;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import javax.swing.text.html.ImageView;
 import java.util.Objects;
 
 public class AskLoginController {
@@ -18,6 +20,8 @@ public class AskLoginController {
     private TextField usernameTextfield;
     @FXML
     private Label hostnameLabel;
+    @FXML
+    private javafx.scene.image.ImageView connectButton;
 
     private GUI mainApp;
     private Stage dialogStage;
@@ -78,12 +82,6 @@ public class AskLoginController {
     @FXML
     private void handleStart() {
         if (isInputValid()) {
-            usernameTextfield.setText("");
-            usernameTextfield.setPromptText("Waiting...");
-            hostnameTextfield.setText("");
-            hostnameTextfield.setPromptText("Waiting...");
-            portTextfield.setText("");
-            portTextfield.setPromptText("Waiting...");
             isOK = false;
             try {
                 System.out.println("initClient: " + hostnameTextfield.getText());
@@ -95,7 +93,15 @@ public class AskLoginController {
                 mainApp.setUserName(usernameTextfield.getText());
                 mainApp.sendMessage(new PlayerNameMessage(usernameTextfield.getText()));
             }catch (Exception ignored){}
+            usernameTextfield.setText("");
+            usernameTextfield.setPromptText("Waiting...");
+            hostnameTextfield.setText("");
+            hostnameTextfield.setPromptText("Waiting...");
+            portTextfield.setText("");
+            portTextfield.setPromptText("Waiting...");
+            connectButton.setOnMouseClicked(null);
         }
+
     }
 
 }

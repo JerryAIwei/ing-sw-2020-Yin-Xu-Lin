@@ -268,7 +268,8 @@ public class GUI extends Application implements ViewInterface {
                 if (loginStage.isShowing())
                     loginStage.close();
                 trans2GameBoard();
-            });
+                primaryStage.centerOnScreen();
+                });
 
             for (Integer id : vGame.getVPlayers().keySet()) {
                 if (vGame.getVPlayers().get(id).getPlayerName().equals(this.userName)) {
@@ -288,6 +289,7 @@ public class GUI extends Application implements ViewInterface {
         Platform.runLater(() -> {
             gameBoardGUI.setMaps(vGame.getSpaces());
             gameBoardGUI.setGodPower(vGame.getVPlayers().get(id).getGodPower());
+            gameBoardGUI.updateVSGodPowers(vGame);
             gameBoardController.setWorkerInAction(vGame.getVPlayers().get(id).getWorkerInAction());
             gameBoardController.refresh();
         });

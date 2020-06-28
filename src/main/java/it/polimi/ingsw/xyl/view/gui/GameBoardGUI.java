@@ -77,10 +77,10 @@ public class GameBoardGUI {
     private final Label playerIdLabel = new Label();
     private final Label godPowerLabel = new Label();
     private final ImageView godPowerImage = new ImageView();
-    private final VBox vsPlayerVBox = new VBox(4);
-//    private final ArrayList<ImageView> vsPlayerImage = new ArrayList<>(2);
-//    private final ArrayList<Label> vsPlayerNameLabel = new ArrayList<>(2);
-//    private final ArrayList<Label> vsPlayerPowerLabel = new ArrayList<>(2);
+    private final VBox vsPlayerVBox = new VBox(2);
+    private final ArrayList<ImageView> vsPlayerImage = new ArrayList<>(2);
+    private final ArrayList<Label> vsPlayerNameLabel = new ArrayList<>(2);
+    private final ArrayList<Label> vsPlayerPowerLabel = new ArrayList<>(2);
 
     public void setShowStatus(String status) {
         showStatus.setText(status);
@@ -427,39 +427,71 @@ public class GameBoardGUI {
         godPowerImage.setScaleX(0.7);
         godPowerImage.setScaleY(0.7);
         godPowerImage.setScaleZ(0.7);
-//        vsPlayerImage.add(new ImageView());
-//        vsPlayerImage.add(new ImageView());
-//        vsPlayerImage.get(0).setImage(anonymousImage);
-//        vsPlayerImage.get(0).setScaleX(0.7);
-//        vsPlayerImage.get(0).setScaleY(0.7);
-//        vsPlayerImage.get(0).setScaleZ(0.7);
-//        vsPlayerImage.get(1).setScaleX(0.7);
-//        vsPlayerImage.get(1).setScaleY(0.7);
-//        vsPlayerImage.get(1).setScaleZ(0.7);
-//        vsPlayerImage.get(1).setImage(anonymousImage);
-//        vsPlayerNameLabel.add(new Label());
-//        vsPlayerNameLabel.add(new Label());
-//        vsPlayerNameLabel.get(0).setFont(Font.font("System", FontWeight.BOLD, 20));
-//        vsPlayerNameLabel.get(1).setFont(Font.font("System", FontWeight.BOLD, 20));
-//        vsPlayerPowerLabel.add(new Label());
-//        vsPlayerPowerLabel.add(new Label());
-//        vsPlayerPowerLabel.get(0).setFont(Font.font("System", FontWeight.BOLD, 20));
-//        vsPlayerPowerLabel.get(1).setFont(Font.font("System", FontWeight.BOLD, 20));
+        vsPlayerImage.add(new ImageView());
+        vsPlayerImage.add(new ImageView());
+        vsPlayerImage.get(0).setImage(anonymousImage);
+        vsPlayerImage.get(1).setImage(anonymousImage);
+        vsPlayerImage.get(0).setCache(false);
+        vsPlayerImage.get(1).setCache(false);
+        vsPlayerImage.get(0).setFitHeight(200);
+        vsPlayerImage.get(0).setPreserveRatio(true);
+        vsPlayerImage.get(1).setFitHeight(200);
+        vsPlayerImage.get(1).setPreserveRatio(true);
+        vsPlayerNameLabel.add(new Label());
+        vsPlayerNameLabel.add(new Label());
+        vsPlayerNameLabel.get(0).setFont(Font.font("System", FontWeight.BOLD, 20));
+        vsPlayerNameLabel.get(1).setFont(Font.font("System", FontWeight.BOLD, 20));
+        vsPlayerPowerLabel.add(new Label());
+        vsPlayerPowerLabel.add(new Label());
+        vsPlayerPowerLabel.get(0).setFont(Font.font("System", FontWeight.BOLD, 20));
+        vsPlayerPowerLabel.get(1).setFont(Font.font("System", FontWeight.BOLD, 20));
+
+        vsPlayerPowerLabel.get(0).textProperty().addListener((observable, oldValue, newValue) -> {
+            String fileName = (godPower==null)?"Anonymous":newValue;
+            fileName = fileName.toUpperCase();
+            Image powerImage = new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                    "/"+ fileName +".png").toURI().toString());
+            vsPlayerImage.get(0).setImage(powerImage);
+            vsPlayerImage.get(0).setFitHeight(200);
+            vsPlayerImage.get(0).setPreserveRatio(true);
+            VBox vsPlayerVBox1 = (VBox)vsPlayerVBox.getChildren().get(0);
+            vsPlayerVBox1.getChildren().set(1,vsPlayerImage.get(0));
+        });
+
+        vsPlayerPowerLabel.get(1).textProperty().addListener((observable, oldValue, newValue) -> {
+            String fileName = (godPower==null)?"Anonymous":newValue;
+            fileName = fileName.toUpperCase();
+            Image powerImage = new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                    "/"+ fileName +".png").toURI().toString());
+            vsPlayerImage.get(1).setImage(powerImage);
+            vsPlayerImage.get(1).setFitHeight(200);
+            vsPlayerImage.get(1).setPreserveRatio(true);
+            VBox vsPlayerVBox2 = (VBox)vsPlayerVBox.getChildren().get(1);
+            vsPlayerVBox2.getChildren().set(1,vsPlayerImage.get(1));
+        });
     }
 
-//    public void updateVSGodPowers(VirtualGame virtualGame){
-//        for(Integer i:virtualGame.getVPlayers().keySet()){
-//            if (i != this.id) {
-//                VirtualGame.VPlayer vPlayer = virtualGame.getVPlayers().get(id);
-//                String name = vPlayer.getPlayerName();
-//                vsPlayerNameLabel.get(i).setText(name);
-//                GodPower power = vPlayer.getGodPower();
-//                vsPlayerPowerLabel.get(i).setText(power.toString());
-//                vsPlayerImage.get(i).setImage(new Image(new File("src/main/resources/santorini_risorse" +
-//                        "-grafiche-2/Sprite/Cards/Full/"+ godPower.getGodPower() + ".png").toURI().toString()));
-//            }
-//        }
-//    }
+    public void updateVSGodPowers(VirtualGame virtualGame){
+        if(virtualGame.getVPlayers()!=null) {
+            int j = 0;
+            for (Integer i : virtualGame.getVPlayers().keySet()) {
+                if (i != this.id){
+                    VirtualGame.VPlayer vPlayer = virtualGame.getVPlayers().get(i);
+                    String name = vPlayer.getPlayerName();
+                    vsPlayerNameLabel.get(j).setText(name);
+                    int currentId = virtualGame.getCurrentPlayerId();
+                    if (vPlayer.playerId == currentId){
+                        vsPlayerNameLabel.get(j).setText("Playing: " + name);
+                    }
+                    GodPower power = vPlayer.getGodPower();
+                    vsPlayerPowerLabel.get(j++).setText(power.toString());
+                }
+            }
+            if(virtualGame.getPlayerNumber() == 2){
+                vsPlayerImage.get(1).setVisible(false);
+            }
+        }
+    }
 
     /**
      * Setup the whole game board gui layout
@@ -506,10 +538,20 @@ public class GameBoardGUI {
         gameBoardLayout.setCenter(scene);
         gameBoardLayout.setLeft(powerVBox);
         gameBoardLayout.setRight(vsPlayerVBox);
-//        vsPlayerVBox.getChildren().add(0,vsPlayerImage.get(0));
-//        vsPlayerVBox.getChildren().add(1,vsPlayerNameLabel.get(0));
-//        vsPlayerVBox.getChildren().add(2,vsPlayerImage.get(1));
-//        vsPlayerVBox.getChildren().add(3,vsPlayerNameLabel.get(1));
+        vsPlayerVBox.setPadding(new Insets(0, 50, 0, 0));
+        VBox vsPlayerVBox1 = new VBox(3);
+        vsPlayerVBox1.setAlignment(Pos.CENTER);
+        vsPlayerVBox1.getChildren().add(0,vsPlayerNameLabel.get(0));
+        vsPlayerVBox1.getChildren().add(1,vsPlayerImage.get(0));
+        vsPlayerVBox1.getChildren().add(2,vsPlayerPowerLabel.get(0));
+        VBox vsPlayerVBox2 = new VBox(3);
+        vsPlayerVBox2.setAlignment(Pos.CENTER);
+        vsPlayerVBox2.setPadding(new Insets(50,0,0,0));
+        vsPlayerVBox2.getChildren().add(0,vsPlayerNameLabel.get(1));
+        vsPlayerVBox2.getChildren().add(1,vsPlayerImage.get(1));
+        vsPlayerVBox2.getChildren().add(2,vsPlayerPowerLabel.get(1));
+        vsPlayerVBox.getChildren().add(0,vsPlayerVBox1);
+        vsPlayerVBox.getChildren().add(1,vsPlayerVBox2);
         return new Scene(gameBoardLayout);
     }
 

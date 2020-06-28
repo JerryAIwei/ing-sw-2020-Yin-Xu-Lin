@@ -41,7 +41,7 @@
                <font>
                   <Font size="17.0" />
                </font></Label>
-            <ImageView accessibleRole="BUTTON" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleStart" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <ImageView fx:id="connectButton" accessibleRole="BUTTON" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleStart" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <image>
                   <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_blue.png" />
                </image>
