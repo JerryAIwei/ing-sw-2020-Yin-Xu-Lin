@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="pane" prefHeight="518.0" prefWidth="474.0" styleClass="background-win" stylesheets="@css/endGameStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="pane" prefHeight="518.0" prefWidth="474.0" styleClass="background-win" stylesheets="@css/endGameStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fill="#23b521" fontSmoothingType="LCD" layoutX="90.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="VICTORY!" wrappingWidth="293.6123046875">
+      <Text fill="#b22522" fontSmoothingType="LCD" layoutX="90.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="VICTORY" textAlignment="CENTER" wrappingWidth="293.6123046875">
          <font>
             <Font name="System Bold Italic" size="53.0" />
          </font>

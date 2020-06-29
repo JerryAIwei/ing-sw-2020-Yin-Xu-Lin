@@ -1,0 +1,5 @@
+.background-Lobby{
+    -fx-background-image: url("../santorini_risorse-grafiche-2/Sprite/fg_panel4.png");
+    -fx-background-size: contain;
+    -fx-background-color: #3d3756;
+}

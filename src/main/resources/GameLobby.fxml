@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.xyl.view.gui.controller.GameLobbyController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.xyl.view.gui.controller.GameLobbyController">
     <children>
         <SplitPane dividerPositions="0.568561872909699" layoutX="130.0" layoutY="40.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <AnchorPane fx:id="label_gamesTable" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="225.0">
+                <AnchorPane fx:id="label_gamesTable" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="225.0" stylesheets="@css/gameLobbyStyle.css">
                     <children>
                         <TableView fx:id="gamesTable" layoutX="5.0" layoutY="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <columns>
@@ -37,7 +28,7 @@
                     <children>
                   <TitledPane animated="false" prefHeight="398.0" prefWidth="254.0" text="Players" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="624.0" prefWidth="402.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="624.0" prefWidth="402.0" stylesheets="@css/gameLobbyStyle.css">
                            <children>
                               <ImageView accessibleRole="BUTTON" fitHeight="56.0" fitWidth="112.0" layoutX="196.0" layoutY="616.0" onMouseClicked="#handleNewGame" pickOnBounds="true" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="196.0" AnchorPane.rightAnchor="151.0" AnchorPane.topAnchor="612.0">
                                  <image>
@@ -81,12 +72,12 @@
                                             <Insets bottom="20.0" />
                                         </padding>
                                     </HBox>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="230.0" layoutY="622.0" mouseTransparent="true" prefHeight="44.0" prefWidth="64.0" text="New" textFill="#f20000">
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="230.0" layoutY="622.0" mouseTransparent="true" prefHeight="44.0" prefWidth="64.0" text="New" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold Italic" size="23.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="351.0" layoutY="622.0" mouseTransparent="true" prefHeight="44.0" prefWidth="64.0" text="Join" textFill="#f20000">
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="351.0" layoutY="622.0" mouseTransparent="true" prefHeight="44.0" prefWidth="64.0" text="Join" textAlignment="CENTER" textFill="#fffbfb">
                                  <font>
                                     <Font name="System Bold Italic" size="23.0" />
                                  </font>
@@ -96,7 +87,7 @@
                                     <Image url="@santorini_risorse-grafiche-2/Sprite/Buttons/btn_player.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="88.0" layoutY="622.0" mouseTransparent="true" prefHeight="44.0" prefWidth="95.0" text="Refresh" textFill="#f20000">
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="88.0" layoutY="622.0" mouseTransparent="true" prefHeight="44.0" prefWidth="95.0" text="Refresh" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold Italic" size="23.0" />
                                  </font>
