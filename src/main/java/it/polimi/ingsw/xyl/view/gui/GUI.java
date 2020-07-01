@@ -16,12 +16,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class GUI extends Application implements ViewInterface {
 
@@ -76,6 +78,12 @@ public class GUI extends Application implements ViewInterface {
         this.primaryStage.setTitle("Santorini");
         this.primaryStage.getIcons().add(new Image(
                 GUI.class.getResourceAsStream("/img/icon.png")));
+        this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                System.exit(0);
+            }
+        });
         // load necessary 3D resource and init gameBoardGUI
         new Thread(() -> {
             gameBoardGUI = new GameBoardGUI();
