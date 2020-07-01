@@ -81,7 +81,7 @@ public class AskLoginController {
         if (isInputValid()) {
             isOK = false;
             try {
-                mainApp.initClient(hostnameTextfield.getText());
+                mainApp.initClient(hostnameTextfield.getText(), portTextfield.getText());
             }catch (Exception ignored){
             }
             try{

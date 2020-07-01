@@ -55,8 +55,8 @@ public class GUI extends Application implements ViewInterface {
         return gameId;
     }
 
-    public void initClient(String IP) {
-        client.init(IP);
+    public void initClient(String IP, String port) {
+        client.init(IP, port);
     }
 
     public void setUserName(String userName) {

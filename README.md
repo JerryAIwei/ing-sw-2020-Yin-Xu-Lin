@@ -10,31 +10,49 @@ Santorini is an abstract strategy board game for 2-4 players, the name was inspi
 
 This is the repo of the fianl project of the Polimi Software Engineering course. The project is developed by Lin Xin, Xu Shaoxun and Yin Aiwei.
 
-The current progress of the project:
+The project implements:
 
 
-- [x] Simplified Rules: finished
+- [x] Simplified Rules
 
-- [x] Complete Rules: finished
+- [x] Complete Rules
 
-- [x] Socket: finished
+- [x] Socket
 
-- [x] CLI: finished
+- [x] CLI
 
-- [ ] GUI: WIP
+- [x] GUI
 
-- [x] Advanced Feature - Multiple Games: finished
+- [x] Advanced Feature - Multiple Games
 
-- [x] Advanced Feature - Persistence: finished
+- [x] Advanced Feature - Persistence
 
-### Attention
+### How to use the Jar
 
-The CLI version of the game is better in the terminal with dark background, we haven't tested whether the color setter code used can run on Windows platform.
+The `Santorini.jar` is all-in-one. You can both establish the game server and run the game client:
 
-Since the project is still under development, the data organization might be changed, especially the local data files stored for the advanced feature Persistence. If the server doesn't run as expected, please delete the data directory manually.
+* If you want to establish a game server, run 
 
-#### special description of the data file: 
+    ```java -jar Santorini.jar -S```
+    
+    or 
+    
+    ```java -jar Santorini.jar -S PORT_NUMBER```
 
-All the data files of a game is in data/game*, where * is the game ID. The server will always restore the virtualGame_i.ser file, which is the latest version of the game i. 
+For example `java -jar Santorini.jar -S 8888`. The default port number is 7777.
 
-To make it easier for debugging, we store each change of the game in virtualGame_i_j.ser file, as the game goes on, the j goes larger. You can always stop the server, rename the data file to virtualGame_i.ser and restart the server, relogin the game with the same nicknames and test.
+* If you want to run the game client, run 
+
+    `java -jar Santorini.jar -C -c` for Command-line interface
+    
+    or
+    
+    `java -jar Santorini.jar -C -g` for Graphical User Interface
+    
+    
+    Since we used javaFX3D, in case of a **warning** like `WARNING: System can't support ConditionalFeature.SCENE3D` or the situation where you **cannot see the 3D elements** of the game board, `java -Dprism.forceGPU=true -jar Santorini.jar -C -g` might help.
+
+### Special Attention
+
+The CLI version of the game is better in the terminal with dark background.
+

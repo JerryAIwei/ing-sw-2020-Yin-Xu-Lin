@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +27,7 @@ import java.util.logging.Logger;
 
 public class Server
 {
-    public final static int SOCKET_PORT = 7777;
+    public  static int SOCKET_PORT = 7777;
     private static final GameController gc = GameController.getSingleton();
     private static final VirtualView v = VirtualView.getSingleton();
     private static final Logger logger = Logger.getLogger("network.server.Server");
@@ -38,7 +37,8 @@ public class Server
 
     public static void main(String[] args)
     {
-
+        if (args.length == 2 )
+            SOCKET_PORT = Integer.parseInt(args[1]);
         logger.log(Level.INFO, "Santorini game server starting.");
         gc.register(v);
         v.register(gc);
@@ -47,7 +47,7 @@ public class Server
         ServerSocket socket;
         try {
             socket = new ServerSocket(SOCKET_PORT);
-            logger.log(Level.INFO, "Server started.");
+            logger.log(Level.INFO, "Server started at port "+ SOCKET_PORT +".");
         } catch (IOException e) {
             System.err.println(e.toString());
             return;

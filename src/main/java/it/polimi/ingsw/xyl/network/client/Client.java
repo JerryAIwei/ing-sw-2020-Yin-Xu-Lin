@@ -29,9 +29,9 @@ public class Client implements Runnable{
      * connect to server and start a new thread
      * @param ip IP address of the server
      */
-    public void init(String ip){
+    public void init(String ip, String port){
         try {
-            server = new Socket(ip, Server.SOCKET_PORT);
+            server = new Socket(ip, Integer.parseInt(port));
             outputStream = new ObjectOutputStream(server.getOutputStream());
             inputStream = new ObjectInputStream(server.getInputStream());
             outputStream.flush();

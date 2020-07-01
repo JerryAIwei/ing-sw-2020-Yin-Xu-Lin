@@ -205,7 +205,12 @@ public class CLI extends Thread implements ViewInterface {
         ip = scanner.nextLine();
         if(ip.trim().isEmpty())
             ip = "127.0.0.1";
-        client.init(ip);
+        System.out.println(ColorSetter.FG_BLUE.setColor("Please Enter Port Number, press enter to use default 7777"));
+        String port;
+        port = scanner.nextLine();
+        if(port.trim().isEmpty())
+            port = "7777";
+        client.init(ip,port);
     }
 
     private void setUserName() {
