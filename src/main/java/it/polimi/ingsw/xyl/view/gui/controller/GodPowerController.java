@@ -58,11 +58,10 @@ public class GodPowerController {
     private void initGodPowers(LinkedList<GodPower> godPowers) {
         currentGod = godPowers.get(0);
         for (var god : GodPower.values()) {
-            var image = new Image(new File
-                    ("src/main/resources/santorini_risorse-grafiche-2" +
+            var image = new Image(
+                    (getClass().getResourceAsStream("/santorini_risorse-grafiche-2" +
                             "/Sprite/Cards/Full/" +
-                            god.getGodPower() + ".png")
-                    .toURI().toString());
+                            god.getGodPower() + ".png")));
             godImages.put(god, image);
             System.out.println(god.toString());
         }

@@ -92,8 +92,8 @@ public class GameBoardGUI {
 
     public void setGodPowerLabel(GodPower godPower) {
         godPowerLabel.setText(godPower.toString());
-        godPowerImage.setImage(new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
-                "/" + godPower.getGodPower() + ".png").toURI().toString()));
+        godPowerImage.setImage(new Image(getClass().getResourceAsStream("/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                "/" + godPower.getGodPower() + ".png")));
     }
 
     public void setUserNameLabel(String userName) {
@@ -148,7 +148,7 @@ public class GameBoardGUI {
      */
     private MeshView setUPMeshView() {
         MeshView meshView;
-        meshView = Loader.loadObj("src/main/resources/santorini_risorse-grafiche-2/Mesh/Buildings/Dome.obj");
+        meshView = Loader.loadObj("/santorini_risorse-grafiche-2/Mesh/Buildings/Dome.obj");
         meshView.setMaterial(new PhongMaterial(Color.BLUE));
         return meshView;
     }
@@ -187,12 +187,10 @@ public class GameBoardGUI {
         public Builder(String meshPath, String pmPath, int workerId) {
             super(Loader.loadMesh(meshPath));
             PhongMaterial boardPm = new PhongMaterial();
-            boardPm.setDiffuseMap(new Image((new File
-                    (pmPath).toURI().toString())));
+            boardPm.setDiffuseMap(new Image(getClass().getResourceAsStream(pmPath)));
             this.setMaterial(boardPm);
             this.workerId = workerId;
         }
-
     }
 
     public class Block extends Group {
@@ -217,15 +215,12 @@ public class GameBoardGUI {
 
         public Block() {
 
-            building01 = setUPMeshView("src/main/resources/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock01.obj"
-                    , "src/main/resources/santorini_risorse-grafiche-2/Texture2D/BuildingBlock01_v001.png"
-            );
-            building02 = setUPMeshView("src/main/resources/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock02.obj"
-                    , "src/main/resources/santorini_risorse-grafiche-2/Texture2D/BuildingBlock02_v001.png"
-            );
-            building03 = setUPMeshView("src/main/resources/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock03.obj"
-                    , "src/main/resources/santorini_risorse-grafiche-2/Texture2D/BuildingBlock03_v001.png"
-            );
+            building01 = setUPMeshView("/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock01.obj"
+                    , "/santorini_risorse-grafiche-2/Texture2D/BuildingBlock01_v001.png");
+            building02 = setUPMeshView("/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock02.obj"
+                    , "/santorini_risorse-grafiche-2/Texture2D/BuildingBlock02_v001.png");
+            building03 = setUPMeshView("/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock03.obj",
+                     "/santorini_risorse-grafiche-2/Texture2D/BuildingBlock03_v001.png");
             dome = setUPMeshView();
             building01.getTransforms().addAll(this.getTransforms());
             building01.getTransforms().add(new Translate(0, LEVEL1_HEIGHT, 0));
@@ -391,18 +386,25 @@ public class GameBoardGUI {
     }
 
     public GameBoardGUI() {
-        maleBuilders[0] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Blue_v001.png", 0);
-        maleBuilders[1] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Orange_v001.png", 0);
-        maleBuilders[2] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Pink_v001.png", 0);
-        femaleBuilders[0] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Blue_v001.png", 1);
-        femaleBuilders[1] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Orange_v001.png", 1);
-        femaleBuilders[2] = new Builder("src/main/resources/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
-                "src/main/resources/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Pink_v001.png", 1);
+        maleBuilders[0] = new Builder("/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
+                "/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Blue_v001.png", 0);
+        maleBuilders[1] = new Builder(
+                "/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
+               "/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Orange_v001.png", 0);
+        maleBuilders[2] = new Builder(
+                "/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
+                "/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Pink_v001.png", 0);
+
+
+        femaleBuilders[0] = new Builder(
+                "/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
+                "/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Blue_v001.png", 1);
+        femaleBuilders[1] = new Builder(
+                "/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
+                "/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Orange_v001.png", 1);
+        femaleBuilders[2] = new Builder(
+                "/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
+                "/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Pink_v001.png",1);
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -421,8 +423,9 @@ public class GameBoardGUI {
         showStatus.setFont(Font.font("System", FontWeight.BOLD, 20));
         godPowerDescribe.setFont(Font.font("System", FontWeight.BOLD, 20));
         godPowerLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
-        Image anonymousImage = new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
-                "/ANONYMOUS.png").toURI().toString());
+        Image anonymousImage = new Image(
+                getClass().getResourceAsStream("/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                "/ANONYMOUS.png"));
         godPowerImage.setImage(anonymousImage);
         godPowerImage.setScaleX(0.7);
         godPowerImage.setScaleY(0.7);
@@ -449,8 +452,8 @@ public class GameBoardGUI {
         vsPlayerPowerLabel.get(0).textProperty().addListener((observable, oldValue, newValue) -> {
             String fileName = (godPower==null)?"Anonymous":newValue;
             fileName = fileName.toUpperCase();
-            Image powerImage = new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
-                    "/"+ fileName +".png").toURI().toString());
+            Image powerImage = new Image(getClass().getResourceAsStream("/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                    "/"+ fileName +".png"));
             vsPlayerImage.get(0).setImage(powerImage);
             vsPlayerImage.get(0).setFitHeight(200);
             vsPlayerImage.get(0).setPreserveRatio(true);
@@ -461,8 +464,8 @@ public class GameBoardGUI {
         vsPlayerPowerLabel.get(1).textProperty().addListener((observable, oldValue, newValue) -> {
             String fileName = (godPower==null)?"Anonymous":newValue;
             fileName = fileName.toUpperCase();
-            Image powerImage = new Image(new File("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
-                    "/"+ fileName +".png").toURI().toString());
+            Image powerImage = new Image(getClass().getResourceAsStream("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                    "/"+ fileName +".png"));
             vsPlayerImage.get(1).setImage(powerImage);
             vsPlayerImage.get(1).setFitHeight(200);
             vsPlayerImage.get(1).setPreserveRatio(true);
