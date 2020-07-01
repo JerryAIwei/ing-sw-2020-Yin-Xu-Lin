@@ -3,12 +3,9 @@ package it.polimi.ingsw.xyl.view.gui.controller;
 import it.polimi.ingsw.xyl.model.message.PlayerNameMessage;
 import it.polimi.ingsw.xyl.view.gui.GUI;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import javax.swing.text.html.ImageView;
 import java.util.Objects;
 
 public class AskLoginController {
@@ -84,24 +81,37 @@ public class AskLoginController {
         if (isInputValid()) {
             isOK = false;
             try {
-                System.out.println("initClient: " + hostnameTextfield.getText());
                 mainApp.initClient(hostnameTextfield.getText());
             }catch (Exception ignored){
             }
             try{
-                System.out.println("setUserName: " + usernameTextfield.getText());
                 mainApp.setUserName(usernameTextfield.getText());
                 mainApp.sendMessage(new PlayerNameMessage(usernameTextfield.getText()));
             }catch (Exception ignored){}
-            usernameTextfield.setText("");
-            usernameTextfield.setPromptText("Waiting...");
-            hostnameTextfield.setText("");
-            hostnameTextfield.setPromptText("Waiting...");
-            portTextfield.setText("");
-            portTextfield.setPromptText("Waiting...");
-            connectButton.setOnMouseClicked(null);
+            setWaiting();
         }
-
     }
 
+    public void setWaiting(){
+        usernameTextfield.setPromptText("Waiting...");
+        hostnameTextfield.setPromptText("Waiting...");
+        portTextfield.setPromptText("Waiting...");
+        connectButton.setOnMouseClicked(null);
+    }
+
+    public void setServerUnreachable(){
+        usernameTextfield.setText("");
+        hostnameTextfield.setText("");
+        portTextfield.setText("");
+        hostnameTextfield.setPromptText("Connection Refused");
+        portTextfield.setPromptText("Connection Refused");
+        usernameTextfield.setPromptText("Connection Refused");
+        connectButton.setOnMouseClicked(null);
+    }
+
+    public void setUserNameNotAvailable(){
+        usernameTextfield.setPromptText("The username is duplicated");
+        usernameTextfield.setText("");
+        connectButton.setOnMouseClicked(mouseEvent -> handleStart());
+    }
 }

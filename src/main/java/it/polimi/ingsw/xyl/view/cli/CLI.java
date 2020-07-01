@@ -199,11 +199,12 @@ public class CLI extends Thread implements ViewInterface {
      * called when start a new CLI
      */
     private void askLogin() {
-        System.out.println(ColorSetter.FG_BLUE.setColor("Please Enter Server IP"));
-//        Scanner scanner = new Scanner(System.in);
-//        String ip = scanner.next();
-        String ip = "127.0.0.1";
-        System.out.println("Use default server ip: localhost");
+        System.out.println(ColorSetter.FG_BLUE.setColor("Please Enter Server IP, press enter to use localhost"));
+        String ip;
+        Scanner scanner = new Scanner(System.in);
+        ip = scanner.nextLine();
+        if(ip.trim().isEmpty())
+            ip = "127.0.0.1";
         client.init(ip);
     }
 

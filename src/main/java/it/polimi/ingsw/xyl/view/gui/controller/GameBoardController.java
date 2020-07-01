@@ -220,7 +220,6 @@ public class GameBoardController {
     }
 
     private void showTargets() {
-        System.out.println("show Targets");
         status.set(1);
         int x = selectBuilder.get().getPosition()[0];
         int y = selectBuilder.get().getPosition()[1];

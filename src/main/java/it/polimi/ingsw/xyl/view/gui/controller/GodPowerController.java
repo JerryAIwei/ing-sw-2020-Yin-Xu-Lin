@@ -44,16 +44,6 @@ public class GodPowerController {
     private boolean isNext = true;
 
 
-//    static {
-//        for (var god : GodPower.values()) {
-//            var image = new Image(new File
-//                    ("src/main/resources/santorini_risorse-grafiche-2" +
-//                            "/Sprite/Cards/Full/" +
-//                            "full_0000s_0000_god_and_hero_cards_0057_Human.png")
-//                    .toURI().toString());
-//            godImages.put(god, image);
-//        }
-//    }
 
     private void initGodPowers(LinkedList<GodPower> godPowers) {
         currentGod = godPowers.get(0);
@@ -63,7 +53,6 @@ public class GodPowerController {
                             "/Sprite/Cards/Full/" +
                             god.getGodPower() + ".png")));
             godImages.put(god, image);
-            System.out.println(god.toString());
         }
         imageView.setImage(godImages.get(currentGod));
         textArea.setText(currentGod.getGodPower()

@@ -11,7 +11,6 @@ import it.polimi.ingsw.xyl.model.message.*;
 import it.polimi.ingsw.xyl.network.client.Client;
 import it.polimi.ingsw.xyl.util.ColorSetter;
 import it.polimi.ingsw.xyl.view.ViewInterface;
-import it.polimi.ingsw.xyl.view.cli.IslandBoardCLI;
 import it.polimi.ingsw.xyl.view.gui.controller.*;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -34,7 +33,6 @@ public class GUI extends Application implements ViewInterface {
     private final Client client;
     private AskLoginController askLoginController;
     private GameBoardController gameBoardController;
-    private final IslandBoardCLI islandBoardCLI = new IslandBoardCLI();
 
     private String userName;
     private int gameId = -1;
@@ -99,12 +97,9 @@ public class GUI extends Application implements ViewInterface {
      */
     private void askLogin() {
         try {
-            // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(GUI.class.getResource("/askLogin.fxml"));
-            //loader.setRoot(rootLayout);
             BorderPane loginLayout = loader.load();
-
             loginStage = new Stage();
             loginStage.setResizable(false);
             loginStage.centerOnScreen();
@@ -113,15 +108,11 @@ public class GUI extends Application implements ViewInterface {
             loginStage.initOwner(primaryStage);
             Scene scene = new Scene(loginLayout);
             loginStage.setScene(scene);
-
-            // Give the controller access to the main app.
             askLoginController = loader.getController();
             askLoginController.setMainApp(this);
             askLoginController.setDialogStage(loginStage);
-
             // Show the dialog and wait until the user closes it
             loginStage.showAndWait();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,48 +126,18 @@ public class GUI extends Application implements ViewInterface {
     private void joinOrCreate(NameOKMessage nameOKMessage) {
         ObservableList<NameOKMessage.Games> games = FXCollections.observableArrayList();
         games.addAll(nameOKMessage.getGames());
-
         try {
-            // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(GUI.class.getResource("/GameLobby.fxml"));
             AnchorPane layout = (AnchorPane) loader.load();
-            // Give the controller access to the main app.
             GameLobbyController controller = loader.getController();
             controller.setMainApp(this, games);
-
-            /*
-            Image image = new Image(getClass().getResourceAsStream("santorini_risorse-grafiche-2/Sprite/clp_bg.png"),1080,720,false,true);
-            GameLobbyController.label_gamesTable.setGraphic(new ImageView(image));
-             */
-
             Scene scene = new Scene(layout);
             Platform.runLater(() -> {
                 loginStage.close();
                 primaryStage.setScene(scene);
                 primaryStage.show();
             });
-            /*Image image = new Image("santorini_risorse-grafiche-2/Sprite/clp_bg.png");
-            ImageView imageview2 = new ImageView(image);
-            imageview2.setFitHeight(600);
-            imageview2.setFitWidth(720);
-            layout.getChildren().add(imageview2);
-             */
-
-            /*JFrame frame = new JFrame();
-            frame.setSize(200,200);
-            frame.setResizable(false);
-            frame.setLayout(new GridLayout());
-
-            ImageIcon image = new ImageIcon(getClass().getResource("santorini_risorse-grafiche-2/Sprite/clp_bg.png"));
-            Image scaledImg = image.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-            JLabel imageLabel = new JLabel(new ImageIcon(scaledImg));
-            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
-            frame.add(imageLabel);
-            frame.setVisible(true);
-             */
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -203,7 +164,6 @@ public class GUI extends Application implements ViewInterface {
                 setPlayNumStage.initOwner(primaryStage);
                 Scene scene = new Scene(page);
                 setPlayNumStage.setScene(scene);
-                // Set the person into the controller.
                 SetUpGameController controller = loader.getController();
                 controller.setDialogStage(setPlayNumStage);
                 controller.setMainApp(this, gameId);
@@ -224,7 +184,9 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void update(Exception e) {
         if (e instanceof ConnectException) {
-            System.err.println("Connection refused");
+            Platform.runLater(() -> {
+                askLoginController.setServerUnreachable();
+            });
         } else if (e instanceof EOFException) {
             System.err.println("Connection failed! If you want to rejoin the game,\n" +
                     "please restart the game and login with the same username!");
@@ -237,11 +199,19 @@ public class GUI extends Application implements ViewInterface {
     @Override
     public void update(Message message) {
         if (message instanceof AskPlayerNameMessage) {
-            // tell player the name is not available
+            Platform.runLater(() -> {
+                askLoginController.setUserNameNotAvailable();
+            });
         } else if (message instanceof NameOKMessage) {
             joinOrCreate((NameOKMessage) message);
         } else if (message instanceof WaitingReconnectionMessage) {
-            // tell player to wait for other players' reconnection
+            Platform.runLater(() -> {
+                askLoginController.setWaiting();
+            });
+        } else if(message instanceof ConnectionDroppedMessage){
+            System.err.println("Some player's connection dropped! If you want to rejoin the game,\n" +
+                    "please restart the game and login with the same username!");
+            System.exit(0);
         } else {
             System.err.println("Wrong Message Received:" + message.getClass().toString());
         }
@@ -259,8 +229,6 @@ public class GUI extends Application implements ViewInterface {
         this.vGame = virtualGame;
         final GameStatus gameStatus = vGame.getGameStatus();
 
-        islandBoardCLI.setMaps(vGame.getSpaces());//debug
-        islandBoardCLI.setPlayers(vGame);//debug
 
         if (id == -1 && gameId == -1) {
             gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);
@@ -275,7 +243,6 @@ public class GUI extends Application implements ViewInterface {
                 if (vGame.getVPlayers().get(id).getPlayerName().equals(this.userName)) {
                     this.id = id;
                     gameBoardGUI.setId(id);
-                    System.out.println("My ID: " + id);
                 }
             }
             this.gameId = vGame.getGameId();
@@ -283,7 +250,6 @@ public class GUI extends Application implements ViewInterface {
                 gameBoardGUI.setUserNameLabel("Username: " + userName);
                 gameBoardGUI.setGameIdLabel("Game ID: " + gameId);
             });
-            System.out.println("Game ID: " + gameId);
         }
 
         Platform.runLater(() -> {
@@ -298,7 +264,6 @@ public class GUI extends Application implements ViewInterface {
         availableGodPowers = vGame.getAvailableGodPowers();
         nextAction = vGame.getVPlayers().get(id).getNextAction();
         currentPlayerId = vGame.getCurrentPlayerId();
-        System.out.println("Player: " + currentPlayerId + " is playing");
         switch (gameStatus) {
             case WAITINGINIT:
                 if (id == 0 && vGame.getCurrentPlayerId() == 0) {
@@ -308,28 +273,17 @@ public class GUI extends Application implements ViewInterface {
                 }
                 break;
             case WAITINGPLAYER:
-                islandBoardCLI.showPlayers();
-                System.out.println(ColorSetter.FG_BLUE.setColor("Please wait for other players join the game."));
                 break;
             case WAITINGSTART:
-                islandBoardCLI.showPlayers();
                 if (currentPlayerId == id)
                     setUpGame();
-                else
-                    System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for Start"));
                 break;
 
             case INGAME:
-                islandBoardCLI.showMaps();
-                islandBoardCLI.showPlayers();
                 if (currentPlayerId == id)
                     playGame();
-                else
-                    System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for other player's operations."));
                 break;
             case GAMEENDED:
-                System.out.println("Game End");
-                System.out.println("You " + vGame.getVPlayers().get(id).getPlayerStatus());
                 gameEnd(vGame.getVPlayers().get(id).getPlayerStatus()==PlayerStatus.WIN);
                 break;
         }
@@ -346,7 +300,6 @@ public class GUI extends Application implements ViewInterface {
                         Platform.runLater(() -> {
                             gameBoardGUI.setShowStatus("Waiting for setting Available God Power");
                         });
-                        System.out.println(ColorSetter.FG_BLUE.setColor("Waiting for setting Available God Power"));
                     }
                 } else {
                     setGodPower();
@@ -376,7 +329,7 @@ public class GUI extends Application implements ViewInterface {
                 // Set the person into the controller.
                 StartPlayerController controller = loader.getController();
                 controller.setDialogStage(setPlayNumStage);
-                controller.setMainApp(this, gameId, islandBoardCLI.getPlayers().size());
+                controller.setMainApp(this, gameId, vGame.getPlayerNumber());
                 // Show the dialog and wait until the user closes it
                 setPlayNumStage.showAndWait();
             });
@@ -391,7 +344,6 @@ public class GUI extends Application implements ViewInterface {
             gameBoardGUI.setShowStatus("Please choose your God Power.");
         });
         if (availableGodPowers.get(0) == GodPower.ANONYMOUS) {
-            System.out.println(ColorSetter.FG_BLUE.setColor("This is a no-GodPowers game!"));
             sendMessage(new PlayerChooseGodPowerMessage
                     (gameId, id, availableGodPowers.get(0)));
         } else {
@@ -425,7 +377,7 @@ public class GUI extends Application implements ViewInterface {
         Platform.runLater(() -> {
             gameBoardGUI.setShowStatus("Please set Available God Powers.");
         });
-        int playNum = islandBoardCLI.getPlayers().size();
+        int playNum = vGame.getPlayerNumber();
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -517,11 +469,9 @@ public class GUI extends Application implements ViewInterface {
                 Platform.runLater(() -> gameBoardController.setBuild());
                 break;
             case "MOVEORBUILD":
-                System.out.println("MOVEORBUILD");
                 Platform.runLater(() -> gameBoardController.setMoveOrBuild());
                 break;
             case "BUILDOREND":
-                System.out.println("MOVEORBUILD");
                 Platform.runLater(() -> gameBoardController.setBuildOrEnd());
                 break;
         }
