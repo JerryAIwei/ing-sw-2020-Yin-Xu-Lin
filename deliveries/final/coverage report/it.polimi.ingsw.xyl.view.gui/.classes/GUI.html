@@ -1,0 +1,620 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GUI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.xyl.view.gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GUI (it.polimi.ingsw.xyl.view.gui)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 47)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 237)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GUI$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 50)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 241)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.xyl.view.gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.io.EOFException;
+<i>4</i>&nbsp;import java.io.IOException;
+<i>5</i>&nbsp;import java.net.ConnectException;
+<i>6</i>&nbsp;import java.util.ArrayList;
+<i>7</i>&nbsp;import java.util.LinkedList;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import it.polimi.ingsw.xyl.model.*;
+<i>10</i>&nbsp;import it.polimi.ingsw.xyl.model.message.*;
+<i>11</i>&nbsp;import it.polimi.ingsw.xyl.network.client.Client;
+<i>12</i>&nbsp;import it.polimi.ingsw.xyl.util.ColorSetter;
+<i>13</i>&nbsp;import it.polimi.ingsw.xyl.view.ViewInterface;
+<i>14</i>&nbsp;import it.polimi.ingsw.xyl.view.gui.controller.*;
+<i>15</i>&nbsp;import javafx.application.Application;
+<i>16</i>&nbsp;import javafx.application.Platform;
+<i>17</i>&nbsp;import javafx.collections.FXCollections;
+<i>18</i>&nbsp;import javafx.collections.ObservableList;
+<i>19</i>&nbsp;import javafx.event.EventHandler;
+<i>20</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i>21</i>&nbsp;import javafx.scene.*;
+<i>22</i>&nbsp;import javafx.scene.image.Image;
+<i>23</i>&nbsp;import javafx.scene.layout.*;
+<i>24</i>&nbsp;import javafx.stage.Modality;
+<i>25</i>&nbsp;import javafx.stage.Stage;
+<i>26</i>&nbsp;import javafx.stage.WindowEvent;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;public class GUI extends Application implements ViewInterface {
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    private Stage primaryStage;
+<b class="nc"><i>31</i>&nbsp;    private final Stage setPlayNumStage = new Stage();</b>
+<i>32</i>&nbsp;    private Stage loginStage;
+<b class="nc"><i>33</i>&nbsp;    private final Stage godPowerStage = new Stage();</b>
+<i>34</i>&nbsp;    private GameBoardGUI gameBoardGUI;
+<i>35</i>&nbsp;    private final Client client;
+<i>36</i>&nbsp;    private AskLoginController askLoginController;
+<i>37</i>&nbsp;    private GameBoardController gameBoardController;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    private String userName;
+<b class="nc"><i>40</i>&nbsp;    private int gameId = -1;</b>
+<b class="nc"><i>41</i>&nbsp;    private int id = -1;</b>
+<i>42</i>&nbsp;    private int currentPlayerId;
+<i>43</i>&nbsp;    private ArrayList&lt;GodPower&gt; availableGodPowers;
+<i>44</i>&nbsp;    private PlayerStatus playerStatus;
+<i>45</i>&nbsp;    private String nextAction;
+<b class="nc"><i>46</i>&nbsp;    private int workerInAction = -1;</b>
+<i>47</i>&nbsp;    private VirtualGame vGame;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    public int getId() {
+<b class="nc"><i>51</i>&nbsp;        return id;</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    public int getGameId() {
+<b class="nc"><i>55</i>&nbsp;        return gameId;</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    public void initClient(String IP, String port) {
+<b class="nc"><i>59</i>&nbsp;        client.init(IP, port);</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    public void setUserName(String userName) {
+<b class="nc"><i>63</i>&nbsp;        this.userName = userName;</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    public String getUserName() {
+<b class="nc"><i>67</i>&nbsp;        return userName;</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;    public GUI() {</b>
+<b class="nc"><i>71</i>&nbsp;        client = new Client(this);</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    @Override
+<i>76</i>&nbsp;    public void start(Stage primaryStage) {
+<b class="nc"><i>77</i>&nbsp;        this.primaryStage = primaryStage;</b>
+<b class="nc"><i>78</i>&nbsp;        this.primaryStage.setTitle(&quot;Santorini&quot;);</b>
+<b class="nc"><i>79</i>&nbsp;        this.primaryStage.getIcons().add(new Image(</b>
+<b class="nc"><i>80</i>&nbsp;                GUI.class.getResourceAsStream(&quot;/img/icon.png&quot;)));</b>
+<b class="nc"><i>81</i>&nbsp;        this.primaryStage.setOnCloseRequest(new EventHandler&lt;WindowEvent&gt;() {</b>
+<i>82</i>&nbsp;            @Override
+<i>83</i>&nbsp;            public void handle(WindowEvent event) {
+<b class="nc"><i>84</i>&nbsp;                System.exit(0);</b>
+<i>85</i>&nbsp;            }
+<i>86</i>&nbsp;        });
+<i>87</i>&nbsp;        // load necessary 3D resource and init gameBoardGUI
+<b class="nc"><i>88</i>&nbsp;        new Thread(() -&gt; {</b>
+<b class="nc"><i>89</i>&nbsp;            gameBoardGUI = new GameBoardGUI();</b>
+<i>90</i>&nbsp;        }).start();
+<b class="nc"><i>91</i>&nbsp;        askLogin();</b>
+<i>92</i>&nbsp;    }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * set primaryStage to game board layout
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public void trans2GameBoard() {
+<b class="nc"><i>98</i>&nbsp;        primaryStage.setScene(gameBoardGUI.toGameBoard());</b>
+<b class="nc"><i>99</i>&nbsp;        primaryStage.show();</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * ask player to input server IP and player name
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    private void askLogin() {
+<i>107</i>&nbsp;        try {
+<b class="nc"><i>108</i>&nbsp;            FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>109</i>&nbsp;            loader.setLocation(GUI.class.getResource(&quot;/askLogin.fxml&quot;));</b>
+<b class="nc"><i>110</i>&nbsp;            BorderPane loginLayout = loader.load();</b>
+<b class="nc"><i>111</i>&nbsp;            loginStage = new Stage();</b>
+<b class="nc"><i>112</i>&nbsp;            loginStage.setResizable(false);</b>
+<b class="nc"><i>113</i>&nbsp;            loginStage.centerOnScreen();</b>
+<b class="nc"><i>114</i>&nbsp;            loginStage.setTitle(&quot;Santorini : Login&quot;);</b>
+<b class="nc"><i>115</i>&nbsp;            loginStage.setAlwaysOnTop(true);</b>
+<b class="nc"><i>116</i>&nbsp;            loginStage.initOwner(primaryStage);</b>
+<b class="nc"><i>117</i>&nbsp;            Scene scene = new Scene(loginLayout);</b>
+<b class="nc"><i>118</i>&nbsp;            loginStage.setScene(scene);</b>
+<b class="nc"><i>119</i>&nbsp;            askLoginController = loader.getController();</b>
+<b class="nc"><i>120</i>&nbsp;            askLoginController.setMainApp(this);</b>
+<b class="nc"><i>121</i>&nbsp;            askLoginController.setDialogStage(loginStage);</b>
+<i>122</i>&nbsp;            // Show the dialog and wait until the user closes it
+<b class="nc"><i>123</i>&nbsp;            loginStage.showAndWait();</b>
+<b class="nc"><i>124</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>125</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>126</i>&nbsp;        }</b>
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * show existed games, player can choose join a game or create new game
+<i>133</i>&nbsp;     */
+<i>134</i>&nbsp;    private void joinOrCreate(NameOKMessage nameOKMessage) {
+<b class="nc"><i>135</i>&nbsp;        ObservableList&lt;NameOKMessage.Games&gt; games = FXCollections.observableArrayList();</b>
+<b class="nc"><i>136</i>&nbsp;        games.addAll(nameOKMessage.getGames());</b>
+<i>137</i>&nbsp;        try {
+<b class="nc"><i>138</i>&nbsp;            FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>139</i>&nbsp;            loader.setLocation(GUI.class.getResource(&quot;/GameLobby.fxml&quot;));</b>
+<b class="nc"><i>140</i>&nbsp;            AnchorPane layout = (AnchorPane) loader.load();</b>
+<b class="nc"><i>141</i>&nbsp;            GameLobbyController controller = loader.getController();</b>
+<b class="nc"><i>142</i>&nbsp;            controller.setMainApp(this, games);</b>
+<b class="nc"><i>143</i>&nbsp;            Scene scene = new Scene(layout);</b>
+<b class="nc"><i>144</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>145</i>&nbsp;                loginStage.close();</b>
+<b class="nc"><i>146</i>&nbsp;                primaryStage.setScene(scene);</b>
+<b class="nc"><i>147</i>&nbsp;                primaryStage.show();</b>
+<i>148</i>&nbsp;            });
+<b class="nc"><i>149</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>150</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>151</i>&nbsp;        }</b>
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;    /**
+<i>155</i>&nbsp;     * choose to number of player(2 or 3) in game
+<i>156</i>&nbsp;     */
+<i>157</i>&nbsp;    public void setPlayNum() {
+<b class="nc"><i>158</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>159</i>&nbsp;            gameBoardGUI.setShowStatus(&quot;Please set the total player number.&quot;);</b>
+<i>160</i>&nbsp;        });
+<i>161</i>&nbsp;        try {
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;            // Load the fxml file and create a new stage for the popup dialog.
+<b class="nc"><i>164</i>&nbsp;            FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>165</i>&nbsp;            loader.setLocation(GUI.class.getResource(&quot;/SetUpGame.fxml&quot;));</b>
+<b class="nc"><i>166</i>&nbsp;            BorderPane page = loader.load();</b>
+<i>167</i>&nbsp;
+<b class="nc"><i>168</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<i>169</i>&nbsp;                // Create the dialog Stage.
+<b class="nc"><i>170</i>&nbsp;                setPlayNumStage.setTitle(&quot;Choice Player Number&quot;);</b>
+<b class="nc"><i>171</i>&nbsp;                setPlayNumStage.initModality(Modality.WINDOW_MODAL);</b>
+<b class="nc"><i>172</i>&nbsp;                setPlayNumStage.initOwner(primaryStage);</b>
+<b class="nc"><i>173</i>&nbsp;                Scene scene = new Scene(page);</b>
+<b class="nc"><i>174</i>&nbsp;                setPlayNumStage.setScene(scene);</b>
+<b class="nc"><i>175</i>&nbsp;                SetUpGameController controller = loader.getController();</b>
+<b class="nc"><i>176</i>&nbsp;                controller.setDialogStage(setPlayNumStage);</b>
+<b class="nc"><i>177</i>&nbsp;                controller.setMainApp(this, gameId);</b>
+<i>178</i>&nbsp;                // Show the dialog and wait until the user closes it
+<b class="nc"><i>179</i>&nbsp;                setPlayNumStage.showAndWait();</b>
+<i>180</i>&nbsp;            });
+<b class="nc"><i>181</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>182</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>183</i>&nbsp;        }</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    public static void main(String[] args) {
+<b class="nc"><i>188</i>&nbsp;        launch(args);</b>
+<i>189</i>&nbsp;    }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    @Override
+<i>193</i>&nbsp;    public void update(Exception e) {
+<b class="nc"><i>194</i>&nbsp;        if (e instanceof ConnectException) {</b>
+<b class="nc"><i>195</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>196</i>&nbsp;                askLoginController.setServerUnreachable();</b>
+<i>197</i>&nbsp;            });
+<b class="nc"><i>198</i>&nbsp;        } else if (e instanceof EOFException) {</b>
+<b class="nc"><i>199</i>&nbsp;            System.err.println(&quot;Connection failed! If you want to rejoin the game,\n&quot; +</b>
+<i>200</i>&nbsp;                    &quot;please restart the game and login with the same username!&quot;);
+<b class="nc"><i>201</i>&nbsp;            System.exit(0);</b>
+<i>202</i>&nbsp;        } else {
+<b class="nc"><i>203</i>&nbsp;            e.printStackTrace();</b>
+<i>204</i>&nbsp;        }
+<i>205</i>&nbsp;    }
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    @Override
+<i>208</i>&nbsp;    public void update(Message message) {
+<b class="nc"><i>209</i>&nbsp;        if (message instanceof AskPlayerNameMessage) {</b>
+<b class="nc"><i>210</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>211</i>&nbsp;                askLoginController.setUserNameNotAvailable();</b>
+<i>212</i>&nbsp;            });
+<b class="nc"><i>213</i>&nbsp;        } else if (message instanceof NameOKMessage) {</b>
+<b class="nc"><i>214</i>&nbsp;            joinOrCreate((NameOKMessage) message);</b>
+<b class="nc"><i>215</i>&nbsp;        } else if (message instanceof WaitingReconnectionMessage) {</b>
+<b class="nc"><i>216</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>217</i>&nbsp;                askLoginController.setWaiting();</b>
+<i>218</i>&nbsp;            });
+<b class="nc"><i>219</i>&nbsp;        } else if(message instanceof ConnectionDroppedMessage){</b>
+<b class="nc"><i>220</i>&nbsp;            System.err.println(&quot;Some player&#39;s connection dropped! If you want to rejoin the game,\n&quot; +</b>
+<i>221</i>&nbsp;                    &quot;please restart the game and login with the same username!&quot;);
+<b class="nc"><i>222</i>&nbsp;            System.exit(0);</b>
+<i>223</i>&nbsp;        } else {
+<b class="nc"><i>224</i>&nbsp;            System.err.println(&quot;Wrong Message Received:&quot; + message.getClass().toString());</b>
+<i>225</i>&nbsp;        }
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;    }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * update and show what to do next
+<i>231</i>&nbsp;     *
+<i>232</i>&nbsp;     * @param virtualGame virtualGame received from server
+<i>233</i>&nbsp;     */
+<i>234</i>&nbsp;    @Override
+<i>235</i>&nbsp;    public void update(VirtualGame virtualGame) {
+<i>236</i>&nbsp;
+<b class="nc"><i>237</i>&nbsp;        this.vGame = virtualGame;</b>
+<b class="nc"><i>238</i>&nbsp;        final GameStatus gameStatus = vGame.getGameStatus();</b>
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;
+<b class="nc"><i>241</i>&nbsp;        if (id == -1 &amp;&amp; gameId == -1) {</b>
+<b class="nc"><i>242</i>&nbsp;            gameBoardController = new GameBoardController(gameBoardGUI, primaryStage, this);</b>
+<b class="nc"><i>243</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>244</i>&nbsp;                if (loginStage.isShowing())</b>
+<b class="nc"><i>245</i>&nbsp;                    loginStage.close();</b>
+<b class="nc"><i>246</i>&nbsp;                trans2GameBoard();</b>
+<b class="nc"><i>247</i>&nbsp;                primaryStage.centerOnScreen();</b>
+<i>248</i>&nbsp;                });
+<i>249</i>&nbsp;
+<b class="nc"><i>250</i>&nbsp;            for (Integer id : vGame.getVPlayers().keySet()) {</b>
+<b class="nc"><i>251</i>&nbsp;                if (vGame.getVPlayers().get(id).getPlayerName().equals(this.userName)) {</b>
+<b class="nc"><i>252</i>&nbsp;                    this.id = id;</b>
+<b class="nc"><i>253</i>&nbsp;                    gameBoardGUI.setId(id);</b>
+<i>254</i>&nbsp;                }
+<b class="nc"><i>255</i>&nbsp;            }</b>
+<b class="nc"><i>256</i>&nbsp;            this.gameId = vGame.getGameId();</b>
+<b class="nc"><i>257</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>258</i>&nbsp;                gameBoardGUI.setUserNameLabel(&quot;Username: &quot; + userName);</b>
+<b class="nc"><i>259</i>&nbsp;                gameBoardGUI.setGameIdLabel(&quot;Game ID: &quot; + gameId);</b>
+<i>260</i>&nbsp;            });
+<i>261</i>&nbsp;        }
+<i>262</i>&nbsp;
+<b class="nc"><i>263</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>264</i>&nbsp;            gameBoardGUI.setMaps(vGame.getSpaces());</b>
+<b class="nc"><i>265</i>&nbsp;            gameBoardGUI.setGodPower(vGame.getVPlayers().get(id).getGodPower());</b>
+<b class="nc"><i>266</i>&nbsp;            gameBoardGUI.updateVSGodPowers(vGame);</b>
+<b class="nc"><i>267</i>&nbsp;            gameBoardController.setWorkerInAction(vGame.getVPlayers().get(id).getWorkerInAction());</b>
+<b class="nc"><i>268</i>&nbsp;            gameBoardController.refresh();</b>
+<i>269</i>&nbsp;        });
+<i>270</i>&nbsp;
+<b class="nc"><i>271</i>&nbsp;        playerStatus = vGame.getVPlayers().get(id).getPlayerStatus();</b>
+<b class="nc"><i>272</i>&nbsp;        availableGodPowers = vGame.getAvailableGodPowers();</b>
+<b class="nc"><i>273</i>&nbsp;        nextAction = vGame.getVPlayers().get(id).getNextAction();</b>
+<b class="nc"><i>274</i>&nbsp;        currentPlayerId = vGame.getCurrentPlayerId();</b>
+<b class="nc"><i>275</i>&nbsp;        switch (gameStatus) {</b>
+<i>276</i>&nbsp;            case WAITINGINIT:
+<b class="nc"><i>277</i>&nbsp;                if (id == 0 &amp;&amp; vGame.getCurrentPlayerId() == 0) {</b>
+<b class="nc"><i>278</i>&nbsp;                    setPlayNum();</b>
+<i>279</i>&nbsp;                } else {//do nothing
+<b class="nc"><i>280</i>&nbsp;                    System.err.println(ColorSetter.FG_RED.setColor(&quot;Wrong gameStatus&quot;));</b>
+<i>281</i>&nbsp;                }
+<b class="nc"><i>282</i>&nbsp;                break;</b>
+<i>283</i>&nbsp;            case WAITINGPLAYER:
+<b class="nc"><i>284</i>&nbsp;                break;</b>
+<i>285</i>&nbsp;            case WAITINGSTART:
+<b class="nc"><i>286</i>&nbsp;                if (currentPlayerId == id)</b>
+<b class="nc"><i>287</i>&nbsp;                    setUpGame();</b>
+<i>288</i>&nbsp;                break;
+<i>289</i>&nbsp;
+<i>290</i>&nbsp;            case INGAME:
+<b class="nc"><i>291</i>&nbsp;                if (currentPlayerId == id)</b>
+<b class="nc"><i>292</i>&nbsp;                    playGame();</b>
+<i>293</i>&nbsp;                break;
+<i>294</i>&nbsp;            case GAMEENDED:
+<b class="nc"><i>295</i>&nbsp;                gameEnd(vGame.getVPlayers().get(id).getPlayerStatus()==PlayerStatus.WIN);</b>
+<i>296</i>&nbsp;                break;
+<i>297</i>&nbsp;        }
+<i>298</i>&nbsp;
+<i>299</i>&nbsp;    }
+<i>300</i>&nbsp;
+<i>301</i>&nbsp;    private void setUpGame() {
+<b class="nc"><i>302</i>&nbsp;        switch (playerStatus) {</b>
+<i>303</i>&nbsp;            case INGAMEBOARD:
+<b class="nc"><i>304</i>&nbsp;                if (availableGodPowers.isEmpty()) {</b>
+<b class="nc"><i>305</i>&nbsp;                    if (id == 0)</b>
+<b class="nc"><i>306</i>&nbsp;                        setAvailableGodPowers();</b>
+<i>307</i>&nbsp;                    else {
+<b class="nc"><i>308</i>&nbsp;                        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>309</i>&nbsp;                            gameBoardGUI.setShowStatus(&quot;Waiting for setting Available God Power&quot;);</b>
+<i>310</i>&nbsp;                        });
+<i>311</i>&nbsp;                    }
+<i>312</i>&nbsp;                } else {
+<b class="nc"><i>313</i>&nbsp;                    setGodPower();</b>
+<i>314</i>&nbsp;                }
+<b class="nc"><i>315</i>&nbsp;                break;</b>
+<i>316</i>&nbsp;            case GODPOWERED://do nothing
+<b class="nc"><i>317</i>&nbsp;                break;</b>
+<i>318</i>&nbsp;            case WAITING4START:
+<b class="nc"><i>319</i>&nbsp;                setStartPlayer();</b>
+<i>320</i>&nbsp;                break;
+<i>321</i>&nbsp;        }
+<i>322</i>&nbsp;    }
+<i>323</i>&nbsp;
+<i>324</i>&nbsp;    private void setStartPlayer() {
+<b class="nc"><i>325</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>326</i>&nbsp;            gameBoardGUI.setShowStatus(&quot;Please choose the start player.&quot;);</b>
+<i>327</i>&nbsp;        });
+<i>328</i>&nbsp;        try {
+<i>329</i>&nbsp;            // Load the fxml file and create a new stage for the popup dialog.
+<b class="nc"><i>330</i>&nbsp;            FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>331</i>&nbsp;            loader.setLocation(GUI.class.getResource(&quot;/StartPlayer.fxml&quot;));</b>
+<b class="nc"><i>332</i>&nbsp;            BorderPane page = loader.load();</b>
+<b class="nc"><i>333</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>334</i>&nbsp;                setPlayNumStage.setTitle(&quot;Choice Start Player&quot;);</b>
+<b class="nc"><i>335</i>&nbsp;                Scene scene = new Scene(page);</b>
+<b class="nc"><i>336</i>&nbsp;                setPlayNumStage.setScene(scene);</b>
+<i>337</i>&nbsp;                // Set the person into the controller.
+<b class="nc"><i>338</i>&nbsp;                StartPlayerController controller = loader.getController();</b>
+<b class="nc"><i>339</i>&nbsp;                controller.setDialogStage(setPlayNumStage);</b>
+<b class="nc"><i>340</i>&nbsp;                controller.setMainApp(this, gameId, vGame.getPlayerNumber());</b>
+<i>341</i>&nbsp;                // Show the dialog and wait until the user closes it
+<b class="nc"><i>342</i>&nbsp;                setPlayNumStage.showAndWait();</b>
+<i>343</i>&nbsp;            });
+<b class="nc"><i>344</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>345</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>346</i>&nbsp;        }</b>
+<i>347</i>&nbsp;    }
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;
+<i>350</i>&nbsp;    private void setGodPower() {
+<b class="nc"><i>351</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>352</i>&nbsp;            gameBoardGUI.setShowStatus(&quot;Please choose your God Power.&quot;);</b>
+<i>353</i>&nbsp;        });
+<b class="nc"><i>354</i>&nbsp;        if (availableGodPowers.get(0) == GodPower.ANONYMOUS) {</b>
+<b class="nc"><i>355</i>&nbsp;            sendMessage(new PlayerChooseGodPowerMessage</b>
+<b class="nc"><i>356</i>&nbsp;                    (gameId, id, availableGodPowers.get(0)));</b>
+<i>357</i>&nbsp;        } else {
+<i>358</i>&nbsp;            try {
+<i>359</i>&nbsp;                // Load the fxml file and create a new stage for the popup dialog.
+<b class="nc"><i>360</i>&nbsp;                FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>361</i>&nbsp;                loader.setLocation(GUI.class.getResource(&quot;/GodPower.fxml&quot;));</b>
+<b class="nc"><i>362</i>&nbsp;                BorderPane page = (BorderPane) loader.load();</b>
+<b class="nc"><i>363</i>&nbsp;                Platform.runLater(() -&gt; {</b>
+<i>364</i>&nbsp;                    // show the dialog Stage.
+<b class="nc"><i>365</i>&nbsp;                    godPowerStage.setTitle(&quot;Choice your GodPower&quot;);</b>
+<i>366</i>&nbsp;                    // godPowerStage.initOwner(primaryStage);
+<b class="nc"><i>367</i>&nbsp;                    Scene scene = new Scene(page);</b>
+<b class="nc"><i>368</i>&nbsp;                    godPowerStage.setScene(scene);</b>
+<b class="nc"><i>369</i>&nbsp;                    GodPowerController controller = loader.getController();</b>
+<b class="nc"><i>370</i>&nbsp;                    LinkedList&lt;GodPower&gt; powers = new LinkedList&lt;&gt;();</b>
+<b class="nc"><i>371</i>&nbsp;                    powers.addAll(availableGodPowers);</b>
+<b class="nc"><i>372</i>&nbsp;                    controller.setMainApp(this, powers);</b>
+<b class="nc"><i>373</i>&nbsp;                    controller.setStage(godPowerStage);</b>
+<i>374</i>&nbsp;                    // Show the dialog and wait until the user closes it
+<b class="nc"><i>375</i>&nbsp;                    godPowerStage.showAndWait();</b>
+<i>376</i>&nbsp;                });
+<i>377</i>&nbsp;
+<b class="nc"><i>378</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>379</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>380</i>&nbsp;            }</b>
+<i>381</i>&nbsp;        }
+<i>382</i>&nbsp;    }
+<i>383</i>&nbsp;
+<i>384</i>&nbsp;    private void setAvailableGodPowers() {
+<b class="nc"><i>385</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>386</i>&nbsp;            gameBoardGUI.setShowStatus(&quot;Please set Available God Powers.&quot;);</b>
+<i>387</i>&nbsp;        });
+<b class="nc"><i>388</i>&nbsp;        int playNum = vGame.getPlayerNumber();</b>
+<i>389</i>&nbsp;        try {
+<i>390</i>&nbsp;            // Load the fxml file and create a new stage for the popup dialog.
+<b class="nc"><i>391</i>&nbsp;            FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>392</i>&nbsp;            loader.setLocation(GUI.class.getResource(&quot;/GodPower.fxml&quot;));</b>
+<b class="nc"><i>393</i>&nbsp;            BorderPane page = (BorderPane) loader.load();</b>
+<b class="nc"><i>394</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<i>395</i>&nbsp;                // show the dialog Stage.
+<b class="nc"><i>396</i>&nbsp;                godPowerStage.setTitle(&quot;Set Available GodPowers&quot;);</b>
+<b class="nc"><i>397</i>&nbsp;                godPowerStage.initOwner(primaryStage);</b>
+<b class="nc"><i>398</i>&nbsp;                Scene scene = new Scene(page);</b>
+<b class="nc"><i>399</i>&nbsp;                godPowerStage.setScene(scene);</b>
+<b class="nc"><i>400</i>&nbsp;                GodPowerController controller = loader.getController();</b>
+<b class="nc"><i>401</i>&nbsp;                controller.setMainApp(this, playNum);</b>
+<b class="nc"><i>402</i>&nbsp;                controller.setStage(godPowerStage);</b>
+<i>403</i>&nbsp;                // Show the dialog and wait until the user closes it
+<b class="nc"><i>404</i>&nbsp;                godPowerStage.showAndWait();</b>
+<i>405</i>&nbsp;            });
+<i>406</i>&nbsp;
+<b class="nc"><i>407</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>408</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>409</i>&nbsp;        }</b>
+<i>410</i>&nbsp;    }
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;    /**
+<i>413</i>&nbsp;     * my turn, play game based on playerStatus and nextAction
+<i>414</i>&nbsp;     */
+<i>415</i>&nbsp;    private void playGame() {
+<b class="nc"><i>416</i>&nbsp;        gameBoardController.setIsTurn();</b>
+<b class="nc"><i>417</i>&nbsp;        switch (playerStatus) {</b>
+<i>418</i>&nbsp;            case WAITING4INIT:
+<b class="nc"><i>419</i>&nbsp;                setInitialWorkerPosition();</b>
+<b class="nc"><i>420</i>&nbsp;                break;</b>
+<i>421</i>&nbsp;            case WORKERPREPARED:
+<b class="nc"><i>422</i>&nbsp;                moveOrBuild();</b>
+<b class="nc"><i>423</i>&nbsp;                break;</b>
+<i>424</i>&nbsp;            case LOSE:
+<b class="nc"><i>425</i>&nbsp;                gameEnd(false);</b>
+<i>426</i>&nbsp;                break;
+<i>427</i>&nbsp;        }
+<i>428</i>&nbsp;    }
+<i>429</i>&nbsp;
+<i>430</i>&nbsp;
+<i>431</i>&nbsp;    /**
+<i>432</i>&nbsp;     * When you lose or win the game, show the the game result.
+<i>433</i>&nbsp;     * @param isWin true if win the game; false if lose the game
+<i>434</i>&nbsp;     */
+<i>435</i>&nbsp;    private void gameEnd(Boolean isWin) {
+<b class="nc"><i>436</i>&nbsp;        FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>437</i>&nbsp;        if (isWin) loader.setLocation(GUI.class.getResource(&quot;/EndGameWin.fxml&quot;));</b>
+<b class="nc"><i>438</i>&nbsp;        else loader.setLocation(GUI.class.getResource(&quot;/EndGameLose.fxml&quot;));</b>
+<i>439</i>&nbsp;        try {
+<b class="nc"><i>440</i>&nbsp;            AnchorPane layout = loader.load();</b>
+<b class="nc"><i>441</i>&nbsp;            Scene scene = new Scene(layout);</b>
+<b class="nc"><i>442</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>443</i>&nbsp;                Stage endGameStage = new Stage();</b>
+<b class="nc"><i>444</i>&nbsp;                endGameStage.setScene(scene);</b>
+<b class="nc"><i>445</i>&nbsp;                endGameStage.setAlwaysOnTop(true);</b>
+<b class="nc"><i>446</i>&nbsp;                endGameStage.show();</b>
+<i>447</i>&nbsp;            });
+<b class="nc"><i>448</i>&nbsp;        } catch (Exception e) {</b>
+<b class="nc"><i>449</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>450</i>&nbsp;        }</b>
+<i>451</i>&nbsp;    }
+<i>452</i>&nbsp;
+<i>453</i>&nbsp;    private void setInitialWorkerPosition() {
+<b class="nc"><i>454</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>455</i>&nbsp;            gameBoardGUI.setShowStatus(&quot;Please choose two position to place your Worker.&quot;);</b>
+<b class="nc"><i>456</i>&nbsp;            gameBoardGUI.initialWorkerPosition();</b>
+<i>457</i>&nbsp;        });
+<i>458</i>&nbsp;    }
+<i>459</i>&nbsp;
+<i>460</i>&nbsp;    /**
+<i>461</i>&nbsp;     * deside what to do based on nextAction
+<i>462</i>&nbsp;     */
+<i>463</i>&nbsp;    private void moveOrBuild() {
+<b class="nc"><i>464</i>&nbsp;        gameBoardGUI.setAvailable</b>
+<b class="nc"><i>465</i>&nbsp;                (vGame.getVPlayers().get(id).getAvailable(&quot;Build&quot;, 0), false, 0);</b>
+<b class="nc"><i>466</i>&nbsp;        gameBoardGUI.setAvailable</b>
+<b class="nc"><i>467</i>&nbsp;                (vGame.getVPlayers().get(id).getAvailable(&quot;Build&quot;, 1), false, 1);</b>
+<b class="nc"><i>468</i>&nbsp;        gameBoardGUI.setAvailable</b>
+<b class="nc"><i>469</i>&nbsp;                (vGame.getVPlayers().get(id).getAvailable(&quot;Move&quot;, 0), true, 0);</b>
+<b class="nc"><i>470</i>&nbsp;        gameBoardGUI.setAvailable</b>
+<b class="nc"><i>471</i>&nbsp;                (vGame.getVPlayers().get(id).getAvailable(&quot;Move&quot;, 1), true, 1);</b>
+<b class="nc"><i>472</i>&nbsp;        switch (nextAction) {</b>
+<i>473</i>&nbsp;            case &quot;MOVE&quot;:
+<b class="nc"><i>474</i>&nbsp;                Platform.runLater(() -&gt; gameBoardController.setMove());</b>
+<b class="nc"><i>475</i>&nbsp;                break;</b>
+<i>476</i>&nbsp;            case &quot;BUILD&quot;:
+<b class="nc"><i>477</i>&nbsp;                Platform.runLater(() -&gt; gameBoardController.setBuild());</b>
+<b class="nc"><i>478</i>&nbsp;                break;</b>
+<i>479</i>&nbsp;            case &quot;MOVEORBUILD&quot;:
+<b class="nc"><i>480</i>&nbsp;                Platform.runLater(() -&gt; gameBoardController.setMoveOrBuild());</b>
+<b class="nc"><i>481</i>&nbsp;                break;</b>
+<i>482</i>&nbsp;            case &quot;BUILDOREND&quot;:
+<b class="nc"><i>483</i>&nbsp;                Platform.runLater(() -&gt; gameBoardController.setBuildOrEnd());</b>
+<i>484</i>&nbsp;                break;
+<i>485</i>&nbsp;        }
+<i>486</i>&nbsp;    }
+<i>487</i>&nbsp;
+<i>488</i>&nbsp;    @Override
+<i>489</i>&nbsp;    public void sendMessage(Message message) {
+<b class="nc"><i>490</i>&nbsp;        client.sendMessage(message);</b>
+<i>491</i>&nbsp;    }
+<i>492</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 19:44</div>
+</div>
+</body>
+</html>
