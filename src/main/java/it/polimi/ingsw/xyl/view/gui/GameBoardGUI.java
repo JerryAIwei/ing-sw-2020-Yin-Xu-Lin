@@ -9,9 +9,7 @@ import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -29,7 +27,7 @@ import java.util.Arrays;
 
 /**
  * Coordinate
- * --->x
+ * ----x
  * |
  * z
  * Class to show the builder and building
@@ -137,8 +135,7 @@ public class GameBoardGUI {
         MeshView meshView;
         meshView = Loader.loadObj(meshPath);
         PhongMaterial boardPm = new PhongMaterial();
-        boardPm.setDiffuseMap(new Image((new File
-                (pmPath).toURI().toString())));
+        boardPm.setDiffuseMap(new Image(getClass().getResourceAsStream(pmPath)));
         meshView.setMaterial(boardPm);
         return meshView;
     }
@@ -161,6 +158,9 @@ public class GameBoardGUI {
         return this.godPower;
     }
 
+    /**
+     * class for showing the builder
+     */
     public class Builder extends MeshView {
         private int[] position = {-1, -1};
 
@@ -193,6 +193,9 @@ public class GameBoardGUI {
         }
     }
 
+    /**
+     * class for showing one block on the map
+     */
     public class Block extends Group {
 
         private Level level = Level.GROUND;
@@ -220,7 +223,7 @@ public class GameBoardGUI {
             building02 = setUPMeshView("/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock02.obj"
                     , "/santorini_risorse-grafiche-2/Texture2D/BuildingBlock02_v001.png");
             building03 = setUPMeshView("/santorini_risorse-grafiche-2/Mesh/Buildings/BuildingBlock03.obj",
-                     "/santorini_risorse-grafiche-2/Texture2D/BuildingBlock03_v001.png");
+                    "/santorini_risorse-grafiche-2/Texture2D/BuildingBlock03_v001.png");
             dome = setUPMeshView();
             building01.getTransforms().addAll(this.getTransforms());
             building01.getTransforms().add(new Translate(0, LEVEL1_HEIGHT, 0));
@@ -390,7 +393,7 @@ public class GameBoardGUI {
                 "/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Blue_v001.png", 0);
         maleBuilders[1] = new Builder(
                 "/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
-               "/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Orange_v001.png", 0);
+                "/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Orange_v001.png", 0);
         maleBuilders[2] = new Builder(
                 "/santorini_risorse-grafiche-2/Mesh/Builders/MaleBuilder.obj",
                 "/santorini_risorse-grafiche-2/Texture2D/MaleBuilder_Pink_v001.png", 0);
@@ -404,7 +407,7 @@ public class GameBoardGUI {
                 "/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Orange_v001.png", 1);
         femaleBuilders[2] = new Builder(
                 "/santorini_risorse-grafiche-2/Mesh/Builders/FemaleBuilder_Blue.obj",
-                "/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Pink_v001.png",1);
+                "/santorini_risorse-grafiche-2/Texture2D/FemaleBuilder_Pink_v001.png", 1);
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -425,7 +428,7 @@ public class GameBoardGUI {
         godPowerLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
         Image anonymousImage = new Image(
                 getClass().getResourceAsStream("/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
-                "/ANONYMOUS.png"));
+                        "/ANONYMOUS.png"));
         godPowerImage.setImage(anonymousImage);
         godPowerImage.setScaleX(0.7);
         godPowerImage.setScaleY(0.7);
@@ -450,47 +453,47 @@ public class GameBoardGUI {
         vsPlayerPowerLabel.get(1).setFont(Font.font("System", FontWeight.BOLD, 20));
 
         vsPlayerPowerLabel.get(0).textProperty().addListener((observable, oldValue, newValue) -> {
-            String fileName = (godPower==null)?"Anonymous":newValue;
+            String fileName = (godPower == null) ? "Anonymous" : newValue;
             fileName = fileName.toUpperCase();
             Image powerImage = new Image(getClass().getResourceAsStream("/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
-                    "/"+ fileName +".png"));
+                    "/" + fileName + ".png"));
             vsPlayerImage.get(0).setImage(powerImage);
             vsPlayerImage.get(0).setFitHeight(200);
             vsPlayerImage.get(0).setPreserveRatio(true);
-            VBox vsPlayerVBox1 = (VBox)vsPlayerVBox.getChildren().get(0);
-            vsPlayerVBox1.getChildren().set(1,vsPlayerImage.get(0));
+            VBox vsPlayerVBox1 = (VBox) vsPlayerVBox.getChildren().get(0);
+            vsPlayerVBox1.getChildren().set(1, vsPlayerImage.get(0));
         });
 
         vsPlayerPowerLabel.get(1).textProperty().addListener((observable, oldValue, newValue) -> {
-            String fileName = (godPower==null)?"Anonymous":newValue;
+            String fileName = (godPower == null) ? "Anonymous" : newValue;
             fileName = fileName.toUpperCase();
-            Image powerImage = new Image(getClass().getResourceAsStream("src/main/resources/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
-                    "/"+ fileName +".png"));
+            Image powerImage = new Image(getClass().getResourceAsStream("/santorini_risorse-grafiche-2/Sprite/Cards/Full" +
+                    "/" + fileName + ".png"));
             vsPlayerImage.get(1).setImage(powerImage);
             vsPlayerImage.get(1).setFitHeight(200);
             vsPlayerImage.get(1).setPreserveRatio(true);
-            VBox vsPlayerVBox2 = (VBox)vsPlayerVBox.getChildren().get(1);
-            vsPlayerVBox2.getChildren().set(1,vsPlayerImage.get(1));
+            VBox vsPlayerVBox2 = (VBox) vsPlayerVBox.getChildren().get(1);
+            vsPlayerVBox2.getChildren().set(1, vsPlayerImage.get(1));
         });
     }
 
-    public void updateVSGodPowers(VirtualGame virtualGame){
-        if(virtualGame.getVPlayers()!=null) {
+    public void updateVSGodPowers(VirtualGame virtualGame) {
+        if (virtualGame.getVPlayers() != null) {
             int j = 0;
             for (Integer i : virtualGame.getVPlayers().keySet()) {
-                if (i != this.id){
+                if (i != this.id) {
                     VirtualGame.VPlayer vPlayer = virtualGame.getVPlayers().get(i);
                     String name = vPlayer.getPlayerName();
                     vsPlayerNameLabel.get(j).setText(name);
                     int currentId = virtualGame.getCurrentPlayerId();
-                    if (vPlayer.playerId == currentId){
+                    if (vPlayer.playerId == currentId) {
                         vsPlayerNameLabel.get(j).setText("Playing: " + name);
                     }
                     GodPower power = vPlayer.getGodPower();
                     vsPlayerPowerLabel.get(j++).setText(power.toString());
                 }
             }
-            if(virtualGame.getPlayerNumber() == 2){
+            if (virtualGame.getPlayerNumber() == 2) {
                 vsPlayerImage.get(1).setVisible(false);
             }
         }
@@ -544,17 +547,17 @@ public class GameBoardGUI {
         vsPlayerVBox.setPadding(new Insets(0, 50, 0, 0));
         VBox vsPlayerVBox1 = new VBox(3);
         vsPlayerVBox1.setAlignment(Pos.CENTER);
-        vsPlayerVBox1.getChildren().add(0,vsPlayerNameLabel.get(0));
-        vsPlayerVBox1.getChildren().add(1,vsPlayerImage.get(0));
-        vsPlayerVBox1.getChildren().add(2,vsPlayerPowerLabel.get(0));
+        vsPlayerVBox1.getChildren().add(0, vsPlayerNameLabel.get(0));
+        vsPlayerVBox1.getChildren().add(1, vsPlayerImage.get(0));
+        vsPlayerVBox1.getChildren().add(2, vsPlayerPowerLabel.get(0));
         VBox vsPlayerVBox2 = new VBox(3);
         vsPlayerVBox2.setAlignment(Pos.CENTER);
-        vsPlayerVBox2.setPadding(new Insets(50,0,0,0));
-        vsPlayerVBox2.getChildren().add(0,vsPlayerNameLabel.get(1));
-        vsPlayerVBox2.getChildren().add(1,vsPlayerImage.get(1));
-        vsPlayerVBox2.getChildren().add(2,vsPlayerPowerLabel.get(1));
-        vsPlayerVBox.getChildren().add(0,vsPlayerVBox1);
-        vsPlayerVBox.getChildren().add(1,vsPlayerVBox2);
+        vsPlayerVBox2.setPadding(new Insets(50, 0, 0, 0));
+        vsPlayerVBox2.getChildren().add(0, vsPlayerNameLabel.get(1));
+        vsPlayerVBox2.getChildren().add(1, vsPlayerImage.get(1));
+        vsPlayerVBox2.getChildren().add(2, vsPlayerPowerLabel.get(1));
+        vsPlayerVBox.getChildren().add(0, vsPlayerVBox1);
+        vsPlayerVBox.getChildren().add(1, vsPlayerVBox2);
         return new Scene(gameBoardLayout);
     }
 
@@ -636,6 +639,9 @@ public class GameBoardGUI {
             }
     }
 
+    /**
+     * remove all the targets on the map
+     */
     public void removeTargets() {
         for (var line : maps)
             for (var map : line) {

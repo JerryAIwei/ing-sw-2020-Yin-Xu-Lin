@@ -19,6 +19,11 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.*;
 
+/**
+ * UI controller for choosing godpowers
+ *
+ * @author yaw
+ */
 public class GodPowerController {
     @FXML
     private TableView<GodPower> godPowerTable;
@@ -42,7 +47,6 @@ public class GodPowerController {
     private boolean isSelect = false;
     private boolean isSend = false;
     private boolean isNext = true;
-
 
 
     private void initGodPowers(LinkedList<GodPower> godPowers) {
@@ -143,7 +147,7 @@ public class GodPowerController {
         } else {
             availableGodPowers.add(currentGod);
             godPowerTable.setItems(availableGodPowers);
-            if (currentGod!=GodPower.ANONYMOUS)
+            if (currentGod != GodPower.ANONYMOUS)
                 currentGodIt.remove();
             if (availableGodPowers.size() == playerNum) {
                 if (playerNum == 2)

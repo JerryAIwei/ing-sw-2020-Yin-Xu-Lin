@@ -21,6 +21,11 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * UI controller for playing the game
+ *
+ * @author yaw
+ */
 public class GameBoardController extends GodPowerController {
     private GameBoardGUI gameBoardGUI;
     private boolean moveOrBuild = false;
@@ -55,9 +60,11 @@ public class GameBoardController extends GodPowerController {
         setBuilderEvent();
         //testPosition();
         setTargetEvent();
-        // Listen for selection changes and show the person details when changed.
     }
 
+    /**
+     * set the actions you can do on the stage
+     */
     private void setStageEvent() {
         Rotate xRotate;
         Rotate yRotate;
@@ -82,7 +89,6 @@ public class GameBoardController extends GodPowerController {
 
         stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (!isTurn) return;
-            ;
             if (moveOrBuild)
                 switch (event.getCode()) {
 /*                case RIGHT:
@@ -146,6 +152,9 @@ public class GameBoardController extends GodPowerController {
         });
     }
 
+    /**
+     * set the actions you can do when you choose the builder
+     */
     private void setBuilderEvent() {
         for (int i = 0; i < 3; i++) {
             var builder = gameBoardGUI.getMaleBuilders()[i];
@@ -175,6 +184,9 @@ public class GameBoardController extends GodPowerController {
         }
     }
 
+    /**
+     * set the actions you can do when you choose the target
+     */
     private void setTargetEvent() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -219,7 +231,11 @@ public class GameBoardController extends GodPowerController {
         }
     }
 
+    /**
+     * show all the targets on the map
+     */
     private void showTargets() {
+        if(selectBuilder.get()==null) return;
         status.set(1);
         int x = selectBuilder.get().getPosition()[0];
         int y = selectBuilder.get().getPosition()[1];
@@ -256,6 +272,9 @@ public class GameBoardController extends GodPowerController {
         }
     }
 
+    /**
+     * hide all the targets on the map
+     */
     private void hideTargets() {
         status.set(0);
         gameBoardGUI.removeTargets();
@@ -308,6 +327,14 @@ public class GameBoardController extends GodPowerController {
         });
     }
 
+    /**
+     * util function to change to two coordinates to direction
+     *
+     * @param x1 x of first coordinate
+     * @param y1 y of first coordinate
+     * @param x2 x of second coordinate
+     * @param y2 y of second coordinate
+     */
     private Direction intToDirection(int x1, int y1, int x2, int y2) {
         int dx = x2 - x1;
         int dy = y2 - y1;
@@ -318,16 +345,31 @@ public class GameBoardController extends GodPowerController {
         return null;
     }
 
+    /**
+     * send the build info to the server
+     *
+     * @param worker    the id of the chosen worker
+     * @param direction the chosen direction of building
+     */
     private void build(int worker, Direction direction) {
         gui.sendMessage(new BuildMessage(gui.getGameId(), gui.getId(), worker, direction, isDome));
         endTurn();
     }
 
+    /**
+     * send the build info to the server
+     *
+     * @param worker    the id of the chosen worker
+     * @param direction the chosen direction of the movement
+     */
     private void move(int worker, Direction direction) {
         gui.sendMessage(new MoveMessage(gui.getGameId(), gui.getId(), worker, direction));
         endTurn();
     }
 
+    /**
+     * called ever time the turn is end
+     */
     private void endTurn() {
         isTurn = false;
         moveOrBuild = false;
@@ -340,13 +382,18 @@ public class GameBoardController extends GodPowerController {
         gameBoardGUI.setShowStatus("Waiting for other player");
     }
 
-
+    /**
+     * called by GUI, let play do move
+     */
     public void setMove() {
         gameBoardGUI.setShowStatus("Move");
         initial = 2;// having finished set initial builder position
         isMove = true;
     }
 
+    /**
+     * called by GUI, let play do build
+     */
     public void setBuild() {
         gameBoardGUI.setShowStatus("Build");
         initial = 2;//having finished set initial builder position
@@ -359,6 +406,9 @@ public class GameBoardController extends GodPowerController {
         isMove = false;
     }
 
+    /**
+     * called by GUI, let play choose move or build
+     */
     public void setMoveOrBuild() {
         gameBoardGUI.setShowStatus("Move");
         gameBoardGUI.setGodPowerDescribe("Press M to Move, B to Build");
@@ -366,6 +416,9 @@ public class GameBoardController extends GodPowerController {
         initial = 2;
     }
 
+    /**
+     * called by GUI, let play choose build or end turn
+     */
     public void setBuildOrEnd() {
         gameBoardGUI.setShowStatus("Build");
         gameBoardGUI.setGodPowerDescribe("Press E to End Turn");
@@ -374,11 +427,16 @@ public class GameBoardController extends GodPowerController {
         initial = 2;
     }
 
-
+    /**
+     * called when come to my turn
+     */
     public void setIsTurn() {
         isTurn = true;
     }
 
+    /**
+     * fresh gameBoardGUI to receive new vGame from server
+     */
     public void refresh() {
         if (gameBoardGUI.getGodPower() != null)
             gameBoardGUI.setGodPowerLabel(gameBoardGUI.getGodPower());

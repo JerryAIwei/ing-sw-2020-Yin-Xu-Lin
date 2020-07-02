@@ -8,6 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 
+/**
+ * UI controller for choosing the number of player
+ */
 public class SetUpGameController {
 
     ObservableList list = FXCollections.observableArrayList();

@@ -1,0 +1,11 @@
+it.polimi.ingsw.xyl.controller
+it.polimi.ingsw.xyl.model
+it.polimi.ingsw.xyl.model.cosplayer
+it.polimi.ingsw.xyl.model.message
+it.polimi.ingsw.xyl.network.client
+it.polimi.ingsw.xyl.network.server
+it.polimi.ingsw.xyl.util
+it.polimi.ingsw.xyl.view
+it.polimi.ingsw.xyl.view.cli
+it.polimi.ingsw.xyl.view.gui
+it.polimi.ingsw.xyl.view.gui.controller

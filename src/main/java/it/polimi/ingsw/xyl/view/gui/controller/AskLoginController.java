@@ -6,8 +6,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.util.Objects;
 
+/**
+ * UI controller for log in stage.
+ * let player input user name server ip and port.
+ * then start the game and connect to server.
+ *
+ * @author yaw
+ */
 public class AskLoginController {
     @FXML
     private TextField hostnameTextfield;
@@ -23,7 +31,7 @@ public class AskLoginController {
     private GUI mainApp;
     private Stage dialogStage;
 
-    boolean isOK =true;
+    boolean isOK = true;
 
     public AskLoginController() {
     }
@@ -44,6 +52,7 @@ public class AskLoginController {
     public void setMainApp(GUI mainApp) {
         this.mainApp = mainApp;
     }
+
     /**
      * Sets the stage of this dialog.
      *
@@ -52,6 +61,7 @@ public class AskLoginController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
+
     private boolean isInputValid() {
         String errorMessage = "";
         final String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
@@ -82,24 +92,25 @@ public class AskLoginController {
             isOK = false;
             try {
                 mainApp.initClient(hostnameTextfield.getText(), portTextfield.getText());
-            }catch (Exception ignored){
+            } catch (Exception ignored) {
             }
-            try{
+            try {
                 mainApp.setUserName(usernameTextfield.getText());
                 mainApp.sendMessage(new PlayerNameMessage(usernameTextfield.getText()));
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
             setWaiting();
         }
     }
 
-    public void setWaiting(){
+    public void setWaiting() {
         usernameTextfield.setPromptText("Waiting...");
         hostnameTextfield.setPromptText("Waiting...");
         portTextfield.setPromptText("Waiting...");
         connectButton.setOnMouseClicked(null);
     }
 
-    public void setServerUnreachable(){
+    public void setServerUnreachable() {
         usernameTextfield.setText("");
         hostnameTextfield.setText("");
         portTextfield.setText("");
@@ -109,7 +120,7 @@ public class AskLoginController {
         connectButton.setOnMouseClicked(null);
     }
 
-    public void setUserNameNotAvailable(){
+    public void setUserNameNotAvailable() {
         usernameTextfield.setPromptText("The username is duplicated");
         usernameTextfield.setText("");
         connectButton.setOnMouseClicked(mouseEvent -> handleStart());

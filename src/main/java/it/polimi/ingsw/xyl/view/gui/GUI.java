@@ -25,6 +25,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+/**
+ * GUI main class
+ *
+ * @author yaw
+ */
 public class GUI extends Application implements ViewInterface {
 
     private Stage primaryStage;
@@ -55,6 +60,12 @@ public class GUI extends Application implements ViewInterface {
         return gameId;
     }
 
+    /**
+     * start the connection between client and server
+     *
+     * @param IP   server ip
+     * @param port server port
+     */
     public void initClient(String IP, String port) {
         client.init(IP, port);
     }
@@ -216,7 +227,7 @@ public class GUI extends Application implements ViewInterface {
             Platform.runLater(() -> {
                 askLoginController.setWaiting();
             });
-        } else if(message instanceof ConnectionDroppedMessage){
+        } else if (message instanceof ConnectionDroppedMessage) {
             System.err.println("Some player's connection dropped! If you want to rejoin the game,\n" +
                     "please restart the game and login with the same username!");
             System.exit(0);
@@ -245,7 +256,7 @@ public class GUI extends Application implements ViewInterface {
                     loginStage.close();
                 trans2GameBoard();
                 primaryStage.centerOnScreen();
-                });
+            });
 
             for (Integer id : vGame.getVPlayers().keySet()) {
                 if (vGame.getVPlayers().get(id).getPlayerName().equals(this.userName)) {
@@ -292,12 +303,15 @@ public class GUI extends Application implements ViewInterface {
                     playGame();
                 break;
             case GAMEENDED:
-                gameEnd(vGame.getVPlayers().get(id).getPlayerStatus()==PlayerStatus.WIN);
+                gameEnd(vGame.getVPlayers().get(id).getPlayerStatus() == PlayerStatus.WIN);
                 break;
         }
 
     }
 
+    /**
+     * decide what to do based on playerStatus
+     */
     private void setUpGame() {
         switch (playerStatus) {
             case INGAMEBOARD:
@@ -321,6 +335,9 @@ public class GUI extends Application implements ViewInterface {
         }
     }
 
+    /**
+     * choose who to start
+     */
     private void setStartPlayer() {
         Platform.runLater(() -> {
             gameBoardGUI.setShowStatus("Please choose the start player.");
@@ -346,7 +363,9 @@ public class GUI extends Application implements ViewInterface {
         }
     }
 
-
+    /**
+     * choose my god power
+     */
     private void setGodPower() {
         Platform.runLater(() -> {
             gameBoardGUI.setShowStatus("Please choose your God Power.");
@@ -381,6 +400,9 @@ public class GUI extends Application implements ViewInterface {
         }
     }
 
+    /**
+     * choose god powers for this game
+     */
     private void setAvailableGodPowers() {
         Platform.runLater(() -> {
             gameBoardGUI.setShowStatus("Please set Available God Powers.");
@@ -430,6 +452,7 @@ public class GUI extends Application implements ViewInterface {
 
     /**
      * When you lose or win the game, show the the game result.
+     *
      * @param isWin true if win the game; false if lose the game
      */
     private void gameEnd(Boolean isWin) {
@@ -450,6 +473,9 @@ public class GUI extends Application implements ViewInterface {
         }
     }
 
+    /**
+     * at the beginning of the game, set the workers' position
+     */
     private void setInitialWorkerPosition() {
         Platform.runLater(() -> {
             gameBoardGUI.setShowStatus("Please choose two position to place your Worker.");
