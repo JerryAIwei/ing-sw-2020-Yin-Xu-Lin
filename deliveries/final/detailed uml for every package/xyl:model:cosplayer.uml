@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.xyl.model.cosplayer</OriginalElement>
+  <nodes>
+    <node x="2718.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Pan</node>
+    <node x="3010.75" y="0.0">it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest</node>
+    <node x="1087.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Hephaestus</node>
+    <node x="2174.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Athena</node>
+    <node x="0.0" y="362.0">it.polimi.ingsw.xyl.model.cosplayer.HephaestusBuildTest</node>
+    <node x="5195.0" y="307.0">it.polimi.ingsw.xyl.model.cosplayer.PrometheusMoveBuildTest</node>
+    <node x="0.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Demeter</node>
+    <node x="1448.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Apollo</node>
+    <node x="2520.0" y="352.0">it.polimi.ingsw.xyl.model.cosplayer.AthenaSetOpponentPlayersNoMoveUpTest</node>
+    <node x="2419.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Atlas</node>
+    <node x="1253.9999999999998" y="318.0">it.polimi.ingsw.xyl.model.cosplayer.MinotaurMoveTest</node>
+    <node x="4234.0" y="362.0">it.polimi.ingsw.xyl.model.cosplayer.PanWinTest</node>
+    <node x="3687.0" y="384.0">it.polimi.ingsw.xyl.model.cosplayer.AtlasBuildTest</node>
+    <node x="361.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Prometheus</node>
+    <node x="724.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Artemis</node>
+    <node x="607.0" y="351.0">it.polimi.ingsw.xyl.model.cosplayer.ApolloMoveTest</node>
+    <node x="3136.0" y="362.0">it.polimi.ingsw.xyl.model.cosplayer.ArtemisMoveTest</node>
+    <node x="4679.0" y="352.0">it.polimi.ingsw.xyl.model.cosplayer.AthenaPowerTest</node>
+    <node x="1811.0" y="647.0">it.polimi.ingsw.xyl.model.cosplayer.Minotaur</node>
+    <node x="1916.9999999999998" y="384.0">it.polimi.ingsw.xyl.model.cosplayer.DemeterBuildTest</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.AtlasBuildTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-70.5" />
+      <point x="3950.5" y="277.0" />
+      <point x="3139.45" y="277.0" />
+      <point x="29.699999999999818" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.MinotaurMoveTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-136.5" />
+      <point x="1575.4999999999998" y="267.0" />
+      <point x="3060.25" y="267.0" />
+      <point x="-49.5" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.PanWinTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-92.5" />
+      <point x="4446.5" y="267.0" />
+      <point x="3159.25" y="267.0" />
+      <point x="49.5" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.ApolloMoveTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-103.5" />
+      <point x="920.5" y="257.0" />
+      <point x="3040.45" y="257.0" />
+      <point x="-69.30000000000018" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.PrometheusMoveBuildTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-147.5" />
+      <point x="5541.5" y="247.0" />
+      <point x="3198.8499999999995" y="247.0" />
+      <point x="89.09999999999991" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.HephaestusBuildTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-92.5" />
+      <point x="293.5" y="247.0" />
+      <point x="3020.6499999999996" y="247.0" />
+      <point x="-89.09999999999991" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.AthenaSetOpponentPlayersNoMoveUpTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-102.5" />
+      <point x="2818.0" y="287.0" />
+      <point x="3099.8499999999995" y="287.0" />
+      <point x="-9.900000000000091" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.AthenaPowerTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-102.5" />
+      <point x="4927.0" y="257.0" />
+      <point x="3179.05" y="257.0" />
+      <point x="69.30000000000018" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.ArtemisMoveTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-92.5" />
+      <point x="3401.5" y="287.0" />
+      <point x="3119.6499999999996" y="287.0" />
+      <point x="9.900000000000091" y="113.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer.DemeterBuildTest" target="it.polimi.ingsw.xyl.model.cosplayer.GodCosplayerTest">
+      <point x="0.0" y="-70.5" />
+      <point x="2208.5" y="277.0" />
+      <point x="3080.05" y="277.0" />
+      <point x="-29.699999999999818" y="113.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.1704468517264726" x="2944.0" y="414.0" />
+  <SelectedNodes>
+    <node>it.polimi.ingsw.xyl.model.cosplayer.Pan</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

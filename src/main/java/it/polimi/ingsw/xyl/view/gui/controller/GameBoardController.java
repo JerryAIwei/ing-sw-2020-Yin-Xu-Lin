@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class GameBoardController {
+public class GameBoardController extends GodPowerController {
     private GameBoardGUI gameBoardGUI;
     private boolean moveOrBuild = false;
     private boolean buildOrEnd = false;

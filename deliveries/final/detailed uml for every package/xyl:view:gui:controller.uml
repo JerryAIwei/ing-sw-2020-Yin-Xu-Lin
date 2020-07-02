@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.xyl.view.gui.controller</OriginalElement>
+  <nodes>
+    <node x="1542.5" y="0.0">it.polimi.ingsw.xyl.view.gui.controller.SetUpGameController</node>
+    <node x="20.0" y="0.0">it.polimi.ingsw.xyl.view.gui.controller.GodPowerController</node>
+    <node x="0.0" y="1597.0">it.polimi.ingsw.xyl.view.gui.controller.WaitingStageController</node>
+    <node x="97.5" y="605.0">it.polimi.ingsw.xyl.view.gui.controller.GameBoardController</node>
+    <node x="932.5" y="0.0">it.polimi.ingsw.xyl.view.gui.controller.AskLoginController</node>
+    <node x="526.5" y="0.0">it.polimi.ingsw.xyl.view.gui.controller.GameLobbyController</node>
+    <node x="1245.5" y="0.0">it.polimi.ingsw.xyl.view.gui.controller.StartPlayerController</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController" target="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController">
+      <point x="0.0" y="463.5" />
+      <point x="279.5" y="1552.0" />
+      <point x="77.5" y="1552.0" />
+      <point x="77.5" y="1068.5" />
+      <point x="-182.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.GameLobbyController" target="it.polimi.ingsw.xyl.view.gui.controller.GameLobbyController">
+      <point x="0.0" y="244.5" />
+      <point x="697.0" y="509.0" />
+      <point x="506.5" y="509.0" />
+      <point x="506.5" y="244.5" />
+      <point x="-170.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.StartPlayerController" target="it.polimi.ingsw.xyl.view.gui.controller.StartPlayerController">
+      <point x="0.0" y="134.5" />
+      <point x="1361.5" y="289.0" />
+      <point x="1225.5" y="289.0" />
+      <point x="1225.5" y="134.5" />
+      <point x="-116.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.AskLoginController" target="it.polimi.ingsw.xyl.view.gui.controller.AskLoginController">
+      <point x="0.0" y="210.5" />
+      <point x="1056.5" y="441.0" />
+      <point x="912.5" y="441.0" />
+      <point x="912.5" y="210.5" />
+      <point x="-124.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.GodPowerController" target="it.polimi.ingsw.xyl.view.gui.controller.GodPowerController">
+      <point x="-86.5" y="277.5" />
+      <point x="106.5" y="575.0" />
+      <point x="0.0" y="575.0" />
+      <point x="0.0" y="277.5" />
+      <point x="-173.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController" target="it.polimi.ingsw.xyl.view.gui.controller.GodPowerController">
+      <point x="0.0" y="-463.5" />
+      <point x="86.5" y="277.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.SetUpGameController" target="it.polimi.ingsw.xyl.view.gui.controller.SetUpGameController">
+      <point x="0.0" y="134.5" />
+      <point x="1646.5" y="289.0" />
+      <point x="1522.5" y="289.0" />
+      <point x="1522.5" y="134.5" />
+      <point x="-104.0" y="-0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.7178026745765682" x="531.9746283238098" y="297.61752194603946" />
+  <SelectedNodes>
+    <node>it.polimi.ingsw.xyl.view.gui.controller.SetUpGameController</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

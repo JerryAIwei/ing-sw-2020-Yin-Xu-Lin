@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>it.polimi.ingsw.xyl.model.message</OriginalElement>
+  <nodes>
+    <node x="878.0" y="193.0">it.polimi.ingsw.xyl.model.message.SetPlayerNumberMessage</node>
+    <node x="1160.0" y="204.0">it.polimi.ingsw.xyl.model.message.RefreshMessage</node>
+    <node x="44.47499999999991" y="516.0">it.polimi.ingsw.xyl.model.message.NameOKMessage.Games</node>
+    <node x="561.0" y="204.0">it.polimi.ingsw.xyl.model.message.ConnectionDroppedMessage</node>
+    <node x="1433.272727272727" y="474.0">it.polimi.ingsw.xyl.model.message.SetInitialWorkerPositionMessage</node>
+    <node x="2928.0" y="129.0">it.polimi.ingsw.xyl.model.message.AvailableGodPowersMessage</node>
+    <node x="2339.0" y="182.0">it.polimi.ingsw.xyl.model.message.StartGameMessage</node>
+    <node x="1380.0" y="193.0">it.polimi.ingsw.xyl.model.message.AfterGameMessage</node>
+    <node x="1872.272727272727" y="527.0">it.polimi.ingsw.xyl.model.message.BuildMessage</node>
+    <node x="2146.0" y="237.0">it.polimi.ingsw.xyl.model.message.LoadDataMessage</node>
+    <node x="303.0" y="193.0">it.polimi.ingsw.xyl.model.message.JoinGameMessage</node>
+    <node x="2627.9709956709958" y="538.0">it.polimi.ingsw.xyl.model.message.PlayerChooseGodPowerMessage</node>
+    <node x="3317.9709956709958" y="538.0">it.polimi.ingsw.xyl.model.message.MoveMessage</node>
+    <node x="1643.0" y="237.0">it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage</node>
+    <node x="20.0" y="204.0">it.polimi.ingsw.xyl.model.message.NameOKMessage</node>
+    <node x="3023.9709956709958" y="538.0">it.polimi.ingsw.xyl.model.message.MyTurnFinishedMessage</node>
+    <node x="1857.6755411255413" y="0.0">it.polimi.ingsw.xyl.model.message.Message</node>
+    <node x="3441.0" y="193.0">it.polimi.ingsw.xyl.model.message.PlayerNameMessage</node>
+    <node x="3686.0" y="237.0">it.polimi.ingsw.xyl.model.message.WaitingReconnectionMessage</node>
+    <node x="2645.0" y="193.0">it.polimi.ingsw.xyl.model.message.RoleControllerMessage</node>
+    <node x="1871.0" y="204.0">it.polimi.ingsw.xyl.model.message.CreateNewGameMessage</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="it.polimi.ingsw.xyl.model.message.JoinGameMessage" target="it.polimi.ingsw.xyl.model.message.JoinGameMessage">
+      <point x="0.0" y="58.5" />
+      <point x="422.0" y="330.0" />
+      <point x="283.0" y="330.0" />
+      <point x="283.0" y="251.5" />
+      <point x="-119.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.MoveMessage" target="it.polimi.ingsw.xyl.model.message.MoveMessage">
+      <point x="0.0" y="69.5" />
+      <point x="3455.9709956709958" y="697.0" />
+      <point x="3297.9709956709958" y="697.0" />
+      <point x="3297.9709956709958" y="607.5" />
+      <point x="-138.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.LoadDataMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="2222.5" y="99.0" />
+      <point x="1916.5683982683986" y="99.0" />
+      <point x="10.392857142857338" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.NameOKMessage.Games" target="it.polimi.ingsw.xyl.model.message.NameOKMessage">
+      <point x="-87.375" y="-91.5" />
+      <point x="73.59999999999991" y="454.0" />
+      <point x="92.90000000000009" y="454.0" />
+      <point x="-48.599999999999994" y="47.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.NameOKMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-47.5" />
+      <point x="141.5" y="49.0" />
+      <point x="1861.139826839827" y="49.0" />
+      <point x="-45.03571428571422" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.SetPlayerNumberMessage" target="it.polimi.ingsw.xyl.model.message.SetPlayerNumberMessage">
+      <point x="0.0" y="58.5" />
+      <point x="1009.0" y="330.0" />
+      <point x="858.0" y="330.0" />
+      <point x="858.0" y="251.5" />
+      <point x="-131.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.SetInitialWorkerPositionMessage" target="it.polimi.ingsw.xyl.model.message.RoleControllerMessage">
+      <point x="-99.75" y="-133.5" />
+      <point x="1533.022727272727" y="414.0" />
+      <point x="2678.1363636363635" y="414.0" />
+      <point x="-88.36363636363626" y="58.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.AfterGameMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-58.5" />
+      <point x="1501.5" y="99.0" />
+      <point x="1895.782683982684" y="99.0" />
+      <point x="-10.392857142857338" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.WaitingReconnectionMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="3801.0" y="49.0" />
+      <point x="1951.2112554112555" y="49.0" />
+      <point x="45.03571428571422" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.BuildMessage" target="it.polimi.ingsw.xyl.model.message.BuildMessage">
+      <point x="0.0" y="80.5" />
+      <point x="2037.772727272727" y="708.0" />
+      <point x="1852.272727272727" y="708.0" />
+      <point x="1852.272727272727" y="607.5" />
+      <point x="-165.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.PlayerNameMessage" target="it.polimi.ingsw.xyl.model.message.PlayerNameMessage">
+      <point x="0.0" y="58.5" />
+      <point x="3553.5" y="330.0" />
+      <point x="3421.0" y="330.0" />
+      <point x="3421.0" y="251.5" />
+      <point x="-112.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.MyTurnFinishedMessage" target="it.polimi.ingsw.xyl.model.message.RoleControllerMessage">
+      <point x="63.5" y="-69.5" />
+      <point x="3214.4709956709958" y="434.0" />
+      <point x="2832.772727272727" y="434.0" />
+      <point x="66.27272727272725" y="58.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.BuildMessage" target="it.polimi.ingsw.xyl.model.message.RoleControllerMessage">
+      <point x="82.75" y="-80.5" />
+      <point x="2120.522727272727" y="444.0" />
+      <point x="2744.409090909091" y="444.0" />
+      <point x="-22.09090909090901" y="58.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.RefreshMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-47.5" />
+      <point x="1260.0" y="89.0" />
+      <point x="1888.8541125541128" y="89.0" />
+      <point x="-17.32142857142844" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.ConnectionDroppedMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-47.5" />
+      <point x="699.5" y="69.0" />
+      <point x="1874.9969696969697" y="69.0" />
+      <point x="-31.17857142857156" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.StartGameMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-69.5" />
+      <point x="2472.0" y="89.0" />
+      <point x="1923.4969696969697" y="89.0" />
+      <point x="17.32142857142844" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.RoleControllerMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-58.5" />
+      <point x="2766.5" y="79.0" />
+      <point x="1930.4255411255413" y="79.0" />
+      <point x="24.25" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.PlayerChooseGodPowerMessage" target="it.polimi.ingsw.xyl.model.message.PlayerChooseGodPowerMessage">
+      <point x="0.0" y="69.5" />
+      <point x="2815.9709956709958" y="697.0" />
+      <point x="2607.9709956709958" y="697.0" />
+      <point x="2607.9709956709958" y="607.5" />
+      <point x="-188.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.MoveMessage" target="it.polimi.ingsw.xyl.model.message.RoleControllerMessage">
+      <point x="69.0" y="-69.5" />
+      <point x="3524.9709956709958" y="414.0" />
+      <point x="2876.9545454545455" y="414.0" />
+      <point x="110.4545454545455" y="58.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.AvailableGodPowersMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-122.5" />
+      <point x="3164.5" y="69.0" />
+      <point x="1937.3541125541128" y="69.0" />
+      <point x="31.17857142857156" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.NameOKMessage" target="it.polimi.ingsw.xyl.model.message.NameOKMessage">
+      <point x="-97.20000000000005" y="47.5" />
+      <point x="44.299999999999955" y="319.0" />
+      <point x="0.0" y="319.0" />
+      <point x="0.0" y="251.5" />
+      <point x="-121.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.NameOKMessage.Games" target="it.polimi.ingsw.xyl.model.message.NameOKMessage.Games">
+      <point x="0.0" y="91.5" />
+      <point x="160.9749999999999" y="719.0" />
+      <point x="24.47499999999991" y="719.0" />
+      <point x="24.47499999999991" y="607.5" />
+      <point x="-116.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.CreateNewGameMessage" target="it.polimi.ingsw.xyl.model.message.CreateNewGameMessage">
+      <point x="0.0" y="47.5" />
+      <point x="1998.5" y="319.0" />
+      <point x="1851.0" y="319.0" />
+      <point x="1851.0" y="251.5" />
+      <point x="-127.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.SetPlayerNumberMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-58.5" />
+      <point x="1009.0" y="79.0" />
+      <point x="1881.9255411255413" y="79.0" />
+      <point x="-24.25" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.PlayerChooseGodPowerMessage" target="it.polimi.ingsw.xyl.model.message.RoleControllerMessage">
+      <point x="94.0" y="-69.5" />
+      <point x="2909.9709956709958" y="454.0" />
+      <point x="2788.590909090909" y="454.0" />
+      <point x="22.09090909090901" y="58.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.AskPlayerNameMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="1737.0" y="109.0" />
+      <point x="1902.7112554112555" y="109.0" />
+      <point x="-3.4642857142857792" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.StartGameMessage" target="it.polimi.ingsw.xyl.model.message.StartGameMessage">
+      <point x="0.0" y="69.5" />
+      <point x="2472.0" y="341.0" />
+      <point x="2319.0" y="341.0" />
+      <point x="2319.0" y="251.5" />
+      <point x="-133.0" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.CreateNewGameMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-47.5" />
+      <point x="1998.5" y="109.0" />
+      <point x="1909.639826839827" y="109.0" />
+      <point x="3.4642857142857792" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.AvailableGodPowersMessage" target="it.polimi.ingsw.xyl.model.message.AvailableGodPowersMessage">
+      <point x="0.0" y="122.5" />
+      <point x="3164.5" y="394.0" />
+      <point x="2908.0" y="394.0" />
+      <point x="2908.0" y="251.5" />
+      <point x="-236.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.SetInitialWorkerPositionMessage" target="it.polimi.ingsw.xyl.model.message.SetInitialWorkerPositionMessage">
+      <point x="0.0" y="133.5" />
+      <point x="1632.772727272727" y="761.0" />
+      <point x="1413.272727272727" y="761.0" />
+      <point x="1413.272727272727" y="607.5" />
+      <point x="-199.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.NameOKMessage" target="it.polimi.ingsw.xyl.model.message.NameOKMessage.Games">
+      <point x="48.59999999999991" y="47.5" />
+      <point x="29.125" y="-91.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.PlayerNameMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-58.5" />
+      <point x="3553.5" y="59.0" />
+      <point x="1944.282683982684" y="59.0" />
+      <point x="38.10714285714266" y="14.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.RoleControllerMessage" target="it.polimi.ingsw.xyl.model.message.RoleControllerMessage">
+      <point x="-110.4545454545455" y="58.5" />
+      <point x="2656.0454545454545" y="330.0" />
+      <point x="2625.0" y="330.0" />
+      <point x="2625.0" y="251.5" />
+      <point x="-121.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message.JoinGameMessage" target="it.polimi.ingsw.xyl.model.message.Message">
+      <point x="0.0" y="-58.5" />
+      <point x="422.0" y="59.0" />
+      <point x="1868.0683982683986" y="59.0" />
+      <point x="-38.10714285714266" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.25584349593495936" x="1948.0" y="380.5" />
+  <SelectedNodes>
+    <node>it.polimi.ingsw.xyl.model.message.CreateNewGameMessage</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
