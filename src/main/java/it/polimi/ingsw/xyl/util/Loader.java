@@ -16,6 +16,7 @@ import javafx.scene.shape.VertexFormat;
  * Loader.java
  * <p>
  * This class is responsible for loading any required assets for the game.
+ * @author https://github.com/danielbarry/javafx-mesh-importer
  **/
 public abstract class Loader {
     /**
