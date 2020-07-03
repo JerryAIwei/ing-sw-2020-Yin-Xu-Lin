@@ -7,23 +7,8 @@
     <node x="30.0" y="0.0">it.polimi.ingsw.xyl.network.server</node>
   </nodes>
   <notes />
-  <edges>
-    <edge source="it.polimi.ingsw.xyl.network.server" target="it.polimi.ingsw.xyl.network.server">
-      <point x="32.5" y="14.5" />
-      <point x="127.5" y="59.0" />
-      <point x="0.0" y="59.0" />
-      <point x="0.0" y="7.25" />
-      <point x="-65.0" y="-7.25" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.network.client" target="it.polimi.ingsw.xyl.network.client">
-      <point x="0.0" y="14.5" />
-      <point x="85.0" y="162.5" />
-      <point x="0.0" y="162.5" />
-      <point x="0.0" y="128.0" />
-      <point x="-65.0" y="-0.0" />
-    </edge>
-  </edges>
-  <settings layout="Hierarchic Group" zoom="2.2829346004873514" x="21.447534013219467" y="60.36390991744916" />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="90.0" y="71.5" />
   <SelectedNodes>
     <node>it.polimi.ingsw.xyl.network.client</node>
   </SelectedNodes>

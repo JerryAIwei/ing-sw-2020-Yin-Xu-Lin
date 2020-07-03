@@ -3,753 +3,169 @@
   <ID>JAVA</ID>
   <OriginalElement>it.polimi.ingsw.xyl.model</OriginalElement>
   <nodes>
-    <node x="1808.5460190308972" y="3132.0">it.polimi.ingsw.xyl.model.GameLobby</node>
-    <node x="1439.5712606837606" y="2454.0">it.polimi.ingsw.xyl.model.GameBoard</node>
-    <node x="1040.3440789473684" y="965.0">it.polimi.ingsw.xyl.model.Cosplayer</node>
-    <node x="683.6142729991514" y="1877.0">it.polimi.ingsw.xyl.model.GodPower</node>
-    <node x="1829.5611111111111" y="0.0">it.polimi.ingsw.xyl.model.Level</node>
-    <node x="314.42499999999995" y="4129.0">it.polimi.ingsw.xyl.model.VirtualGame</node>
-    <node x="537.3603473014676" y="525.0">it.polimi.ingsw.xyl.model.PlayerStatus</node>
-    <node x="1298.14133385877" y="5059.0">it.polimi.ingsw.xyl.model.GameMaster</node>
-    <node x="1769.7277777777776" y="253.0">it.polimi.ingsw.xyl.model.Space</node>
-    <node x="2212.451452906389" y="1588.0">it.polimi.ingsw.xyl.model.cosplayer</node>
-    <node x="965.5142729991514" y="3109.0">it.polimi.ingsw.xyl.model.Player</node>
-    <node x="2749.455542840421" y="1040.0">it.polimi.ingsw.xyl.model.DirectionToMarginalPositionTest</node>
-    <node x="698.425" y="2542.0">it.polimi.ingsw.xyl.model.Worker</node>
-    <node x="1046.14133385877" y="3805.0">it.polimi.ingsw.xyl.model.message</node>
-    <node x="2323.8443100492464" y="559.0">it.polimi.ingsw.xyl.model.IslandBoard</node>
-    <node x="1187.260745614035" y="569.0">it.polimi.ingsw.xyl.model.Cosplayer.Action</node>
-    <node x="402.70705128205145" y="4618.0">it.polimi.ingsw.xyl.model.VirtualGame.VPlayer</node>
-    <node x="45.496074302316174" y="558.0">it.polimi.ingsw.xyl.model.GameStatus</node>
-    <node x="1232.5460190308975" y="4225.0">it.polimi.ingsw.xyl.model.CosplayerMoveTest</node>
-    <node x="2084.5460190308972" y="4258.0">it.polimi.ingsw.xyl.model.CosplayerBuildTest</node>
-    <node x="2652.062621769468" y="482.0">it.polimi.ingsw.xyl.model.Direction</node>
-    <node x="1349.6978814778176" y="3640.0">it.polimi.ingsw.xyl.model.CosplayerTest</node>
+    <node x="792.5" y="877.5">it.polimi.ingsw.xyl.model.GameLobby</node>
+    <node x="-30.0" y="777.5">it.polimi.ingsw.xyl.model.GameBoard</node>
+    <node x="2256.5" y="-18.5">it.polimi.ingsw.xyl.model.GodPower</node>
+    <node x="2601.0" y="2058.5">it.polimi.ingsw.xyl.model.Cosplayer</node>
+    <node x="1226.5" y="1188.5">it.polimi.ingsw.xyl.model.Level</node>
+    <node x="1445.0" y="1320.5">it.polimi.ingsw.xyl.model.VirtualGame</node>
+    <node x="730.0" y="3216.5">it.polimi.ingsw.xyl.model.PlayerStatus</node>
+    <node x="324.5" y="613.5">it.polimi.ingsw.xyl.model.GameMaster</node>
+    <node x="1195.0" y="1450.5">it.polimi.ingsw.xyl.model.Space</node>
+    <node x="2284.5" y="465.5">it.polimi.ingsw.xyl.model.cosplayer</node>
+    <node x="2236.5" y="2134.5">it.polimi.ingsw.xyl.model.Player</node>
+    <node x="-0.5" y="3213.5">it.polimi.ingsw.xyl.model.DirectionToMarginalPositionTest</node>
+    <node x="1941.5" y="2145.5">it.polimi.ingsw.xyl.model.Worker</node>
+    <node x="1531.5" y="1225.5">it.polimi.ingsw.xyl.model.message</node>
+    <node x="424.0" y="1450.5">it.polimi.ingsw.xyl.model.IslandBoard</node>
+    <node x="1814.0" y="1764.5">it.polimi.ingsw.xyl.model.VirtualGame.VPlayer</node>
+    <node x="2984.0" y="2220.5">it.polimi.ingsw.xyl.model.Cosplayer.Action</node>
+    <node x="2523.0" y="3009.5">it.polimi.ingsw.xyl.model.CosplayerBuildTest</node>
+    <node x="3012.5" y="2656.5">it.polimi.ingsw.xyl.model.CosplayerMoveTest</node>
+    <node x="938.5" y="3209.5">it.polimi.ingsw.xyl.model.GameStatus</node>
+    <node x="458.5" y="3213.5">it.polimi.ingsw.xyl.model.Direction</node>
+    <node x="2566.0" y="2580.5">it.polimi.ingsw.xyl.model.CosplayerTest</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.GameStatus">
-      <point x="-183.28125" y="-386.5" />
-      <point x="1310.36008385877" y="5039.0" />
-      <point x="17.075000000000045" y="5039.0" />
-      <point x="17.075000000000045" y="895.0" />
-      <point x="51.646074302316265" y="895.0" />
-      <point x="-55.34999999999991" y="70.5" />
+    <edge source="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer" target="it.polimi.ingsw.xyl.model.VirtualGame">
+      <point x="-226.0" y="0.0" />
+      <point x="1600.0" y="1920.0" />
+      <point x="0.0" y="199.5" />
     </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="70.10714285714289" y="-14.5" />
-      <point x="2358.058595763532" y="1568.0" />
-      <point x="2663.955542840421" y="1568.0" />
-      <point x="2663.955542840421" y="895.0" />
-      <point x="2712.962621769468" y="895.0" />
-      <point x="-40.59999999999991" y="146.5" />
+    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.Player">
+      <point x="-194.0" y="-80.0" />
+      <point x="2360.0" y="2680.0" />
+      <point x="0.0" y="145.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.cosplayer">
+      <point x="40.0" y="-14.5" />
+      <point x="2400.0" y="400.0" />
+      <point x="2520.0" y="400.0" />
+      <point x="2520.0" y="472.0" />
+      <point x="75.5" y="-8.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.IslandBoard">
+      <point x="-194.0" y="-40.0" />
+      <point x="520.0" y="2720.0" />
+      <point x="0.0" y="69.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.GameBoard">
+      <point x="-75.5" y="0.0" />
+      <point x="120.0" y="480.0" />
+      <point x="0.0" y="-222.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.GameBoard">
+      <point x="-195.5" y="0.0" />
+      <point x="150.0" y="0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.message" target="it.polimi.ingsw.xyl.model.message">
+      <point x="0.0" y="-14.5" />
+      <point x="1600.0" y="1160.0" />
+      <point x="1720.0" y="1160.0" />
+      <point x="1720.0" y="1240.0" />
+      <point x="68.5" y="0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer">
+      <point x="155.0" y="0.0" />
+      <point x="2040.0" y="1520.0" />
+      <point x="0.0" y="-155.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.Cosplayer">
+      <point x="0.0" y="-179.5" />
+      <point x="0.0" y="221.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer" target="it.polimi.ingsw.xyl.model.Worker">
+      <point x="0.0" y="155.5" />
+      <point x="0.0" y="-134.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.Space">
+      <point x="-155.0" y="0.0" />
+      <point x="85.0" y="0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.CosplayerMoveTest" target="it.polimi.ingsw.xyl.model.CosplayerTest">
+      <point x="-267.5" y="0.0" />
+      <point x="194.0" y="0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.Player">
+      <point x="0.0" y="14.5" />
+      <point x="0.0" y="-145.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.Cosplayer">
+      <point x="75.5" y="0.0" />
+      <point x="2720.0" y="480.0" />
+      <point x="-40.0" y="-221.5" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="-12.21875" y="-386.5" />
-      <point x="1481.42258385877" y="4969.0" />
-      <point x="1215.64133385877" y="4969.0" />
-      <point x="1215.64133385877" y="3490.0" />
-      <point x="1124.2999872848657" y="3490.0" />
-      <point x="35.28571428571422" y="145.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.GameStatus">
-      <point x="-141.33333333333337" y="-221.5" />
-      <point x="1058.0107456140352" y="865.0" />
-      <point x="162.34607430231608" y="865.0" />
-      <point x="55.34999999999991" y="70.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="16.736842105263122" y="221.5" />
-      <point x="1216.0809210526318" y="1568.0" />
-      <point x="1188.2841910016273" y="1568.0" />
-      <point x="1188.2841910016273" y="2969.0" />
-      <point x="1095.1892729991514" y="2969.0" />
-      <point x="6.1749999999999545" y="-145.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.GodPower">
-      <point x="-22.65000000000009" y="14.5" />
-      <point x="2265.301452906389" y="1847.0" />
-      <point x="875.8285587134371" y="1847.0" />
-      <point x="88.71428571428578" y="-178.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer" target="it.polimi.ingsw.xyl.model.VirtualGame">
-      <point x="-139.07692307692332" y="-155.5" />
-      <point x="489.63012820512813" y="4568.0" />
-      <point x="443.59166666666647" y="4568.0" />
-      <point x="-25.833333333333485" y="199.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.VirtualGame">
-      <point x="-129.16666666666674" y="199.5" />
-      <point x="340.2583333333332" y="4548.0" />
-      <point x="294.42499999999995" y="4548.0" />
-      <point x="294.42499999999995" y="4328.5" />
-      <point x="-155.0" y="-0.0" />
+      <point x="0.0" y="-386.5" />
+      <point x="520.0" y="560.0" />
+      <point x="2320.0" y="560.0" />
+      <point x="-40.0" y="-145.5" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.Space" target="it.polimi.ingsw.xyl.model.Level">
       <point x="0.0" y="-69.5" />
-      <point x="1854.7277777777776" y="233.0" />
-      <point x="1876.3736111111111" y="233.0" />
-      <point x="-6.6875" y="91.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerBuildTest" target="it.polimi.ingsw.xyl.model.Level">
-      <point x="177.7499999999999" y="-70.5" />
-      <point x="2499.2960190308972" y="4109.0" />
-      <point x="3208.0888761737547" y="4109.0" />
-      <point x="3208.0888761737547" y="203.0" />
-      <point x="1929.8736111111111" y="203.0" />
-      <point x="46.8125" y="91.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Worker" target="it.polimi.ingsw.xyl.model.Worker">
-      <point x="-84.42857142857144" y="134.5" />
-      <point x="712.4964285714285" y="2831.0" />
-      <point x="678.425" y="2831.0" />
-      <point x="678.425" y="2676.5" />
-      <point x="-98.5" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.Space">
-      <point x="-35.333333333333485" y="-221.5" />
-      <point x="1164.010745614035" y="945.0" />
-      <point x="1176.760745614035" y="945.0" />
-      <point x="1176.760745614035" y="462.0" />
-      <point x="1854.7277777777776" y="462.0" />
-      <point x="0.0" y="69.5" />
+      <point x="0.0" y="91.5" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.Cosplayer.Action" target="it.polimi.ingsw.xyl.model.Cosplayer">
-      <point x="14.0" y="59.5" />
-      <point x="1257.260745614035" y="945.0" />
-      <point x="1270.0107456140354" y="945.0" />
-      <point x="70.66666666666674" y="-221.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.PlayerStatus">
-      <point x="-77.5" y="-199.5" />
-      <point x="391.92499999999995" y="4079.0" />
-      <point x="170.17499999999995" y="4079.0" />
-      <point x="170.17499999999995" y="1707.0" />
-      <point x="516.1353473014677" y="1707.0" />
-      <point x="516.1353473014677" y="915.0" />
-      <point x="586.3603473014676" y="915.0" />
-      <point x="-21.0" y="103.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.Cosplayer.Action">
-      <point x="35.33333333333326" y="-221.5" />
-      <point x="1234.677412280702" y="945.0" />
-      <point x="1229.260745614035" y="945.0" />
-      <point x="-14.0" y="59.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.GodPower">
-      <point x="77.5" y="-199.5" />
-      <point x="546.925" y="4099.0" />
-      <point x="502.09491800247577" y="4099.0" />
-      <point x="502.09491800247577" y="2394.0" />
-      <point x="730.6597275446059" y="2394.0" />
-      <point x="-56.454545454545496" y="178.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.GameBoard">
-      <point x="66.94736842105249" y="221.5" />
-      <point x="1266.291447368421" y="1548.0" />
-      <point x="1584.0712606837606" y="1548.0" />
-      <point x="1584.0712606837606" y="2434.0" />
-      <point x="1577.0712606837606" y="2434.0" />
-      <point x="-12.5" y="-222.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="-113.16666666666674" y="-179.5" />
-      <point x="1430.5312148111511" y="3460.0" />
-      <point x="1159.5857015705799" y="3460.0" />
-      <point x="70.57142857142844" y="145.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.IslandBoard">
-      <point x="106.0" y="-221.5" />
-      <point x="1305.3440789473684" y="865.0" />
-      <point x="2347.8443100492464" y="865.0" />
-      <point x="-72.0" y="69.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameBoard" target="it.polimi.ingsw.xyl.model.GodPower">
-      <point x="-87.5" y="-222.5" />
-      <point x="1502.0712606837606" y="2274.0" />
-      <point x="862.3870002718786" y="2274.0" />
-      <point x="75.27272727272725" y="178.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.PlayerStatus">
-      <point x="-16.17857142857133" y="-14.5" />
-      <point x="2271.772881477818" y="1458.0" />
-      <point x="2199.0045057400957" y="1458.0" />
-      <point x="2199.0045057400957" y="835.0" />
-      <point x="670.3603473014676" y="835.0" />
-      <point x="63.0" y="103.5" />
+      <point x="-56.0" y="0.0" />
+      <point x="159.0" y="0.0" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.GameBoard">
-      <point x="-16.166666666666742" y="-179.5" />
-      <point x="1527.5312148111511" y="3530.0" />
-      <point x="1572.087685697564" y="3530.0" />
-      <point x="1572.087685697564" y="3049.0" />
-      <point x="1612.6481837606837" y="3049.0" />
-      <point x="23.076923076923094" y="222.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameLobby" target="it.polimi.ingsw.xyl.model.GameLobby">
-      <point x="-102.0" y="122.5" />
-      <point x="1834.0460190308972" y="3397.0" />
-      <point x="1788.5460190308972" y="3397.0" />
-      <point x="1788.5460190308972" y="3254.5" />
-      <point x="-127.5" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.message" target="it.polimi.ingsw.xyl.model.GodPower">
-      <point x="-30.444444444444343" y="-14.5" />
-      <point x="1084.1968894143256" y="3600.0" />
-      <point x="656.925" y="3600.0" />
-      <point x="656.925" y="2424.0" />
-      <point x="787.1142729991514" y="2424.0" />
-      <point x="0.0" y="178.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerMoveTest" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="200.625" y="-103.5" />
-      <point x="1700.6710190308975" y="4089.0" />
-      <point x="2707.955542840421" y="4089.0" />
-      <point x="2707.955542840421" y="935.0" />
-      <point x="2767.0959551028013" y="935.0" />
-      <point x="13.533333333333303" y="146.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer" target="it.polimi.ingsw.xyl.model.GodPower">
-      <point x="34.769230769230944" y="-155.5" />
-      <point x="663.4762820512824" y="4598.0" />
-      <point x="645.925" y="4598.0" />
-      <point x="645.925" y="2414.0" />
-      <point x="768.2960911809696" y="2414.0" />
-      <point x="-18.818181818181756" y="178.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.IslandBoard">
-      <point x="37.75" y="-14.5" />
-      <point x="2325.701452906389" y="1538.0" />
-      <point x="2391.919764626611" y="1538.0" />
-      <point x="2391.919764626611" y="865.0" />
-      <point x="2395.8443100492464" y="865.0" />
-      <point x="-24.0" y="69.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.Level">
-      <point x="177.83333333333337" y="-179.5" />
-      <point x="1721.5312148111511" y="3620.0" />
-      <point x="3197.0888761737547" y="3620.0" />
-      <point x="3197.0888761737547" y="213.0" />
-      <point x="1916.4986111111111" y="213.0" />
-      <point x="33.4375" y="91.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Player" target="it.polimi.ingsw.xyl.model.Cosplayer">
-      <point x="18.52500000000009" y="-145.5" />
-      <point x="1107.5392729991515" y="2979.0" />
-      <point x="1316.6324180024758" y="2979.0" />
-      <point x="1316.6324180024758" y="1568.0" />
-      <point x="1232.8177631578947" y="1568.0" />
-      <point x="33.473684210526244" y="221.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.cosplayer">
-      <point x="-67.95000000000005" y="14.5" />
-      <point x="2220.001452906389" y="1637.0" />
-      <point x="2192.451452906389" y="1637.0" />
-      <point x="2192.451452906389" y="1609.75" />
-      <point x="-75.5" y="7.25" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.IslandBoard">
-      <point x="80.83333333333326" y="-179.5" />
-      <point x="1624.5312148111511" y="3570.0" />
-      <point x="2449.6300243349606" y="3570.0" />
-      <point x="2449.6300243349606" y="855.0" />
-      <point x="2459.8443100492464" y="855.0" />
-      <point x="40.0" y="69.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.GameBoard">
-      <point x="22.649999999999864" y="14.5" />
-      <point x="2310.601452906389" y="1857.0" />
-      <point x="2314.701452906389" y="1857.0" />
-      <point x="2314.701452906389" y="2404.0" />
-      <point x="1652.0712606837606" y="2404.0" />
-      <point x="62.5" y="-222.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer" target="it.polimi.ingsw.xyl.model.PlayerStatus">
-      <point x="-208.61538461538476" y="-155.5" />
-      <point x="420.0916666666667" y="4588.0" />
-      <point x="148.17499999999995" y="4588.0" />
-      <point x="148.17499999999995" y="1687.0" />
-      <point x="494.13534730146773" y="1687.0" />
-      <point x="494.13534730146773" y="895.0" />
-      <point x="558.3603473014676" y="895.0" />
-      <point x="-49.0" y="103.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameBoard" target="it.polimi.ingsw.xyl.model.PlayerStatus">
-      <point x="-37.5" y="-222.5" />
-      <point x="1552.0712606837606" y="2254.0" />
-      <point x="979.6142729991514" y="2254.0" />
-      <point x="979.6142729991514" y="1737.0" />
-      <point x="637.3603473014676" y="1737.0" />
-      <point x="637.3603473014676" y="945.0" />
-      <point x="642.3603473014676" y="945.0" />
-      <point x="35.0" y="103.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.GodPower">
-      <point x="-117.15789473684208" y="221.5" />
-      <point x="1082.1861842105263" y="1528.0" />
-      <point x="887.1499872848659" y="1528.0" />
-      <point x="887.1499872848659" y="1787.0" />
-      <point x="698.3999872848656" y="1787.0" />
-      <point x="-88.71428571428578" y="-178.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.GameBoard">
-      <point x="12.21875" y="-386.5" />
-      <point x="1505.86008385877" y="4969.0" />
-      <point x="1778.0460190308972" y="4969.0" />
-      <point x="1778.0460190308972" y="3059.0" />
-      <point x="1658.8020299145298" y="3059.0" />
-      <point x="69.23076923076928" y="222.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.message" target="it.polimi.ingsw.xyl.model.GameStatus">
-      <point x="-60.88888888888914" y="-14.5" />
-      <point x="1053.7524449698808" y="3620.0" />
-      <point x="50.075000000000045" y="3620.0" />
-      <point x="50.075000000000045" y="925.0" />
-      <point x="88.54607430231636" y="925.0" />
-      <point x="-18.449999999999818" y="70.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Player" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="-105.85714285714289" y="145.5" />
-      <point x="983.1571301420086" y="3420.0" />
-      <point x="945.5142729991514" y="3420.0" />
-      <point x="945.5142729991514" y="3254.5" />
-      <point x="-123.5" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.IslandBoard">
-      <point x="134.40625" y="-386.5" />
-      <point x="1628.04758385877" y="5019.0" />
-      <point x="2569.0460190308972" y="5019.0" />
-      <point x="2569.0460190308972" y="865.0" />
-      <point x="2491.8443100492464" y="865.0" />
-      <point x="72.0" y="69.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Direction" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="-94.73333333333335" y="146.5" />
-      <point x="2658.8292884361344" y="795.0" />
-      <point x="2632.062621769468" y="795.0" />
-      <point x="2632.062621769468" y="701.75" />
-      <point x="-101.5" y="73.25" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.message" target="it.polimi.ingsw.xyl.model.message">
-      <point x="17.125" y="14.5" />
-      <point x="1131.76633385877" y="3874.0" />
-      <point x="1006.14133385877" y="3874.0" />
-      <point x="1006.14133385877" y="3809.833333333333" />
-      <point x="-68.5" y="-9.666666666666742" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer">
-      <point x="25.833333333333485" y="199.5" />
-      <point x="495.25833333333344" y="4598.0" />
-      <point x="524.3993589743591" y="4598.0" />
-      <point x="-104.30769230769238" y="-155.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer">
-      <point x="-61.09375" y="-386.5" />
-      <point x="1432.54758385877" y="4989.0" />
-      <point x="741.7070512820515" y="4989.0" />
-      <point x="113.0" y="155.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.GameLobby">
-      <point x="36.65625" y="-386.5" />
-      <point x="1530.29758385877" y="4979.0" />
-      <point x="1980.8978814778177" y="4979.0" />
-      <point x="1980.8978814778177" y="3550.0" />
-      <point x="1936.0460190308972" y="3550.0" />
-      <point x="0.0" y="122.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="183.28125" y="-386.5" />
-      <point x="1676.92258385877" y="5039.0" />
-      <point x="3182.955542840421" y="5039.0" />
-      <point x="3182.955542840421" y="905.0" />
-      <point x="2848.295955102801" y="905.0" />
-      <point x="94.73333333333312" y="146.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GodPower" target="it.polimi.ingsw.xyl.model.cosplayer">
-      <point x="59.14285714285711" y="-178.5" />
-      <point x="846.2571301420085" y="1837.0" />
-      <point x="2250.201452906389" y="1837.0" />
-      <point x="-37.75" y="14.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.IslandBoard" target="it.polimi.ingsw.xyl.model.IslandBoard">
-      <point x="-88.0" y="69.5" />
-      <point x="2331.8443100492464" y="718.0" />
-      <point x="2303.8443100492464" y="718.0" />
-      <point x="2303.8443100492464" y="628.5" />
-      <point x="-96.0" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.message" target="it.polimi.ingsw.xyl.model.GameBoard">
-      <point x="15.222222222222172" y="-14.5" />
-      <point x="1129.863556080992" y="3520.0" />
-      <point x="1527.1978814778176" y="3520.0" />
-      <point x="1527.1978814778176" y="3039.0" />
-      <point x="1589.5712606837606" y="3039.0" />
+      <point x="-194.0" y="0.0" />
+      <point x="120.0" y="2760.0" />
       <point x="0.0" y="222.5" />
     </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.Cosplayer">
-      <point x="-48.5" y="-179.5" />
-      <point x="1495.1978814778176" y="3440.0" />
-      <point x="1381.2199180024759" y="3440.0" />
-      <point x="1381.2199180024759" y="1558.0" />
-      <point x="1249.554605263158" y="1558.0" />
-      <point x="50.210526315789366" y="221.5" />
+    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.IslandBoard">
+      <point x="-75.5" y="8.0" />
+      <point x="1120.0" y="488.0" />
+      <point x="1120.0" y="1480.0" />
+      <point x="96.0" y="-40.0" />
     </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="145.5" y="-179.5" />
-      <point x="1689.1978814778176" y="3610.0" />
-      <point x="2696.955542840421" y="3610.0" />
-      <point x="2696.955542840421" y="925.0" />
-      <point x="2753.562621769468" y="925.0" />
-      <point x="0.0" y="146.5" />
+    <edge source="it.polimi.ingsw.xyl.model.Player" target="it.polimi.ingsw.xyl.model.Cosplayer">
+      <point x="123.5" y="0.0" />
+      <point x="-159.0" y="0.0" />
     </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.Cosplayer.Action">
-      <point x="-5.39285714285711" y="-14.5" />
-      <point x="2282.558595763532" y="1448.0" />
-      <point x="2275.701452906389" y="1448.0" />
-      <point x="2275.701452906389" y="825.0" />
-      <point x="1285.260745614035" y="825.0" />
-      <point x="42.0" y="59.5" />
+    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.IslandBoard">
+      <point x="0.0" y="386.5" />
+      <point x="0.0" y="-69.5" />
     </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameBoard" target="it.polimi.ingsw.xyl.model.GameBoard">
-      <point x="-138.46153846153845" y="222.5" />
-      <point x="1451.109722222222" y="2919.0" />
-      <point x="1419.5712606837606" y="2919.0" />
-      <point x="1419.5712606837606" y="2676.5" />
-      <point x="-150.0" y="-0.0" />
+    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.GameLobby">
+      <point x="195.5" y="0.0" />
+      <point x="-127.5" y="0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.model.GodPower" target="it.polimi.ingsw.xyl.model.cosplayer">
+      <point x="0.0" y="178.5" />
+      <point x="0.0" y="-14.5" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.Player" target="it.polimi.ingsw.xyl.model.Worker">
-      <point x="-92.625" y="-145.5" />
-      <point x="996.3892729991514" y="3049.0" />
-      <point x="853.2107142857142" y="3049.0" />
-      <point x="56.28571428571422" y="134.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.DirectionToMarginalPositionTest" target="it.polimi.ingsw.xyl.model.DirectionToMarginalPositionTest">
-      <point x="0.0" y="146.5" />
-      <point x="2949.955542840421" y="1353.0" />
-      <point x="2729.455542840421" y="1353.0" />
-      <point x="2729.455542840421" y="1186.5" />
-      <point x="-200.5" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="139.5" y="-199.5" />
-      <point x="608.925" y="4109.0" />
-      <point x="1193.64133385877" y="4109.0" />
-      <point x="1193.64133385877" y="3510.0" />
-      <point x="1053.7285587134372" y="3510.0" />
-      <point x="-35.28571428571422" y="145.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameLobby" target="it.polimi.ingsw.xyl.model.GameBoard">
-      <point x="63.75" y="-122.5" />
-      <point x="1999.7960190308972" y="3039.0" />
-      <point x="1704.9558760683758" y="3039.0" />
-      <point x="115.38461538461524" y="222.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerMoveTest" target="it.polimi.ingsw.xyl.model.Level">
-      <point x="-200.625" y="-103.5" />
-      <point x="1299.4210190308975" y="4039.0" />
-      <point x="0.0" y="4039.0" />
-      <point x="0.0" y="203.0" />
-      <point x="1836.2486111111111" y="203.0" />
-      <point x="-46.8125" y="91.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer" target="it.polimi.ingsw.xyl.model.Worker">
-      <point x="104.30769230769238" y="-155.5" />
-      <point x="733.0147435897438" y="4598.0" />
-      <point x="737.925" y="4598.0" />
-      <point x="737.925" y="3089.0" />
-      <point x="768.7821428571426" y="3089.0" />
-      <point x="-28.142857142857338" y="134.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.VirtualGame">
-      <point x="-85.53125" y="-386.5" />
-      <point x="1408.11008385877" y="4999.0" />
-      <point x="348.1365384615385" y="4999.0" />
-      <point x="348.1365384615385" y="4598.0" />
-      <point x="391.92499999999995" y="4598.0" />
-      <point x="-77.5" y="199.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.GameStatus">
-      <point x="-70.10714285714289" y="-14.5" />
-      <point x="2217.8443100492464" y="1508.0" />
-      <point x="560.1353473014677" y="1508.0" />
-      <point x="560.1353473014677" y="875.0" />
-      <point x="150.04607430231636" y="875.0" />
-      <point x="43.05000000000018" y="70.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.PlayerStatus">
-      <point x="-158.84375" y="-386.5" />
-      <point x="1334.79758385877" y="5029.0" />
-      <point x="115.17499999999995" y="5029.0" />
-      <point x="115.17499999999995" y="1677.0" />
-      <point x="483.13534730146773" y="1677.0" />
-      <point x="483.13534730146773" y="885.0" />
-      <point x="544.3603473014676" y="885.0" />
-      <point x="-63.0" y="103.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.Space">
-      <point x="-46.5" y="-199.5" />
-      <point x="422.92499999999995" y="4069.0" />
-      <point x="230.67107430231636" y="4069.0" />
-      <point x="230.67107430231636" y="2334.0" />
-      <point x="495.86034730146764" y="2334.0" />
-      <point x="495.86034730146764" y="1747.0" />
-      <point x="722.7770139681343" y="1747.0" />
-      <point x="722.7770139681343" y="432.0" />
-      <point x="1798.061111111111" y="432.0" />
-      <point x="-56.66666666666674" y="69.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.GameMaster">
-      <point x="0.0" y="386.5" />
-      <point x="1493.64133385877" y="5852.0" />
-      <point x="1278.14133385877" y="5852.0" />
-      <point x="1278.14133385877" y="5445.5" />
-      <point x="-195.5" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="141.33333333333326" y="-221.5" />
-      <point x="1340.677412280702" y="875.0" />
-      <point x="2685.8959551028015" y="875.0" />
-      <point x="-67.66666666666652" y="146.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.GodPower">
-      <point x="-109.96875" y="-386.5" />
-      <point x="1383.67258385877" y="5009.0" />
-      <point x="283.92499999999995" y="5009.0" />
-      <point x="283.92499999999995" y="2374.0" />
-      <point x="693.0233639082423" y="2374.0" />
-      <point x="-94.09090909090901" y="178.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GodPower" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="56.454545454545496" y="178.5" />
-      <point x="843.5688184536968" y="2304.0" />
-      <point x="950.8415457264241" y="2304.0" />
-      <point x="950.8415457264241" y="3009.0" />
-      <point x="1045.7892729991515" y="3009.0" />
-      <point x="-43.22499999999991" y="-145.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.PlayerStatus">
-      <point x="-106.0" y="-221.5" />
-      <point x="1093.3440789473684" y="855.0" />
-      <point x="656.3603473014676" y="855.0" />
-      <point x="49.0" y="103.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerMoveTest" target="it.polimi.ingsw.xyl.model.CosplayerTest">
-      <point x="-66.875" y="-103.5" />
-      <point x="1433.1710190308975" y="4109.0" />
-      <point x="1466.0978814778177" y="4109.0" />
-      <point x="-77.60000000000002" y="179.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameBoard" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="-46.15384615384619" y="222.5" />
-      <point x="1543.4174145299144" y="3019.0" />
-      <point x="1156.9392729991514" y="3019.0" />
-      <point x="67.92499999999995" y="-145.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer" target="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer">
-      <point x="-113.0" y="155.5" />
-      <point x="515.7070512820515" y="4949.0" />
-      <point x="382.70705128205145" y="4949.0" />
-      <point x="382.70705128205145" y="4773.5" />
-      <point x="-226.0" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Space" target="it.polimi.ingsw.xyl.model.Space">
-      <point x="-75.55555555555554" y="69.5" />
-      <point x="1779.172222222222" y="412.0" />
-      <point x="1749.7277777777776" y="412.0" />
-      <point x="1749.7277777777776" y="322.5" />
-      <point x="-85.0" y="-0.0" />
+      <point x="-123.5" y="0.0" />
+      <point x="98.5" y="0.0" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.message">
-      <point x="108.5" y="-199.5" />
-      <point x="577.925" y="4099.0" />
-      <point x="1166.01633385877" y="4099.0" />
-      <point x="51.375" y="14.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameBoard" target="it.polimi.ingsw.xyl.model.GameStatus">
-      <point x="-137.5" y="-222.5" />
-      <point x="1452.0712606837606" y="2294.0" />
-      <point x="126.17499999999995" y="2294.0" />
-      <point x="18.449999999999818" y="70.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Player" target="it.polimi.ingsw.xyl.model.GameBoard">
-      <point x="43.22499999999991" y="-145.5" />
-      <point x="1132.2392729991514" y="2999.0" />
-      <point x="1497.2635683760682" y="2999.0" />
-      <point x="-92.30769230769238" y="222.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame" target="it.polimi.ingsw.xyl.model.GameStatus">
-      <point x="-139.5" y="-199.5" />
-      <point x="329.92499999999995" y="4099.0" />
-      <point x="28.075000000000045" y="4099.0" />
-      <point x="28.075000000000045" y="905.0" />
-      <point x="63.94607430231599" y="905.0" />
-      <point x="-43.05000000000018" y="70.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GodPower" target="it.polimi.ingsw.xyl.model.Cosplayer">
-      <point x="-59.14285714285711" y="-178.5" />
-      <point x="727.9714158562942" y="1797.0" />
-      <point x="898.1499872848659" y="1797.0" />
-      <point x="898.1499872848659" y="1538.0" />
-      <point x="1098.9230263157897" y="1538.0" />
-      <point x="-100.42105263157896" y="221.5" />
+      <point x="0.0" y="-199.5" />
+      <point x="0.0" y="14.5" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.IslandBoard" target="it.polimi.ingsw.xyl.model.Space">
-      <point x="-64.0" y="-69.5" />
-      <point x="2355.8443100492464" y="452.0" />
-      <point x="1892.5055555555555" y="452.0" />
-      <point x="37.77777777777783" y="69.5" />
+      <point x="96.0" y="0.0" />
+      <point x="-85.0" y="0.0" />
     </edge>
-    <edge source="it.polimi.ingsw.xyl.model.message" target="it.polimi.ingsw.xyl.model.GameLobby">
-      <point x="30.444444444444343" y="-14.5" />
-      <point x="1145.0857783032143" y="3550.0" />
-      <point x="1885.0460190308972" y="3550.0" />
-      <point x="-51.0" y="122.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerBuildTest" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="59.25" y="-70.5" />
-      <point x="2380.7960190308972" y="4099.0" />
-      <point x="2718.955542840421" y="4099.0" />
-      <point x="2718.955542840421" y="945.0" />
-      <point x="2780.6292884361346" y="945.0" />
-      <point x="27.066666666666606" y="146.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.message" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="60.88888888888869" y="-14.5" />
-      <point x="1175.5302227476586" y="3600.0" />
-      <point x="2685.955542840421" y="3600.0" />
-      <point x="2685.955542840421" y="915.0" />
-      <point x="2740.0292884361347" y="915.0" />
-      <point x="-13.533333333333303" y="146.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.VirtualGame.VPlayer" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="208.61538461538476" y="-155.5" />
-      <point x="837.3224358974362" y="4598.0" />
-      <point x="3171.955542840421" y="4598.0" />
-      <point x="3171.955542840421" y="915.0" />
-      <point x="2834.762621769468" y="915.0" />
-      <point x="81.19999999999982" y="146.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.Level">
-      <point x="48.53571428571422" y="-14.5" />
-      <point x="2336.4871671921032" y="1548.0" />
-      <point x="2591.7960190308972" y="1548.0" />
-      <point x="2591.7960190308972" y="223.0" />
-      <point x="1903.1236111111111" y="223.0" />
-      <point x="20.0625" y="91.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Player" target="it.polimi.ingsw.xyl.model.PlayerStatus">
-      <point x="-117.32499999999982" y="-145.5" />
-      <point x="971.6892729991516" y="3069.0" />
-      <point x="192.17499999999995" y="3069.0" />
-      <point x="192.17499999999995" y="1727.0" />
-      <point x="538.1353473014677" y="1727.0" />
-      <point x="538.1353473014677" y="935.0" />
-      <point x="614.3603473014676" y="935.0" />
-      <point x="7.0" y="103.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.Cosplayer">
-      <point x="-150.63157894736844" y="221.5" />
-      <point x="1048.7125" y="1428.0" />
-      <point x="1020.3440789473685" y="1428.0" />
-      <point x="1020.3440789473685" y="1186.5" />
-      <point x="-159.0" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.CosplayerTest">
-      <point x="-155.2" y="179.5" />
-      <point x="1388.4978814778178" y="4019.0" />
-      <point x="1329.6978814778176" y="4019.0" />
-      <point x="1329.6978814778176" y="3819.5" />
-      <point x="-194.0" y="-0.0" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.Cosplayer" target="it.polimi.ingsw.xyl.model.Level">
-      <point x="-70.66666666666674" y="-221.5" />
-      <point x="1128.677412280702" y="845.0" />
-      <point x="687.8603473014676" y="845.0" />
-      <point x="687.8603473014676" y="213.0" />
-      <point x="1849.6236111111111" y="213.0" />
-      <point x="-33.4375" y="91.5" />
+    <edge source="it.polimi.ingsw.xyl.model.GodPower" target="it.polimi.ingsw.xyl.model.Cosplayer">
+      <point x="103.5" y="0.0" />
+      <point x="2760.0" y="160.0" />
+      <point x="0.0" y="-221.5" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.CosplayerBuildTest" target="it.polimi.ingsw.xyl.model.CosplayerTest">
-      <point x="-59.25" y="-70.5" />
-      <point x="2262.2960190308972" y="4069.0" />
-      <point x="1698.897881477818" y="4069.0" />
-      <point x="155.20000000000005" y="179.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.GameStatus">
-      <point x="-177.83333333333348" y="-179.5" />
-      <point x="1365.8645481444842" y="3480.0" />
-      <point x="77.5" y="3480.0" />
-      <point x="77.5" y="945.0" />
-      <point x="113.14607430231626" y="945.0" />
-      <point x="6.150000000000091" y="70.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.message" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="0.0" y="-14.5" />
-      <point x="1114.64133385877" y="3580.0" />
-      <point x="1018.4428444277228" y="3580.0" />
-      <point x="-70.57142857142867" y="145.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.GameMaster" target="it.polimi.ingsw.xyl.model.Cosplayer">
-      <point x="-134.40625" y="-386.5" />
-      <point x="1359.23508385877" y="5019.0" />
-      <point x="131.24607430231617" y="5019.0" />
-      <point x="131.24607430231617" y="4109.0" />
-      <point x="272.92499999999995" y="4109.0" />
-      <point x="272.92499999999995" y="2364.0" />
-      <point x="619.3296455470817" y="2364.0" />
-      <point x="619.3296455470817" y="1777.0" />
-      <point x="778.0796455470818" y="1777.0" />
-      <point x="778.0796455470818" y="1518.0" />
-      <point x="1065.4493421052634" y="1518.0" />
-      <point x="-133.8947368421052" y="221.5" />
+      <point x="0.0" y="-70.5" />
+      <point x="0.0" y="179.5" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.model.GameBoard" target="it.polimi.ingsw.xyl.model.IslandBoard">
-      <point x="137.5" y="-222.5" />
-      <point x="1727.0712606837606" y="2434.0" />
-      <point x="2438.6300243349606" y="2434.0" />
-      <point x="2438.6300243349606" y="865.0" />
-      <point x="2443.8443100492464" y="865.0" />
-      <point x="24.0" y="69.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.Player">
-      <point x="37.75" y="14.5" />
-      <point x="2325.701452906389" y="3069.0" />
-      <point x="1181.6392729991514" y="3069.0" />
-      <point x="92.625" y="-145.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.DirectionToMarginalPositionTest" target="it.polimi.ingsw.xyl.model.Direction">
-      <point x="-100.25" y="-146.5" />
-      <point x="2849.705542840421" y="945.0" />
-      <point x="2794.162621769468" y="945.0" />
-      <point x="40.59999999999991" y="146.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.Cosplayer">
-      <point x="-48.53571428571422" y="-14.5" />
-      <point x="2239.415738620675" y="1488.0" />
-      <point x="1316.5019736842105" y="1488.0" />
-      <point x="117.15789473684208" y="221.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.cosplayer" target="it.polimi.ingsw.xyl.model.Space">
-      <point x="5.39285714285711" y="-14.5" />
-      <point x="2293.3443100492464" y="462.0" />
-      <point x="1873.6166666666666" y="462.0" />
-      <point x="18.888888888888914" y="69.5" />
-    </edge>
-    <edge source="it.polimi.ingsw.xyl.model.CosplayerTest" target="it.polimi.ingsw.xyl.model.PlayerStatus">
-      <point x="-145.5000000000001" y="-179.5" />
-      <point x="1398.1978814778176" y="3470.0" />
-      <point x="181.17499999999995" y="3470.0" />
-      <point x="181.17499999999995" y="1717.0" />
-      <point x="527.1353473014677" y="1717.0" />
-      <point x="527.1353473014677" y="925.0" />
-      <point x="600.3603473014676" y="925.0" />
-      <point x="-7.0" y="103.5" />
+      <point x="40.0" y="222.5" />
+      <point x="160.0" y="1520.0" />
+      <point x="-96.0" y="0.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.5945134553785881" x="602.9110252170316" y="798.3580027242126" />
-  <SelectedNodes>
-    <node>it.polimi.ingsw.xyl.model.GameLobby</node>
-  </SelectedNodes>
+  <settings layout="Orthogonal" zoom="0.15369430344049634" x="1759.0" y="1744.0" />
+  <SelectedNodes />
   <Categories>
     <Category>Fields</Category>
     <Category>Constructors</Category>

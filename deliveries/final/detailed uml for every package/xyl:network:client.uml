@@ -6,16 +6,8 @@
     <node x="20.0" y="0.0">it.polimi.ingsw.xyl.network.client.Client</node>
   </nodes>
   <notes />
-  <edges>
-    <edge source="it.polimi.ingsw.xyl.network.client.Client" target="it.polimi.ingsw.xyl.network.client.Client">
-      <point x="0.0" y="134.5" />
-      <point x="152.0" y="289.0" />
-      <point x="0.0" y="289.0" />
-      <point x="0.0" y="134.5" />
-      <point x="-132.0" y="-0.0" />
-    </edge>
-  </edges>
-  <settings layout="Hierarchic Group" zoom="1.0" x="75.5" y="134.5" />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="152.0" y="134.5" />
   <SelectedNodes>
     <node>it.polimi.ingsw.xyl.network.client.Client</node>
   </SelectedNodes>

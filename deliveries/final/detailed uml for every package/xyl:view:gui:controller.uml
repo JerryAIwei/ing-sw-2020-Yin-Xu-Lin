@@ -13,19 +13,19 @@
   </nodes>
   <notes />
   <edges>
-    <edge source="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController" target="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController">
-      <point x="0.0" y="463.5" />
-      <point x="279.5" y="1552.0" />
-      <point x="77.5" y="1552.0" />
-      <point x="77.5" y="1068.5" />
-      <point x="-182.0" y="-0.0" />
-    </edge>
     <edge source="it.polimi.ingsw.xyl.view.gui.controller.GameLobbyController" target="it.polimi.ingsw.xyl.view.gui.controller.GameLobbyController">
       <point x="0.0" y="244.5" />
       <point x="697.0" y="509.0" />
       <point x="506.5" y="509.0" />
       <point x="506.5" y="244.5" />
       <point x="-170.5" y="-0.0" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController" target="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController">
+      <point x="0.0" y="463.5" />
+      <point x="279.5" y="1552.0" />
+      <point x="77.5" y="1552.0" />
+      <point x="77.5" y="1068.5" />
+      <point x="-182.0" y="-0.0" />
     </edge>
     <edge source="it.polimi.ingsw.xyl.view.gui.controller.StartPlayerController" target="it.polimi.ingsw.xyl.view.gui.controller.StartPlayerController">
       <point x="0.0" y="134.5" />
@@ -48,10 +48,6 @@
       <point x="0.0" y="277.5" />
       <point x="-173.0" y="-0.0" />
     </edge>
-    <edge source="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController" target="it.polimi.ingsw.xyl.view.gui.controller.GodPowerController">
-      <point x="0.0" y="-463.5" />
-      <point x="86.5" y="277.5" />
-    </edge>
     <edge source="it.polimi.ingsw.xyl.view.gui.controller.SetUpGameController" target="it.polimi.ingsw.xyl.view.gui.controller.SetUpGameController">
       <point x="0.0" y="134.5" />
       <point x="1646.5" y="289.0" />
@@ -59,8 +55,12 @@
       <point x="1522.5" y="134.5" />
       <point x="-104.0" y="-0.0" />
     </edge>
+    <edge source="it.polimi.ingsw.xyl.view.gui.controller.GameBoardController" target="it.polimi.ingsw.xyl.view.gui.controller.GodPowerController">
+      <point x="0.0" y="-463.5" />
+      <point x="86.5" y="277.5" />
+    </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.7178026745765682" x="531.9746283238098" y="297.61752194603946" />
+  <settings layout="Hierarchic Group" zoom="0.37215906254883907" x="715.015631819383" y="569.4189300411522" />
   <SelectedNodes>
     <node>it.polimi.ingsw.xyl.view.gui.controller.SetUpGameController</node>
   </SelectedNodes>

@@ -13,17 +13,17 @@
   </nodes>
   <notes />
   <edges>
-    <edge source="it.polimi.ingsw.xyl.view.cli.IslandBoardCLI.Player" target="it.polimi.ingsw.xyl.view.cli.IslandBoardCLI">
-      <point x="0.0" y="-122.5" />
-      <point x="536.0" y="446.0" />
-      <point x="629.25" y="446.0" />
-      <point x="-68.25" y="210.5" />
-    </edge>
     <edge source="it.polimi.ingsw.xyl.view.cli.IslandBoardCLI.Block" target="it.polimi.ingsw.xyl.view.cli.IslandBoardCLI">
       <point x="0.0" y="-155.5" />
       <point x="859.0" y="446.0" />
       <point x="765.75" y="446.0" />
       <point x="68.25" y="210.5" />
+    </edge>
+    <edge source="it.polimi.ingsw.xyl.view.cli.IslandBoardCLI.Player" target="it.polimi.ingsw.xyl.view.cli.IslandBoardCLI">
+      <point x="0.0" y="-122.5" />
+      <point x="536.0" y="446.0" />
+      <point x="629.25" y="446.0" />
+      <point x="-68.25" y="210.5" />
     </edge>
   </edges>
   <settings layout="Hierarchic Group" zoom="0.509822263797942" x="668.0" y="524.5" />
