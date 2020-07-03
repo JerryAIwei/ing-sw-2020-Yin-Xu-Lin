@@ -22,7 +22,12 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.util.Vector;
 
-
+/**
+ * UI controller for the game lobby
+ * allow player to choose the game to join or start a new game
+ *
+ * @author yaw
+ */
 public class GameLobbyController {
     @FXML
     private TableView<NameOKMessage.Games> gamesTable;
@@ -123,7 +128,7 @@ public class GameLobbyController {
 
         var selectedGame = gamesTable.getSelectionModel().getSelectedItem();
         if (selectedGame != null && selectedGame.getCurrentNumber() != selectedGame.getPlayerNumber()) {
-           // mainApp.trans2GameBoard();
+            // mainApp.trans2GameBoard();
             isJoinGame = true;
 //            Platform.runLater(() -> {
 //                mainApp.getWaitingStage().showAndWait();

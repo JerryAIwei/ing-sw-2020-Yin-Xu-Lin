@@ -9,6 +9,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 
+/**
+ * UI controller for choose which player to start
+ *
+ * @author yaw
+ */
 public class StartPlayerController {
 
     ObservableList list = FXCollections.observableArrayList();
@@ -45,12 +50,12 @@ public class StartPlayerController {
         this.dialogStage = dialogStage;
     }
 
-    public void setMainApp(GUI gui, int gameID,int playerNumer) {
+    public void setMainApp(GUI gui, int gameID, int playerNumer) {
         this.gui = gui;
         this.gameID = gameID;
-        if(playerNumer==2)
+        if (playerNumer == 2)
             cb.getItems().addAll(0, 1);
         else
-            cb.getItems().addAll(0,1,2);
+            cb.getItems().addAll(0, 1, 2);
     }
 }

@@ -124,15 +124,15 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     @Override
-    public void update(Exception e)  {
+    public void update(Exception e) {
         if (e instanceof ConnectException) {
             System.err.println("Connection refused");
             //askLogin();
-        }else if (e instanceof EOFException){
+        } else if (e instanceof EOFException) {
             System.err.println("Connection failed! If you want to rejoin the game,\n" +
                     "please restart the game and login with the same username!");
             System.exit(0);
-        }else{
+        } else {
             e.printStackTrace();
         }
     }
@@ -147,14 +147,14 @@ public class CLI extends Thread implements ViewInterface {
             setUserName();
         } else if (message instanceof NameOKMessage) {
             joinOrCreate((NameOKMessage) message);
-        } else if (message instanceof WaitingReconnectionMessage){
+        } else if (message instanceof WaitingReconnectionMessage) {
             System.out.println("Please waiting for other players' reconnection.");
-        } else if (message instanceof ConnectionDroppedMessage){
+        } else if (message instanceof ConnectionDroppedMessage) {
             System.err.println(((ConnectionDroppedMessage) message).playerName + " dropped the connection with " +
                     "server, " +
                     "the game stopped.");
             System.exit(0);
-        }else {
+        } else {
             System.err.println("Wrong Message Received:" + message.getClass().toString());
         }
 
@@ -194,6 +194,7 @@ public class CLI extends Thread implements ViewInterface {
     }
 
     /**
+     * user interface
      * Set ip and username
      * connect to server
      * called when start a new CLI
@@ -203,16 +204,20 @@ public class CLI extends Thread implements ViewInterface {
         String ip;
         Scanner scanner = new Scanner(System.in);
         ip = scanner.nextLine();
-        if(ip.trim().isEmpty())
+        if (ip.trim().isEmpty())
             ip = "127.0.0.1";
         System.out.println(ColorSetter.FG_BLUE.setColor("Please Enter Port Number, press enter to use default 7777"));
         String port;
         port = scanner.nextLine();
-        if(port.trim().isEmpty())
+        if (port.trim().isEmpty())
             port = "7777";
-        client.init(ip,port);
+        client.init(ip, port);
     }
 
+    /**
+     * user interface
+     * Set username
+     */
     private void setUserName() {
         System.out.println(ColorSetter.FG_BLUE.setColor("Please Enter Login Name"));
         executor.execute(() -> {
@@ -221,6 +226,10 @@ public class CLI extends Thread implements ViewInterface {
         });
     }
 
+    /**
+     * user interface
+     * set the player number when create a new game
+     */
     private void setPlayNum() {
         executor.execute(() -> {
             int playNum;
@@ -228,7 +237,7 @@ public class CLI extends Thread implements ViewInterface {
                 System.out.println(ColorSetter.FG_BLUE.setColor("Please set number of players, 2 or 3"));
                 try {
                     playNum = new Scanner(System.in).nextInt();
-                }catch(Exception ignored) {
+                } catch (Exception ignored) {
                     playNum = -1;
                 }
             } while (playNum != 2 && playNum != 3);
@@ -237,6 +246,10 @@ public class CLI extends Thread implements ViewInterface {
         });
     }
 
+    /**
+     * user interface
+     * choose join a game or create a new game
+     */
     private void joinOrCreate(NameOKMessage nameOKMessage) {
         var games = nameOKMessage.getGames();
         for (NameOKMessage.Games game : games) {
@@ -268,9 +281,9 @@ public class CLI extends Thread implements ViewInterface {
                     System.out.println(ColorSetter.FG_BLUE.setColor("Input game ID to join the game"));
                 System.out.println(ColorSetter.FG_BLUE.setColor("Input -1 to create a new game, input -2 to refresh " +
                         "the game lobby."));
-                try{
-                input = new Scanner(System.in).nextInt();
-                }catch(Exception ignored){
+                try {
+                    input = new Scanner(System.in).nextInt();
+                } catch (Exception ignored) {
                     input = -3;
                 }
             } while (input < -2 || input >= games.size()
@@ -278,17 +291,20 @@ public class CLI extends Thread implements ViewInterface {
 
             if (input == -1) {
                 sendMessage(new CreateNewGameMessage(userName));
-            } else if (input == -2){
+            } else if (input == -2) {
                 sendMessage(new RefreshMessage(userName));
-            }
-            else {
+            } else {
                 sendMessage(new JoinGameMessage(userName, input));
             }
         });
 
-        
+
     }
 
+    /**
+     * user interface
+     * choose available god powers in this game
+     */
     private void setAvailableGodPowers() {
 
         int playNum = islandBoardCLI.getPlayers().size();
@@ -308,7 +324,7 @@ public class CLI extends Thread implements ViewInterface {
                 int input;
                 try {
                     input = new Scanner(System.in).nextInt();
-                }catch (Exception ignored){
+                } catch (Exception ignored) {
                     input = 1000;
                 }
                 if (input >= 0 && input < GodPower.values().length &&
@@ -342,6 +358,10 @@ public class CLI extends Thread implements ViewInterface {
 
     }
 
+    /**
+     * user interface
+     * choose my god power
+     */
     private void setGodPower() {
         if (availableGodPowers.get(0) == GodPower.ANONYMOUS) {
             System.out.println(ColorSetter.FG_BLUE.setColor("This is a no-GodPowers game!"));
@@ -360,7 +380,7 @@ public class CLI extends Thread implements ViewInterface {
                     }
                     try {
                         input = new Scanner(System.in).nextInt();
-                    }catch (Exception ignored){
+                    } catch (Exception ignored) {
                         input = -1;
                     }
                 } while (input < 0 || input >= availableGodPowers.size());
@@ -369,7 +389,10 @@ public class CLI extends Thread implements ViewInterface {
             });
         }
     }
-
+    /**
+     * user interface
+     * choose who to start
+     */
     private void setStartPlayer() {
         int playNum = islandBoardCLI.getPlayers().size();
         executor.execute(() -> {
@@ -379,14 +402,17 @@ public class CLI extends Thread implements ViewInterface {
                 islandBoardCLI.showPlayers();
                 try {
                     input = new Scanner(System.in).nextInt();
-                }catch (Exception ignored){
+                } catch (Exception ignored) {
                     input = -1;
                 }
             } while (input < 0 || input >= playNum);
             sendMessage(new StartGameMessage(gameId, userName, input));
         });
     }
-
+    /**
+     * user interface
+     * choose the initial position of the workers
+     */
     private void setInitialWorkPosition() {
 
         System.out.println(ColorSetter.FG_BLUE.setColor("Set initial worker position"));
@@ -427,7 +453,10 @@ public class CLI extends Thread implements ViewInterface {
                     "the most right-hand digit of the red numbers represents the Worker ID."));
         });
     }
-
+    /**
+     * user interface
+     * choose the direction of move and build
+     */
     private Direction chooseDirection(String action, int workerId) {
         ArrayList<Direction> available = vGame.getVPlayers().get(id).getAvailable(action, workerId);
         if (available.isEmpty()) {
@@ -442,13 +471,16 @@ public class CLI extends Thread implements ViewInterface {
             }
             try {
                 directionInput = new Scanner(System.in).nextInt();
-            }catch(Exception ignored){
+            } catch (Exception ignored) {
                 directionInput = -1;
             }
         } while (directionInput < 0 || directionInput >= available.size());
         return available.get(directionInput);
     }
-
+    /**
+     * user interface
+     * choose who and where to move
+     */
     private void move() {
         executor.execute(() -> {
             int workerId;
@@ -462,10 +494,10 @@ public class CLI extends Thread implements ViewInterface {
                             (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to move"));
                     try {
                         workerId = new Scanner(System.in).nextInt();
-                    }catch (Exception ignored){
+                    } catch (Exception ignored) {
                         workerId = -1;
                     }
-                    if ( vGame.getVPlayers().get(id).getAvailable("Move", workerId).isEmpty())
+                    if (vGame.getVPlayers().get(id).getAvailable("Move", workerId).isEmpty())
                         System.out.println(ColorSetter.FG_RED.setColor("No available action of worker " + workerId +
                                 "."));
                 } while ((workerId != 1 && workerId != 0) || vGame.getVPlayers().get(id).getAvailable("Move",
@@ -476,7 +508,10 @@ public class CLI extends Thread implements ViewInterface {
                     (gameId, id, workerId, direction));
         });
     }
-
+    /**
+     * user interface
+     * choose who and where to build
+     */
     private void build() {
         executor.execute(() -> {
             int workerId;
@@ -490,7 +525,7 @@ public class CLI extends Thread implements ViewInterface {
                             (ColorSetter.FG_BLUE.setColor("Input 0 or 1 to choose your worker to build"));
                     try {
                         workerId = new Scanner(System.in).nextInt();
-                    }catch (Exception ignored){
+                    } catch (Exception ignored) {
                         workerId = -1;
                     }
                     if (vGame.getVPlayers().get(id).getAvailable("Build", workerId).isEmpty())
@@ -511,7 +546,7 @@ public class CLI extends Thread implements ViewInterface {
                                     " 0 for normal building");
                     try {
                         input = new Scanner(System.in).nextInt();
-                    }catch(Exception ignored){
+                    } catch (Exception ignored) {
                         input = -1;
                     }
                     if (input == 1) isDome = true;
@@ -523,7 +558,10 @@ public class CLI extends Thread implements ViewInterface {
 
         });
     }
-
+    /**
+     * user interface
+     * for god power, choose move or build
+     */
     private void chooseMoveOrBuild() {
         executor.execute(() -> {
             int input;
@@ -533,7 +571,7 @@ public class CLI extends Thread implements ViewInterface {
                                 " 0 for building"));
                 try {
                     input = new Scanner(System.in).nextInt();
-                }catch(Exception ignored){
+                } catch (Exception ignored) {
                     input = -1;
                 }
             } while (input != 0 && input != 1);
@@ -543,7 +581,10 @@ public class CLI extends Thread implements ViewInterface {
                 build();
         });
     }
-
+    /**
+     * user interface
+     * for god power, choose build or end this turn
+     */
     private void chooseBuildOrEnd() {
         executor.execute(() -> {
             int input;
@@ -553,7 +594,7 @@ public class CLI extends Thread implements ViewInterface {
                                 " 0 for end your turn"));
                 try {
                     input = new Scanner(System.in).nextInt();
-                }catch(Exception ignored){
+                } catch (Exception ignored) {
                     input = -1;
                 }
             } while (input != 0 && input != 1);
@@ -626,8 +667,10 @@ public class CLI extends Thread implements ViewInterface {
                 break;
         }
     }
-
-    private void gameEnd(){
+    /**
+     * show the game result
+     */
+    private void gameEnd() {
         System.out.println("Game End");
         PlayerStatus playerStatus = vGame.getVPlayers().get(id).getPlayerStatus();
         if (playerStatus == PlayerStatus.WIN)
