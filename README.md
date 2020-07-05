@@ -4,7 +4,7 @@
 
 ### About the game
 
-Santorini is an abstract strategy board game for 2-4 players, the name was inspired by the architecture of cliffside villages on Santorini Island in Greece. The game is played on a grid where each turn players build a town by placing building pieces up to three levels high. To win the game, players must move one of their two characters to the third level of the town. Normally a game takes about 20-30 minutes.
+Santorini is an abstract strategy board game for 2-3 players, the name was inspired by the architecture of cliffside villages on Santorini Island in Greece. The game is played on a grid where each turn players build a town by placing building pieces up to three levels high. To win the game, players must move one of their two characters to the third level of the town. Normally a game takes about 20-30 minutes.
 
 ### About the project
 
